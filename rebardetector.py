@@ -2,31 +2,18 @@ import cv2
 import numpy as np
 
 # ==========================================
-# CONFIG
-# ==========================================
-
-IMAGE_PATH = "rebar.png"
-
-MIN_SEGMENT_LENGTH = 25
-
-VERTICAL_ANGLE = 70
-HORIZONTAL_ANGLE = 20
-
-CLUSTER_DISTANCE = 8
-
-# ==========================================
 # LOAD IMAGE
 # ==========================================
+
+IMAGE_PATH = "rebar2.png"
 
 image = cv2.imread(IMAGE_PATH)
 
 if image is None:
-    print("Could not load image")
+    print(f"Could not load {IMAGE_PATH}")
     exit()
 
 display = image.copy()
-
-height, width = image.shape[:2]
 
 # ==========================================
 # PREPROCESS
@@ -37,6 +24,8 @@ gray = cv2.cvtColor(
     cv2.COLOR_BGR2GRAY
 )
 
+# Normalize contrast
+
 gray = cv2.normalize(
     gray,
     None,
@@ -45,12 +34,16 @@ gray = cv2.normalize(
     cv2.NORM_MINMAX
 )
 
+# CLAHE
+
 clahe = cv2.createCLAHE(
     clipLimit=2.0,
     tileGridSize=(8, 8)
 )
 
 gray = clahe.apply(gray)
+
+# Slight blur
 
 gray = cv2.GaussianBlur(
     gray,
@@ -59,25 +52,29 @@ gray = cv2.GaussianBlur(
 )
 
 # ==========================================
-# LSD
+# LSD DETECTOR
 # ==========================================
 
 lsd = cv2.createLineSegmentDetector()
 
-result = lsd.detect(gray)
+detected = lsd.detect(gray)
 
-if result[0] is None:
-    print("No lines found")
+if detected[0] is None:
+    print("No lines detected")
     exit()
 
-lines = result[0]
+lines = detected[0]
 
 # ==========================================
-# STORE SEGMENTS
+# COUNTERS
 # ==========================================
 
-vertical_segments = []
-horizontal_segments = []
+vertical_count = 0
+horizontal_count = 0
+
+# ==========================================
+# DRAW DETECTED SEGMENTS
+# ==========================================
 
 for line in lines:
 
@@ -88,7 +85,8 @@ for line in lines:
         (y2 - y1) ** 2
     )
 
-    if length < MIN_SEGMENT_LENGTH:
+    # Don't kill real rebars
+    if length < 25:
         continue
 
     angle = abs(
@@ -100,147 +98,37 @@ for line in lines:
         )
     )
 
-    # --------------------------
-    # VERTICAL
-    # --------------------------
+    # ----------------------------------
+    # VERTICAL REBARS
+    # ----------------------------------
 
-    if angle >= VERTICAL_ANGLE:
+    if angle >= 70:
 
-        center_x = int(
-            (x1 + x2) / 2
+        cv2.line(
+            display,
+            (int(x1), int(y1)),
+            (int(x2), int(y2)),
+            (0, 255, 0),
+            2
         )
 
-        vertical_segments.append(
-            (
-                center_x,
-                min(y1, y2),
-                max(y1, y2)
-            )
+        vertical_count += 1
+
+    # ----------------------------------
+    # HORIZONTAL REBARS
+    # ----------------------------------
+
+    elif angle <= 20:
+
+        cv2.line(
+            display,
+            (int(x1), int(y1)),
+            (int(x2), int(y2)),
+            (255, 255, 0),
+            2
         )
 
-    # --------------------------
-    # HORIZONTAL
-    # --------------------------
-
-    elif angle <= HORIZONTAL_ANGLE:
-
-        center_y = int(
-            (y1 + y2) / 2
-        )
-
-        horizontal_segments.append(
-            (
-                center_y,
-                min(x1, x2),
-                max(x1, x2)
-            )
-        )
-
-# ==========================================
-# CLUSTER FUNCTION
-# ==========================================
-
-def cluster(values):
-
-    if len(values) == 0:
-        return []
-
-    values.sort(key=lambda x: x[0])
-
-    groups = []
-
-    current = [values[0]]
-
-    for item in values[1:]:
-
-        if abs(
-            item[0] - current[-1][0]
-        ) <= CLUSTER_DISTANCE:
-
-            current.append(item)
-
-        else:
-
-            groups.append(current)
-            current = [item]
-
-    groups.append(current)
-
-    return groups
-
-# ==========================================
-# MERGE VERTICALS
-# ==========================================
-
-vertical_groups = cluster(
-    vertical_segments
-)
-
-merged_verticals = []
-
-for group in vertical_groups:
-
-    xs = [g[0] for g in group]
-
-    ys1 = [g[1] for g in group]
-    ys2 = [g[2] for g in group]
-
-    merged_verticals.append(
-        (
-            int(np.mean(xs)),
-            int(min(ys1)),
-            int(max(ys2))
-        )
-    )
-
-# ==========================================
-# MERGE HORIZONTALS
-# ==========================================
-
-horizontal_groups = cluster(
-    horizontal_segments
-)
-
-merged_horizontals = []
-
-for group in horizontal_groups:
-
-    ys = [g[0] for g in group]
-
-    xs1 = [g[1] for g in group]
-    xs2 = [g[2] for g in group]
-
-    merged_horizontals.append(
-        (
-            int(np.mean(ys)),
-            int(min(xs1)),
-            int(max(xs2))
-        )
-    )
-
-# ==========================================
-# DRAW RECONSTRUCTED REBARS
-# ==========================================
-
-for x, y1, y2 in merged_verticals:
-
-    cv2.line(
-        display,
-        (x, y1),
-        (x, y2),
-        (0, 255, 0),
-        3
-    )
-
-for y, x1, x2 in merged_horizontals:
-
-    cv2.line(
-        display,
-        (x1, y),
-        (x2, y),
-        (255, 255, 0),
-        3
-    )
+        horizontal_count += 1
 
 # ==========================================
 # TEXT
@@ -248,7 +136,7 @@ for y, x1, x2 in merged_horizontals:
 
 cv2.putText(
     display,
-    f"Vertical Rebars: {len(merged_verticals)}",
+    f"Vertical: {vertical_count}",
     (20, 40),
     cv2.FONT_HERSHEY_SIMPLEX,
     0.8,
@@ -258,7 +146,7 @@ cv2.putText(
 
 cv2.putText(
     display,
-    f"Horizontal Rebars: {len(merged_horizontals)}",
+    f"Horizontal: {horizontal_count}",
     (20, 80),
     cv2.FONT_HERSHEY_SIMPLEX,
     0.8,
@@ -271,10 +159,10 @@ cv2.putText(
 # ==========================================
 
 print()
-print("MERGED REBARS")
-print("---------------------")
-print("Vertical :", len(merged_verticals))
-print("Horizontal :", len(merged_horizontals))
+print("Detected Segments")
+print("-----------------")
+print(f"Vertical   : {vertical_count}")
+print(f"Horizontal : {horizontal_count}")
 print()
 
 # ==========================================
@@ -282,12 +170,22 @@ print()
 # ==========================================
 
 cv2.namedWindow(
-    "Merged Rebars",
+    "Gray",
+    cv2.WINDOW_NORMAL
+)
+
+cv2.namedWindow(
+    "LSD Rebar Detection",
     cv2.WINDOW_NORMAL
 )
 
 cv2.imshow(
-    "Merged Rebars",
+    "Gray",
+    gray
+)
+
+cv2.imshow(
+    "LSD Rebar Detection",
     display
 )
 
