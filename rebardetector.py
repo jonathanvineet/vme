@@ -5,7 +5,7 @@ import numpy as np
 # LOAD IMAGE
 # ==========================================
 
-IMAGE_PATH = "rebar.png"
+IMAGE_PATH = "rebar2.png"
 
 image = cv2.imread(IMAGE_PATH)
 
