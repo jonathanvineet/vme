@@ -2,167 +2,226 @@ import cv2
 import numpy as np
 
 # ==========================================
-# LOAD IMAGE
+# CONFIG
 # ==========================================
 
-IMAGE_PATH = "rebar2.png"
+IMAGE_PATH = "rebar.png"
+
+# Change if required
+ARUCO_DICT = cv2.aruco.DICT_4X4_50
+
+# ==========================================
+# LOAD IMAGE
+# ==========================================
 
 image = cv2.imread(IMAGE_PATH)
 
 if image is None:
-    print(f"Could not load {IMAGE_PATH}")
+    print("Could not load image")
     exit()
 
 display = image.copy()
 
 # ==========================================
-# PREPROCESS
+# DETECT ARUCO
 # ==========================================
 
-gray = cv2.cvtColor(
-    image,
-    cv2.COLOR_BGR2GRAY
+dictionary = cv2.aruco.getPredefinedDictionary(
+    ARUCO_DICT
 )
 
-# Normalize contrast
+parameters = cv2.aruco.DetectorParameters()
 
-gray = cv2.normalize(
-    gray,
-    None,
-    0,
-    255,
-    cv2.NORM_MINMAX
+detector = cv2.aruco.ArucoDetector(
+    dictionary,
+    parameters
 )
 
-# CLAHE
-
-clahe = cv2.createCLAHE(
-    clipLimit=2.0,
-    tileGridSize=(8, 8)
+corners, ids, _ = detector.detectMarkers(
+    image
 )
 
-gray = clahe.apply(gray)
+if ids is None:
 
-# Slight blur
-
-gray = cv2.GaussianBlur(
-    gray,
-    (3, 3),
-    0
-)
-
-# ==========================================
-# LSD DETECTOR
-# ==========================================
-
-lsd = cv2.createLineSegmentDetector()
-
-detected = lsd.detect(gray)
-
-if detected[0] is None:
-    print("No lines detected")
+    print("No markers found")
     exit()
 
-lines = detected[0]
+ids = ids.flatten()
 
 # ==========================================
-# COUNTERS
+# STORE CENTERS
 # ==========================================
 
-vertical_count = 0
-horizontal_count = 0
+centers = {}
 
-# ==========================================
-# DRAW DETECTED SEGMENTS
-# ==========================================
+for marker_corners, marker_id in zip(
+    corners,
+    ids
+):
 
-for line in lines:
+    pts = marker_corners[0]
 
-    x1, y1, x2, y2 = line[0]
+    cx = int(np.mean(pts[:, 0]))
+    cy = int(np.mean(pts[:, 1]))
 
-    length = np.sqrt(
-        (x2 - x1) ** 2 +
-        (y2 - y1) ** 2
+    if marker_id not in centers:
+        centers[marker_id] = []
+
+    centers[marker_id].append(
+        (cx, cy)
     )
 
-    # Don't kill real rebars
-    if length < 25:
-        continue
+# ==========================================
+# FIND TOP ROW
+# ==========================================
 
-    angle = abs(
-        np.degrees(
-            np.arctan2(
-                y2 - y1,
-                x2 - x1
+all_points = []
+
+for marker_id in centers:
+
+    for pt in centers[marker_id]:
+
+        all_points.append(
+            (
+                marker_id,
+                pt[0],
+                pt[1]
             )
         )
-    )
 
-    # ----------------------------------
-    # VERTICAL REBARS
-    # ----------------------------------
+# ==========================================
+# TOP ROW
+# ==========================================
 
-    if angle >= 70:
+top_row = sorted(
+    all_points,
+    key=lambda p: p[1]
+)[:6]
 
-        cv2.line(
+top_row = sorted(
+    top_row,
+    key=lambda p: p[1]
+)
+
+# ==========================================
+# LEFT COLUMN
+# ==========================================
+
+left_column = sorted(
+    all_points,
+    key=lambda p: p[0]
+)[:6]
+
+left_column = sorted(
+    left_column,
+    key=lambda p: p[2]
+)
+
+# ==========================================
+# CORNERS
+# ==========================================
+
+top_left = np.array([
+    top_row[0][1],
+    top_row[0][2]
+], dtype=np.float32)
+
+top_right = np.array([
+    top_row[-1][1],
+    top_row[-1][2]
+], dtype=np.float32)
+
+bottom_left = np.array([
+    left_column[-1][1],
+    left_column[-1][2]
+], dtype=np.float32)
+
+# Estimate bottom-right
+
+bottom_right = np.array([
+    top_right[0] +
+    (bottom_left[0] - top_left[0]),
+
+    bottom_left[1]
+], dtype=np.float32)
+
+# ==========================================
+# SOURCE POINTS
+# ==========================================
+
+src = np.array([
+    top_left,
+    top_right,
+    bottom_right,
+    bottom_left
+], dtype=np.float32)
+
+# ==========================================
+# DESTINATION
+# ==========================================
+
+WIDTH = 1200
+HEIGHT = 1200
+
+dst = np.array([
+    [0, 0],
+    [WIDTH, 0],
+    [WIDTH, HEIGHT],
+    [0, HEIGHT]
+], dtype=np.float32)
+
+# ==========================================
+# HOMOGRAPHY
+# ==========================================
+
+H = cv2.getPerspectiveTransform(
+    src,
+    dst
+)
+
+warped = cv2.warpPerspective(
+    image,
+    H,
+    (WIDTH, HEIGHT)
+)
+
+# ==========================================
+# DRAW DETECTIONS
+# ==========================================
+
+for marker_id in centers:
+
+    for (x, y) in centers[marker_id]:
+
+        cv2.circle(
             display,
-            (int(x1), int(y1)),
-            (int(x2), int(y2)),
+            (x, y),
+            6,
             (0, 255, 0),
-            2
+            -1
         )
 
-        vertical_count += 1
-
-    # ----------------------------------
-    # HORIZONTAL REBARS
-    # ----------------------------------
-
-    elif angle <= 20:
-
-        cv2.line(
+        cv2.putText(
             display,
-            (int(x1), int(y1)),
-            (int(x2), int(y2)),
-            (255, 255, 0),
+            str(marker_id),
+            (x + 10, y),
+            cv2.FONT_HERSHEY_SIMPLEX,
+            0.6,
+            (0, 0, 255),
             2
         )
 
-        horizontal_count += 1
-
 # ==========================================
-# TEXT
+# SAVE
 # ==========================================
 
-cv2.putText(
-    display,
-    f"Vertical: {vertical_count}",
-    (20, 40),
-    cv2.FONT_HERSHEY_SIMPLEX,
-    0.8,
-    (0, 255, 0),
-    2
+cv2.imwrite(
+    "rectified.png",
+    warped
 )
-
-cv2.putText(
-    display,
-    f"Horizontal: {horizontal_count}",
-    (20, 80),
-    cv2.FONT_HERSHEY_SIMPLEX,
-    0.8,
-    (255, 255, 0),
-    2
-)
-
-# ==========================================
-# PRINT
-# ==========================================
 
 print()
-print("Detected Segments")
-print("-----------------")
-print(f"Vertical   : {vertical_count}")
-print(f"Horizontal : {horizontal_count}")
+print("Saved: rectified.png")
 print()
 
 # ==========================================
@@ -170,23 +229,23 @@ print()
 # ==========================================
 
 cv2.namedWindow(
-    "Gray",
+    "Detected Markers",
     cv2.WINDOW_NORMAL
 )
 
 cv2.namedWindow(
-    "LSD Rebar Detection",
+    "Rectified",
     cv2.WINDOW_NORMAL
 )
 
 cv2.imshow(
-    "Gray",
-    gray
+    "Detected Markers",
+    display
 )
 
 cv2.imshow(
-    "LSD Rebar Detection",
-    display
+    "Rectified",
+    warped
 )
 
 cv2.waitKey(0)
