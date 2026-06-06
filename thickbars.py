@@ -5,29 +5,26 @@ import numpy as np
 # LOAD IMAGE
 # ==========================================
 
-IMAGE_PATH = "rebar2.png"
+IMAGE_PATH = "rebar.png"
 
-img = cv2.imread(IMAGE_PATH)
+image = cv2.imread(IMAGE_PATH)
 
-if img is None:
-    print("Image not found")
+if image is None:
+    print("Could not load image")
     exit()
 
-display = img.copy()
+display = image.copy()
 
 # ==========================================
-# GRAYSCALE
+# PREPROCESS
 # ==========================================
 
 gray = cv2.cvtColor(
-    img,
+    image,
     cv2.COLOR_BGR2GRAY
 )
 
-# ==========================================
 # CLAHE
-# ==========================================
-
 clahe = cv2.createCLAHE(
     clipLimit=3.0,
     tileGridSize=(8, 8)
@@ -35,183 +32,158 @@ clahe = cv2.createCLAHE(
 
 gray = clahe.apply(gray)
 
-# ==========================================
-# BLUR
-# ==========================================
-
-gray = cv2.GaussianBlur(
+# Bilateral preserves bar edges
+gray = cv2.bilateralFilter(
     gray,
-    (5, 5),
-    0
+    9,
+    75,
+    75
 )
 
 # ==========================================
-# EDGE DETECTION
+# LSD DETECTOR
 # ==========================================
 
-edges = cv2.Canny(
-    gray,
-    80,
-    180
-)
+lsd = cv2.createLineSegmentDetector(0)
+
+result = lsd.detect(gray)
+
+if result[0] is None:
+    print("No lines found")
+    exit()
+
+lines = result[0]
 
 # ==========================================
-# LINE DETECTION
+# KEEP ONLY LONG VERTICAL SEGMENTS
 # ==========================================
 
-lines = cv2.HoughLinesP(
-    edges,
-    rho=1,
-    theta=np.pi / 180,
-    threshold=80,
-    minLineLength=120,
-    maxLineGap=30
-)
+vertical_segments = []
 
-bars = []
+for l in lines:
 
-if lines is not None:
+    x1, y1, x2, y2 = l[0]
 
-    for line in lines:
+    dx = x2 - x1
+    dy = y2 - y1
 
-        x1, y1, x2, y2 = line[0]
+    length = np.sqrt(dx * dx + dy * dy)
 
-        length = np.sqrt(
-            (x2 - x1) ** 2 +
-            (y2 - y1) ** 2
+    if length < 120:
+        continue
+
+    angle = abs(
+        np.degrees(
+            np.arctan2(dy, dx)
         )
+    )
 
-        angle = abs(
-            np.degrees(
-                np.arctan2(
-                    y2 - y1,
-                    x2 - x1
-                )
-            )
-        )
+    # near vertical
+    if 75 <= angle <= 105:
 
-        # Starter bars are almost vertical
-
-        if not (70 <= angle <= 110):
-            continue
-
-        # Must be long
-
-        if length < 150:
-            continue
-
-        center_x = int((x1 + x2) / 2)
-
-        bars.append(
+        vertical_segments.append(
             (
-                center_x,
-                x1,
-                y1,
-                x2,
-                y2,
-                length
+                int(x1),
+                int(y1),
+                int(x2),
+                int(y2)
             )
         )
 
 # ==========================================
-# REMOVE DUPLICATES
+# MERGE NEARBY LINES
 # ==========================================
 
-bars.sort(
-    key=lambda x: x[5],
-    reverse=True
-)
+groups = []
 
-accepted = []
+for line in vertical_segments:
 
-for bar in bars:
+    x1, y1, x2, y2 = line
 
-    center_x = bar[0]
+    x_center = (x1 + x2) / 2
 
-    duplicate = False
+    matched = False
 
-    for existing in accepted:
+    for group in groups:
 
-        if abs(center_x - existing[0]) < 30:
-            duplicate = True
+        if abs(group["x"] - x_center) < 20:
+
+            group["lines"].append(line)
+
+            group["x"] = np.mean([
+                (a + c) / 2
+                for a, b, c, d
+                in group["lines"]
+            ])
+
+            matched = True
             break
 
-    if not duplicate:
-        accepted.append(bar)
+    if not matched:
+
+        groups.append({
+            "x": x_center,
+            "lines": [line]
+        })
 
 # ==========================================
-# DRAW
+# BUILD FINAL BARS
 # ==========================================
 
-for idx, bar in enumerate(accepted):
+bar_count = 0
 
-    center_x, x1, y1, x2, y2, length = bar
+for group in groups:
+
+    if len(group["lines"]) < 3:
+        continue
+
+    xs = []
+    ys = []
+
+    for x1, y1, x2, y2 in group["lines"]:
+
+        xs.extend([x1, x2])
+        ys.extend([y1, y2])
+
+    x = int(np.mean(xs))
+
+    y_top = int(min(ys))
+    y_bottom = int(max(ys))
+
+    # ignore tiny groups
+    if (y_bottom - y_top) < 200:
+        continue
 
     cv2.line(
         display,
-        (x1, y1),
-        (x2, y2),
+        (x, y_top),
+        (x, y_bottom),
         (0, 255, 0),
-        4
-    )
-
-    cx = int((x1 + x2) / 2)
-    cy = int((y1 + y2) / 2)
-
-    cv2.circle(
-        display,
-        (cx, cy),
-        6,
-        (0, 0, 255),
-        -1
+        3
     )
 
     cv2.putText(
         display,
-        f"B{idx+1}",
-        (cx + 10, cy),
+        f"B{bar_count}",
+        (x + 5, y_top + 20),
         cv2.FONT_HERSHEY_SIMPLEX,
-        0.6,
+        0.5,
         (255, 0, 0),
-        2
+        1
     )
 
-# ==========================================
-# PRINT RESULTS
-# ==========================================
-
-print("\nDetected Starter Bars")
-print("---------------------")
-
-for idx, bar in enumerate(accepted):
-
-    print(
-        f"Bar {idx+1}: "
-        f"Length={bar[5]:.1f}px"
-    )
+    bar_count += 1
 
 print()
-print(
-    f"Total Bars: {len(accepted)}"
-)
+print("Detected Starter Bars:", bar_count)
 
 # ==========================================
 # SHOW
 # ==========================================
 
 cv2.namedWindow(
-    "Edges",
-    cv2.WINDOW_NORMAL
-)
-
-cv2.namedWindow(
     "Starter Bars",
     cv2.WINDOW_NORMAL
-)
-
-cv2.imshow(
-    "Edges",
-    edges
 )
 
 cv2.imshow(
