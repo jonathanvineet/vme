@@ -1,0 +1,7 @@
+PyMuPDF>=1.22.0
+numpy>=1.24
+shapely>=2.0
+Pillow>=9.0
+opencv-python>=4.7
+matplotlib>=3.6
+attrs>=22.0

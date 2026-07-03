@@ -1,0 +1,1352 @@
+{
+  "dwg": "/Users/jonathan/elco/vme/DRAWINGS/SS-GF-01(M).dxf",
+  "insert_counts": [
+    [
+      "Rebar Bar - Part 1871424790-V1-3D Ortho",
+      23
+    ],
+    [
+      "Rebar Bar - Part 3681399347-V44-3D Ortho",
+      16
+    ],
+    [
+      "Rebar Bar - Part 1871424790-V20-3D Ortho",
+      8
+    ],
+    [
+      "Rebar Bar - Part 878712912-431004-3D Ortho",
+      7
+    ],
+    [
+      "Rebar Bar - Part 878712912-V50-3D Ortho",
+      6
+    ],
+    [
+      "Rebar Bar - Part 1871424790-V37-3D Ortho",
+      4
+    ],
+    [
+      "Rebar Bar - Part 3660531219-431004-3D Ortho",
+      3
+    ],
+    [
+      "Rebar Bar - Part 1871424790-431004-3D Ortho",
+      1
+    ],
+    [
+      "Rebar Bar - Part 1871424790-V2-3D Ortho",
+      1
+    ],
+    [
+      "Rebar Bar - Part 1871424790-V3-3D Ortho",
+      1
+    ],
+    [
+      "Rebar Bar - Part 1871424790-V4-3D Ortho",
+      1
+    ],
+    [
+      "Rebar Bar - Part 2352736704-431004-3D Ortho",
+      1
+    ],
+    [
+      "Rebar Bar - Part 3575411732-431004-3D Ortho",
+      1
+    ],
+    [
+      "Rebar Bar - Part 1070054846-431004-3D Ortho",
+      1
+    ],
+    [
+      "Rebar Bar - Part 2227165887-431004-3D Ortho",
+      1
+    ],
+    [
+      "Rebar Bar - Part 360578841-431004-3D Ortho",
+      1
+    ],
+    [
+      "Rebar Bar - Part 360578841-V5-3D Ortho",
+      1
+    ],
+    [
+      "Rebar Bar - Part 3575411732-V6-3D Ortho",
+      1
+    ],
+    [
+      "Rebar Bar - Part 766981352-431004-3D Ortho",
+      1
+    ],
+    [
+      "Rebar Bar - Part 3575411732-V7-3D Ortho",
+      1
+    ],
+    [
+      "Rebar Bar - Part 1070054846-V8-3D Ortho",
+      1
+    ],
+    [
+      "Rebar Bar - Part 2227165887-V9-3D Ortho",
+      1
+    ],
+    [
+      "Rebar Bar - Part 360578841-V10-3D Ortho",
+      1
+    ],
+    [
+      "Rebar Bar - Part 766981352-V11-3D Ortho",
+      1
+    ],
+    [
+      "Rebar Bar - Part 3635738315-431004-3D Ortho",
+      1
+    ],
+    [
+      "Rebar Bar - Part 3635738315-V12-3D Ortho",
+      1
+    ],
+    [
+      "Rebar Bar - Part 3660531219-V13-3D Ortho",
+      1
+    ],
+    [
+      "Rebar Bar - Part 3681399347-431004-3D Ortho",
+      1
+    ],
+    [
+      "Rebar Bar - Part 3660531219-V14-3D Ortho",
+      1
+    ],
+    [
+      "Rebar Bar - Part 4101040190-431004-3D Ortho",
+      1
+    ],
+    [
+      "Rebar Bar - Part 4101040190-V16-3D Ortho",
+      1
+    ],
+    [
+      "Rebar Bar - Part 1871424790-V17-3D Ortho",
+      1
+    ],
+    [
+      "Rebar Bar - Part 1871424790-V18-3D Ortho",
+      1
+    ],
+    [
+      "Rebar Bar - Part 1871424790-V19-3D Ortho",
+      1
+    ],
+    [
+      "Rebar Bar - Part 1871424790-V21-3D Ortho",
+      1
+    ],
+    [
+      "Rebar Bar - Part 1871424790-V22-3D Ortho",
+      1
+    ],
+    [
+      "Rebar Bar - Part 1871424790-V23-3D Ortho",
+      1
+    ],
+    [
+      "Rebar Bar - Part 1871424790-V24-3D Ortho",
+      1
+    ],
+    [
+      "Rebar Bar - Part 1871424790-V25-3D Ortho",
+      1
+    ],
+    [
+      "Rebar Bar - Part 1871424790-V26-3D Ortho",
+      1
+    ],
+    [
+      "Rebar Bar - Part 1871424790-V27-3D Ortho",
+      1
+    ],
+    [
+      "Rebar Bar - Part 1871424790-V28-3D Ortho",
+      1
+    ],
+    [
+      "Rebar Bar - Part 1871424790-V29-3D Ortho",
+      1
+    ],
+    [
+      "Rebar Bar - Part 1871424790-V30-3D Ortho",
+      1
+    ],
+    [
+      "Rebar Bar - Part 1871424790-V31-3D Ortho",
+      1
+    ],
+    [
+      "Rebar Bar - Part 1871424790-V32-3D Ortho",
+      1
+    ],
+    [
+      "Rebar Bar - Part 1871424790-V33-3D Ortho",
+      1
+    ],
+    [
+      "Rebar Bar - Part 1871424790-V34-3D Ortho",
+      1
+    ],
+    [
+      "Rebar Bar - Part 1871424790-V35-3D Ortho",
+      1
+    ],
+    [
+      "Rebar Bar - Part 1871424790-V36-3D Ortho",
+      1
+    ],
+    [
+      "Rebar Bar - Part 1871424790-V38-3D Ortho",
+      1
+    ],
+    [
+      "Rebar Bar - Part 1871424790-V39-3D Ortho",
+      1
+    ],
+    [
+      "Rebar Bar - Part 1871424790-V40-3D Ortho",
+      1
+    ],
+    [
+      "Rebar Bar - Part 1871424790-V41-3D Ortho",
+      1
+    ],
+    [
+      "Rebar Bar - Part 1871424790-V42-3D Ortho",
+      1
+    ],
+    [
+      "Rebar Bar - Part 1871424790-V43-3D Ortho",
+      1
+    ],
+    [
+      "Rebar Bar - Part 878712912-V45-3D Ortho",
+      1
+    ],
+    [
+      "Rebar Bar - Part 650701189-431004-3D Ortho",
+      1
+    ],
+    [
+      "Rebar Bar - Part 878712912-V46-3D Ortho",
+      1
+    ],
+    [
+      "Rebar Bar - Part 3681399347-V47-3D Ortho",
+      1
+    ],
+    [
+      "Rebar Bar - Part 878712912-V48-3D Ortho",
+      1
+    ],
+    [
+      "Rebar Bar - Part 878712912-V49-3D Ortho",
+      1
+    ],
+    [
+      "Rebar Bar - Part 878712912-V51-3D Ortho",
+      1
+    ],
+    [
+      "Rebar Bar - Part 878712912-V52-3D Ortho",
+      1
+    ],
+    [
+      "Rebar Bar - Part 3681399347-V53-3D Ortho",
+      1
+    ],
+    [
+      "Rebar Bar - Part 878712912-V54-3D Ortho",
+      1
+    ]
+  ],
+  "block_details": {
+    "Rebar Bar - Part 1871424790-431004-3D Ortho": {
+      "count": 1,
+      "entity_counts": {
+        "LINE": 2,
+        "POLYLINE": 2
+      },
+      "entity_types": [
+        "LINE",
+        "LINE",
+        "POLYLINE",
+        "POLYLINE"
+      ]
+    },
+    "Rebar Bar - Part 1871424790-V1-3D Ortho": {
+      "count": 23,
+      "entity_counts": {
+        "LINE": 2,
+        "POLYLINE": 2
+      },
+      "entity_types": [
+        "LINE",
+        "LINE",
+        "POLYLINE",
+        "POLYLINE"
+      ]
+    },
+    "Rebar Bar - Part 1871424790-V2-3D Ortho": {
+      "count": 1,
+      "entity_counts": {
+        "LINE": 2,
+        "POLYLINE": 2
+      },
+      "entity_types": [
+        "LINE",
+        "LINE",
+        "POLYLINE",
+        "POLYLINE"
+      ]
+    },
+    "Rebar Bar - Part 1871424790-V3-3D Ortho": {
+      "count": 1,
+      "entity_counts": {
+        "LINE": 2,
+        "POLYLINE": 3
+      },
+      "entity_types": [
+        "LINE",
+        "LINE",
+        "POLYLINE",
+        "POLYLINE",
+        "POLYLINE"
+      ]
+    },
+    "Rebar Bar - Part 1871424790-V4-3D Ortho": {
+      "count": 1,
+      "entity_counts": {
+        "LINE": 2,
+        "POLYLINE": 2
+      },
+      "entity_types": [
+        "LINE",
+        "LINE",
+        "POLYLINE",
+        "POLYLINE"
+      ]
+    },
+    "Rebar Bar - Part 2352736704-431004-3D Ortho": {
+      "count": 1,
+      "entity_counts": {
+        "LINE": 4,
+        "POLYLINE": 3
+      },
+      "entity_types": [
+        "LINE",
+        "LINE",
+        "LINE",
+        "LINE",
+        "POLYLINE",
+        "POLYLINE",
+        "POLYLINE"
+      ]
+    },
+    "Rebar Bar - Part 3575411732-431004-3D Ortho": {
+      "count": 1,
+      "entity_counts": {
+        "POLYLINE": 2
+      },
+      "entity_types": [
+        "POLYLINE",
+        "POLYLINE"
+      ]
+    },
+    "Rebar Bar - Part 1070054846-431004-3D Ortho": {
+      "count": 1,
+      "entity_counts": {
+        "LINE": 2
+      },
+      "entity_types": [
+        "LINE",
+        "LINE"
+      ]
+    },
+    "Rebar Bar - Part 2227165887-431004-3D Ortho": {
+      "count": 1,
+      "entity_counts": {
+        "POLYLINE": 2
+      },
+      "entity_types": [
+        "POLYLINE",
+        "POLYLINE"
+      ]
+    },
+    "Rebar Bar - Part 360578841-431004-3D Ortho": {
+      "count": 1,
+      "entity_counts": {
+        "LINE": 4
+      },
+      "entity_types": [
+        "LINE",
+        "LINE",
+        "LINE",
+        "LINE"
+      ]
+    },
+    "Rebar Bar - Part 360578841-V5-3D Ortho": {
+      "count": 1,
+      "entity_counts": {
+        "LINE": 3
+      },
+      "entity_types": [
+        "LINE",
+        "LINE",
+        "LINE"
+      ]
+    },
+    "Rebar Bar - Part 3575411732-V6-3D Ortho": {
+      "count": 1,
+      "entity_counts": {
+        "POLYLINE": 2
+      },
+      "entity_types": [
+        "POLYLINE",
+        "POLYLINE"
+      ]
+    },
+    "Rebar Bar - Part 766981352-431004-3D Ortho": {
+      "count": 1,
+      "entity_counts": {
+        "LINE": 4,
+        "POLYLINE": 3
+      },
+      "entity_types": [
+        "LINE",
+        "LINE",
+        "LINE",
+        "LINE",
+        "POLYLINE",
+        "POLYLINE",
+        "POLYLINE"
+      ]
+    },
+    "Rebar Bar - Part 3575411732-V7-3D Ortho": {
+      "count": 1,
+      "entity_counts": {
+        "LINE": 1
+      },
+      "entity_types": [
+        "LINE"
+      ]
+    },
+    "Rebar Bar - Part 1070054846-V8-3D Ortho": {
+      "count": 1,
+      "entity_counts": {
+        "LINE": 1
+      },
+      "entity_types": [
+        "LINE"
+      ]
+    },
+    "Rebar Bar - Part 2227165887-V9-3D Ortho": {
+      "count": 1,
+      "entity_counts": {
+        "POLYLINE": 2
+      },
+      "entity_types": [
+        "POLYLINE",
+        "POLYLINE"
+      ]
+    },
+    "Rebar Bar - Part 360578841-V10-3D Ortho": {
+      "count": 1,
+      "entity_counts": {
+        "LINE": 2
+      },
+      "entity_types": [
+        "LINE",
+        "LINE"
+      ]
+    },
+    "Rebar Bar - Part 766981352-V11-3D Ortho": {
+      "count": 1,
+      "entity_counts": {
+        "LINE": 2,
+        "POLYLINE": 3
+      },
+      "entity_types": [
+        "LINE",
+        "LINE",
+        "POLYLINE",
+        "POLYLINE",
+        "POLYLINE"
+      ]
+    },
+    "Rebar Bar - Part 3660531219-431004-3D Ortho": {
+      "count": 3,
+      "entity_counts": {
+        "LINE": 2,
+        "POLYLINE": 2
+      },
+      "entity_types": [
+        "LINE",
+        "LINE",
+        "POLYLINE",
+        "POLYLINE"
+      ]
+    },
+    "Rebar Bar - Part 3635738315-431004-3D Ortho": {
+      "count": 1,
+      "entity_counts": {
+        "LINE": 2,
+        "POLYLINE": 2
+      },
+      "entity_types": [
+        "LINE",
+        "LINE",
+        "POLYLINE",
+        "POLYLINE"
+      ]
+    },
+    "Rebar Bar - Part 3635738315-V12-3D Ortho": {
+      "count": 1,
+      "entity_counts": {
+        "LINE": 4,
+        "POLYLINE": 2
+      },
+      "entity_types": [
+        "LINE",
+        "LINE",
+        "LINE",
+        "LINE",
+        "POLYLINE",
+        "POLYLINE"
+      ]
+    },
+    "Rebar Bar - Part 3660531219-V13-3D Ortho": {
+      "count": 1,
+      "entity_counts": {
+        "LINE": 2,
+        "POLYLINE": 3
+      },
+      "entity_types": [
+        "LINE",
+        "LINE",
+        "POLYLINE",
+        "POLYLINE",
+        "POLYLINE"
+      ]
+    },
+    "Rebar Bar - Part 3681399347-431004-3D Ortho": {
+      "count": 1,
+      "entity_counts": {
+        "LINE": 2,
+        "POLYLINE": 2
+      },
+      "entity_types": [
+        "LINE",
+        "LINE",
+        "POLYLINE",
+        "POLYLINE"
+      ]
+    },
+    "Rebar Bar - Part 878712912-431004-3D Ortho": {
+      "count": 7,
+      "entity_counts": {
+        "POLYLINE": 2
+      },
+      "entity_types": [
+        "POLYLINE",
+        "POLYLINE"
+      ]
+    },
+    "Rebar Bar - Part 3660531219-V14-3D Ortho": {
+      "count": 1,
+      "entity_counts": {
+        "LINE": 2,
+        "POLYLINE": 2
+      },
+      "entity_types": [
+        "LINE",
+        "LINE",
+        "POLYLINE",
+        "POLYLINE"
+      ]
+    },
+    "Rebar Bar - Part 4101040190-431004-3D Ortho": {
+      "count": 1,
+      "entity_counts": {
+        "LINE": 7
+      },
+      "entity_types": [
+        "LINE",
+        "LINE",
+        "LINE",
+        "LINE",
+        "LINE",
+        "LINE",
+        "LINE"
+      ]
+    },
+    "Rebar Bar - Part 4101040190-V16-3D Ortho": {
+      "count": 1,
+      "entity_counts": {
+        "LINE": 4
+      },
+      "entity_types": [
+        "LINE",
+        "LINE",
+        "LINE",
+        "LINE"
+      ]
+    },
+    "Rebar Bar - Part 1871424790-V17-3D Ortho": {
+      "count": 1,
+      "entity_counts": {
+        "LINE": 4,
+        "POLYLINE": 2
+      },
+      "entity_types": [
+        "LINE",
+        "LINE",
+        "LINE",
+        "LINE",
+        "POLYLINE",
+        "POLYLINE"
+      ]
+    },
+    "Rebar Bar - Part 1871424790-V18-3D Ortho": {
+      "count": 1,
+      "entity_counts": {
+        "LINE": 2
+      },
+      "entity_types": [
+        "LINE",
+        "LINE"
+      ]
+    },
+    "Rebar Bar - Part 1871424790-V19-3D Ortho": {
+      "count": 1,
+      "entity_counts": {
+        "LINE": 4,
+        "POLYLINE": 2
+      },
+      "entity_types": [
+        "LINE",
+        "LINE",
+        "LINE",
+        "LINE",
+        "POLYLINE",
+        "POLYLINE"
+      ]
+    },
+    "Rebar Bar - Part 1871424790-V20-3D Ortho": {
+      "count": 8,
+      "entity_counts": {
+        "LINE": 2,
+        "POLYLINE": 2
+      },
+      "entity_types": [
+        "LINE",
+        "LINE",
+        "POLYLINE",
+        "POLYLINE"
+      ]
+    },
+    "Rebar Bar - Part 1871424790-V21-3D Ortho": {
+      "count": 1,
+      "entity_counts": {
+        "LINE": 4,
+        "POLYLINE": 2
+      },
+      "entity_types": [
+        "LINE",
+        "LINE",
+        "LINE",
+        "LINE",
+        "POLYLINE",
+        "POLYLINE"
+      ]
+    },
+    "Rebar Bar - Part 1871424790-V22-3D Ortho": {
+      "count": 1,
+      "entity_counts": {
+        "LINE": 4,
+        "POLYLINE": 2
+      },
+      "entity_types": [
+        "LINE",
+        "LINE",
+        "LINE",
+        "LINE",
+        "POLYLINE",
+        "POLYLINE"
+      ]
+    },
+    "Rebar Bar - Part 1871424790-V23-3D Ortho": {
+      "count": 1,
+      "entity_counts": {
+        "LINE": 2
+      },
+      "entity_types": [
+        "LINE",
+        "LINE"
+      ]
+    },
+    "Rebar Bar - Part 1871424790-V24-3D Ortho": {
+      "count": 1,
+      "entity_counts": {
+        "LINE": 4,
+        "POLYLINE": 2
+      },
+      "entity_types": [
+        "LINE",
+        "LINE",
+        "LINE",
+        "LINE",
+        "POLYLINE",
+        "POLYLINE"
+      ]
+    },
+    "Rebar Bar - Part 1871424790-V25-3D Ortho": {
+      "count": 1,
+      "entity_counts": {
+        "LINE": 4,
+        "POLYLINE": 2
+      },
+      "entity_types": [
+        "LINE",
+        "LINE",
+        "LINE",
+        "LINE",
+        "POLYLINE",
+        "POLYLINE"
+      ]
+    },
+    "Rebar Bar - Part 1871424790-V26-3D Ortho": {
+      "count": 1,
+      "entity_counts": {
+        "LINE": 4
+      },
+      "entity_types": [
+        "LINE",
+        "LINE",
+        "LINE",
+        "LINE"
+      ]
+    },
+    "Rebar Bar - Part 1871424790-V27-3D Ortho": {
+      "count": 1,
+      "entity_counts": {
+        "LINE": 4,
+        "POLYLINE": 2
+      },
+      "entity_types": [
+        "LINE",
+        "LINE",
+        "LINE",
+        "LINE",
+        "POLYLINE",
+        "POLYLINE"
+      ]
+    },
+    "Rebar Bar - Part 1871424790-V28-3D Ortho": {
+      "count": 1,
+      "entity_counts": {
+        "LINE": 4,
+        "POLYLINE": 2
+      },
+      "entity_types": [
+        "LINE",
+        "LINE",
+        "LINE",
+        "LINE",
+        "POLYLINE",
+        "POLYLINE"
+      ]
+    },
+    "Rebar Bar - Part 1871424790-V29-3D Ortho": {
+      "count": 1,
+      "entity_counts": {
+        "LINE": 4,
+        "POLYLINE": 2
+      },
+      "entity_types": [
+        "LINE",
+        "LINE",
+        "LINE",
+        "LINE",
+        "POLYLINE",
+        "POLYLINE"
+      ]
+    },
+    "Rebar Bar - Part 1871424790-V30-3D Ortho": {
+      "count": 1,
+      "entity_counts": {
+        "LINE": 2,
+        "POLYLINE": 2
+      },
+      "entity_types": [
+        "LINE",
+        "LINE",
+        "POLYLINE",
+        "POLYLINE"
+      ]
+    },
+    "Rebar Bar - Part 1871424790-V31-3D Ortho": {
+      "count": 1,
+      "entity_counts": {
+        "LINE": 4,
+        "POLYLINE": 2
+      },
+      "entity_types": [
+        "LINE",
+        "LINE",
+        "LINE",
+        "LINE",
+        "POLYLINE",
+        "POLYLINE"
+      ]
+    },
+    "Rebar Bar - Part 1871424790-V32-3D Ortho": {
+      "count": 1,
+      "entity_counts": {
+        "LINE": 4,
+        "POLYLINE": 2
+      },
+      "entity_types": [
+        "LINE",
+        "LINE",
+        "LINE",
+        "LINE",
+        "POLYLINE",
+        "POLYLINE"
+      ]
+    },
+    "Rebar Bar - Part 1871424790-V33-3D Ortho": {
+      "count": 1,
+      "entity_counts": {
+        "LINE": 3,
+        "POLYLINE": 2
+      },
+      "entity_types": [
+        "LINE",
+        "LINE",
+        "LINE",
+        "POLYLINE",
+        "POLYLINE"
+      ]
+    },
+    "Rebar Bar - Part 1871424790-V34-3D Ortho": {
+      "count": 1,
+      "entity_counts": {
+        "LINE": 4,
+        "POLYLINE": 2
+      },
+      "entity_types": [
+        "LINE",
+        "LINE",
+        "LINE",
+        "LINE",
+        "POLYLINE",
+        "POLYLINE"
+      ]
+    },
+    "Rebar Bar - Part 1871424790-V35-3D Ortho": {
+      "count": 1,
+      "entity_counts": {
+        "LINE": 2,
+        "POLYLINE": 2
+      },
+      "entity_types": [
+        "LINE",
+        "LINE",
+        "POLYLINE",
+        "POLYLINE"
+      ]
+    },
+    "Rebar Bar - Part 1871424790-V36-3D Ortho": {
+      "count": 1,
+      "entity_counts": {
+        "LINE": 2,
+        "POLYLINE": 2
+      },
+      "entity_types": [
+        "LINE",
+        "LINE",
+        "POLYLINE",
+        "POLYLINE"
+      ]
+    },
+    "Rebar Bar - Part 1871424790-V37-3D Ortho": {
+      "count": 4,
+      "entity_counts": {
+        "LINE": 2,
+        "POLYLINE": 2
+      },
+      "entity_types": [
+        "LINE",
+        "LINE",
+        "POLYLINE",
+        "POLYLINE"
+      ]
+    },
+    "Rebar Bar - Part 1871424790-V38-3D Ortho": {
+      "count": 1,
+      "entity_counts": {
+        "LINE": 4,
+        "POLYLINE": 2
+      },
+      "entity_types": [
+        "LINE",
+        "LINE",
+        "LINE",
+        "LINE",
+        "POLYLINE",
+        "POLYLINE"
+      ]
+    },
+    "Rebar Bar - Part 1871424790-V39-3D Ortho": {
+      "count": 1,
+      "entity_counts": {
+        "LINE": 4,
+        "POLYLINE": 2
+      },
+      "entity_types": [
+        "LINE",
+        "LINE",
+        "LINE",
+        "LINE",
+        "POLYLINE",
+        "POLYLINE"
+      ]
+    },
+    "Rebar Bar - Part 1871424790-V40-3D Ortho": {
+      "count": 1,
+      "entity_counts": {
+        "LINE": 2
+      },
+      "entity_types": [
+        "LINE",
+        "LINE"
+      ]
+    },
+    "Rebar Bar - Part 1871424790-V41-3D Ortho": {
+      "count": 1,
+      "entity_counts": {
+        "LINE": 4,
+        "POLYLINE": 2
+      },
+      "entity_types": [
+        "LINE",
+        "LINE",
+        "LINE",
+        "LINE",
+        "POLYLINE",
+        "POLYLINE"
+      ]
+    },
+    "Rebar Bar - Part 1871424790-V42-3D Ortho": {
+      "count": 1,
+      "entity_counts": {
+        "LINE": 4,
+        "POLYLINE": 2
+      },
+      "entity_types": [
+        "LINE",
+        "LINE",
+        "LINE",
+        "LINE",
+        "POLYLINE",
+        "POLYLINE"
+      ]
+    },
+    "Rebar Bar - Part 1871424790-V43-3D Ortho": {
+      "count": 1,
+      "entity_counts": {
+        "LINE": 4,
+        "POLYLINE": 2
+      },
+      "entity_types": [
+        "LINE",
+        "LINE",
+        "LINE",
+        "LINE",
+        "POLYLINE",
+        "POLYLINE"
+      ]
+    },
+    "Rebar Bar - Part 3681399347-V44-3D Ortho": {
+      "count": 16,
+      "entity_counts": {
+        "LINE": 2,
+        "POLYLINE": 2
+      },
+      "entity_types": [
+        "LINE",
+        "LINE",
+        "POLYLINE",
+        "POLYLINE"
+      ]
+    },
+    "Rebar Bar - Part 878712912-V45-3D Ortho": {
+      "count": 1,
+      "entity_counts": {
+        "POLYLINE": 2
+      },
+      "entity_types": [
+        "POLYLINE",
+        "POLYLINE"
+      ]
+    },
+    "Rebar Bar - Part 650701189-431004-3D Ortho": {
+      "count": 1,
+      "entity_counts": {
+        "LINE": 2,
+        "POLYLINE": 2
+      },
+      "entity_types": [
+        "LINE",
+        "LINE",
+        "POLYLINE",
+        "POLYLINE"
+      ]
+    },
+    "Rebar Bar - Part 878712912-V46-3D Ortho": {
+      "count": 1,
+      "entity_counts": {
+        "POLYLINE": 2
+      },
+      "entity_types": [
+        "POLYLINE",
+        "POLYLINE"
+      ]
+    },
+    "Rebar Bar - Part 3681399347-V47-3D Ortho": {
+      "count": 1,
+      "entity_counts": {
+        "LINE": 2,
+        "POLYLINE": 2
+      },
+      "entity_types": [
+        "LINE",
+        "LINE",
+        "POLYLINE",
+        "POLYLINE"
+      ]
+    },
+    "Rebar Bar - Part 878712912-V48-3D Ortho": {
+      "count": 1,
+      "entity_counts": {
+        "POLYLINE": 2
+      },
+      "entity_types": [
+        "POLYLINE",
+        "POLYLINE"
+      ]
+    },
+    "Rebar Bar - Part 878712912-V49-3D Ortho": {
+      "count": 1,
+      "entity_counts": {
+        "LINE": 2
+      },
+      "entity_types": [
+        "LINE",
+        "LINE"
+      ]
+    },
+    "Rebar Bar - Part 878712912-V50-3D Ortho": {
+      "count": 6,
+      "entity_counts": {
+        "LINE": 2
+      },
+      "entity_types": [
+        "LINE",
+        "LINE"
+      ]
+    },
+    "Rebar Bar - Part 878712912-V51-3D Ortho": {
+      "count": 1,
+      "entity_counts": {
+        "LINE": 2
+      },
+      "entity_types": [
+        "LINE",
+        "LINE"
+      ]
+    },
+    "Rebar Bar - Part 878712912-V52-3D Ortho": {
+      "count": 1,
+      "entity_counts": {
+        "LINE": 2
+      },
+      "entity_types": [
+        "LINE",
+        "LINE"
+      ]
+    },
+    "Rebar Bar - Part 3681399347-V53-3D Ortho": {
+      "count": 1,
+      "entity_counts": {
+        "LINE": 2,
+        "POLYLINE": 3
+      },
+      "entity_types": [
+        "LINE",
+        "LINE",
+        "POLYLINE",
+        "POLYLINE",
+        "POLYLINE"
+      ]
+    },
+    "Rebar Bar - Part 878712912-V54-3D Ortho": {
+      "count": 1,
+      "entity_counts": {
+        "LINE": 2
+      },
+      "entity_types": [
+        "LINE",
+        "LINE"
+      ]
+    }
+  },
+  "block_entity_breakdown": {
+    "Rebar Bar - Part 1871424790-431004-3D Ortho": {
+      "LINE": 2,
+      "POLYLINE": 2
+    },
+    "Rebar Bar - Part 1871424790-V1-3D Ortho": {
+      "LINE": 2,
+      "POLYLINE": 2
+    },
+    "Rebar Bar - Part 1871424790-V2-3D Ortho": {
+      "LINE": 2,
+      "POLYLINE": 2
+    },
+    "Rebar Bar - Part 1871424790-V3-3D Ortho": {
+      "LINE": 2,
+      "POLYLINE": 3
+    },
+    "Rebar Bar - Part 1871424790-V4-3D Ortho": {
+      "LINE": 2,
+      "POLYLINE": 2
+    },
+    "Rebar Bar - Part 2352736704-431004-3D Ortho": {
+      "LINE": 4,
+      "POLYLINE": 3
+    },
+    "Rebar Bar - Part 3575411732-431004-3D Ortho": {
+      "POLYLINE": 2
+    },
+    "Rebar Bar - Part 1070054846-431004-3D Ortho": {
+      "LINE": 2
+    },
+    "Rebar Bar - Part 2227165887-431004-3D Ortho": {
+      "POLYLINE": 2
+    },
+    "Rebar Bar - Part 360578841-431004-3D Ortho": {
+      "LINE": 4
+    },
+    "Rebar Bar - Part 360578841-V5-3D Ortho": {
+      "LINE": 3
+    },
+    "Rebar Bar - Part 3575411732-V6-3D Ortho": {
+      "POLYLINE": 2
+    },
+    "Rebar Bar - Part 766981352-431004-3D Ortho": {
+      "LINE": 4,
+      "POLYLINE": 3
+    },
+    "Rebar Bar - Part 3575411732-V7-3D Ortho": {
+      "LINE": 1
+    },
+    "Rebar Bar - Part 1070054846-V8-3D Ortho": {
+      "LINE": 1
+    },
+    "Rebar Bar - Part 2227165887-V9-3D Ortho": {
+      "POLYLINE": 2
+    },
+    "Rebar Bar - Part 360578841-V10-3D Ortho": {
+      "LINE": 2
+    },
+    "Rebar Bar - Part 766981352-V11-3D Ortho": {
+      "LINE": 2,
+      "POLYLINE": 3
+    },
+    "Rebar Bar - Part 3660531219-431004-3D Ortho": {
+      "LINE": 2,
+      "POLYLINE": 2
+    },
+    "Rebar Bar - Part 3635738315-431004-3D Ortho": {
+      "LINE": 2,
+      "POLYLINE": 2
+    },
+    "Rebar Bar - Part 3635738315-V12-3D Ortho": {
+      "LINE": 4,
+      "POLYLINE": 2
+    },
+    "Rebar Bar - Part 3660531219-V13-3D Ortho": {
+      "LINE": 2,
+      "POLYLINE": 3
+    },
+    "Rebar Bar - Part 3681399347-431004-3D Ortho": {
+      "LINE": 2,
+      "POLYLINE": 2
+    },
+    "Rebar Bar - Part 878712912-431004-3D Ortho": {
+      "POLYLINE": 2
+    },
+    "Rebar Bar - Part 3660531219-V14-3D Ortho": {
+      "LINE": 2,
+      "POLYLINE": 2
+    },
+    "Rebar Bar - Part 4101040190-431004-3D Ortho": {
+      "LINE": 7
+    },
+    "Rebar Bar - Part 4101040190-V16-3D Ortho": {
+      "LINE": 4
+    },
+    "Rebar Bar - Part 1871424790-V17-3D Ortho": {
+      "LINE": 4,
+      "POLYLINE": 2
+    },
+    "Rebar Bar - Part 1871424790-V18-3D Ortho": {
+      "LINE": 2
+    },
+    "Rebar Bar - Part 1871424790-V19-3D Ortho": {
+      "LINE": 4,
+      "POLYLINE": 2
+    },
+    "Rebar Bar - Part 1871424790-V20-3D Ortho": {
+      "LINE": 2,
+      "POLYLINE": 2
+    },
+    "Rebar Bar - Part 1871424790-V21-3D Ortho": {
+      "LINE": 4,
+      "POLYLINE": 2
+    },
+    "Rebar Bar - Part 1871424790-V22-3D Ortho": {
+      "LINE": 4,
+      "POLYLINE": 2
+    },
+    "Rebar Bar - Part 1871424790-V23-3D Ortho": {
+      "LINE": 2
+    },
+    "Rebar Bar - Part 1871424790-V24-3D Ortho": {
+      "LINE": 4,
+      "POLYLINE": 2
+    },
+    "Rebar Bar - Part 1871424790-V25-3D Ortho": {
+      "LINE": 4,
+      "POLYLINE": 2
+    },
+    "Rebar Bar - Part 1871424790-V26-3D Ortho": {
+      "LINE": 4
+    },
+    "Rebar Bar - Part 1871424790-V27-3D Ortho": {
+      "LINE": 4,
+      "POLYLINE": 2
+    },
+    "Rebar Bar - Part 1871424790-V28-3D Ortho": {
+      "LINE": 4,
+      "POLYLINE": 2
+    },
+    "Rebar Bar - Part 1871424790-V29-3D Ortho": {
+      "LINE": 4,
+      "POLYLINE": 2
+    },
+    "Rebar Bar - Part 1871424790-V30-3D Ortho": {
+      "LINE": 2,
+      "POLYLINE": 2
+    },
+    "Rebar Bar - Part 1871424790-V31-3D Ortho": {
+      "LINE": 4,
+      "POLYLINE": 2
+    },
+    "Rebar Bar - Part 1871424790-V32-3D Ortho": {
+      "LINE": 4,
+      "POLYLINE": 2
+    },
+    "Rebar Bar - Part 1871424790-V33-3D Ortho": {
+      "LINE": 3,
+      "POLYLINE": 2
+    },
+    "Rebar Bar - Part 1871424790-V34-3D Ortho": {
+      "LINE": 4,
+      "POLYLINE": 2
+    },
+    "Rebar Bar - Part 1871424790-V35-3D Ortho": {
+      "LINE": 2,
+      "POLYLINE": 2
+    },
+    "Rebar Bar - Part 1871424790-V36-3D Ortho": {
+      "LINE": 2,
+      "POLYLINE": 2
+    },
+    "Rebar Bar - Part 1871424790-V37-3D Ortho": {
+      "LINE": 2,
+      "POLYLINE": 2
+    },
+    "Rebar Bar - Part 1871424790-V38-3D Ortho": {
+      "LINE": 4,
+      "POLYLINE": 2
+    },
+    "Rebar Bar - Part 1871424790-V39-3D Ortho": {
+      "LINE": 4,
+      "POLYLINE": 2
+    },
+    "Rebar Bar - Part 1871424790-V40-3D Ortho": {
+      "LINE": 2
+    },
+    "Rebar Bar - Part 1871424790-V41-3D Ortho": {
+      "LINE": 4,
+      "POLYLINE": 2
+    },
+    "Rebar Bar - Part 1871424790-V42-3D Ortho": {
+      "LINE": 4,
+      "POLYLINE": 2
+    },
+    "Rebar Bar - Part 1871424790-V43-3D Ortho": {
+      "LINE": 4,
+      "POLYLINE": 2
+    },
+    "Rebar Bar - Part 3681399347-V44-3D Ortho": {
+      "LINE": 2,
+      "POLYLINE": 2
+    },
+    "Rebar Bar - Part 878712912-V45-3D Ortho": {
+      "POLYLINE": 2
+    },
+    "Rebar Bar - Part 650701189-431004-3D Ortho": {
+      "LINE": 2,
+      "POLYLINE": 2
+    },
+    "Rebar Bar - Part 878712912-V46-3D Ortho": {
+      "POLYLINE": 2
+    },
+    "Rebar Bar - Part 3681399347-V47-3D Ortho": {
+      "LINE": 2,
+      "POLYLINE": 2
+    },
+    "Rebar Bar - Part 878712912-V48-3D Ortho": {
+      "POLYLINE": 2
+    },
+    "Rebar Bar - Part 878712912-V49-3D Ortho": {
+      "LINE": 2
+    },
+    "Rebar Bar - Part 878712912-V50-3D Ortho": {
+      "LINE": 2
+    },
+    "Rebar Bar - Part 878712912-V51-3D Ortho": {
+      "LINE": 2
+    },
+    "Rebar Bar - Part 878712912-V52-3D Ortho": {
+      "LINE": 2
+    },
+    "Rebar Bar - Part 3681399347-V53-3D Ortho": {
+      "LINE": 2,
+      "POLYLINE": 3
+    },
+    "Rebar Bar - Part 878712912-V54-3D Ortho": {
+      "LINE": 2
+    }
+  }
+}
