@@ -1,0 +1,13 @@
+{
+  "nearest_point": 0.4809579986613244,
+  "within_radius": 3.3408750023227185,
+  "intersect_bbox": 0.9850419883150607,
+  "query_layer": 0.05733300349675119,
+  "query_type": 0.24245800159405917,
+  "query_orientation": 0.15887498739175498,
+  "parallel": 0.152915992657654,
+  "similar_length": 0.005541995051316917,
+  "text_near": 0.5305840022629127,
+  "dimension_near": 1.0307499906048179,
+  "fingerprint_lookup": 0.001291991793550551
+}
