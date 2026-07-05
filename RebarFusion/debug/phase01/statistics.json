@@ -1,0 +1,244 @@
+{
+  "PW-GF-02(R).dwg": {
+    "entity_counts": {},
+    "bounding_box": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "extents": [
+      0.0,
+      0.0
+    ],
+    "entity_density": 0.0,
+    "average_entity_size": 0.0,
+    "dominant_layers": [],
+    "dominant_blocks": []
+  },
+  "PW-GF-02(M2).dwg": {
+    "entity_counts": {},
+    "bounding_box": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "extents": [
+      0.0,
+      0.0
+    ],
+    "entity_density": 0.0,
+    "average_entity_size": 0.0,
+    "dominant_layers": [],
+    "dominant_blocks": []
+  },
+  "PW-GF-09(M2).pdf": {
+    "entity_counts": {},
+    "bounding_box": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "extents": [
+      0.0,
+      0.0
+    ],
+    "entity_density": 0.0,
+    "average_entity_size": 0.0,
+    "dominant_layers": [],
+    "dominant_blocks": []
+  },
+  "PW-GF-09(M2).dwg": {
+    "entity_counts": {},
+    "bounding_box": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "extents": [
+      0.0,
+      0.0
+    ],
+    "entity_density": 0.0,
+    "average_entity_size": 0.0,
+    "dominant_layers": [],
+    "dominant_blocks": []
+  },
+  "SS-GF-01(R).dwg": {
+    "entity_counts": {},
+    "bounding_box": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "extents": [
+      0.0,
+      0.0
+    ],
+    "entity_density": 0.0,
+    "average_entity_size": 0.0,
+    "dominant_layers": [],
+    "dominant_blocks": []
+  },
+  "SS-GF-01(M).dxf": {
+    "entity_counts": {
+      "LINE": 982,
+      "ARC": 134,
+      "HATCH": 75,
+      "CIRCLE": 38,
+      "INSERT": 157,
+      "POLYLINE": 9,
+      "MTEXT": 32,
+      "DIMENSION": 137
+    },
+    "bounding_box": [
+      59547.9302728906,
+      2512.863401605829,
+      97855.87621390348,
+      30497.56124328974
+    ],
+    "extents": [
+      38307.945941012884,
+      27984.697841683912
+    ],
+    "entity_density": 1.458905833256702e-06,
+    "average_entity_size": 0.0,
+    "dominant_layers": [
+      "S-RBAR",
+      "A-DETL-MBND",
+      "A-FLOR",
+      "A-ANNO-DIMS",
+      "G-ANNO-TEXT"
+    ],
+    "dominant_blocks": [
+      "Rebar Bar - Part 1871424790-V1-3D Ortho",
+      "Rebar Bar - Part 3681399347-V44-3D Ortho",
+      "RR spread anchor face based - RR-SA-2_5-150-614724-Elevation Top",
+      "Rebar Bar - Part 1871424790-V20-3D Ortho",
+      "Rebar Bar - Part 878712912-431004-3D Ortho"
+    ]
+  },
+  "PW-GF-09(M1).dwg": {
+    "entity_counts": {},
+    "bounding_box": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "extents": [
+      0.0,
+      0.0
+    ],
+    "entity_density": 0.0,
+    "average_entity_size": 0.0,
+    "dominant_layers": [],
+    "dominant_blocks": []
+  },
+  "PW-GF-09(R).pdf": {
+    "entity_counts": {},
+    "bounding_box": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "extents": [
+      0.0,
+      0.0
+    ],
+    "entity_density": 0.0,
+    "average_entity_size": 0.0,
+    "dominant_layers": [],
+    "dominant_blocks": []
+  },
+  "banana.dwg": {
+    "entity_counts": {},
+    "bounding_box": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "extents": [
+      0.0,
+      0.0
+    ],
+    "entity_density": 0.0,
+    "average_entity_size": 0.0,
+    "dominant_layers": [],
+    "dominant_blocks": []
+  },
+  "PW-GF-09(M1).pdf": {
+    "entity_counts": {},
+    "bounding_box": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "extents": [
+      0.0,
+      0.0
+    ],
+    "entity_density": 0.0,
+    "average_entity_size": 0.0,
+    "dominant_layers": [],
+    "dominant_blocks": []
+  },
+  "PW-GF-09(R).dwg": {
+    "entity_counts": {},
+    "bounding_box": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "extents": [
+      0.0,
+      0.0
+    ],
+    "entity_density": 0.0,
+    "average_entity_size": 0.0,
+    "dominant_layers": [],
+    "dominant_blocks": []
+  },
+  "PW-GF-02(M1).dwg": {
+    "entity_counts": {},
+    "bounding_box": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "extents": [
+      0.0,
+      0.0
+    ],
+    "entity_density": 0.0,
+    "average_entity_size": 0.0,
+    "dominant_layers": [],
+    "dominant_blocks": []
+  },
+  "PW-GF-02(M1)-copy.dwg": {
+    "entity_counts": {},
+    "bounding_box": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "extents": [
+      0.0,
+      0.0
+    ],
+    "entity_density": 0.0,
+    "average_entity_size": 0.0,
+    "dominant_layers": [],
+    "dominant_blocks": []
+  }
+}
