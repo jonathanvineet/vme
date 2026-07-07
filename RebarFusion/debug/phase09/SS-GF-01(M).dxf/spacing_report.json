@@ -1,0 +1,45 @@
+[
+  {
+    "Annotated Spacing": 200.0,
+    "Average Error": 4.504,
+    "Confidence": 0.977,
+    "Family UUID": "0337e68e-34a5-5999-aace-756f95ada82e",
+    "Inferred Spacing": 195.496,
+    "Mark": "N4",
+    "Offsets": [
+      -390.992,
+      -195.496,
+      0.0,
+      195.496,
+      390.992,
+      586.488,
+      781.984,
+      977.481,
+      1172.977,
+      1368.473,
+      1563.969,
+      1759.465,
+      1954.961,
+      2150.457,
+      2345.953,
+      2541.449,
+      2736.946,
+      2932.442
+    ],
+    "Selected Spacing": 200.0,
+    "Spacing Source": "annotation"
+  },
+  {
+    "Annotated Spacing": 0.0,
+    "Average Error": 0.0,
+    "Confidence": 0.0,
+    "Family UUID": "9a6b2122-fcfc-57c6-9b4a-fae9d29b7817",
+    "Inferred Spacing": 0.0,
+    "Mark": "N6",
+    "Offsets": [
+      0.0
+    ],
+    "Selected Spacing": 0.0,
+    "Spacing Source": "inferred"
+  }
+]

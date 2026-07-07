@@ -60,6 +60,18 @@ class StatisticsPanel(QWidget):
         if scene.comp_repo:
             stats["Components"] = len(scene.comp_repo.components)
 
+        stats["Families"] = len(getattr(scene, "engineering_families", []) or [])
+        stats["Assemblies"] = len(getattr(scene, "reinforcement_assemblies", []) or [])
+        stats["Bars"] = len(getattr(scene, "physical_bars", []) or [])
+        stats["Meshes"] = len(getattr(scene, "reconstruction_meshes", []) or [])
+        stats["Vertices"] = sum(len(mesh.vertices) for mesh in getattr(scene, "reconstruction_meshes", []) or [])
+        stats["Faces"] = sum(len(mesh.faces) for mesh in getattr(scene, "reconstruction_meshes", []) or [])
+        stats["QA Warnings"] = sum(
+            len(f.qa.warnings)
+            for f in getattr(scene, "engineering_families", []) or []
+            if getattr(f, "qa", None)
+        )
+
         insert_pos = 1
         for k, v in stats.items():
             row = _stat_row(k, str(v))

@@ -18,6 +18,8 @@ from viewer.renderer.node_renderer import NodeRenderer
 from viewer.renderer.graph_renderer import GraphRenderer
 from viewer.renderer.component_renderer import ComponentRenderer
 from viewer.renderer.recognition_renderer import RecognitionRenderer
+from viewer.renderer.family_renderer import FamilyRenderer
+from viewer.renderer.reconstruction_renderer import BarRenderer, MeshRenderer
 
 
 class ViewportWidget(QtInteractor):
@@ -45,6 +47,9 @@ class ViewportWidget(QtInteractor):
         self.add_renderer(GraphRenderer(scene, self))
         self.add_renderer(ComponentRenderer(scene, self))
         self.add_renderer(RecognitionRenderer(scene, self))  # stub
+        self.add_renderer(FamilyRenderer(scene, self))
+        self.add_renderer(BarRenderer(scene, self))
+        self.add_renderer(MeshRenderer(scene, self))
 
         # Camera: top-down 2D view by default
         self.view_xy()

@@ -1,0 +1,1024 @@
+[
+  {
+    "assembly_type": "edge_reinforcement",
+    "bars": [
+      {
+        "adjustment_notes": [
+          "cover=40.0",
+          "layer_z_offset=0.0"
+        ],
+        "bar_type": "branch",
+        "centerline": {
+          "bends": [],
+          "closed": false,
+          "family_uuid": "9a6b2122-fcfc-57c6-9b4a-fae9d29b7817",
+          "hooks": [],
+          "member_uuid": "e45df0da-9cd7-5f3a-b023-9aebee4fb4c5",
+          "points": [
+            [
+              89776.25828893064,
+              2690.3607296348173,
+              46.0
+            ],
+            [
+              89776.25828893064,
+              4655.202305015476,
+              46.0
+            ]
+          ],
+          "uuid": "34f8458d-c627-5992-a9c4-d2bd5b562469"
+        },
+        "confidence": 0.0,
+        "diameter": 12.0,
+        "family_uuid": "9a6b2122-fcfc-57c6-9b4a-fae9d29b7817",
+        "layer_uuid": "0684d8a0-fefa-5637-9456-be2a371b0ca1",
+        "mark": "N6",
+        "member_uuid": "e45df0da-9cd7-5f3a-b023-9aebee4fb4c5",
+        "path": [
+          [
+            89776.25828893064,
+            2690.3607296348173,
+            46.0
+          ],
+          [
+            89776.25828893064,
+            4655.202305015476,
+            46.0
+          ]
+        ],
+        "radius": 6.0,
+        "uuid": "28c7ce12-804a-5eb4-89ea-13aa5868cda1"
+      }
+    ],
+    "bounding_box": {
+      "max_x": 89784.26091000001,
+      "max_y": 4155.9611,
+      "max_z": 0.0,
+      "min_x": 89763.84280488508,
+      "min_y": 3181.5315839249597,
+      "min_z": 0.0
+    },
+    "confidence": 0.0,
+    "families": [
+      "9a6b2122-fcfc-57c6-9b4a-fae9d29b7817"
+    ],
+    "layers": [
+      {
+        "bar_uuids": [
+          "28c7ce12-804a-5eb4-89ea-13aa5868cda1"
+        ],
+        "direction": "Vertical",
+        "family_uuids": [
+          "9a6b2122-fcfc-57c6-9b4a-fae9d29b7817"
+        ],
+        "name": "Edge",
+        "uuid": "0684d8a0-fefa-5637-9456-be2a371b0ca1",
+        "z_offset": 0.0
+      }
+    ],
+    "local_coordinate_system": {
+      "cover": 40.0,
+      "origin": [
+        89774.05185744254,
+        3668.74634196248,
+        0.0
+      ],
+      "thickness": 64.0,
+      "u_axis": [
+        6.123233995736766e-17,
+        1.0,
+        0.0
+      ],
+      "v_axis": [
+        -1.0,
+        6.123233995736766e-17,
+        0.0
+      ],
+      "w_axis": [
+        0.0,
+        0.0,
+        1.0
+      ]
+    },
+    "uuid": "e58d23b2-23bc-5cc6-9261-e34c9bf46f8e"
+  },
+  {
+    "assembly_type": "slab_bottom_mesh",
+    "bars": [
+      {
+        "adjustment_notes": [
+          "cover=40.0",
+          "layer_z_offset=0.0"
+        ],
+        "bar_type": "u_bar",
+        "centerline": {
+          "bends": [],
+          "closed": false,
+          "family_uuid": "0337e68e-34a5-5999-aace-756f95ada82e",
+          "hooks": [],
+          "member_uuid": "2c94675a-7bd7-51c9-b4de-69328b1fa71f",
+          "points": [
+            [
+              68325.1302,
+              24414.41281792453,
+              44.0
+            ],
+            [
+              68325.1302,
+              25262.41281792453,
+              44.0
+            ]
+          ],
+          "uuid": "f58d2846-05f4-53de-bbe9-d5f7b9128d58"
+        },
+        "confidence": 0.977,
+        "diameter": 8.0,
+        "family_uuid": "0337e68e-34a5-5999-aace-756f95ada82e",
+        "layer_uuid": "35d79509-00ed-5bb4-a307-891c8ced52e8",
+        "mark": "N4",
+        "member_uuid": "2c94675a-7bd7-51c9-b4de-69328b1fa71f",
+        "path": [
+          [
+            68325.1302,
+            24414.41281792453,
+            44.0
+          ],
+          [
+            68325.1302,
+            25262.41281792453,
+            44.0
+          ]
+        ],
+        "radius": 4.0,
+        "uuid": "c93f5c8f-4f87-50db-b6dd-496a054c50f0"
+      },
+      {
+        "adjustment_notes": [
+          "cover=40.0",
+          "layer_z_offset=0.0"
+        ],
+        "bar_type": "u_bar",
+        "centerline": {
+          "bends": [],
+          "closed": false,
+          "family_uuid": "0337e68e-34a5-5999-aace-756f95ada82e",
+          "hooks": [],
+          "member_uuid": "1ae610b9-f797-5f53-b2b1-df78abaf3178",
+          "points": [
+            [
+              68129.63409,
+              24414.41281792453,
+              44.0
+            ],
+            [
+              68129.63409,
+              25262.41281792453,
+              44.0
+            ]
+          ],
+          "uuid": "c11a5224-5630-51bb-86a0-88c16e9cba0d"
+        },
+        "confidence": 0.977,
+        "diameter": 8.0,
+        "family_uuid": "0337e68e-34a5-5999-aace-756f95ada82e",
+        "layer_uuid": "35d79509-00ed-5bb4-a307-891c8ced52e8",
+        "mark": "N4",
+        "member_uuid": "1ae610b9-f797-5f53-b2b1-df78abaf3178",
+        "path": [
+          [
+            68129.63409,
+            24414.41281792453,
+            44.0
+          ],
+          [
+            68129.63409,
+            25262.41281792453,
+            44.0
+          ]
+        ],
+        "radius": 4.0,
+        "uuid": "d6ef2c10-943f-5755-92e6-296ec724adb1"
+      },
+      {
+        "adjustment_notes": [
+          "cover=40.0",
+          "layer_z_offset=0.0"
+        ],
+        "bar_type": "u_bar",
+        "centerline": {
+          "bends": [],
+          "closed": false,
+          "family_uuid": "0337e68e-34a5-5999-aace-756f95ada82e",
+          "hooks": [],
+          "member_uuid": "d55c353a-0bcc-5f17-a9e8-6c088b3e0ded",
+          "points": [
+            [
+              67934.13798,
+              24414.41281792453,
+              44.0
+            ],
+            [
+              67934.13798,
+              25262.41281792453,
+              44.0
+            ]
+          ],
+          "uuid": "ca94e68f-a4b8-59e2-a932-ac97d7ac92cb"
+        },
+        "confidence": 0.977,
+        "diameter": 8.0,
+        "family_uuid": "0337e68e-34a5-5999-aace-756f95ada82e",
+        "layer_uuid": "35d79509-00ed-5bb4-a307-891c8ced52e8",
+        "mark": "N4",
+        "member_uuid": "d55c353a-0bcc-5f17-a9e8-6c088b3e0ded",
+        "path": [
+          [
+            67934.13798,
+            24414.41281792453,
+            44.0
+          ],
+          [
+            67934.13798,
+            25262.41281792453,
+            44.0
+          ]
+        ],
+        "radius": 4.0,
+        "uuid": "0cba066e-eb65-539a-81e5-bf0774220aa4"
+      },
+      {
+        "adjustment_notes": [
+          "cover=40.0",
+          "layer_z_offset=0.0"
+        ],
+        "bar_type": "u_bar",
+        "centerline": {
+          "bends": [],
+          "closed": false,
+          "family_uuid": "0337e68e-34a5-5999-aace-756f95ada82e",
+          "hooks": [],
+          "member_uuid": "eedb8304-1a93-5306-9cd5-0ab854673414",
+          "points": [
+            [
+              67738.64186,
+              24414.41281792453,
+              44.0
+            ],
+            [
+              67738.64186,
+              25262.41281792453,
+              44.0
+            ]
+          ],
+          "uuid": "01087832-c20a-557b-bff4-6efa215ca6e7"
+        },
+        "confidence": 0.977,
+        "diameter": 8.0,
+        "family_uuid": "0337e68e-34a5-5999-aace-756f95ada82e",
+        "layer_uuid": "35d79509-00ed-5bb4-a307-891c8ced52e8",
+        "mark": "N4",
+        "member_uuid": "eedb8304-1a93-5306-9cd5-0ab854673414",
+        "path": [
+          [
+            67738.64186,
+            24414.41281792453,
+            44.0
+          ],
+          [
+            67738.64186,
+            25262.41281792453,
+            44.0
+          ]
+        ],
+        "radius": 4.0,
+        "uuid": "9a2fb278-b61a-5478-a6c9-74e41b107621"
+      },
+      {
+        "adjustment_notes": [
+          "cover=40.0",
+          "layer_z_offset=0.0"
+        ],
+        "bar_type": "u_bar",
+        "centerline": {
+          "bends": [],
+          "closed": false,
+          "family_uuid": "0337e68e-34a5-5999-aace-756f95ada82e",
+          "hooks": [],
+          "member_uuid": "82bc8135-b358-54d6-9900-94c170087dc4",
+          "points": [
+            [
+              67543.14575000001,
+              24414.41281792453,
+              44.0
+            ],
+            [
+              67543.14575000001,
+              25262.41281792453,
+              44.0
+            ]
+          ],
+          "uuid": "31aa6261-eade-5ec7-99d7-140a86188451"
+        },
+        "confidence": 0.977,
+        "diameter": 8.0,
+        "family_uuid": "0337e68e-34a5-5999-aace-756f95ada82e",
+        "layer_uuid": "35d79509-00ed-5bb4-a307-891c8ced52e8",
+        "mark": "N4",
+        "member_uuid": "82bc8135-b358-54d6-9900-94c170087dc4",
+        "path": [
+          [
+            67543.14575000001,
+            24414.41281792453,
+            44.0
+          ],
+          [
+            67543.14575000001,
+            25262.41281792453,
+            44.0
+          ]
+        ],
+        "radius": 4.0,
+        "uuid": "c119db42-fd3a-5b10-9871-dca858b7e040"
+      },
+      {
+        "adjustment_notes": [
+          "cover=40.0",
+          "layer_z_offset=0.0"
+        ],
+        "bar_type": "u_bar",
+        "centerline": {
+          "bends": [],
+          "closed": false,
+          "family_uuid": "0337e68e-34a5-5999-aace-756f95ada82e",
+          "hooks": [],
+          "member_uuid": "b1cac5ae-4de1-5470-901c-a70fa46a1f50",
+          "points": [
+            [
+              67347.64964,
+              24414.41281792453,
+              44.0
+            ],
+            [
+              67347.64964,
+              25262.41281792453,
+              44.0
+            ]
+          ],
+          "uuid": "ef3ad29a-d9d2-5964-a742-6d84bcef3bc7"
+        },
+        "confidence": 0.977,
+        "diameter": 8.0,
+        "family_uuid": "0337e68e-34a5-5999-aace-756f95ada82e",
+        "layer_uuid": "35d79509-00ed-5bb4-a307-891c8ced52e8",
+        "mark": "N4",
+        "member_uuid": "b1cac5ae-4de1-5470-901c-a70fa46a1f50",
+        "path": [
+          [
+            67347.64964,
+            24414.41281792453,
+            44.0
+          ],
+          [
+            67347.64964,
+            25262.41281792453,
+            44.0
+          ]
+        ],
+        "radius": 4.0,
+        "uuid": "651e1495-4b84-5979-aa37-08a8b41fe1dc"
+      },
+      {
+        "adjustment_notes": [
+          "cover=40.0",
+          "layer_z_offset=0.0"
+        ],
+        "bar_type": "u_bar",
+        "centerline": {
+          "bends": [],
+          "closed": false,
+          "family_uuid": "0337e68e-34a5-5999-aace-756f95ada82e",
+          "hooks": [],
+          "member_uuid": "d2d69f56-de26-5071-b969-99cdde0ce00d",
+          "points": [
+            [
+              67152.15352,
+              24414.41281792453,
+              44.0
+            ],
+            [
+              67152.15352,
+              25262.41281792453,
+              44.0
+            ]
+          ],
+          "uuid": "4b615fcb-3c2a-599f-aaec-6c2ce467aaa0"
+        },
+        "confidence": 0.977,
+        "diameter": 8.0,
+        "family_uuid": "0337e68e-34a5-5999-aace-756f95ada82e",
+        "layer_uuid": "35d79509-00ed-5bb4-a307-891c8ced52e8",
+        "mark": "N4",
+        "member_uuid": "d2d69f56-de26-5071-b969-99cdde0ce00d",
+        "path": [
+          [
+            67152.15352,
+            24414.41281792453,
+            44.0
+          ],
+          [
+            67152.15352,
+            25262.41281792453,
+            44.0
+          ]
+        ],
+        "radius": 4.0,
+        "uuid": "05bb477e-535d-5998-b80f-c943b60308a0"
+      },
+      {
+        "adjustment_notes": [
+          "cover=40.0",
+          "layer_z_offset=0.0"
+        ],
+        "bar_type": "u_bar",
+        "centerline": {
+          "bends": [],
+          "closed": false,
+          "family_uuid": "0337e68e-34a5-5999-aace-756f95ada82e",
+          "hooks": [],
+          "member_uuid": "1af08bd7-1ca6-57e1-a1ff-56449b2dc41b",
+          "points": [
+            [
+              66956.65741,
+              24414.41281792453,
+              44.0
+            ],
+            [
+              66956.65741,
+              25262.41281792453,
+              44.0
+            ]
+          ],
+          "uuid": "fc24ef82-d2a4-59cf-9159-5fb0be2da1a6"
+        },
+        "confidence": 0.977,
+        "diameter": 8.0,
+        "family_uuid": "0337e68e-34a5-5999-aace-756f95ada82e",
+        "layer_uuid": "35d79509-00ed-5bb4-a307-891c8ced52e8",
+        "mark": "N4",
+        "member_uuid": "1af08bd7-1ca6-57e1-a1ff-56449b2dc41b",
+        "path": [
+          [
+            66956.65741,
+            24414.41281792453,
+            44.0
+          ],
+          [
+            66956.65741,
+            25262.41281792453,
+            44.0
+          ]
+        ],
+        "radius": 4.0,
+        "uuid": "614fc649-7b22-5e84-84e7-6a77c5036e57"
+      },
+      {
+        "adjustment_notes": [
+          "cover=40.0",
+          "layer_z_offset=0.0"
+        ],
+        "bar_type": "u_bar",
+        "centerline": {
+          "bends": [],
+          "closed": false,
+          "family_uuid": "0337e68e-34a5-5999-aace-756f95ada82e",
+          "hooks": [],
+          "member_uuid": "6778ec2d-7d1c-5538-8c25-4dad6dfb1a18",
+          "points": [
+            [
+              66761.1613,
+              24414.41281792453,
+              44.0
+            ],
+            [
+              66761.1613,
+              25262.41281792453,
+              44.0
+            ]
+          ],
+          "uuid": "4828adf6-d8de-5d50-9112-f1118c56978d"
+        },
+        "confidence": 0.977,
+        "diameter": 8.0,
+        "family_uuid": "0337e68e-34a5-5999-aace-756f95ada82e",
+        "layer_uuid": "35d79509-00ed-5bb4-a307-891c8ced52e8",
+        "mark": "N4",
+        "member_uuid": "6778ec2d-7d1c-5538-8c25-4dad6dfb1a18",
+        "path": [
+          [
+            66761.1613,
+            24414.41281792453,
+            44.0
+          ],
+          [
+            66761.1613,
+            25262.41281792453,
+            44.0
+          ]
+        ],
+        "radius": 4.0,
+        "uuid": "5e88d41d-e532-57bb-afa2-8295ace1eae8"
+      },
+      {
+        "adjustment_notes": [
+          "cover=40.0",
+          "layer_z_offset=0.0"
+        ],
+        "bar_type": "u_bar",
+        "centerline": {
+          "bends": [],
+          "closed": false,
+          "family_uuid": "0337e68e-34a5-5999-aace-756f95ada82e",
+          "hooks": [],
+          "member_uuid": "ce5184c9-33da-5439-9678-85ba60f42230",
+          "points": [
+            [
+              66565.66519,
+              24414.41281792453,
+              44.0
+            ],
+            [
+              66565.66519,
+              25262.41281792453,
+              44.0
+            ]
+          ],
+          "uuid": "6d16eefb-0f98-5403-aed3-765aa68174dd"
+        },
+        "confidence": 0.977,
+        "diameter": 8.0,
+        "family_uuid": "0337e68e-34a5-5999-aace-756f95ada82e",
+        "layer_uuid": "35d79509-00ed-5bb4-a307-891c8ced52e8",
+        "mark": "N4",
+        "member_uuid": "ce5184c9-33da-5439-9678-85ba60f42230",
+        "path": [
+          [
+            66565.66519,
+            24414.41281792453,
+            44.0
+          ],
+          [
+            66565.66519,
+            25262.41281792453,
+            44.0
+          ]
+        ],
+        "radius": 4.0,
+        "uuid": "06745ec5-a500-5b03-a1d2-b4f0965d2a10"
+      },
+      {
+        "adjustment_notes": [
+          "cover=40.0",
+          "layer_z_offset=0.0"
+        ],
+        "bar_type": "u_bar",
+        "centerline": {
+          "bends": [],
+          "closed": false,
+          "family_uuid": "0337e68e-34a5-5999-aace-756f95ada82e",
+          "hooks": [],
+          "member_uuid": "1fa18097-8a49-5048-92e1-64e9b82e8391",
+          "points": [
+            [
+              66370.16907,
+              24414.41281792453,
+              44.0
+            ],
+            [
+              66370.16907,
+              25262.41281792453,
+              44.0
+            ]
+          ],
+          "uuid": "9dc2d671-16b7-514b-a460-445ab2f4a18b"
+        },
+        "confidence": 0.977,
+        "diameter": 8.0,
+        "family_uuid": "0337e68e-34a5-5999-aace-756f95ada82e",
+        "layer_uuid": "35d79509-00ed-5bb4-a307-891c8ced52e8",
+        "mark": "N4",
+        "member_uuid": "1fa18097-8a49-5048-92e1-64e9b82e8391",
+        "path": [
+          [
+            66370.16907,
+            24414.41281792453,
+            44.0
+          ],
+          [
+            66370.16907,
+            25262.41281792453,
+            44.0
+          ]
+        ],
+        "radius": 4.0,
+        "uuid": "13b9f89e-44e4-52bc-988e-b6c57a66c535"
+      },
+      {
+        "adjustment_notes": [
+          "cover=40.0",
+          "layer_z_offset=0.0"
+        ],
+        "bar_type": "u_bar",
+        "centerline": {
+          "bends": [],
+          "closed": false,
+          "family_uuid": "0337e68e-34a5-5999-aace-756f95ada82e",
+          "hooks": [],
+          "member_uuid": "87094dc4-d1b3-5760-8df3-1b985076af9c",
+          "points": [
+            [
+              66174.67296000001,
+              24414.41281792453,
+              44.0
+            ],
+            [
+              66174.67296000001,
+              25262.41281792453,
+              44.0
+            ]
+          ],
+          "uuid": "54608bd5-4341-506a-afa0-c51a2899d64f"
+        },
+        "confidence": 0.977,
+        "diameter": 8.0,
+        "family_uuid": "0337e68e-34a5-5999-aace-756f95ada82e",
+        "layer_uuid": "35d79509-00ed-5bb4-a307-891c8ced52e8",
+        "mark": "N4",
+        "member_uuid": "87094dc4-d1b3-5760-8df3-1b985076af9c",
+        "path": [
+          [
+            66174.67296000001,
+            24414.41281792453,
+            44.0
+          ],
+          [
+            66174.67296000001,
+            25262.41281792453,
+            44.0
+          ]
+        ],
+        "radius": 4.0,
+        "uuid": "162a3b32-314e-5a2d-95e7-37cec5f9bee5"
+      },
+      {
+        "adjustment_notes": [
+          "cover=40.0",
+          "layer_z_offset=0.0"
+        ],
+        "bar_type": "u_bar",
+        "centerline": {
+          "bends": [],
+          "closed": false,
+          "family_uuid": "0337e68e-34a5-5999-aace-756f95ada82e",
+          "hooks": [],
+          "member_uuid": "6cfbf64c-5efe-5801-ab9f-7e0a92dbccbe",
+          "points": [
+            [
+              65979.17685,
+              24414.41281792453,
+              44.0
+            ],
+            [
+              65979.17685,
+              25262.41281792453,
+              44.0
+            ]
+          ],
+          "uuid": "43f980ce-d24b-5b6f-ac3c-79644327dc61"
+        },
+        "confidence": 0.977,
+        "diameter": 8.0,
+        "family_uuid": "0337e68e-34a5-5999-aace-756f95ada82e",
+        "layer_uuid": "35d79509-00ed-5bb4-a307-891c8ced52e8",
+        "mark": "N4",
+        "member_uuid": "6cfbf64c-5efe-5801-ab9f-7e0a92dbccbe",
+        "path": [
+          [
+            65979.17685,
+            24414.41281792453,
+            44.0
+          ],
+          [
+            65979.17685,
+            25262.41281792453,
+            44.0
+          ]
+        ],
+        "radius": 4.0,
+        "uuid": "2b946e51-f138-53e6-9a86-9b5a6623792f"
+      },
+      {
+        "adjustment_notes": [
+          "cover=40.0",
+          "layer_z_offset=0.0"
+        ],
+        "bar_type": "u_bar",
+        "centerline": {
+          "bends": [],
+          "closed": false,
+          "family_uuid": "0337e68e-34a5-5999-aace-756f95ada82e",
+          "hooks": [],
+          "member_uuid": "e03a6291-495b-526f-8d4d-cc54aa5a4d19",
+          "points": [
+            [
+              65783.68074000001,
+              24414.41281792453,
+              44.0
+            ],
+            [
+              65783.68074000001,
+              25262.41281792453,
+              44.0
+            ]
+          ],
+          "uuid": "f9725980-40c8-52af-9a21-4ab86f63644b"
+        },
+        "confidence": 0.977,
+        "diameter": 8.0,
+        "family_uuid": "0337e68e-34a5-5999-aace-756f95ada82e",
+        "layer_uuid": "35d79509-00ed-5bb4-a307-891c8ced52e8",
+        "mark": "N4",
+        "member_uuid": "e03a6291-495b-526f-8d4d-cc54aa5a4d19",
+        "path": [
+          [
+            65783.68074000001,
+            24414.41281792453,
+            44.0
+          ],
+          [
+            65783.68074000001,
+            25262.41281792453,
+            44.0
+          ]
+        ],
+        "radius": 4.0,
+        "uuid": "c5582073-5bd1-562f-b73f-5b96446c7779"
+      },
+      {
+        "adjustment_notes": [
+          "cover=40.0",
+          "layer_z_offset=0.0"
+        ],
+        "bar_type": "u_bar",
+        "centerline": {
+          "bends": [],
+          "closed": false,
+          "family_uuid": "0337e68e-34a5-5999-aace-756f95ada82e",
+          "hooks": [],
+          "member_uuid": "34081317-cce1-50a0-9f85-5abad424fef2",
+          "points": [
+            [
+              65588.18462,
+              24414.41281792453,
+              44.0
+            ],
+            [
+              65588.18462,
+              25262.41281792453,
+              44.0
+            ]
+          ],
+          "uuid": "0d7bd4b1-bf97-59b5-a986-09bffa1605e8"
+        },
+        "confidence": 0.977,
+        "diameter": 8.0,
+        "family_uuid": "0337e68e-34a5-5999-aace-756f95ada82e",
+        "layer_uuid": "35d79509-00ed-5bb4-a307-891c8ced52e8",
+        "mark": "N4",
+        "member_uuid": "34081317-cce1-50a0-9f85-5abad424fef2",
+        "path": [
+          [
+            65588.18462,
+            24414.41281792453,
+            44.0
+          ],
+          [
+            65588.18462,
+            25262.41281792453,
+            44.0
+          ]
+        ],
+        "radius": 4.0,
+        "uuid": "16d59a08-7537-58f0-9898-db652a2e1b43"
+      },
+      {
+        "adjustment_notes": [
+          "cover=40.0",
+          "layer_z_offset=0.0"
+        ],
+        "bar_type": "u_bar",
+        "centerline": {
+          "bends": [],
+          "closed": false,
+          "family_uuid": "0337e68e-34a5-5999-aace-756f95ada82e",
+          "hooks": [],
+          "member_uuid": "f6ff81cf-4c03-50f1-8ef8-bce51e986852",
+          "points": [
+            [
+              65392.68851,
+              24414.41281792453,
+              44.0
+            ],
+            [
+              65392.68851,
+              25262.41281792453,
+              44.0
+            ]
+          ],
+          "uuid": "51eb34e3-2e63-5dc4-983f-5033a7a2fc2d"
+        },
+        "confidence": 0.977,
+        "diameter": 8.0,
+        "family_uuid": "0337e68e-34a5-5999-aace-756f95ada82e",
+        "layer_uuid": "35d79509-00ed-5bb4-a307-891c8ced52e8",
+        "mark": "N4",
+        "member_uuid": "f6ff81cf-4c03-50f1-8ef8-bce51e986852",
+        "path": [
+          [
+            65392.68851,
+            24414.41281792453,
+            44.0
+          ],
+          [
+            65392.68851,
+            25262.41281792453,
+            44.0
+          ]
+        ],
+        "radius": 4.0,
+        "uuid": "0c9ce1ef-67ee-5b6f-97d8-7d8c2d3f6331"
+      },
+      {
+        "adjustment_notes": [
+          "cover=40.0",
+          "layer_z_offset=0.0"
+        ],
+        "bar_type": "u_bar",
+        "centerline": {
+          "bends": [],
+          "closed": false,
+          "family_uuid": "0337e68e-34a5-5999-aace-756f95ada82e",
+          "hooks": [],
+          "member_uuid": "a198f09f-6eac-5d48-a5fb-e4001636b978",
+          "points": [
+            [
+              65197.19240000001,
+              24414.41281792453,
+              44.0
+            ],
+            [
+              65197.19240000001,
+              25262.41281792453,
+              44.0
+            ]
+          ],
+          "uuid": "afa59bd5-96d6-5626-bda2-517f4618127a"
+        },
+        "confidence": 0.977,
+        "diameter": 8.0,
+        "family_uuid": "0337e68e-34a5-5999-aace-756f95ada82e",
+        "layer_uuid": "35d79509-00ed-5bb4-a307-891c8ced52e8",
+        "mark": "N4",
+        "member_uuid": "a198f09f-6eac-5d48-a5fb-e4001636b978",
+        "path": [
+          [
+            65197.19240000001,
+            24414.41281792453,
+            44.0
+          ],
+          [
+            65197.19240000001,
+            25262.41281792453,
+            44.0
+          ]
+        ],
+        "radius": 4.0,
+        "uuid": "fa01dfe0-382d-5099-8837-ef85a06f18c5"
+      },
+      {
+        "adjustment_notes": [
+          "cover=40.0",
+          "layer_z_offset=0.0"
+        ],
+        "bar_type": "u_bar",
+        "centerline": {
+          "bends": [],
+          "closed": false,
+          "family_uuid": "0337e68e-34a5-5999-aace-756f95ada82e",
+          "hooks": [],
+          "member_uuid": "c037291a-3da5-55dd-a743-2a156138410e",
+          "points": [
+            [
+              65001.696280000004,
+              24414.41281792453,
+              44.0
+            ],
+            [
+              65001.696280000004,
+              25262.41281792453,
+              44.0
+            ]
+          ],
+          "uuid": "0451c7f5-5e05-5ee4-8d8f-c018aa5fb177"
+        },
+        "confidence": 0.977,
+        "diameter": 8.0,
+        "family_uuid": "0337e68e-34a5-5999-aace-756f95ada82e",
+        "layer_uuid": "35d79509-00ed-5bb4-a307-891c8ced52e8",
+        "mark": "N4",
+        "member_uuid": "c037291a-3da5-55dd-a743-2a156138410e",
+        "path": [
+          [
+            65001.696280000004,
+            24414.41281792453,
+            44.0
+          ],
+          [
+            65001.696280000004,
+            25262.41281792453,
+            44.0
+          ]
+        ],
+        "radius": 4.0,
+        "uuid": "b6ba8875-3b39-5a8d-8d2c-500275a435ed"
+      }
+    ],
+    "bounding_box": {
+      "max_x": 68329.1302,
+      "max_y": 25050.39395,
+      "max_z": 0.0,
+      "min_x": 64997.696280000004,
+      "min_y": 24630.39395,
+      "min_z": 0.0
+    },
+    "confidence": 0.977,
+    "families": [
+      "0337e68e-34a5-5999-aace-756f95ada82e"
+    ],
+    "layers": [
+      {
+        "bar_uuids": [
+          "c93f5c8f-4f87-50db-b6dd-496a054c50f0",
+          "d6ef2c10-943f-5755-92e6-296ec724adb1",
+          "0cba066e-eb65-539a-81e5-bf0774220aa4",
+          "9a2fb278-b61a-5478-a6c9-74e41b107621",
+          "c119db42-fd3a-5b10-9871-dca858b7e040",
+          "651e1495-4b84-5979-aa37-08a8b41fe1dc",
+          "05bb477e-535d-5998-b80f-c943b60308a0",
+          "614fc649-7b22-5e84-84e7-6a77c5036e57",
+          "5e88d41d-e532-57bb-afa2-8295ace1eae8",
+          "06745ec5-a500-5b03-a1d2-b4f0965d2a10",
+          "13b9f89e-44e4-52bc-988e-b6c57a66c535",
+          "162a3b32-314e-5a2d-95e7-37cec5f9bee5",
+          "2b946e51-f138-53e6-9a86-9b5a6623792f",
+          "c5582073-5bd1-562f-b73f-5b96446c7779",
+          "16d59a08-7537-58f0-9898-db652a2e1b43",
+          "0c9ce1ef-67ee-5b6f-97d8-7d8c2d3f6331",
+          "fa01dfe0-382d-5099-8837-ef85a06f18c5",
+          "b6ba8875-3b39-5a8d-8d2c-500275a435ed"
+        ],
+        "direction": "Vertical",
+        "family_uuids": [
+          "0337e68e-34a5-5999-aace-756f95ada82e"
+        ],
+        "name": "Layer 2 - Distribution",
+        "uuid": "35d79509-00ed-5bb4-a307-891c8ced52e8",
+        "z_offset": 0.0
+      }
+    ],
+    "local_coordinate_system": {
+      "cover": 40.0,
+      "origin": [
+        66663.41324,
+        24840.39395,
+        0.0
+      ],
+      "thickness": 56.0,
+      "u_axis": [
+        6.123233995736766e-17,
+        1.0,
+        0.0
+      ],
+      "v_axis": [
+        -1.0,
+        6.123233995736766e-17,
+        0.0
+      ],
+      "w_axis": [
+        0.0,
+        0.0,
+        1.0
+      ]
+    },
+    "uuid": "b7d983c2-049a-5c5b-8fcc-225dd8a242ba"
+  }
+]

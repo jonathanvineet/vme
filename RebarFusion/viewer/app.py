@@ -22,18 +22,21 @@ import sys
 
 from PySide6.QtWidgets import (
     QApplication, QMainWindow, QDockWidget,
-    QToolBar, QStatusBar, QWidget, QVBoxLayout, QLabel, QFileDialog
+    QToolBar, QStatusBar, QWidget, QVBoxLayout, QLabel, QFileDialog,
+    QSplitter, QLineEdit
 )
 from PySide6.QtCore import Qt, QTimer
 from PySide6.QtGui import QAction, QFont, QIcon
 
 from viewer.scene import SceneManager
 from viewer.viewport import ViewportWidget
+from viewer.viewport2d import Viewport2D
 from viewer.panels.hierarchy_panel import HierarchyPanel
 from viewer.panels.layer_panel import LayerPanel
 from viewer.panels.property_panel import PropertyPanel
 from viewer.panels.statistics_panel import StatisticsPanel
 from viewer.panels.console_panel import ConsolePanel
+from viewer.panels.timeline_panel import TimelinePanel
 
 
 DARK_STYLESHEET = """
@@ -100,9 +103,14 @@ class MainWindow(QMainWindow):
         # ── Scene ─────────────────────────────────────────────────────────
         self.scene = SceneManager()
 
-        # ── Viewport ──────────────────────────────────────────────────────
+        # ── Workbench Viewports ───────────────────────────────────────────
+        self.viewport2d = Viewport2D(self.scene, self)
         self.viewport = ViewportWidget(self.scene, self)
-        self.setCentralWidget(self.viewport)
+        center_split = QSplitter(Qt.Orientation.Vertical)
+        center_split.addWidget(self.viewport2d)
+        center_split.addWidget(self.viewport)
+        center_split.setSizes([560, 360])
+        self.setCentralWidget(center_split)
 
         # ── Panels ────────────────────────────────────────────────────────
         self._hier_panel  = HierarchyPanel(self.scene)
@@ -110,6 +118,7 @@ class MainWindow(QMainWindow):
         self._layer_panel = LayerPanel(self.scene)
         self._prop_panel  = PropertyPanel(self.scene)
         self._console     = ConsolePanel(self.scene)
+        self._timeline    = TimelinePanel(self.scene)
 
         # Left dock
         left_dock = QDockWidget("HIERARCHY", self)
@@ -142,6 +151,11 @@ class MainWindow(QMainWindow):
         bottom_dock.setFeatures(QDockWidget.DockWidgetFeature.DockWidgetMovable)
         bottom_dock.setWidget(self._console)
         self.addDockWidget(Qt.DockWidgetArea.BottomDockWidgetArea, bottom_dock)
+
+        timeline_dock = QDockWidget("TIMELINE", self)
+        timeline_dock.setFeatures(QDockWidget.DockWidgetFeature.DockWidgetMovable)
+        timeline_dock.setWidget(self._timeline)
+        self.addDockWidget(Qt.DockWidgetArea.BottomDockWidgetArea, timeline_dock)
 
         # ── Menu Bar ──────────────────────────────────────────────────────
         self._build_menu()
@@ -215,6 +229,20 @@ class MainWindow(QMainWindow):
         fit_a.triggered.connect(self.viewport.fit_view)
         tb.addAction(fit_a)
 
+        tb.addSeparator()
+        search = QLineEdit()
+        search.setPlaceholderText("Search mark, assembly, bar...")
+        search.setMinimumWidth(260)
+        search.returnPressed.connect(lambda: self._search(search.text()))
+        tb.addWidget(QLabel("Search:"))
+        tb.addWidget(search)
+
+    def _search(self, query: str):
+        if self.scene.search(query):
+            self.status.showMessage(f"Selected: {query}")
+        else:
+            self.status.showMessage(f"No match: {query}")
+
     # ─── Project loading ──────────────────────────────────────────────────────
 
     def _open_project_dialog(self):
@@ -244,6 +272,10 @@ class MainWindow(QMainWindow):
             from core.recognition.annotations import Annotation, AnnotationParser
             from core.engineering.association import EngineeringAssociationEngine
             from core.engineering.solver import ConstraintSolver
+            from core.engineering.family import FamilyBuilder
+            from core.reconstruction.assembly_builder import AssemblyBuilder
+            from core.reconstruction.bar_builder import PhysicalBarBuilder
+            from core.reconstruction.mesh_builder import MeshBuilder
             project = DrawingProject()
             manifest = project.load_directory(directory)
             reader = DXFReader()
@@ -253,6 +285,11 @@ class MainWindow(QMainWindow):
             graph = None
             comp_repo = None
             recognition_cache = None
+            eng_objects = {}
+            engineering_families = []
+            reinforcement_assemblies = []
+            physical_bars = []
+            reconstruction_meshes = []
 
             registry = RecognizerRegistry()
             registry.register(StraightBarRecognizer())
@@ -311,13 +348,27 @@ class MainWindow(QMainWindow):
                         for c in constraints:
                             solver.add_constraint(c)
                 eng_objects = solver.solve()
+                family_builder = FamilyBuilder(graph, comp_repo, engine, recognition_cache)
+                engineering_families = family_builder.build_families(eng_objects)
+                reinforcement_assemblies = AssemblyBuilder().build(engineering_families)
+                bar_builder = PhysicalBarBuilder()
+                for assembly in reinforcement_assemblies:
+                    bar_builder.build_for_assembly(assembly)
+                physical_bars = [bar for assembly in reinforcement_assemblies for bar in assembly.bars]
+                reconstruction_meshes = MeshBuilder(segments=12).build_meshes(reinforcement_assemblies)
 
                 self._console.log(f"Loaded: {filename}")
                 self._console.log(f"  Nodes={metrics['total_nodes']}  Edges={metrics['total_edges']}  Components={metrics['connected_components']}")
+                self._console.log(f"  Engineering Families={len(engineering_families)}")
+                self._console.log(f"  Reinforcement Assemblies={len(reinforcement_assemblies)}  Bars={len(physical_bars)}")
                 break  # TODO: multi-drawing mode
 
             self.scene.recognition_cache = recognition_cache
             self.scene.engineering_objects = eng_objects
+            self.scene.engineering_families = engineering_families
+            self.scene.reinforcement_assemblies = reinforcement_assemblies
+            self.scene.physical_bars = physical_bars
+            self.scene.reconstruction_meshes = reconstruction_meshes
             self.scene.load(
                 manifest=manifest,
                 canon_repo=canon_repo,

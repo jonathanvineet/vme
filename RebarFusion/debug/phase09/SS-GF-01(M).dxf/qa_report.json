@@ -1,0 +1,26 @@
+[
+  {
+    "Confidence": 0.977,
+    "Expected Members": null,
+    "Family UUID": "0337e68e-34a5-5999-aace-756f95ada82e",
+    "Found Members": 18,
+    "Mark": "N4",
+    "Missing Members": null,
+    "Missing Offsets": [],
+    "Warnings": []
+  },
+  {
+    "Confidence": 0.0,
+    "Expected Members": null,
+    "Family UUID": "9a6b2122-fcfc-57c6-9b4a-fae9d29b7817",
+    "Found Members": 1,
+    "Mark": "N6",
+    "Missing Members": null,
+    "Missing Offsets": [],
+    "Warnings": [
+      "missing_spacing",
+      "missing_diameter",
+      "single_member_family"
+    ]
+  }
+]

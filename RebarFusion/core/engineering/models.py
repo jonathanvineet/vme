@@ -22,6 +22,7 @@ class EngineeringBar(EngineeringObject):
     diameter: Optional[float] = None
     spacing: Optional[float] = None
     length: Optional[float] = None
+    expected_count: Optional[int] = None
     shape: str = "unknown"
 
 @dataclass
@@ -70,5 +71,5 @@ class LengthConstraint(EngineeringConstraint):
 
 class CountConstraint(EngineeringConstraint):
     def apply(self, obj: EngineeringObject):
-        # Could be used later for assembly
-        pass
+        if isinstance(obj, EngineeringBar):
+            obj.expected_count = self.token.value

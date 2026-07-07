@@ -69,9 +69,10 @@ class BaseRenderer(ABC):
         self.build()
 
     def _on_layer_changed(self, layer_name: str = ""):
-        if layer_name != self.LAYER_NAME:
+        if layer_name and layer_name != self.LAYER_NAME:
             return
         if self.scene.is_visible(self.LAYER_NAME):
+            self.clear()
             self.build()
         else:
             self.clear()

@@ -44,6 +44,11 @@ class SceneManager:
     LAYER_TEXT      = "Text"
     LAYER_RECOGNITION = "Recognition"
     LAYER_CONFIDENCE  = "Confidence"
+    LAYER_FAMILIES    = "Families"
+    LAYER_ASSEMBLIES  = "Assemblies"
+    LAYER_BARS        = "Bars"
+    LAYER_MESHES      = "Meshes"
+    LAYER_QA          = "QA"
 
     DEFAULT_LAYERS = [
         LAYER_GEOMETRY,
@@ -56,6 +61,20 @@ class SceneManager:
         LAYER_TEXT,
         LAYER_RECOGNITION,
         LAYER_CONFIDENCE,
+        LAYER_FAMILIES,
+        LAYER_ASSEMBLIES,
+        LAYER_BARS,
+        LAYER_MESHES,
+        LAYER_QA,
+    ]
+
+    STAGES = [
+        "Geometry",
+        "Recognition",
+        "Families",
+        "Assemblies",
+        "Bars",
+        "Meshes",
     ]
 
     def __init__(self):
@@ -66,6 +85,16 @@ class SceneManager:
         self.graph = None
         self.comp_repo = None
         self.recognition_cache = None
+        self.engineering_objects = {}
+        self.engineering_families = []
+        self.reinforcement_assemblies = []
+        self.physical_bars = []
+        self.reconstruction_meshes = []
+        self.current_stage = "Meshes"
+        self.show_family_representative = False
+        self.show_family_expanded = True
+        self.show_family_missing = True
+        self.show_family_qa = True
 
         # Layer states
         self.layers: Dict[str, LayerState] = {
@@ -76,11 +105,16 @@ class SceneManager:
         # Selection
         self.selected_entity_uuid: Optional[UUID] = None
         self.selected_component_uuid: Optional[UUID] = None
+        self.selected_family_uuid: Optional[UUID] = None
+        self.selected_assembly_uuid: Optional[UUID] = None
+        self.selected_bar_uuid: Optional[UUID] = None
+        self.selected_mesh_uuid: Optional[UUID] = None
 
         # Change listeners: functions called with (scene_manager)
         self._on_data_loaded_callbacks: List = []
         self._on_layer_changed_callbacks: List = []
         self._on_selection_changed_callbacks: List = []
+        self._on_stage_changed_callbacks: List = []
 
     # ─── Data loading ────────────────────────────────────────────────────────
 
@@ -99,6 +133,34 @@ class SceneManager:
             self.layers[name].visible = visible
             self._fire(self._on_layer_changed_callbacks, name)
 
+    def set_family_display_option(self, name: str, visible: bool):
+        if name == "representative":
+            self.show_family_representative = visible
+        elif name == "expanded":
+            self.show_family_expanded = visible
+        elif name == "missing":
+            self.show_family_missing = visible
+        elif name == "qa":
+            self.show_family_qa = visible
+        self._fire(self._on_layer_changed_callbacks, self.LAYER_FAMILIES)
+
+    def set_stage(self, stage: str):
+        if stage not in self.STAGES:
+            return
+        self.current_stage = stage
+        visible_layers = {
+            "Geometry": {self.LAYER_GEOMETRY, self.LAYER_TEXT, self.LAYER_DIMS},
+            "Recognition": {self.LAYER_GEOMETRY, self.LAYER_RECOGNITION},
+            "Families": {self.LAYER_GEOMETRY, self.LAYER_FAMILIES, self.LAYER_QA},
+            "Assemblies": {self.LAYER_FAMILIES, self.LAYER_ASSEMBLIES, self.LAYER_QA},
+            "Bars": {self.LAYER_FAMILIES, self.LAYER_ASSEMBLIES, self.LAYER_BARS},
+            "Meshes": {self.LAYER_BARS, self.LAYER_MESHES},
+        }[stage]
+        for name in self.layers:
+            self.layers[name].visible = name in visible_layers
+        self._fire(self._on_stage_changed_callbacks, stage)
+        self._fire(self._on_layer_changed_callbacks, "")
+
     def is_visible(self, name: str) -> bool:
         return self.layers.get(name, LayerState()).visible
 
@@ -106,16 +168,96 @@ class SceneManager:
 
     def select_entity(self, entity_uuid: Optional[UUID]):
         self.selected_entity_uuid = entity_uuid
+        self.selected_component_uuid = None
+        self.selected_family_uuid = None
+        self.selected_assembly_uuid = None
+        self.selected_bar_uuid = None
+        self.selected_mesh_uuid = None
         self._fire(self._on_selection_changed_callbacks)
 
     def select_component(self, comp_uuid: Optional[UUID]):
         self.selected_component_uuid = comp_uuid
+        self.selected_family_uuid = None
+        self.selected_assembly_uuid = None
+        self.selected_bar_uuid = None
+        self.selected_mesh_uuid = None
+        self._fire(self._on_selection_changed_callbacks)
+
+    def select_family(self, family_uuid: Optional[UUID]):
+        self.selected_entity_uuid = None
+        self.selected_component_uuid = None
+        self.selected_family_uuid = family_uuid
+        self.selected_assembly_uuid = None
+        self.selected_bar_uuid = None
+        self.selected_mesh_uuid = None
+        self._fire(self._on_selection_changed_callbacks)
+
+    def select_assembly(self, assembly_uuid: Optional[UUID]):
+        self.selected_entity_uuid = None
+        self.selected_component_uuid = None
+        self.selected_family_uuid = None
+        self.selected_assembly_uuid = assembly_uuid
+        self.selected_bar_uuid = None
+        self.selected_mesh_uuid = None
+        self._fire(self._on_selection_changed_callbacks)
+
+    def select_bar(self, bar_uuid: Optional[UUID]):
+        self.selected_entity_uuid = None
+        self.selected_component_uuid = None
+        self.selected_assembly_uuid = None
+        self.selected_bar_uuid = bar_uuid
+        self.selected_mesh_uuid = None
+        self.selected_family_uuid = None
+        for bar in self.physical_bars:
+            if bar.uuid == bar_uuid:
+                self.selected_family_uuid = bar.family_uuid
+                break
+        self._fire(self._on_selection_changed_callbacks)
+
+    def select_mesh(self, mesh_uuid: Optional[UUID]):
+        self.selected_entity_uuid = None
+        self.selected_component_uuid = None
+        self.selected_assembly_uuid = None
+        self.selected_mesh_uuid = mesh_uuid
+        self.selected_bar_uuid = None
+        self.selected_family_uuid = None
+        for mesh in self.reconstruction_meshes:
+            if mesh.uuid == mesh_uuid:
+                self.selected_bar_uuid = mesh.bar_uuid
+                break
+        if self.selected_bar_uuid:
+            for bar in self.physical_bars:
+                if bar.uuid == self.selected_bar_uuid:
+                    self.selected_family_uuid = bar.family_uuid
+                    break
         self._fire(self._on_selection_changed_callbacks)
 
     def clear_selection(self):
         self.selected_entity_uuid = None
         self.selected_component_uuid = None
+        self.selected_family_uuid = None
+        self.selected_assembly_uuid = None
+        self.selected_bar_uuid = None
+        self.selected_mesh_uuid = None
         self._fire(self._on_selection_changed_callbacks)
+
+    def search(self, query: str) -> bool:
+        q = query.strip().lower()
+        if not q:
+            return False
+        for family in self.engineering_families:
+            if q == str(family.mark).lower() or q in str(family.uuid).lower():
+                self.select_family(family.uuid)
+                return True
+        for assembly in self.reinforcement_assemblies:
+            if q in assembly.assembly_type.lower() or q in str(assembly.uuid).lower():
+                self.select_assembly(assembly.uuid)
+                return True
+        for bar in self.physical_bars:
+            if q == str(bar.mark).lower() or q in str(bar.uuid).lower():
+                self.select_bar(bar.uuid)
+                return True
+        return False
 
     # ─── Event system ─────────────────────────────────────────────────────────
 
@@ -127,6 +269,9 @@ class SceneManager:
 
     def on_selection_changed(self, callback):
         self._on_selection_changed_callbacks.append(callback)
+
+    def on_stage_changed(self, callback):
+        self._on_stage_changed_callbacks.append(callback)
 
     def _fire(self, callbacks, *args):
         for cb in callbacks:

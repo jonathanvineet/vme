@@ -1,5 +1,22 @@
 {
-  "Associated Members": 10,
-  "Family Member Association Rate": "1.5%",
-  "Total Families": 4
+  "Average Confidence": 0.488,
+  "Average Members": 9.5,
+  "Average Spacing Error": 4.504,
+  "Detected Members": 19,
+  "Duplicate Object Memberships": 0,
+  "Engineering Families": 2,
+  "Estimated Members": 19,
+  "Families With Spacing": 1,
+  "Family QA Warnings": 3,
+  "Missing Members": 0,
+  "Standalone Engineering Objects": 65,
+  "Standalone Summary": {
+    "Branch": 6,
+    "Different orientation": 4,
+    "Different type": 18,
+    "Isolated": 19,
+    "No nearby family": 10,
+    "Stirrup": 8
+  },
+  "Unique Member Components": 19
 }

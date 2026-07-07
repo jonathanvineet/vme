@@ -63,7 +63,94 @@ class PropertyPanel(QWidget):
         scene = self.scene
         data: Dict[str, Any] = {}
 
-        if scene.selected_component_uuid is not None:
+        if scene.selected_mesh_uuid is not None:
+            mesh = None
+            for candidate in getattr(scene, "reconstruction_meshes", []) or []:
+                if candidate.uuid == scene.selected_mesh_uuid:
+                    mesh = candidate
+                    break
+            if mesh:
+                data["Type"] = "Reconstruction Mesh"
+                data["UUID"] = str(mesh.uuid)[:12] + "…"
+                data["Bar"] = str(mesh.bar_uuid)[:12] + "…"
+                data["Vertices"] = len(mesh.vertices)
+                data["Faces"] = len(mesh.faces)
+                data["Confidence"] = f"{mesh.confidence:.2f}"
+                data["Provenance"] = "Mesh -> Physical Bar -> Family -> Components -> CAD"
+
+        elif scene.selected_bar_uuid is not None:
+            bar = None
+            for candidate in getattr(scene, "physical_bars", []) or []:
+                if candidate.uuid == scene.selected_bar_uuid:
+                    bar = candidate
+                    break
+            if bar:
+                data["Type"] = "Physical Bar"
+                data["Mark"] = bar.mark
+                data["UUID"] = str(bar.uuid)[:12] + "…"
+                data["Family"] = str(bar.family_uuid)[:12] + "…"
+                data["Diameter"] = f"Ø{bar.diameter:g}"
+                data["Radius"] = f"{bar.radius:.1f} mm"
+                data["Path Points"] = len(bar.centerline.points)
+                data["Bends"] = len(bar.centerline.bends)
+                data["Hooks"] = len(bar.centerline.hooks)
+                data["Layer"] = str(bar.layer_uuid)[:12] + "…" if bar.layer_uuid else "None"
+                data["Adjustments"] = ", ".join(bar.adjustment_notes)
+                data["Confidence"] = f"{bar.confidence:.2f}"
+                data["Provenance"] = "Physical Bar -> Family -> Components -> CAD"
+
+        elif scene.selected_assembly_uuid is not None:
+            assembly = None
+            for candidate in getattr(scene, "reinforcement_assemblies", []) or []:
+                if candidate.uuid == scene.selected_assembly_uuid:
+                    assembly = candidate
+                    break
+
+            if assembly:
+                frame = assembly.local_coordinate_system
+                data["Type"] = "Reinforcement Assembly"
+                data["Assembly"] = assembly.assembly_type
+                data["UUID"] = str(assembly.uuid)[:12] + "…"
+                data["Families"] = len(assembly.families)
+                data["Layers"] = len(assembly.layers)
+                data["Bars"] = len(assembly.bars)
+                data["Cover"] = f"{frame.cover:.1f} mm"
+                data["Thickness"] = f"{frame.thickness:.1f} mm"
+                data["Confidence"] = f"{assembly.confidence:.2f}"
+                if assembly.layers:
+                    data["Layer Names"] = ", ".join(layer.name for layer in assembly.layers)
+                data["Provenance"] = "Assembly -> Families -> Bars -> Meshes"
+
+        elif scene.selected_family_uuid is not None:
+            family = None
+            for candidate in getattr(scene, "engineering_families", []) or []:
+                if candidate.uuid == scene.selected_family_uuid:
+                    family = candidate
+                    break
+
+            if family:
+                missing = family.qa.missing_members if family.qa and family.qa.missing_members is not None else 0
+                data["Type"] = "Engineering Family"
+                data["Family"] = family.mark
+                data["Family Type"] = family.family_type
+                data["UUID"] = str(family.uuid)[:12] + "…"
+                data["Diameter"] = f"Ø{family.diameter:g}" if family.diameter else "Unknown"
+                data["Spacing"] = f"{family.spacing:g} c/c" if family.spacing else "Unknown"
+                data["Spacing Source"] = family.spacing_source
+                data["Members"] = family.estimated_count or family.detected_count
+                data["Detected"] = family.detected_count
+                data["Missing"] = missing
+                data["Length"] = f"{family.length:.1f} mm"
+                data["Dominant Direction"] = f"{family.dominant_direction:.1f}° {family.dominant_direction_label}"
+                data["Normal Direction"] = f"{family.normal_direction:.1f}° {family.normal_direction_label}"
+                data["Confidence"] = f"{family.confidence:.2f}"
+                if family.qa and family.qa.warnings:
+                    data["QA"] = ", ".join(family.qa.warnings)
+                data["Provenance"] = "Family -> Members -> Components -> CAD"
+                if family.evidence:
+                    data["Evidence"] = "; ".join(e.rule for e in family.evidence[:3])
+
+        elif scene.selected_component_uuid is not None:
             comp = scene.comp_repo and scene.comp_repo.components.get(scene.selected_component_uuid)
             if comp:
                 data["Type"] = "Component"
@@ -94,6 +181,13 @@ class PropertyPanel(QWidget):
                             data["  Spacing"] = f"{obj.spacing} c/c"
                         if hasattr(obj, 'length') and obj.length:
                             data["  Length"] = f"{obj.length} mm"
+
+                families = []
+                for family in getattr(scene, "engineering_families", []) or []:
+                    if comp.id in family.member_component_uuids:
+                        families.append(f"{family.mark} ({family.detected_count})")
+                if families:
+                    data["Engineering Family"] = ", ".join(families)
 
         elif scene.selected_entity_uuid is not None:
             uid = scene.selected_entity_uuid

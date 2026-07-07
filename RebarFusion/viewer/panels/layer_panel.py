@@ -35,5 +35,22 @@ class LayerPanel(QWidget):
             layout.addWidget(cb)
             self._checkboxes[name] = cb
 
+        family_header = QLabel("FAMILIES")
+        family_header.setStyleSheet("font-weight:bold; color:#aaaaaa; font-size:10px; letter-spacing:1px; margin-top:8px;")
+        layout.addWidget(family_header)
+
+        family_options = [
+            ("Representative", "representative", scene.show_family_representative),
+            ("Expanded", "expanded", scene.show_family_expanded),
+            ("Missing Members", "missing", scene.show_family_missing),
+            ("QA", "qa", scene.show_family_qa),
+        ]
+        for label, key, checked in family_options:
+            cb = QCheckBox(label)
+            cb.setChecked(checked)
+            cb.setStyleSheet("color:#dddddd; font-size:11px;")
+            cb.checkStateChanged.connect(lambda s, k=key: self.scene.set_family_display_option(k, s == Qt.CheckState.Checked))
+            layout.addWidget(cb)
+
         layout.addStretch()
         self.setLayout(layout)

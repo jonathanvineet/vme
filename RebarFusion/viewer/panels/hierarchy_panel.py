@@ -36,6 +36,7 @@ class HierarchyPanel(QWidget):
         layout.addWidget(self._tree)
         self.setLayout(layout)
 
+        self._tree.itemClicked.connect(self._on_item_clicked)
         scene.on_data_loaded(self._populate)
 
     def _populate(self):
@@ -55,4 +56,58 @@ class HierarchyPanel(QWidget):
             child = QTreeWidgetItem([filename])
             floors[floor].addChild(child)
 
+        families = getattr(self.scene, "engineering_families", None) or []
+        if families:
+            family_root = QTreeWidgetItem(["Engineering Families"])
+            family_root.setForeground(0, Qt.GlobalColor.yellow)
+            self._tree.addTopLevelItem(family_root)
+            for family in families:
+                item = QTreeWidgetItem([f"{family.mark}  ({family.detected_count} members)"])
+                item.setData(0, Qt.ItemDataRole.UserRole, ("family", family.uuid))
+                family_root.addChild(item)
+
+        assemblies = getattr(self.scene, "reinforcement_assemblies", None) or []
+        if assemblies:
+            assembly_root = QTreeWidgetItem(["Reinforcement Assemblies"])
+            assembly_root.setForeground(0, Qt.GlobalColor.green)
+            self._tree.addTopLevelItem(assembly_root)
+            for assembly in assemblies:
+                item = QTreeWidgetItem([f"{assembly.assembly_type}  ({len(assembly.bars)} bars)"])
+                item.setData(0, Qt.ItemDataRole.UserRole, ("assembly", assembly.uuid))
+                assembly_root.addChild(item)
+
+        bars = getattr(self.scene, "physical_bars", None) or []
+        if bars:
+            bar_root = QTreeWidgetItem(["Physical Bars"])
+            bar_root.setForeground(0, Qt.GlobalColor.magenta)
+            self._tree.addTopLevelItem(bar_root)
+            for bar in bars[:250]:
+                item = QTreeWidgetItem([f"{bar.mark}  Ø{bar.diameter:g}"])
+                item.setData(0, Qt.ItemDataRole.UserRole, ("bar", bar.uuid))
+                bar_root.addChild(item)
+
+        meshes = getattr(self.scene, "reconstruction_meshes", None) or []
+        if meshes:
+            mesh_root = QTreeWidgetItem(["Meshes"])
+            mesh_root.setForeground(0, Qt.GlobalColor.lightGray)
+            self._tree.addTopLevelItem(mesh_root)
+            for mesh in meshes[:250]:
+                item = QTreeWidgetItem([f"mesh  {len(mesh.vertices)}v/{len(mesh.faces)}f"])
+                item.setData(0, Qt.ItemDataRole.UserRole, ("mesh", mesh.uuid))
+                mesh_root.addChild(item)
+
         self._tree.expandAll()
+
+    def _on_item_clicked(self, item, column):
+        payload = item.data(0, Qt.ItemDataRole.UserRole)
+        if not payload:
+            return
+        kind, value = payload
+        if kind == "family":
+            self.scene.select_family(value)
+        elif kind == "assembly":
+            self.scene.select_assembly(value)
+        elif kind == "bar":
+            self.scene.select_bar(value)
+        elif kind == "mesh":
+            self.scene.select_mesh(value)
