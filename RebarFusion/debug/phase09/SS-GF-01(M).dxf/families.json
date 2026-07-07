@@ -1,0 +1,69 @@
+[
+  {
+    "diameter": 8.0,
+    "layer": "S-RBAR",
+    "length": 848.0,
+    "mark": "N4",
+    "member_component_uuids": [
+      "c968e2c9-e04b-5e8c-8ecf-d390ee336cd9",
+      "7f01330f-0f8a-536e-b7a1-735a79117aa7",
+      "260d46d8-b7a4-5904-9d39-d967ac0209fa",
+      "f3cc6164-25eb-5992-a85e-f1995d77472c"
+    ],
+    "orientation": 90.0,
+    "representative_component_uuid": "c968e2c9-e04b-5e8c-8ecf-d390ee336cd9",
+    "spacing": 200.0,
+    "uuid": "9f3b346e-4732-4408-8977-0bbcb5ed3d8d"
+  },
+  {
+    "diameter": 8.0,
+    "layer": "S-RBAR",
+    "length": 848.0,
+    "mark": "N4",
+    "member_component_uuids": [
+      "7f01330f-0f8a-536e-b7a1-735a79117aa7",
+      "c968e2c9-e04b-5e8c-8ecf-d390ee336cd9",
+      "260d46d8-b7a4-5904-9d39-d967ac0209fa",
+      "23c3a9b3-44ba-51d4-84bf-ccf6eab36fc6",
+      "e9615203-97e2-56a4-91d8-75659348a7e8",
+      "9dd1c4c0-f20c-5ec6-a004-0ebf8a5449af",
+      "bd3e9dfc-2874-59e1-b80c-3b6eba256229"
+    ],
+    "orientation": 90.0,
+    "representative_component_uuid": "7f01330f-0f8a-536e-b7a1-735a79117aa7",
+    "spacing": 200.0,
+    "uuid": "a007cb01-bdac-4f9f-9b7f-f1e1bb2157e7"
+  },
+  {
+    "diameter": 8.0,
+    "layer": "S-RBAR",
+    "length": 848.0,
+    "mark": "N4",
+    "member_component_uuids": [
+      "f3cc6164-25eb-5992-a85e-f1995d77472c",
+      "52c7dbee-9d1d-5db5-aad0-a6d47afa8dd5",
+      "c968e2c9-e04b-5e8c-8ecf-d390ee336cd9",
+      "e9615203-97e2-56a4-91d8-75659348a7e8",
+      "260d46d8-b7a4-5904-9d39-d967ac0209fa",
+      "9dd1c4c0-f20c-5ec6-a004-0ebf8a5449af",
+      "bd3e9dfc-2874-59e1-b80c-3b6eba256229"
+    ],
+    "orientation": 90.0,
+    "representative_component_uuid": "f3cc6164-25eb-5992-a85e-f1995d77472c",
+    "spacing": 200.0,
+    "uuid": "df976de3-9921-4f38-bec8-1f0749b6cd13"
+  },
+  {
+    "diameter": 0.0,
+    "layer": "S-RBAR",
+    "length": 1964.8415753806587,
+    "mark": "N6",
+    "member_component_uuids": [
+      "f3e639ef-cd45-5464-87f1-dc6302d18162"
+    ],
+    "orientation": 74.7672275403085,
+    "representative_component_uuid": "f3e639ef-cd45-5464-87f1-dc6302d18162",
+    "spacing": 0.0,
+    "uuid": "f38c417d-aba7-4749-b97d-586b800d8ae4"
+  }
+]

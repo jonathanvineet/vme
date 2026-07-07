@@ -1,0 +1,104 @@
+[
+  {
+    "raw_text": "N1",
+    "source_uuid": "9d0f5f20-7197-4241-a8d9-d9a3b291049e",
+    "token_type": "TOKEN_MARK",
+    "value": "N1"
+  },
+  {
+    "raw_text": "N2",
+    "source_uuid": "9d0f5f20-7197-4241-a8d9-d9a3b291049e",
+    "token_type": "TOKEN_MARK",
+    "value": "N2"
+  },
+  {
+    "raw_text": "N4",
+    "source_uuid": "c195b7ee-07a9-4056-8827-12a009328ad8",
+    "token_type": "TOKEN_MARK",
+    "value": "N4"
+  },
+  {
+    "raw_text": "N7",
+    "source_uuid": "8bf427d3-63c6-4312-a4eb-0e02c33c8871",
+    "token_type": "TOKEN_MARK",
+    "value": "N7"
+  },
+  {
+    "raw_text": "N6",
+    "source_uuid": "d8447507-712b-4954-be0d-97a8c1e3c78e",
+    "token_type": "TOKEN_MARK",
+    "value": "N6"
+  },
+  {
+    "raw_text": "N4",
+    "source_uuid": "c518e56a-cef1-422a-8235-30f69530f020",
+    "token_type": "TOKEN_MARK",
+    "value": "N4"
+  },
+  {
+    "raw_text": "N6",
+    "source_uuid": "79a60de1-28cf-453c-8661-4489d55eeb6a",
+    "token_type": "TOKEN_MARK",
+    "value": "N6"
+  },
+  {
+    "raw_text": "N7",
+    "source_uuid": "51e4be85-a62e-4c9c-8b83-a89f270c1424",
+    "token_type": "TOKEN_MARK",
+    "value": "N7"
+  },
+  {
+    "raw_text": "N6",
+    "source_uuid": "8db427ab-1829-48e6-9f5a-bb86b9f6607d",
+    "token_type": "TOKEN_MARK",
+    "value": "N6"
+  },
+  {
+    "raw_text": "N1",
+    "source_uuid": "5e4fc71d-f4a1-4e61-8625-9b17c9f6f501",
+    "token_type": "TOKEN_MARK",
+    "value": "N1"
+  },
+  {
+    "raw_text": "N2",
+    "source_uuid": "5e4fc71d-f4a1-4e61-8625-9b17c9f6f501",
+    "token_type": "TOKEN_MARK",
+    "value": "N2"
+  },
+  {
+    "raw_text": "N7",
+    "source_uuid": "71f6a40b-66bd-412b-8ca9-8cab9b414c6f",
+    "token_type": "TOKEN_MARK",
+    "value": "N7"
+  },
+  {
+    "raw_text": "N7",
+    "source_uuid": "a8a9e52c-0f97-441a-a341-73435d2d6dbd",
+    "token_type": "TOKEN_MARK",
+    "value": "N7"
+  },
+  {
+    "raw_text": "N6",
+    "source_uuid": "03d3f2da-4ce3-471a-b28f-bada93dc22c3",
+    "token_type": "TOKEN_MARK",
+    "value": "N6"
+  },
+  {
+    "raw_text": "N1",
+    "source_uuid": "1a6953c7-4dfa-4238-a78a-3cd2aec6f886",
+    "token_type": "TOKEN_MARK",
+    "value": "N1"
+  },
+  {
+    "raw_text": "N2",
+    "source_uuid": "1a6953c7-4dfa-4238-a78a-3cd2aec6f886",
+    "token_type": "TOKEN_MARK",
+    "value": "N2"
+  },
+  {
+    "raw_text": "N4",
+    "source_uuid": "d2024c1d-afa9-4e42-b967-eab864a09fd6",
+    "token_type": "TOKEN_MARK",
+    "value": "N4"
+  }
+]

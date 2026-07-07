@@ -1,7 +1,8 @@
-PyMuPDF>=1.22.0
-numpy>=1.24
-shapely>=2.0
-Pillow>=9.0
-opencv-python>=4.7
-matplotlib>=3.6
-attrs>=22.0
+ezdxf==1.4.4
+matplotlib==3.11.0
+numpy==2.5.1
+pyvista==0.48.4
+pyvistaqt==0.12.0
+scipy==1.18.0
+vtk==9.6.2
+PySide6==6.11.1

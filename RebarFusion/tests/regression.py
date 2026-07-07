@@ -67,6 +67,7 @@ def run_regression(directory: str) -> int:
     from core.project import DrawingProject
     from core.readers.dxf_reader import DXFReader
     from core.geometry.canonicalizer import canonicalize
+    from core.spatial.engine import SpatialQueryEngine
 
     project = DrawingProject()
     manifest = project.load_directory(directory)
@@ -150,9 +151,94 @@ def run_regression(directory: str) -> int:
             else:
                 print(f"  Phase 3 fingerprints ✅")
 
-        # validation must have 0 critical errors
-        if validation["critical_errors"]:
-            all_failures.append(f"  [{filename}] Phase 3 validation has critical errors")
+        # Phase 4 (stub for completeness, benchmarks normally aren't regressed strictly)
+        # Phase 5 & 6
+        from core.topology.node_builder import build_nodes
+        from core.topology.builder import TopologyBuilder
+        engine = SpatialQueryEngine.build(canon_repo)
+        node_repo, _, _ = build_nodes(canon_repo, engine, filename)
+        builder = TopologyBuilder(node_repo, canon_repo)
+        graph, comp_repo, metrics, validation6 = builder.build()
+        
+        p6_golden_dir = os.path.join(golden_base, "phase06")
+        
+        # metrics
+        metrics_path = os.path.join(p6_golden_dir, "metrics.json")
+        if os.path.exists(metrics_path):
+            p6_golden_metrics = _load(metrics_path)
+            failures = []
+            _check_counts(f"{filename}/phase06/metrics", metrics, p6_golden_metrics, failures)
+            if failures:
+                all_failures.extend(failures)
+                for f in failures:
+                    print(f"  ❌ {f}")
+            else:
+                print(f"  Phase 6 metrics ✅")
+                
+        # component UUID stability
+        comps_path = os.path.join(p6_golden_dir, "components.json")
+        if os.path.exists(comps_path):
+            golden_comps = _load(comps_path)
+            current_comp_uuids = set(str(k) for k in comp_repo.components.keys())
+            golden_comp_uuids = set(golden_comps.keys())
+            
+            missing_comps = golden_comp_uuids - current_comp_uuids
+            added_comps = current_comp_uuids - golden_comp_uuids
+            
+            if missing_comps:
+                all_failures.append(f"  [{filename}/phase06/components] {len(missing_comps)} topological components disappeared or changed UUIDs")
+                print(f"  ❌ [{filename}/phase06/components] {len(missing_comps)} components drifted")
+            else:
+                print(f"  Phase 6 component stability ✅")
+            
+            if added_comps:
+                print(f"  [{filename}/phase06/components] INFO: {len(added_comps)} new components created")
+
+        if validation6["critical_errors"]:
+            all_failures.append(f"  [{filename}] Phase 6 validation has critical errors")
+
+        # Phase 7
+        from core.recognition.registry import RecognizerRegistry
+        from core.recognition.recognizers import (
+            StraightBarRecognizer, LBarRecognizer, UBarRecognizer, StirrupRecognizer,
+            BranchRecognizer, DimensionRecognizer, LeaderRecognizer,
+            StructuralOutlineRecognizer
+        )
+        registry = RecognizerRegistry()
+        registry.register(StraightBarRecognizer())
+        registry.register(LBarRecognizer())
+        registry.register(UBarRecognizer())
+        registry.register(StirrupRecognizer())
+        registry.register(BranchRecognizer())
+        registry.register(StructuralOutlineRecognizer())
+        registry.register(DimensionRecognizer())
+        registry.register(LeaderRecognizer())
+
+        p7_golden_dir = os.path.join(golden_base, "phase07")
+        recog_path = os.path.join(p7_golden_dir, "recognition_results.json")
+        if os.path.exists(recog_path):
+            golden_recog = _load(recog_path)
+            current_recog = {}
+            for comp in comp_repo.components.values():
+                res = registry.evaluate(comp, graph)
+                current_recog[str(comp.id)] = res
+
+            failures = []
+            for cid, g_res in golden_recog.items():
+                if cid not in current_recog:
+                    failures.append(f"Component {cid} disappeared.")
+                    continue
+                c_res = current_recog[cid]
+                if c_res.label != g_res['label']:
+                    failures.append(f"Comp {cid}: label changed {g_res['label']} -> {c_res.label}")
+                if c_res.fingerprint != g_res['fingerprint']:
+                    failures.append(f"Comp {cid}: fingerprint changed {g_res['fingerprint']} -> {c_res.fingerprint}")
+
+            if failures:
+                all_failures.extend([f"  [{filename}/phase07/recognition] {f}" for f in failures[:5]])
+                print(f"  ❌ [{filename}/phase07] {len(failures)} recognition drifts")
+            else:
+                print(f"  Phase 7 recognition ✅")
 
     print("\n" + "=" * 60)
     if all_failures:

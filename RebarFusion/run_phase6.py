@@ -86,10 +86,10 @@ def render_component_overlay(graph, comp_repo, out_path):
     ax.set_title("Connected Components Overlay")
     
     comps = list(comp_repo.components.values())
-    colors = cm.get_cmap('hsv', len(comps))
+    colors = matplotlib.colormaps.get_cmap('hsv').resampled(len(comps)) if len(comps) > 0 else None
     
     for i, comp in enumerate(comps):
-        c = colors(i)
+        c = colors(i) if colors else 'w'
         for e_id in comp.edge_ids:
             e = graph.edges[e_id]
             n1 = graph.nodes[e.start_node_uuid]

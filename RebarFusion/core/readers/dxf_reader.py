@@ -179,7 +179,11 @@ class DXFReader(DrawingReader):
                 if hasattr(entity.dxf, 'defpoint2'): p1 = (entity.dxf.defpoint2.x, entity.dxf.defpoint2.y, entity.dxf.defpoint2.z)
                 if hasattr(entity.dxf, 'defpoint3'): p2 = (entity.dxf.defpoint3.x, entity.dxf.defpoint3.y, entity.dxf.defpoint3.z)
                 text = entity.dxf.text if hasattr(entity.dxf, 'text') else ""
-                repo.add(DimensionEntity(**base, text=text, measurement=0.0, defpoint=Point(*defpoint), p1=Point(*p1), p2=Point(*p2)))
+                try:
+                    measurement = entity.get_measurement()
+                except Exception:
+                    measurement = 0.0
+                repo.add(DimensionEntity(**base, text=text, measurement=measurement, defpoint=Point(*defpoint), p1=Point(*p1), p2=Point(*p2)))
             elif dxftype == "HATCH":
                 repo.add(HatchEntity(**base, pattern_name=entity.dxf.pattern_name, solid=entity.dxf.solid_fill, paths=[]))
             else:
