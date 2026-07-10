@@ -50,6 +50,7 @@ class RecognitionRenderer(BaseRenderer):
             result = cache.get(comp.id)
             label = result.label if result else 'unknown'
             color = COLORS.get(label, (1.0, 1.0, 1.0))
+            selected = self.scene.selected_component_uuid == comp.id
             
             points, cells = [], []
             idx = 0
@@ -74,5 +75,5 @@ class RecognitionRenderer(BaseRenderer):
             mesh.lines = np.array(cells)
             name = f"recog_{str(comp.id)[:8]}_{label}"
             a = self.plotter.add_mesh(mesh, color=color, line_width=2.0,
-                                      opacity=0.9, name=name)
+                                      opacity=1.0 if selected else 0.9, name=name)
             self._add_actor(a)

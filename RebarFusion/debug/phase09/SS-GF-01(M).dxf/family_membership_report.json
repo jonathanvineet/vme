@@ -2,7 +2,7 @@
   {
     "Family": "N4",
     "Family Type": "SECONDARY_DISTRIBUTION",
-    "Family UUID": "0337e68e-34a5-5999-aace-756f95ada82e",
+    "Family UUID": "77ef0d1e-82b1-5625-b34a-49a5cec76a8d",
     "Members": [
       "c968e2c9-e04b-5e8c-8ecf-d390ee336cd9",
       "7f01330f-0f8a-536e-b7a1-735a79117aa7",
@@ -21,7 +21,15 @@
       "714c457f-75a8-58bb-aebf-b2e2b1db04e9",
       "b87eab10-74c8-5aa8-87ac-7748e22cc23f",
       "f6d37336-4012-575f-a53a-705aa67ab51a",
-      "106ee874-8c8f-5746-9db6-7790e41f00e3"
+      "106ee874-8c8f-5746-9db6-7790e41f00e3",
+      "e2c74a8a-ea61-5e22-8866-bd374c1c99b0",
+      "86e4a846-3425-58e5-8c99-8a51458f5abf",
+      "9609e5cb-b075-5ff9-a7e0-cb387bb810b0",
+      "7e8a92e6-2af2-5183-b357-76f4ffc515fb",
+      "892c4f52-883d-5c3d-8cae-cab8af50bedb",
+      "91ff7f25-a016-58bc-8d16-5c086427189f",
+      "826a14c7-b263-55ed-9901-129f1b49feb1",
+      "528f7db4-daa1-5de4-9c34-fb0dc8d0c833"
     ],
     "Rejected": [
       {
@@ -344,7 +352,7 @@
         "detail": "recognition differs: stirrup vs u_bar",
         "layer": "S-RBAR",
         "length": 47.023,
-        "orientation": 126.0,
+        "orientation": 54.0,
         "reason": "different_recognition_type",
         "recognition_type": "stirrup"
       },
@@ -1037,7 +1045,7 @@
         "detail": "recognition differs: stirrup vs u_bar",
         "layer": "S-RBAR",
         "length": 47.023,
-        "orientation": 54.0,
+        "orientation": 126.0,
         "reason": "different_recognition_type",
         "recognition_type": "stirrup"
       },
@@ -1595,7 +1603,7 @@
         "detail": "recognition differs: stirrup vs u_bar",
         "layer": "S-RBAR",
         "length": 47.023,
-        "orientation": 18.0,
+        "orientation": 162.0,
         "reason": "different_recognition_type",
         "recognition_type": "stirrup"
       },
@@ -2614,7 +2622,7 @@
         "detail": "recognition differs: stirrup vs branch",
         "layer": "S-RBAR",
         "length": 47.023,
-        "orientation": 126.0,
+        "orientation": 54.0,
         "reason": "different_recognition_type",
         "recognition_type": "stirrup"
       },
@@ -3334,7 +3342,7 @@
         "detail": "recognition differs: stirrup vs branch",
         "layer": "S-RBAR",
         "length": 47.023,
-        "orientation": 54.0,
+        "orientation": 126.0,
         "reason": "different_recognition_type",
         "recognition_type": "stirrup"
       },
@@ -3910,7 +3918,7 @@
         "detail": "recognition differs: stirrup vs branch",
         "layer": "S-RBAR",
         "length": 47.023,
-        "orientation": 18.0,
+        "orientation": 162.0,
         "reason": "different_recognition_type",
         "recognition_type": "stirrup"
       },

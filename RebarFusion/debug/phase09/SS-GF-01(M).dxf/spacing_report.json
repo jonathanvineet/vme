@@ -3,7 +3,7 @@
     "Annotated Spacing": 200.0,
     "Average Error": 4.504,
     "Confidence": 0.977,
-    "Family UUID": "0337e68e-34a5-5999-aace-756f95ada82e",
+    "Family UUID": "77ef0d1e-82b1-5625-b34a-49a5cec76a8d",
     "Inferred Spacing": 195.496,
     "Mark": "N4",
     "Offsets": [
@@ -24,7 +24,15 @@
       2345.953,
       2541.449,
       2736.946,
-      2932.442
+      2932.442,
+      3127.938,
+      3323.434,
+      3518.93,
+      3714.426,
+      3909.922,
+      4105.418,
+      4300.914,
+      4496.411
     ],
     "Selected Spacing": 200.0,
     "Spacing Source": "annotation"

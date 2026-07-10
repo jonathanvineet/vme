@@ -93,7 +93,22 @@ class FamilyBuilder:
     def build_families(self, eng_bars: Dict[UUID, Any]) -> List[EngineeringFamily]:
         seeds = self._seed_bars(eng_bars)
         grouped = self._group_family_seeds(seeds)
-        families = [self._build_family(seed_group) for seed_group in grouped]
+        
+        families = []
+        for seed_group in grouped:
+            remaining_seeds = list(seed_group)
+            while remaining_seeds:
+                fam = self._build_family(remaining_seeds)
+                families.append(fam)
+                
+                # Remove seeds that were successfully captured as members of this family
+                captured_uuids = set(fam.member_component_uuids)
+                
+                # Also ensure we remove the representative component so we don't infinite loop
+                captured_uuids.add(fam.representative_component_uuid)
+                
+                remaining_seeds = [s for s in remaining_seeds if s[0] not in captured_uuids]
+                
         families = self._dedupe_families(families)
 
         for family in families:
@@ -272,20 +287,33 @@ class FamilyBuilder:
             return [item for item in candidates if abs(item[0]) <= 6000.0]
 
         tolerance = max(25.0, spacing * 0.35)
-        slots: Dict[int, Tuple[float, _ComponentProfile, float, float]] = {}
-
-        for offset, profile, confidence in candidates:
-            slot = int(round(offset / spacing))
-            expected_offset = slot * spacing
-            residual = abs(offset - expected_offset)
-            if slot != 0 and residual > tolerance:
+        
+        sorted_candidates = sorted(candidates, key=lambda x: abs(x[0]))
+        accepted_offsets = [0.0]
+        selected = []
+        
+        for item in sorted_candidates:
+            offset = item[0]
+            
+            if offset == 0.0:
+                selected.append(item)
                 continue
-
-            prev = slots.get(slot)
-            if not prev or residual < prev[3]:
-                slots[slot] = (offset, profile, confidence, residual)
-
-        return [(offset, profile, confidence) for offset, profile, confidence, _ in slots.values()]
+                
+            nearest_accepted = min(accepted_offsets, key=lambda a: abs(offset - a))
+            diff = abs(offset - nearest_accepted)
+            
+            if diff < 10.0:
+                continue  # Skip likely duplicates
+            
+            multiple = diff / spacing
+            remainder = abs(multiple - round(multiple))
+            
+            # Use distance to NEAREST accepted bar to prevent cumulative drift breaking the chain
+            if remainder * spacing < tolerance:
+                selected.append(item)
+                accepted_offsets.append(offset)
+                
+        return selected
 
     def _dedupe_families(self, families: List[EngineeringFamily]) -> List[EngineeringFamily]:
         kept: List[EngineeringFamily] = []

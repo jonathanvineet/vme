@@ -10,12 +10,14 @@ from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional, Set
 from uuid import UUID
 
+from viewer.workbench_project import WorkbenchProject
+
 
 @dataclass
 class LayerState:
     """Toggle and visual parameters for a named rendering layer."""
-    visible: bool = True
-    opacity: float = 1.0
+    visible: bool = True,
+    opacity: float = 1.0,
     color: str = "#ffffff"
 
 
@@ -79,6 +81,7 @@ class SceneManager:
 
     def __init__(self):
         # Repositories (set by the app after loading a project)
+        self.project: Optional[WorkbenchProject] = None
         self.manifest = None
         self.canon_repo = None
         self.node_repo = None
@@ -118,12 +121,25 @@ class SceneManager:
 
     # ─── Data loading ────────────────────────────────────────────────────────
 
-    def load(self, manifest=None, canon_repo=None, node_repo=None, graph=None, comp_repo=None):
-        self.manifest = manifest
-        self.canon_repo = canon_repo
-        self.node_repo = node_repo
-        self.graph = graph
-        self.comp_repo = comp_repo
+    def load_project(self, project: WorkbenchProject):
+        """Loads all data from a single unified project object."""
+        self.project = project
+        self.manifest = project.manifest
+        self.canon_repo = project.canon_repo
+        self.node_repo = project.node_repo
+        self.graph = project.graph
+        self.comp_repo = project.comp_repo
+        self.recognition_cache = project.recognition_cache
+        self.engineering_objects = project.engineering_objects
+        self.engineering_families = project.engineering_families
+        self.reinforcement_assemblies = project.reinforcement_assemblies
+        self.physical_bars = project.physical_bars
+        self.reconstruction_meshes = project.reconstruction_meshes
+
+        # Legacy project data property for panels that might still use it
+        self.project_data = getattr(project, 'bundle', None)
+
+        self.clear_selection()
         self._fire(self._on_data_loaded_callbacks)
 
     # ─── Layer management ─────────────────────────────────────────────────────
@@ -246,7 +262,7 @@ class SceneManager:
         if not q:
             return False
         for family in self.engineering_families:
-            if q == str(family.mark).lower() or q in str(family.uuid).lower():
+            if q == str(family.mark).lower() or q in str(family.uuid).lower() or q in str(getattr(family, "family_type", "")).lower():
                 self.select_family(family.uuid)
                 return True
         for assembly in self.reinforcement_assemblies:
@@ -254,8 +270,16 @@ class SceneManager:
                 self.select_assembly(assembly.uuid)
                 return True
         for bar in self.physical_bars:
-            if q == str(bar.mark).lower() or q in str(bar.uuid).lower():
+            if q == str(bar.mark).lower() or q in str(bar.uuid).lower() or q in str(getattr(bar, "bar_type", "")).lower():
                 self.select_bar(bar.uuid)
+                return True
+        for mesh in self.reconstruction_meshes:
+            if q in str(mesh.uuid).lower() or q in str(mesh.bar_uuid).lower():
+                self.select_mesh(mesh.uuid)
+                return True
+        for comp_uuid, result in (self.recognition_cache or {}).items():
+            if q in str(comp_uuid).lower() or q in str(getattr(result, "label", "")).lower():
+                self.select_component(comp_uuid)
                 return True
         return False
 

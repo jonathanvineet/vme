@@ -1,10 +1,10 @@
 [
   {
-    "Detected Count": 18,
-    "Estimated Count": 18,
+    "Detected Count": 26,
+    "Estimated Count": 26,
     "Expected Count": null,
-    "Family UUID": "0337e68e-34a5-5999-aace-756f95ada82e",
-    "Inferred Span": 3323.434,
+    "Family UUID": "77ef0d1e-82b1-5625-b34a-49a5cec76a8d",
+    "Inferred Span": 4887.403,
     "Mark": "N4",
     "Missing Offsets": []
   },

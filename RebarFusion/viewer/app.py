@@ -31,12 +31,14 @@ from PySide6.QtGui import QAction, QFont, QIcon
 from viewer.scene import SceneManager
 from viewer.viewport import ViewportWidget
 from viewer.viewport2d import Viewport2D
-from viewer.panels.hierarchy_panel import HierarchyPanel
+from viewer.project_tree import ProjectTreePanel
 from viewer.panels.layer_panel import LayerPanel
 from viewer.panels.property_panel import PropertyPanel
 from viewer.panels.statistics_panel import StatisticsPanel
 from viewer.panels.console_panel import ConsolePanel
 from viewer.panels.timeline_panel import TimelinePanel
+from viewer.controllers.project_controller import ProjectController
+from viewer.workbench_project import WorkbenchProject
 
 
 DARK_STYLESHEET = """
@@ -93,6 +95,27 @@ QScrollBar::handle:vertical { background: #3a3a5c; border-radius: 3px; }
 """
 
 
+class _HeadlessViewportPlaceholder(QWidget):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        layout = QVBoxLayout(self)
+        layout.setContentsMargins(12, 12, 12, 12)
+        label = QLabel("3D viewport unavailable in headless mode")
+        label.setStyleSheet("color:#8888aa; font-size:14px;")
+        layout.addWidget(label)
+        layout.addStretch()
+        self.camera_presets = {
+            "Top": lambda: None,
+            "Front": lambda: None,
+            "Left": lambda: None,
+            "Isometric": lambda: None,
+            "Fit": lambda: None,
+        }
+
+    def fit_view(self):
+        return None
+
+
 class MainWindow(QMainWindow):
     def __init__(self, project_dir: str | None = None):
         super().__init__()
@@ -100,12 +123,24 @@ class MainWindow(QMainWindow):
         self.resize(1600, 960)
         self.setStyleSheet(DARK_STYLESHEET)
 
-        # ── Scene ─────────────────────────────────────────────────────────
+        # ── Scene & Controllers ───────────────────────────────────────────
         self.scene = SceneManager()
+        self.project_controller = ProjectController(self)
+        self.project_controller.project_loaded.connect(self._on_project_loaded)
+        self.project_controller.project_load_failed.connect(self._on_project_load_failed)
+        self.project_controller.status_message.connect(self.statusBar().showMessage)
+        self.project_controller.log_message.connect(self._on_log_message)
+
 
         # ── Workbench Viewports ───────────────────────────────────────────
         self.viewport2d = Viewport2D(self.scene, self)
-        self.viewport = ViewportWidget(self.scene, self)
+        if os.environ.get("QT_QPA_PLATFORM", "").lower() in {"offscreen", "minimal"}:
+            self.viewport = _HeadlessViewportPlaceholder(self)
+        else:
+            try:
+                self.viewport = ViewportWidget(self.scene, self)
+            except Exception:
+                self.viewport = _HeadlessViewportPlaceholder(self)
         center_split = QSplitter(Qt.Orientation.Vertical)
         center_split.addWidget(self.viewport2d)
         center_split.addWidget(self.viewport)
@@ -113,7 +148,7 @@ class MainWindow(QMainWindow):
         self.setCentralWidget(center_split)
 
         # ── Panels ────────────────────────────────────────────────────────
-        self._hier_panel  = HierarchyPanel(self.scene)
+        self._tree_panel  = ProjectTreePanel(self.scene)
         self._stats_panel = StatisticsPanel(self.scene)
         self._layer_panel = LayerPanel(self.scene)
         self._prop_panel  = PropertyPanel(self.scene)
@@ -127,7 +162,7 @@ class MainWindow(QMainWindow):
         lv = QVBoxLayout(left_widget)
         lv.setContentsMargins(0, 0, 0, 0)
         lv.setSpacing(0)
-        lv.addWidget(self._hier_panel)
+        lv.addWidget(self._tree_panel)
         lv.addWidget(QLabel())  # separator
         lv.addWidget(self._stats_panel)
         left_dock.setWidget(left_widget)
@@ -169,11 +204,11 @@ class MainWindow(QMainWindow):
         self.status.showMessage("Ready")
 
         # Connect scene for status updates
-        self.scene.on_data_loaded(self._on_data_loaded)
+        self.scene.on_data_loaded(self._on_scene_data_loaded)
 
         # ── Auto-load ─────────────────────────────────────────────────────
         if project_dir:
-            QTimer.singleShot(300, lambda: self._load_project(project_dir))
+            QTimer.singleShot(300, lambda: self.project_controller.load_project(project_dir))
 
     # ─── Menu ─────────────────────────────────────────────────────────────────
 
@@ -230,12 +265,12 @@ class MainWindow(QMainWindow):
         tb.addAction(fit_a)
 
         tb.addSeparator()
-        search = QLineEdit()
-        search.setPlaceholderText("Search mark, assembly, bar...")
-        search.setMinimumWidth(260)
-        search.returnPressed.connect(lambda: self._search(search.text()))
         tb.addWidget(QLabel("Search:"))
-        tb.addWidget(search)
+        self._search_box = QLineEdit()
+        self._search_box.setPlaceholderText("Search mark, assembly, bar...")
+        self._search_box.setMinimumWidth(260)
+        self._search_box.returnPressed.connect(lambda: self._search(self._search_box.text()))
+        tb.addWidget(self._search_box)
 
     def _search(self, query: str):
         if self.scene.search(query):
@@ -243,149 +278,31 @@ class MainWindow(QMainWindow):
         else:
             self.status.showMessage(f"No match: {query}")
 
-    # ─── Project loading ──────────────────────────────────────────────────────
-
     def _open_project_dialog(self):
         directory = QFileDialog.getExistingDirectory(
             self, "Select Project Directory", os.path.expanduser("~")
         )
         if directory:
-            self._load_project(directory)
+            self.project_controller.load_project(directory)
 
-    def _load_project(self, directory: str):
-        self.status.showMessage(f"Loading {directory}…")
-        # Run pipeline in-thread (for large projects, move to QThread)
-        try:
-            from core.project import DrawingProject
-            from core.readers.dxf_reader import DXFReader
-            from core.geometry.canonicalizer import canonicalize
-            from core.spatial.engine import SpatialQueryEngine
-            from core.topology.node_builder import build_nodes
-            from core.topology.builder import TopologyBuilder
-            from core.recognition.registry import RecognizerRegistry, RecognitionCache
-            from core.recognition.recognizers import (
-                StraightBarRecognizer, LBarRecognizer, UBarRecognizer, StirrupRecognizer,
-                BranchRecognizer, DimensionRecognizer, LeaderRecognizer,
-                StructuralOutlineRecognizer
-            )
-            import uuid
-            from core.recognition.annotations import Annotation, AnnotationParser
-            from core.engineering.association import EngineeringAssociationEngine
-            from core.engineering.solver import ConstraintSolver
-            from core.engineering.family import FamilyBuilder
-            from core.reconstruction.assembly_builder import AssemblyBuilder
-            from core.reconstruction.bar_builder import PhysicalBarBuilder
-            from core.reconstruction.mesh_builder import MeshBuilder
-            project = DrawingProject()
-            manifest = project.load_directory(directory)
-            reader = DXFReader()
+    # ─── Project Loading Handlers ─────────────────────────────────────────────
 
-            canon_repo = None
-            node_repo = None
-            graph = None
-            comp_repo = None
-            recognition_cache = None
-            eng_objects = {}
-            engineering_families = []
-            reinforcement_assemblies = []
-            physical_bars = []
-            reconstruction_meshes = []
+    def _on_project_loaded(self, project: WorkbenchProject):
+        """Handle successful project loading."""
+        self.scene.load_project(project)
+        self.viewport.fit_view()
 
-            registry = RecognizerRegistry()
-            registry.register(StraightBarRecognizer())
-            registry.register(LBarRecognizer())
-            registry.register(UBarRecognizer())
-            registry.register(StirrupRecognizer())
-            registry.register(BranchRecognizer())
-            registry.register(StructuralOutlineRecognizer())
-            registry.register(DimensionRecognizer())
-            registry.register(LeaderRecognizer())
+    def _on_project_load_failed(self, error_message: str):
+        """Handle failed project loading."""
+        # The controller already logs the detailed error.
+        # We could show a dialog box here if needed.
+        pass
 
-            # Load first supported drawing (extendable to multi-drawing overlay)
-            for filename, drawing in manifest.drawings.items():
-                if drawing.duplicate_of or not drawing.capabilities.geometry:
-                    continue
-                phase2 = reader.read_geometry(drawing.filepath, drawing.identity)
-                canon_repo, _ = canonicalize(phase2, drawing.filepath)
-                engine = SpatialQueryEngine.build(canon_repo)
-                node_repo, _, _ = build_nodes(canon_repo, engine, filename)
-                builder = TopologyBuilder(node_repo, canon_repo)
-                graph, comp_repo, metrics, _ = builder.build()
-                
-                recognition_cache = RecognitionCache()
-                for comp in comp_repo.components.values():
-                    result = registry.evaluate(comp, graph)
-                    recognition_cache.set(comp.id, result)
-                    
-                # Phase 8 Solver
-                annotations = []
-                for t in canon_repo.texts:
-                    annotations.append(Annotation(uuid.uuid4(), 'TEXT', t.text, t.insertion_point, t.bounding_box, t.rotation, t.layer, t.id))
-                for t in canon_repo.mtexts:
-                    annotations.append(Annotation(uuid.uuid4(), 'MTEXT', t.text, t.insertion_point, t.bounding_box, t.rotation, t.layer, t.id))
-                for d in canon_repo.dimensions:
-                    annotations.append(Annotation(uuid.uuid4(), 'DIMENSION', d.text, d.defpoint, d.bounding_box, 0.0, d.layer, d.id, d.measurement, d.p1, d.p2))
-                
-                leaders = []
-                import ezdxf
-                doc = ezdxf.readfile(drawing.filepath)
-                msp = doc.modelspace()
-                for e in msp:
-                    if e.dxftype() == 'LINE' and e.dxf.layer == 'G-ANNO-TEXT':
-                        leaders.append(((e.dxf.start.x, e.dxf.start.y, e.dxf.start.z), (e.dxf.end.x, e.dxf.end.y, e.dxf.end.z)))
-                        
-                assoc_engine = EngineeringAssociationEngine(graph, comp_repo, engine, recognition_cache)
-                anno_parser = AnnotationParser()
-                groups = assoc_engine.cluster_annotations(annotations, anno_parser, leaders)
-                
-                solver = ConstraintSolver()
-                for group in groups:
-                    if not group.tokens:
-                        continue
-                    candidates = assoc_engine.find_group_candidates(group, k=5)
-                    if candidates:
-                        constraints = assoc_engine.build_constraints(candidates)
-                        for c in constraints:
-                            solver.add_constraint(c)
-                eng_objects = solver.solve()
-                family_builder = FamilyBuilder(graph, comp_repo, engine, recognition_cache)
-                engineering_families = family_builder.build_families(eng_objects)
-                reinforcement_assemblies = AssemblyBuilder().build(engineering_families)
-                bar_builder = PhysicalBarBuilder()
-                for assembly in reinforcement_assemblies:
-                    bar_builder.build_for_assembly(assembly)
-                physical_bars = [bar for assembly in reinforcement_assemblies for bar in assembly.bars]
-                reconstruction_meshes = MeshBuilder(segments=12).build_meshes(reinforcement_assemblies)
+    def _on_log_message(self, message: str):
+        """Display a message from a controller in the console."""
+        self._console.log(message)
 
-                self._console.log(f"Loaded: {filename}")
-                self._console.log(f"  Nodes={metrics['total_nodes']}  Edges={metrics['total_edges']}  Components={metrics['connected_components']}")
-                self._console.log(f"  Engineering Families={len(engineering_families)}")
-                self._console.log(f"  Reinforcement Assemblies={len(reinforcement_assemblies)}  Bars={len(physical_bars)}")
-                break  # TODO: multi-drawing mode
-
-            self.scene.recognition_cache = recognition_cache
-            self.scene.engineering_objects = eng_objects
-            self.scene.engineering_families = engineering_families
-            self.scene.reinforcement_assemblies = reinforcement_assemblies
-            self.scene.physical_bars = physical_bars
-            self.scene.reconstruction_meshes = reconstruction_meshes
-            self.scene.load(
-                manifest=manifest,
-                canon_repo=canon_repo,
-                node_repo=node_repo,
-                graph=graph,
-                comp_repo=comp_repo,
-            )
-            self.status.showMessage(f"Loaded: {directory}")
-            self.viewport.fit_view()
-
-        except Exception as e:
-            self.status.showMessage(f"Error: {e}")
-            self._console.log(f"[ERROR] {e}")
-            import traceback
-            self._console.log(traceback.format_exc())
-
-    def _on_data_loaded(self):
+    def _on_scene_data_loaded(self):
         self.status.showMessage("Project loaded. Rendering…")
 
 

@@ -35,6 +35,7 @@ class ComponentRenderer(BaseRenderer):
 
         for comp in comp_repo.components.values():
             color = _uuid_to_rgb(comp.id)
+            selected = self.scene.selected_component_uuid == comp.id
             points, cells = [], []
             idx = 0
             for e_id in comp.edge_ids:
@@ -58,5 +59,5 @@ class ComponentRenderer(BaseRenderer):
             mesh.lines = np.array(cells)
             name = f"comp_{str(comp.id)[:8]}"
             a = self.plotter.add_mesh(mesh, color=color, line_width=1.5,
-                                      opacity=0.85, name=name)
+                                      opacity=1.0 if selected else 0.85, name=name)
             self._add_actor(a)
