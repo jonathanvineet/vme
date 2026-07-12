@@ -97,6 +97,22 @@ class PropertyPanel(QWidget):
                 data["Layer"] = str(bar.layer_uuid)[:12] + "…" if bar.layer_uuid else "None"
                 data["Adjustments"] = ", ".join(bar.adjustment_notes)
                 data["Confidence"] = f"{bar.confidence:.2f}"
+                # Phase 10.1: diameter is never silently fabricated -- show
+                # its source/confidence explicitly rather than presenting a
+                # missing_visual_fallback value as if it were real data.
+                data["Diameter Source"] = bar.diameter_source
+                data["Diameter Confidence"] = f"{bar.diameter_confidence:.2f}"
+                # Phase 10.1/10.2: geometry recovery provenance, independent
+                # of engineering confidence above.
+                data["Recovery Method"] = bar.centerline.recovery_method
+                data["Recovery Confidence"] = f"{bar.centerline.recovery_confidence:.2f}"
+                if bar.centerline.truncated_branch:
+                    data["Recovery Note"] = (
+                        f"Truncated branch: {bar.centerline.excluded_edge_count} edge(s) "
+                        f"excluded from the recovered path"
+                    )
+                if bar.centerline.recovery_notes:
+                    data["Recovery Detail"] = "; ".join(bar.centerline.recovery_notes)
                 data["Provenance"] = "Physical Bar -> Family -> Components -> CAD"
 
         elif scene.selected_assembly_uuid is not None:
@@ -167,7 +183,22 @@ class PropertyPanel(QWidget):
                     res = scene.recognition_cache.get(comp.id)
                     if res:
                         data["Recognized Shape"] = res.label
-                        
+                        data["Recognition Confidence"] = f"{res.confidence:.2f}"
+
+                # Phase 7.6: physical plausibility -- a component can be
+                # correctly recognized (above) yet still be flagged as an
+                # implausible fragment (see docs/audits/phase07/7.6_physical_plausibility.md).
+                plausibility = getattr(scene, "plausibility", None)
+                if plausibility:
+                    p = plausibility.get(comp.id)
+                    if p:
+                        data["Plausibility"] = p.decision
+                        if p.decision != "accept":
+                            data["Plausibility Reason"] = (
+                                f"length={p.length:.1f}mm vs '{p.label}' median={p.median_for_label:.1f}mm "
+                                f"(z={p.modified_z_score:.2f})"
+                            )
+
                 # Phase 8 Association Results
                 if hasattr(scene, 'engineering_objects') and scene.engineering_objects:
                     obj = scene.engineering_objects.get(comp.id)

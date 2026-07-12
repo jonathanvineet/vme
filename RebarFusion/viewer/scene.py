@@ -150,6 +150,8 @@ class SceneManager:
         self.reinforcement_assemblies = project.reinforcement_assemblies
         self.physical_bars = project.physical_bars
         self.reconstruction_meshes = project.reconstruction_meshes
+        self.leader_repo = getattr(project, 'leader_repo', None)
+        self.plausibility = getattr(project, 'plausibility', None) or {}
 
         self._compute_model_transform()
         # Legacy project data property for panels that might still use it
