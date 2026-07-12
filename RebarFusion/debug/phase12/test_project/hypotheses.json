@@ -1,0 +1,330 @@
+[
+  {
+    "anchor_observation": "7344f1b0-b3a1-584d-a503-1fe696afc30f",
+    "candidate_observations": [],
+    "evidence": [
+      {
+        "category": "fact",
+        "confidence": null,
+        "description": "observations disagree on length: 5.336560890367484 vs 1964.8415753806587",
+        "observation_a": "7344f1b0-b3a1-584d-a503-1fe696afc30f",
+        "observation_b": "9d8b1242-ac8b-538f-91a7-0afa9b772b24",
+        "polarity": "contradicts",
+        "rule": "fact_conflict",
+        "uuid": "a8a89423-9092-563b-93ae-01375d521e39"
+      },
+      {
+        "category": "fact",
+        "confidence": null,
+        "description": "observations disagree on orientation: 107.3977950178474 vs 90.0",
+        "observation_a": "7344f1b0-b3a1-584d-a503-1fe696afc30f",
+        "observation_b": "9d8b1242-ac8b-538f-91a7-0afa9b772b24",
+        "polarity": "contradicts",
+        "rule": "fact_conflict",
+        "uuid": "a8a89423-9092-563b-93ae-01375d521e39"
+      },
+      {
+        "category": "fact",
+        "confidence": null,
+        "description": "observations disagree on quantity: 4 vs 1",
+        "observation_a": "7344f1b0-b3a1-584d-a503-1fe696afc30f",
+        "observation_b": "9d8b1242-ac8b-538f-91a7-0afa9b772b24",
+        "polarity": "contradicts",
+        "rule": "fact_conflict",
+        "uuid": "a8a89423-9092-563b-93ae-01375d521e39"
+      },
+      {
+        "category": "fact",
+        "confidence": null,
+        "description": "observations disagree on shape: l_bar vs branch",
+        "observation_a": "7344f1b0-b3a1-584d-a503-1fe696afc30f",
+        "observation_b": "9d8b1242-ac8b-538f-91a7-0afa9b772b24",
+        "polarity": "contradicts",
+        "rule": "fact_conflict",
+        "uuid": "a8a89423-9092-563b-93ae-01375d521e39"
+      },
+      {
+        "category": "spatial",
+        "confidence": null,
+        "description": "centroid distance 30445.6mm (corroborating only, never a qualifying signal on its own)",
+        "observation_a": "7344f1b0-b3a1-584d-a503-1fe696afc30f",
+        "observation_b": "9d8b1242-ac8b-538f-91a7-0afa9b772b24",
+        "polarity": "unknown",
+        "rule": "spatial_distance",
+        "uuid": "a787c8f5-f441-5957-b3a1-164819e16e32"
+      },
+      {
+        "category": "fact",
+        "confidence": null,
+        "description": "observations disagree on length: 5.336560890367484 vs 3227.8025739998466",
+        "observation_a": "7344f1b0-b3a1-584d-a503-1fe696afc30f",
+        "observation_b": "d46e46c8-79c5-5e5e-af52-ecec0672abee",
+        "polarity": "contradicts",
+        "rule": "fact_conflict",
+        "uuid": "99982a5e-695b-5adf-9a71-f35c84f7e14d"
+      },
+      {
+        "category": "fact",
+        "confidence": null,
+        "description": "observations disagree on orientation: 107.3977950178474 vs 90.0",
+        "observation_a": "7344f1b0-b3a1-584d-a503-1fe696afc30f",
+        "observation_b": "d46e46c8-79c5-5e5e-af52-ecec0672abee",
+        "polarity": "contradicts",
+        "rule": "fact_conflict",
+        "uuid": "99982a5e-695b-5adf-9a71-f35c84f7e14d"
+      },
+      {
+        "category": "fact",
+        "confidence": null,
+        "description": "observations disagree on quantity: 4 vs 1",
+        "observation_a": "7344f1b0-b3a1-584d-a503-1fe696afc30f",
+        "observation_b": "d46e46c8-79c5-5e5e-af52-ecec0672abee",
+        "polarity": "contradicts",
+        "rule": "fact_conflict",
+        "uuid": "99982a5e-695b-5adf-9a71-f35c84f7e14d"
+      },
+      {
+        "category": "fact",
+        "confidence": null,
+        "description": "observations disagree on shape: l_bar vs branch",
+        "observation_a": "7344f1b0-b3a1-584d-a503-1fe696afc30f",
+        "observation_b": "d46e46c8-79c5-5e5e-af52-ecec0672abee",
+        "polarity": "contradicts",
+        "rule": "fact_conflict",
+        "uuid": "99982a5e-695b-5adf-9a71-f35c84f7e14d"
+      },
+      {
+        "category": "spatial",
+        "confidence": null,
+        "description": "centroid distance 29442.5mm (corroborating only, never a qualifying signal on its own)",
+        "observation_a": "7344f1b0-b3a1-584d-a503-1fe696afc30f",
+        "observation_b": "d46e46c8-79c5-5e5e-af52-ecec0672abee",
+        "polarity": "unknown",
+        "rule": "spatial_distance",
+        "uuid": "aeb5a10b-c2b4-5ffa-b398-cfb3f9b520a1"
+      }
+    ],
+    "status": "PENDING",
+    "uuid": "42f8fd11-78c1-5275-ad64-8d8c83479fd5"
+  },
+  {
+    "anchor_observation": "9d8b1242-ac8b-538f-91a7-0afa9b772b24",
+    "candidate_observations": [
+      "d46e46c8-79c5-5e5e-af52-ecec0672abee"
+    ],
+    "evidence": [
+      {
+        "category": "fact",
+        "confidence": null,
+        "description": "observations disagree on length: 1964.8415753806587 vs 5.336560890367484",
+        "observation_a": "9d8b1242-ac8b-538f-91a7-0afa9b772b24",
+        "observation_b": "7344f1b0-b3a1-584d-a503-1fe696afc30f",
+        "polarity": "contradicts",
+        "rule": "fact_conflict",
+        "uuid": "3e23c142-790e-5480-853a-9889187b724c"
+      },
+      {
+        "category": "fact",
+        "confidence": null,
+        "description": "observations disagree on orientation: 90.0 vs 107.3977950178474",
+        "observation_a": "9d8b1242-ac8b-538f-91a7-0afa9b772b24",
+        "observation_b": "7344f1b0-b3a1-584d-a503-1fe696afc30f",
+        "polarity": "contradicts",
+        "rule": "fact_conflict",
+        "uuid": "3e23c142-790e-5480-853a-9889187b724c"
+      },
+      {
+        "category": "fact",
+        "confidence": null,
+        "description": "observations disagree on quantity: 1 vs 4",
+        "observation_a": "9d8b1242-ac8b-538f-91a7-0afa9b772b24",
+        "observation_b": "7344f1b0-b3a1-584d-a503-1fe696afc30f",
+        "polarity": "contradicts",
+        "rule": "fact_conflict",
+        "uuid": "3e23c142-790e-5480-853a-9889187b724c"
+      },
+      {
+        "category": "fact",
+        "confidence": null,
+        "description": "observations disagree on shape: branch vs l_bar",
+        "observation_a": "9d8b1242-ac8b-538f-91a7-0afa9b772b24",
+        "observation_b": "7344f1b0-b3a1-584d-a503-1fe696afc30f",
+        "polarity": "contradicts",
+        "rule": "fact_conflict",
+        "uuid": "3e23c142-790e-5480-853a-9889187b724c"
+      },
+      {
+        "category": "spatial",
+        "confidence": null,
+        "description": "centroid distance 30445.6mm (corroborating only, never a qualifying signal on its own)",
+        "observation_a": "9d8b1242-ac8b-538f-91a7-0afa9b772b24",
+        "observation_b": "7344f1b0-b3a1-584d-a503-1fe696afc30f",
+        "polarity": "unknown",
+        "rule": "spatial_distance",
+        "uuid": "b6c56d64-b2b9-5d37-8200-6ec97bb51d53"
+      },
+      {
+        "category": "fact",
+        "confidence": null,
+        "description": "observations disagree on length: 1964.8415753806587 vs 3227.8025739998466",
+        "observation_a": "9d8b1242-ac8b-538f-91a7-0afa9b772b24",
+        "observation_b": "d46e46c8-79c5-5e5e-af52-ecec0672abee",
+        "polarity": "contradicts",
+        "rule": "fact_conflict",
+        "uuid": "a24036e2-4899-59b0-a5c2-af4ca267fed3"
+      },
+      {
+        "category": "fact",
+        "confidence": null,
+        "description": "both observations claim orientation=90.0",
+        "observation_a": "9d8b1242-ac8b-538f-91a7-0afa9b772b24",
+        "observation_b": "d46e46c8-79c5-5e5e-af52-ecec0672abee",
+        "polarity": "supports",
+        "rule": "fact_agreement",
+        "uuid": "9509b97b-da2b-5f16-869e-1ea2c277215a"
+      },
+      {
+        "category": "fact",
+        "confidence": null,
+        "description": "both observations claim quantity=1",
+        "observation_a": "9d8b1242-ac8b-538f-91a7-0afa9b772b24",
+        "observation_b": "d46e46c8-79c5-5e5e-af52-ecec0672abee",
+        "polarity": "supports",
+        "rule": "fact_agreement",
+        "uuid": "9509b97b-da2b-5f16-869e-1ea2c277215a"
+      },
+      {
+        "category": "fact",
+        "confidence": null,
+        "description": "both observations claim shape=branch",
+        "observation_a": "9d8b1242-ac8b-538f-91a7-0afa9b772b24",
+        "observation_b": "d46e46c8-79c5-5e5e-af52-ecec0672abee",
+        "polarity": "supports",
+        "rule": "fact_agreement",
+        "uuid": "9509b97b-da2b-5f16-869e-1ea2c277215a"
+      },
+      {
+        "category": "spatial",
+        "confidence": null,
+        "description": "centroid distance 1882.5mm (corroborating only, never a qualifying signal on its own)",
+        "observation_a": "9d8b1242-ac8b-538f-91a7-0afa9b772b24",
+        "observation_b": "d46e46c8-79c5-5e5e-af52-ecec0672abee",
+        "polarity": "unknown",
+        "rule": "spatial_distance",
+        "uuid": "16a60ab3-3b46-5c02-a1e6-ae9b91966085"
+      }
+    ],
+    "status": "PENDING",
+    "uuid": "183c383e-457a-5469-98c7-714b9e23188e"
+  },
+  {
+    "anchor_observation": "d46e46c8-79c5-5e5e-af52-ecec0672abee",
+    "candidate_observations": [
+      "9d8b1242-ac8b-538f-91a7-0afa9b772b24"
+    ],
+    "evidence": [
+      {
+        "category": "fact",
+        "confidence": null,
+        "description": "observations disagree on length: 3227.8025739998466 vs 5.336560890367484",
+        "observation_a": "d46e46c8-79c5-5e5e-af52-ecec0672abee",
+        "observation_b": "7344f1b0-b3a1-584d-a503-1fe696afc30f",
+        "polarity": "contradicts",
+        "rule": "fact_conflict",
+        "uuid": "96a60ad2-eba8-5b49-8bf1-7a76c86fc541"
+      },
+      {
+        "category": "fact",
+        "confidence": null,
+        "description": "observations disagree on orientation: 90.0 vs 107.3977950178474",
+        "observation_a": "d46e46c8-79c5-5e5e-af52-ecec0672abee",
+        "observation_b": "7344f1b0-b3a1-584d-a503-1fe696afc30f",
+        "polarity": "contradicts",
+        "rule": "fact_conflict",
+        "uuid": "96a60ad2-eba8-5b49-8bf1-7a76c86fc541"
+      },
+      {
+        "category": "fact",
+        "confidence": null,
+        "description": "observations disagree on quantity: 1 vs 4",
+        "observation_a": "d46e46c8-79c5-5e5e-af52-ecec0672abee",
+        "observation_b": "7344f1b0-b3a1-584d-a503-1fe696afc30f",
+        "polarity": "contradicts",
+        "rule": "fact_conflict",
+        "uuid": "96a60ad2-eba8-5b49-8bf1-7a76c86fc541"
+      },
+      {
+        "category": "fact",
+        "confidence": null,
+        "description": "observations disagree on shape: branch vs l_bar",
+        "observation_a": "d46e46c8-79c5-5e5e-af52-ecec0672abee",
+        "observation_b": "7344f1b0-b3a1-584d-a503-1fe696afc30f",
+        "polarity": "contradicts",
+        "rule": "fact_conflict",
+        "uuid": "96a60ad2-eba8-5b49-8bf1-7a76c86fc541"
+      },
+      {
+        "category": "spatial",
+        "confidence": null,
+        "description": "centroid distance 29442.5mm (corroborating only, never a qualifying signal on its own)",
+        "observation_a": "d46e46c8-79c5-5e5e-af52-ecec0672abee",
+        "observation_b": "7344f1b0-b3a1-584d-a503-1fe696afc30f",
+        "polarity": "unknown",
+        "rule": "spatial_distance",
+        "uuid": "f223cf32-7876-54de-89db-1cec32e53301"
+      },
+      {
+        "category": "fact",
+        "confidence": null,
+        "description": "observations disagree on length: 3227.8025739998466 vs 1964.8415753806587",
+        "observation_a": "d46e46c8-79c5-5e5e-af52-ecec0672abee",
+        "observation_b": "9d8b1242-ac8b-538f-91a7-0afa9b772b24",
+        "polarity": "contradicts",
+        "rule": "fact_conflict",
+        "uuid": "6b404afd-bdbb-5ae8-b650-ca3d078f5906"
+      },
+      {
+        "category": "fact",
+        "confidence": null,
+        "description": "both observations claim orientation=90.0",
+        "observation_a": "d46e46c8-79c5-5e5e-af52-ecec0672abee",
+        "observation_b": "9d8b1242-ac8b-538f-91a7-0afa9b772b24",
+        "polarity": "supports",
+        "rule": "fact_agreement",
+        "uuid": "cde24871-a01f-56ce-bd3b-89e613ed0d3b"
+      },
+      {
+        "category": "fact",
+        "confidence": null,
+        "description": "both observations claim quantity=1",
+        "observation_a": "d46e46c8-79c5-5e5e-af52-ecec0672abee",
+        "observation_b": "9d8b1242-ac8b-538f-91a7-0afa9b772b24",
+        "polarity": "supports",
+        "rule": "fact_agreement",
+        "uuid": "cde24871-a01f-56ce-bd3b-89e613ed0d3b"
+      },
+      {
+        "category": "fact",
+        "confidence": null,
+        "description": "both observations claim shape=branch",
+        "observation_a": "d46e46c8-79c5-5e5e-af52-ecec0672abee",
+        "observation_b": "9d8b1242-ac8b-538f-91a7-0afa9b772b24",
+        "polarity": "supports",
+        "rule": "fact_agreement",
+        "uuid": "cde24871-a01f-56ce-bd3b-89e613ed0d3b"
+      },
+      {
+        "category": "spatial",
+        "confidence": null,
+        "description": "centroid distance 1882.5mm (corroborating only, never a qualifying signal on its own)",
+        "observation_a": "d46e46c8-79c5-5e5e-af52-ecec0672abee",
+        "observation_b": "9d8b1242-ac8b-538f-91a7-0afa9b772b24",
+        "polarity": "unknown",
+        "rule": "spatial_distance",
+        "uuid": "616fff3b-c339-5b8b-97be-3076f25a1d35"
+      }
+    ],
+    "status": "PENDING",
+    "uuid": "492095f4-a896-58b1-90ab-203a55560e85"
+  }
+]

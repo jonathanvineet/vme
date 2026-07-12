@@ -1,0 +1,249 @@
+[
+  {
+    "bbox": [
+      68145.04259000001,
+      25095.82874709236,
+      68146.47304493113,
+      25100.872130000003
+    ],
+    "drawing_filename": "SS-GF-01(M).dxf",
+    "drawing_number": "SS-GF-01",
+    "drawing_role": {
+      "confidence": 0.9,
+      "evidence": "view suffix 'M' matches the confirmed Mould-drawing convention (PW-GF-09(M1)/(M2): dimension chains, N-mark references, absolute levels)",
+      "role": "mould_instance"
+    },
+    "drawing_view": "M",
+    "facts": [
+      {
+        "aspect": "mark",
+        "confidence": 0.637,
+        "source": "family_annotation",
+        "source_entity_uuid": null,
+        "uuid": "080c8486-5f94-5d5b-aea0-5026bdbd756f",
+        "value": "N4"
+      },
+      {
+        "aspect": "diameter",
+        "confidence": 0.637,
+        "source": "family_annotation",
+        "source_entity_uuid": null,
+        "uuid": "5a79023f-f9dd-5888-a676-b744b2dae476",
+        "value": 8.0
+      },
+      {
+        "aspect": "spacing",
+        "confidence": 0.796,
+        "source": "family_annotation",
+        "source_entity_uuid": null,
+        "uuid": "57f52cfb-fbb3-542a-ab5d-43d3d63556c1",
+        "value": 295.818
+      },
+      {
+        "aspect": "shape",
+        "confidence": 1.0,
+        "source": "family_annotation",
+        "source_entity_uuid": "7f049da2-8a06-50ad-b520-370144e1feb0",
+        "uuid": "38a26b43-8010-54f2-a3da-573b65e7b945",
+        "value": "l_bar"
+      },
+      {
+        "aspect": "orientation",
+        "confidence": 1.0,
+        "source": "family_annotation",
+        "source_entity_uuid": "7f049da2-8a06-50ad-b520-370144e1feb0",
+        "uuid": "3b6fb8d6-a5a1-58d5-84d1-f8d6f96ef3d6",
+        "value": 107.3977950178474
+      },
+      {
+        "aspect": "position",
+        "confidence": 1.0,
+        "source": "family_annotation",
+        "source_entity_uuid": "7f049da2-8a06-50ad-b520-370144e1feb0",
+        "uuid": "c10e4201-6584-5147-ba0c-5fdbf93f7947",
+        "value": [
+          68145.69372984876,
+          25098.337303509346
+        ]
+      },
+      {
+        "aspect": "length",
+        "confidence": 1.0,
+        "source": "family_annotation",
+        "source_entity_uuid": "7f049da2-8a06-50ad-b520-370144e1feb0",
+        "uuid": "eef9d169-44cd-51dd-abf5-08c9f09130de",
+        "value": 5.336560890367484
+      },
+      {
+        "aspect": "quantity",
+        "confidence": 1.0,
+        "source": "family_annotation",
+        "source_entity_uuid": "7f049da2-8a06-50ad-b520-370144e1feb0",
+        "uuid": "3888293b-288f-5dba-aa59-efd7738f86a7",
+        "value": 4
+      }
+    ],
+    "family_type": "SECONDARY_DISTRIBUTION",
+    "family_uuid": "21d96a0e-5d0f-5368-9565-1bf7d00efaba",
+    "mark_namespace": "reference_code",
+    "member_component_uuids": [
+      "7f049da2-8a06-50ad-b520-370144e1feb0",
+      "39efeb9a-f52b-5107-9e26-0714089cbee9",
+      "f73dfa40-d183-55b6-977e-6cc4e3a01ac4",
+      "d9a0cb5b-6f68-54a7-bb8e-8c0a74b08612"
+    ],
+    "uuid": "7344f1b0-b3a1-584d-a503-1fe696afc30f"
+  },
+  {
+    "bbox": [
+      87818.26091000001,
+      2903.7500000000005,
+      88388.16494,
+      4019.7500000000005
+    ],
+    "drawing_filename": "SS-GF-01(M).dxf",
+    "drawing_number": "SS-GF-01",
+    "drawing_role": {
+      "confidence": 0.9,
+      "evidence": "view suffix 'M' matches the confirmed Mould-drawing convention (PW-GF-09(M1)/(M2): dimension chains, N-mark references, absolute levels)",
+      "role": "mould_instance"
+    },
+    "drawing_view": "M",
+    "facts": [
+      {
+        "aspect": "mark",
+        "confidence": 0.0,
+        "source": "family_annotation",
+        "source_entity_uuid": null,
+        "uuid": "147e3eea-695c-586f-91a5-f2e2dcf9f91e",
+        "value": "N6"
+      },
+      {
+        "aspect": "shape",
+        "confidence": 1.0,
+        "source": "family_annotation",
+        "source_entity_uuid": "5c1cda77-b36a-5f5e-95a8-4d569308389a",
+        "uuid": "cec567df-8ee1-545a-9806-19e06da05d08",
+        "value": "branch"
+      },
+      {
+        "aspect": "orientation",
+        "confidence": 1.0,
+        "source": "family_annotation",
+        "source_entity_uuid": "5c1cda77-b36a-5f5e-95a8-4d569308389a",
+        "uuid": "c589457f-8f85-5300-b571-a70daa5a1120",
+        "value": 90.0
+      },
+      {
+        "aspect": "position",
+        "confidence": 1.0,
+        "source": "family_annotation",
+        "source_entity_uuid": "5c1cda77-b36a-5f5e-95a8-4d569308389a",
+        "uuid": "86208cf4-c6c6-54c6-9f0f-845356b20088",
+        "value": [
+          87931.965575092,
+          3295.47591974134
+        ]
+      },
+      {
+        "aspect": "length",
+        "confidence": 1.0,
+        "source": "family_annotation",
+        "source_entity_uuid": "5c1cda77-b36a-5f5e-95a8-4d569308389a",
+        "uuid": "14cbd23c-8528-5de8-aece-beaf5e666b3b",
+        "value": 3227.8025739998466
+      },
+      {
+        "aspect": "quantity",
+        "confidence": 1.0,
+        "source": "family_annotation",
+        "source_entity_uuid": "5c1cda77-b36a-5f5e-95a8-4d569308389a",
+        "uuid": "92bdd67d-7339-5ee1-862a-33fa742e32b7",
+        "value": 1
+      }
+    ],
+    "family_type": "EDGE",
+    "family_uuid": "837ef1e5-7c9c-5c7f-b45b-a5676aa14ced",
+    "mark_namespace": "reference_code",
+    "member_component_uuids": [
+      "5c1cda77-b36a-5f5e-95a8-4d569308389a"
+    ],
+    "uuid": "d46e46c8-79c5-5e5e-af52-ecec0672abee"
+  },
+  {
+    "bbox": [
+      89763.84280488508,
+      3181.5315839249597,
+      89784.26091000001,
+      4155.9611
+    ],
+    "drawing_filename": "SS-GF-01(M).dxf",
+    "drawing_number": "SS-GF-01",
+    "drawing_role": {
+      "confidence": 0.9,
+      "evidence": "view suffix 'M' matches the confirmed Mould-drawing convention (PW-GF-09(M1)/(M2): dimension chains, N-mark references, absolute levels)",
+      "role": "mould_instance"
+    },
+    "drawing_view": "M",
+    "facts": [
+      {
+        "aspect": "mark",
+        "confidence": 0.0,
+        "source": "family_annotation",
+        "source_entity_uuid": null,
+        "uuid": "0b218a0a-64c3-591c-ba22-ba1f596451e1",
+        "value": "N7"
+      },
+      {
+        "aspect": "shape",
+        "confidence": 1.0,
+        "source": "family_annotation",
+        "source_entity_uuid": "f3e639ef-cd45-5464-87f1-dc6302d18162",
+        "uuid": "5f50132f-79fd-53c4-b9d9-513a470ae29a",
+        "value": "branch"
+      },
+      {
+        "aspect": "orientation",
+        "confidence": 1.0,
+        "source": "family_annotation",
+        "source_entity_uuid": "f3e639ef-cd45-5464-87f1-dc6302d18162",
+        "uuid": "b3dcd827-1006-5231-9536-4edf9d78f59f",
+        "value": 90.0
+      },
+      {
+        "aspect": "position",
+        "confidence": 1.0,
+        "source": "family_annotation",
+        "source_entity_uuid": "f3e639ef-cd45-5464-87f1-dc6302d18162",
+        "uuid": "b4c62c6c-1bd2-568c-a42f-5e644db09cf7",
+        "value": [
+          89776.25828893064,
+          3672.7815173251465
+        ]
+      },
+      {
+        "aspect": "length",
+        "confidence": 1.0,
+        "source": "family_annotation",
+        "source_entity_uuid": "f3e639ef-cd45-5464-87f1-dc6302d18162",
+        "uuid": "135b05ad-d6cc-5e35-842b-640e463af9f4",
+        "value": 1964.8415753806587
+      },
+      {
+        "aspect": "quantity",
+        "confidence": 1.0,
+        "source": "family_annotation",
+        "source_entity_uuid": "f3e639ef-cd45-5464-87f1-dc6302d18162",
+        "uuid": "a7b054a3-7f93-5bcb-9536-375f2d735e20",
+        "value": 1
+      }
+    ],
+    "family_type": "EDGE",
+    "family_uuid": "153a8c83-e9cc-589a-97d4-144f893a2229",
+    "mark_namespace": "reference_code",
+    "member_component_uuids": [
+      "f3e639ef-cd45-5464-87f1-dc6302d18162"
+    ],
+    "uuid": "9d8b1242-ac8b-538f-91a7-0afa9b772b24"
+  }
+]

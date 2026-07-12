@@ -16,6 +16,11 @@
 | 10 — Digital Twin Reconstruction | ✅ Frozen | [10.0 initial audit](audits/phase10/10.0_reconstruction_audit.md), [10.1 geometry recovery redesign](audits/phase10/10.1_geometry_recovery_redesign.md), [10.2 tube sweep design](audits/phase10/10.2_continuous_tube_sweep.md), [10.3 tube sweep implementation](audits/phase10/10.3_continuous_tube_sweep_implementation.md), [10.4 regression audit / freeze](audits/phase10/10.4_reconstruction_regression_audit.md) |
 | 11.0/11.1 — Engineering Viewer (pipeline modernization) | ✅ Frozen | [11.0 viewer audit](audits/phase11/11.0_viewer_audit.md), [11.1 pipeline modernization](audits/phase11/11.1_viewer_pipeline_modernization.md) |
 | 11.2 — Engineering Viewer (new capabilities) | ⬜ Not started | — |
+| 12 — Physical Identity Resolution (research) | ✅ Research complete | [research report](research/phase12_cross_view_fusion_research.md) |
+| 12.1 — Observation Builder | ✅ Frozen (revised) | [audit](audits/phase12/12.1_observation_builder.md) |
+| 12.2 — Hypothesis Generator | ✅ Frozen | [audit](audits/phase12/12.2_hypothesis_generator.md) |
+| 12.3 — Evidence Engine | ✅ Frozen | [audit](audits/phase12/12.3_evidence_engine.md) |
+| 12.4 — Identity Resolver | ⬜ Not started | — |
 
 Overall pipeline architecture and the original Step-1 review: [architecture_review.md](architecture/architecture_review.md).
 

@@ -1,0 +1,158 @@
+[
+  {
+    "anchor_observation": "7344f1b0-b3a1-584d-a503-1fe696afc30f",
+    "scored_candidates": [],
+    "status": "PENDING",
+    "uuid": "42f8fd11-78c1-5275-ad64-8d8c83479fd5"
+  },
+  {
+    "anchor_observation": "9d8b1242-ac8b-538f-91a7-0afa9b772b24",
+    "scored_candidates": [
+      {
+        "anchor_observation": "9d8b1242-ac8b-538f-91a7-0afa9b772b24",
+        "candidate_observation": "d46e46c8-79c5-5e5e-af52-ecec0672abee",
+        "evidence": [
+          {
+            "category": "fact",
+            "confidence": 1.0,
+            "description": "observations disagree on length: 1964.8415753806587 vs 3227.8025739998466",
+            "observation_a": "9d8b1242-ac8b-538f-91a7-0afa9b772b24",
+            "observation_b": "d46e46c8-79c5-5e5e-af52-ecec0672abee",
+            "polarity": "contradicts",
+            "rule": "fact_conflict",
+            "uuid": "a24036e2-4899-59b0-a5c2-af4ca267fed3"
+          },
+          {
+            "category": "fact",
+            "confidence": 1.0,
+            "description": "both observations claim orientation=90.0",
+            "observation_a": "9d8b1242-ac8b-538f-91a7-0afa9b772b24",
+            "observation_b": "d46e46c8-79c5-5e5e-af52-ecec0672abee",
+            "polarity": "supports",
+            "rule": "fact_agreement",
+            "uuid": "9509b97b-da2b-5f16-869e-1ea2c277215a"
+          },
+          {
+            "category": "fact",
+            "confidence": 1.0,
+            "description": "both observations claim quantity=1",
+            "observation_a": "9d8b1242-ac8b-538f-91a7-0afa9b772b24",
+            "observation_b": "d46e46c8-79c5-5e5e-af52-ecec0672abee",
+            "polarity": "supports",
+            "rule": "fact_agreement",
+            "uuid": "9509b97b-da2b-5f16-869e-1ea2c277215a"
+          },
+          {
+            "category": "fact",
+            "confidence": 1.0,
+            "description": "both observations claim shape=branch",
+            "observation_a": "9d8b1242-ac8b-538f-91a7-0afa9b772b24",
+            "observation_b": "d46e46c8-79c5-5e5e-af52-ecec0672abee",
+            "polarity": "supports",
+            "rule": "fact_agreement",
+            "uuid": "9509b97b-da2b-5f16-869e-1ea2c277215a"
+          },
+          {
+            "category": "spatial",
+            "confidence": null,
+            "description": "centroid distance 1882.5mm (corroborating only, never a qualifying signal on its own)",
+            "observation_a": "9d8b1242-ac8b-538f-91a7-0afa9b772b24",
+            "observation_b": "d46e46c8-79c5-5e5e-af52-ecec0672abee",
+            "polarity": "unknown",
+            "rule": "spatial_distance",
+            "uuid": "16a60ab3-3b46-5c02-a1e6-ae9b91966085"
+          }
+        ],
+        "is_candidate": true,
+        "score": {
+          "category_scores": {
+            "fact": 0.75
+          },
+          "overall": 0.75,
+          "unscored_categories": [
+            "engineering_context",
+            "role"
+          ],
+          "weakest_category": "fact"
+        }
+      }
+    ],
+    "status": "PENDING",
+    "uuid": "183c383e-457a-5469-98c7-714b9e23188e"
+  },
+  {
+    "anchor_observation": "d46e46c8-79c5-5e5e-af52-ecec0672abee",
+    "scored_candidates": [
+      {
+        "anchor_observation": "d46e46c8-79c5-5e5e-af52-ecec0672abee",
+        "candidate_observation": "9d8b1242-ac8b-538f-91a7-0afa9b772b24",
+        "evidence": [
+          {
+            "category": "fact",
+            "confidence": 1.0,
+            "description": "observations disagree on length: 3227.8025739998466 vs 1964.8415753806587",
+            "observation_a": "d46e46c8-79c5-5e5e-af52-ecec0672abee",
+            "observation_b": "9d8b1242-ac8b-538f-91a7-0afa9b772b24",
+            "polarity": "contradicts",
+            "rule": "fact_conflict",
+            "uuid": "6b404afd-bdbb-5ae8-b650-ca3d078f5906"
+          },
+          {
+            "category": "fact",
+            "confidence": 1.0,
+            "description": "both observations claim orientation=90.0",
+            "observation_a": "d46e46c8-79c5-5e5e-af52-ecec0672abee",
+            "observation_b": "9d8b1242-ac8b-538f-91a7-0afa9b772b24",
+            "polarity": "supports",
+            "rule": "fact_agreement",
+            "uuid": "cde24871-a01f-56ce-bd3b-89e613ed0d3b"
+          },
+          {
+            "category": "fact",
+            "confidence": 1.0,
+            "description": "both observations claim quantity=1",
+            "observation_a": "d46e46c8-79c5-5e5e-af52-ecec0672abee",
+            "observation_b": "9d8b1242-ac8b-538f-91a7-0afa9b772b24",
+            "polarity": "supports",
+            "rule": "fact_agreement",
+            "uuid": "cde24871-a01f-56ce-bd3b-89e613ed0d3b"
+          },
+          {
+            "category": "fact",
+            "confidence": 1.0,
+            "description": "both observations claim shape=branch",
+            "observation_a": "d46e46c8-79c5-5e5e-af52-ecec0672abee",
+            "observation_b": "9d8b1242-ac8b-538f-91a7-0afa9b772b24",
+            "polarity": "supports",
+            "rule": "fact_agreement",
+            "uuid": "cde24871-a01f-56ce-bd3b-89e613ed0d3b"
+          },
+          {
+            "category": "spatial",
+            "confidence": null,
+            "description": "centroid distance 1882.5mm (corroborating only, never a qualifying signal on its own)",
+            "observation_a": "d46e46c8-79c5-5e5e-af52-ecec0672abee",
+            "observation_b": "9d8b1242-ac8b-538f-91a7-0afa9b772b24",
+            "polarity": "unknown",
+            "rule": "spatial_distance",
+            "uuid": "616fff3b-c339-5b8b-97be-3076f25a1d35"
+          }
+        ],
+        "is_candidate": true,
+        "score": {
+          "category_scores": {
+            "fact": 0.75
+          },
+          "overall": 0.75,
+          "unscored_categories": [
+            "engineering_context",
+            "role"
+          ],
+          "weakest_category": "fact"
+        }
+      }
+    ],
+    "status": "PENDING",
+    "uuid": "492095f4-a896-58b1-90ab-203a55560e85"
+  }
+]

@@ -234,7 +234,7 @@ Directly identified as necessary from the evidence in Step 1, not a generic chec
 
 ## Step 7 — Pipeline integration: new phase, not a replacement
 
-**Recommendation: a new phase, numbered Phase 12** (not Phase 11 — that number is already used and frozen for the viewer, `docs/audits/phase11/`; not a replacement of Phase 9 or 10).
+**Recommendation: a new phase, numbered Phase 12** (not Phase 11 — that number is already used and frozen for the viewer, `docs/audits/phase11/`; not a replacement of Phase 9 or 10). **Renamed in Addendum 2 below from "Cross-View Fusion" to "Phase 12 — Physical Identity Resolution"** — the scope is unchanged, the name was corrected to say what the phase actually resolves (identity) rather than what it superficially looks like it's doing (combining drawings).
 
 Justification:
 - **Not part of Phase 9.** Phase 9 (Engineering Families) is frozen, regression-locked, and correct *for what it's scoped to do*: build families from one drawing's own annotations. Extending it to reach into other drawings would break its single-drawing determinism guarantee (`tests/determinism.py`) and conflate two genuinely different concerns — "what does this drawing say" vs. "what do all the drawings, together, say." Every phase boundary in this project so far has separated concerns exactly this cleanly (geometry vs. recognition vs. association vs. reconstruction); fusion deserves the same treatment, not a bolt-on.
@@ -428,3 +428,91 @@ Not present in the original Step 9 table, because they only exist once "resolve 
 ### What this addendum does not change
 
 Steps 1-3 (drawing evidence, architecture understanding, human reasoning process), Step 7's Phase-12 placement decision, and Step 8's recommendation of an evidence-graph strategy over geometry-first or annotation-first all stand — this addendum is a refinement *within* the evidence-graph strategy (Strategy C), making explicit what "the graph connects" (physical objects, not drawings) and what "resolving the graph" geometrically means (per-aspect hierarchical composition, not spatial registration), which Step 8's original comparison correctly favored but didn't fully specify.
+
+---
+
+## Addendum 2 — Renaming the phase, and the "claims" relationship
+
+**Still pure research. No code. No architecture modified.** This addendum renames Phase 12 and adds one precise structural refinement to Addendum 1's data model. It does not introduce a competing model — checked against Addendum 1's `PhysicalObservation`/`ObservationEdge`/`PhysicalIdentity` sketch, the object-centric graph described here is the same structure, sharpened in two ways worth recording explicitly.
+
+### The phase is renamed
+
+**Phase 12 — Physical Identity Resolution**, not "Cross-View Fusion." "Fusion" describes an operation on drawings (combine records from A and B). That was always a slightly inaccurate name for what Addendum 1's model actually does, which is: decide which observations describe the same pre-existing physical object, then let that object accumulate what each observation knows about it. The scope, phase number, and roadmap (12.0-12.4) from Addendum 1 are unchanged — only the name, because the name should describe the question being answered (*"which observations describe the same bar?"*), not the mechanism (*"drawings get merged"*). `docs/README.md`'s phase table and any future `docs/audits/phase12/` directory should use this name.
+
+### "Fusion" vs. "claims" — a real distinction worth making precise
+
+Addendum 1's `ObservationEdge` is a **pairwise, pre-resolution** signal: evidence that two observations *might* belong together, used to compute clusters. It's the right mechanism for the resolution step (12.1/12.2) — clustering is genuinely how you get from "N observations" to "which ones are the same bar" when you don't yet know the identities in advance.
+
+What was implicit, and is worth making an explicit, separate relationship, is what exists **after** a `PhysicalIdentity` is resolved: each of its `observations` isn't just "in the cluster" — it is **making a specific, scoped claim** about the object, with its own confidence, independent of the clustering confidence that put it there:
+
+```python
+@dataclass
+class Claim:
+    """The post-resolution edge from one PhysicalObservation to the
+    PhysicalIdentity it was resolved into. Distinct from ObservationEdge
+    (which is about WHETHER two observations belong together); a Claim is
+    about WHAT one observation, once resolved, actually asserts about the
+    object -- e.g. one observation claims a diameter, another claims a
+    hook angle, a third claims a position. This is what
+    PhysicalIdentity.observations actually needs to carry, made explicit."""
+    observation_uuid: UUID
+    identity_uuid: UUID
+    facts: Dict[str, Any]        # e.g. {'diameter': 16.0} or {'hook_angle': 90.0}
+    claim_confidence: float      # confidence in THIS fact, independent of
+                                  # resolution_confidence (the confidence that
+                                  # this observation belongs to this identity at all)
+```
+
+This matters because it separates two different failure modes that Addendum 1's single `resolution_confidence` number would otherwise conflate: an observation can be *correctly* resolved to the right bar (high clustering confidence) while *contributing an unreliable fact* (e.g. a section view's drawn circle is a poor diameter estimate at that drawing's scale — low claim confidence on that one fact, even though "this section is definitely showing bar N7" is not in doubt). Phase 12.3's per-aspect authority table in Addendum 1 already implicitly does exactly this weighting per aspect; `Claim.claim_confidence` is what makes that table's logic operate on an explicit number instead of an implicit rule.
+
+With `Claim` in place, the assembly step (12.3) is precisely: for each aspect (diameter, path, hook, position), take the highest-authority `Claim` that has that fact, per the table in Addendum 1 — i.e., *"bar geometry = plan-path claim + section-hook claim + schedule-diameter claim + schedule-quantity claim,"* which is exactly the composition already specified, now with a concrete edge type to hang each term on.
+
+### Viewer implication (forward-looking, not in scope for Phase 12 itself)
+
+Once `PhysicalIdentity` exists, the viewer's existing selection architecture already has the right shape to support object-centric highlighting, with no redesign — direct reuse, per the original research constraint to identify and reuse existing capability rather than replace it. `viewer/scene.py::SceneManager` already tracks one `selected_*_uuid` per entity kind (`selected_bar_uuid`, `selected_family_uuid`, `selected_component_uuid`, `selected_mesh_uuid`, `selected_assembly_uuid`, `selected_entity_uuid`) and fires one `on_selection_changed` event that `property_panel.py` listens to and renders a `"Provenance"` chain string from (e.g. `"Physical Bar -> Family -> Components -> CAD"`). A `selected_physical_identity_uuid` is a natural extension of that exact same enum-of-selection-kinds pattern, and its provenance chain is simply one level longer: `"Physical Identity -> Physical Bar (per drawing) -> Family -> Components -> CAD"`. Selecting the resolved 3D bar would look up its `PhysicalIdentity.observations`/`Claim`s and set every contributing drawing's corresponding selection state; selecting one drawing's annotation would look up which `PhysicalIdentity` (if any) it resolved into and highlight the siblings. This is noted here as a concrete, evidence-grounded acceptance-criterion candidate for whatever phase eventually wires Phase 12's output into the viewer — not something to build now, and not a change to the already-frozen Phase 11 viewer architecture, since it's additive to an existing extension point rather than a modification of it.
+
+---
+
+## Addendum 3 — The observation invariant, and Phase 12.2 redesign notes
+
+**Still pure research/design guidance. No code beyond what's already implemented and frozen for Phase 12.1.**
+
+### Standing acceptance criterion, applies to all of Phase 12
+
+> **An observation must never carry a fact for an aspect it did not directly read off its source.** A plan observation may claim path/position/spacing; it must never claim a hook. A schedule observation may claim diameter/quantity/length; it must never claim position. A section observation may claim a bend/hook and a corroborating diameter; it must never claim spacing. Absence of a fact means "this observation doesn't know" — never a fact carrying a placeholder or `None` value standing in for "unknown."
+
+This is now implemented and enforced, not just stated: `core/fusion/models.py::ObservationFact`/`PhysicalObservation.facts` (Phase 12.1, `docs/audits/phase12/12.1_observation_builder.md`) replaced the original flat `mark`/`diameter`/`spacing`/... fields specifically so a fact's *presence* is its *only* representation — there's no separate `diameter_source='missing'` flag that could disagree with an absent fact, no capability set that could drift from the values it's supposed to describe. `tests/test_phase12_observation_builder.py::check_observation_invariant` verifies this against real data (`N6`/`N7`, whose Phase 9 families carry no diameter, must produce zero `DIAMETER` facts) on every run. This rule binds Phase 12.2 onward as much as it bound 12.1: a candidate/hypothesis generator must reason only over facts observations actually have, and an evidence engine must never synthesize a fact to make a comparison possible.
+
+### Phase 12.2 is a Hypothesis Generator, not a Candidate Generator
+
+Renamed for the same reason Phase 12 itself was renamed in Addendum 2: the name should describe the epistemic state, not the mechanism. An observation does not generate identities — it generates **hypotheses**, each scored independently, none committed. This introduces one more type ahead of `PhysicalIdentity` (Phase 12.4):
+
+```python
+@dataclass
+class IdentityHypothesis:
+    """One observation's guess at which physical object it might belong
+    to -- NOT a resolved identity. Exactly one rung below ObservationEdge
+    (Addendum 1): an ObservationEdge says 'these two observations might be
+    the same object'; an IdentityHypothesis is what a group of such edges
+    looks like from one observation's point of view before Phase 12.4
+    commits to anything. Mirrors Phase 8's AssociationCandidate -> Evidence
+    -> resolved EngineeringObject pipeline one level up, deliberately --
+    that shape is already proven in this codebase."""
+    observation_uuid: UUID
+    candidate_identity_key: str      # a provisional grouping key (e.g. mark+drawing_number),
+                                      # NOT a committed PhysicalIdentity.uuid
+    supporting_edges: List['ObservationEdge']
+    score: float
+```
+
+### Candidate generation ordering: engineering context before spatial proximity
+
+Spatial distance must not be the first filter. Across drawing types there is often no shared coordinate system at all (Addendum 1's finding, re-confirmed here) — but there is almost always shared *engineering context*, and it's cheap, symbolic, and already partially available from Phase 1's `ProjectManifest.relationships` (`floor -> element -> drawing_number -> [filenames]`). The ordering a Phase 12.2 implementation should use:
+
+1. **Same `drawing_number`** (Phase 1's existing grouping — already computed, free to use, scopes everything that follows to one physical element).
+2. **Same mark**, respecting `mark_namespace` (never compare a `self_decoding` mark against a `reference_code` mark as if they were the same kind of thing).
+3. **Compatible `drawing_role`** (a `mould_instance` observation's `N7` and a `reinforcement_typical` observation's schedule entry are compatible *because* their roles are complementary, not despite it).
+4. **Compatible facts** (do the aspects that both observations claim actually agree, where they overlap — e.g. two `DIAMETER` facts from different sources should roughly match).
+5. **Spatial compatibility** — last, and only as corroboration once the above already narrowed the field, never as the initial filter. This directly reflects Addendum 1's finding that plan/section/detail views often aren't in a shared coordinate frame at all, so spatial distance is frequently not even computable, let alone a reliable first signal.
+
+This ordering is a design note for whoever (or whichever future turn) implements Phase 12.2 — not implemented in this turn. Phase 12.1 remains the last frozen subphase.
