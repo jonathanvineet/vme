@@ -25,6 +25,11 @@ class ReinforcementAdjuster:
                 bends=centerline.bends,
                 hooks=centerline.hooks,
                 closed=centerline.closed,
+                recovery_method=centerline.recovery_method,
+                truncated_branch=centerline.truncated_branch,
+                excluded_edge_count=centerline.excluded_edge_count,
+                recovery_confidence=centerline.recovery_confidence,
+                recovery_notes=centerline.recovery_notes,
             ),
             notes,
         )

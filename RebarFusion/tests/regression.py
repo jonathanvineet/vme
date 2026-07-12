@@ -196,11 +196,15 @@ def run_regression(directory: str) -> int:
 
         if validation6["critical_errors"]:
             all_failures.append(f"  [{filename}] Phase 6 validation has critical errors")
+        if validation6["errors"]:
+            all_failures.append(f"  [{filename}] Phase 6 validation has {len(validation6['errors'])} error(s): {validation6['errors'][:3]}")
+        else:
+            print(f"  Phase 6 validation (errors) ✅")
 
         # Phase 7
         from core.recognition.registry import RecognizerRegistry
         from core.recognition.recognizers import (
-            StraightBarRecognizer, LBarRecognizer, UBarRecognizer, StirrupRecognizer,
+            StraightBarRecognizer, LBarRecognizer, UBarRecognizer, ClosedShapeRecognizer,
             BranchRecognizer, DimensionRecognizer, LeaderRecognizer,
             StructuralOutlineRecognizer
         )
@@ -208,7 +212,7 @@ def run_regression(directory: str) -> int:
         registry.register(StraightBarRecognizer())
         registry.register(LBarRecognizer())
         registry.register(UBarRecognizer())
-        registry.register(StirrupRecognizer())
+        registry.register(ClosedShapeRecognizer())
         registry.register(BranchRecognizer())
         registry.register(StructuralOutlineRecognizer())
         registry.register(DimensionRecognizer())

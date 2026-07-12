@@ -26,7 +26,7 @@ from core.topology.node_builder import build_nodes
 from core.topology.builder import TopologyBuilder
 from core.recognition.registry import RecognizerRegistry, RecognitionCache
 from core.recognition.recognizers import (
-    StraightBarRecognizer, LBarRecognizer, UBarRecognizer, StirrupRecognizer,
+    StraightBarRecognizer, LBarRecognizer, UBarRecognizer, ClosedShapeRecognizer,
     BranchRecognizer, DimensionRecognizer, LeaderRecognizer,
     StructuralOutlineRecognizer
 )
@@ -113,7 +113,7 @@ def main():
     registry.register(StraightBarRecognizer())
     registry.register(LBarRecognizer())
     registry.register(UBarRecognizer())
-    registry.register(StirrupRecognizer())
+    registry.register(ClosedShapeRecognizer())
     registry.register(BranchRecognizer())
     registry.register(StructuralOutlineRecognizer())
     registry.register(DimensionRecognizer())

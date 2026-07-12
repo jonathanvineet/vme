@@ -1,0 +1,20 @@
+{
+  "Assembly Layers": 2,
+  "Engineering Families": 3,
+  "Faces": 2832,
+  "Families With Matching Bar Counts": 3,
+  "Mesh Edge Report": {
+    "Nonmanifold Edges": 0,
+    "Open Edges": 0,
+    "Watertight": true
+  },
+  "Meshes": 6,
+  "Multi-Component Meshes (should be 0 -- one continuous tube per bar)": 0,
+  "Phase 10A Centerlines": 6,
+  "Phase 10B Physical Bars": 6,
+  "Phase 10C Adjusted Bars": 6,
+  "Physical Bars": 6,
+  "Reinforcement Assemblies": 2,
+  "Vertices": 1428,
+  "pipeline_version": "10.4"
+}

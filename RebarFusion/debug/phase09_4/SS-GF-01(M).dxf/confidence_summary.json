@@ -1,0 +1,9 @@
+{
+  "families_evaluated": 3,
+  "low_confidence_count": 0,
+  "mean_overall": 0.851,
+  "weakest_dimension_counts": {
+    "annotation": 2,
+    "association": 1
+  }
+}

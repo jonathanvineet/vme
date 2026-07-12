@@ -10,12 +10,28 @@ from viewer.scene import SceneManager
 
 
 class FamilyRenderer(BaseRenderer):
+    """
+    Phase 11.1: draws each family member using its actual PhysicalBar.path
+    (the Phase 10.1 recovered geometry -- bends, arcs, branch shape all
+    preserved), not a synthesized straight line from family.length/
+    orientation. Before this fix, this renderer independently re-derived a
+    straight-line approximation, which would have visibly contradicted
+    BarRenderer/MeshRenderer's real recovered geometry the moment the
+    viewer's pipeline staleness (see docs/audits/phase11/11.0_viewer_audit.md)
+    was fixed -- both views now read from the same PhysicalBar objects, so
+    they can't disagree.
+    """
     LAYER_NAME = SceneManager.LAYER_FAMILIES
 
     def build(self):
         families = getattr(self.scene, "engineering_families", None)
         if not families:
             return
+
+        bars_by_member = {
+            (bar.family_uuid, bar.member_uuid): bar
+            for bar in (getattr(self.scene, "physical_bars", None) or [])
+        }
 
         colors = [
             (0.30, 0.64, 1.00),
@@ -38,19 +54,24 @@ class FamilyRenderer(BaseRenderer):
                 members = [family.members[0]]
             if self.scene.show_family_representative and self.scene.show_family_expanded and family.members:
                 rep = family.members[0]
-                rep_mesh = self._member_mesh(rep, family.length, family.orientation, z + 0.06)
-                actor = self.plotter.add_mesh(
-                    rep_mesh,
-                    color=(1.0, 1.0, 1.0),
-                    line_width=line_width + 1.0,
-                    opacity=0.9,
-                    name=f"family_rep_{str(family.uuid)[:8]}",
-                    pickable=True,
-                )
-                self._add_actor(actor)
+                rep_bar = bars_by_member.get((family.uuid, rep.uuid))
+                rep_mesh = self._member_mesh(rep_bar, rep, z + 0.06)
+                if rep_mesh is not None:
+                    actor = self.plotter.add_mesh(
+                        rep_mesh,
+                        color=(1.0, 1.0, 1.0),
+                        line_width=line_width + 1.0,
+                        opacity=0.9,
+                        name=f"family_rep_{str(family.uuid)[:8]}",
+                        pickable=True,
+                    )
+                    self._add_actor(actor)
 
             for member in members:
-                mesh = self._member_mesh(member, family.length, family.orientation, z)
+                bar = bars_by_member.get((family.uuid, member.uuid))
+                mesh = self._member_mesh(bar, member, z)
+                if mesh is None:
+                    continue
                 actor = self.plotter.add_mesh(
                     mesh,
                     color=color,
@@ -64,6 +85,10 @@ class FamilyRenderer(BaseRenderer):
             if not self.scene.show_family_missing:
                 continue
             for missing_offset in family.missing_member_offsets:
+                # No PhysicalBar exists for an inferred-but-undetected
+                # member -- there is no real geometry to draw, so this one
+                # legitimately stays a synthesized placeholder (dashed, to
+                # visually distinguish it from real recovered bars above).
                 mesh = self._missing_member_mesh(family, missing_offset, z + 0.04)
                 if mesh:
                     actor = self.plotter.add_mesh(
@@ -75,16 +100,27 @@ class FamilyRenderer(BaseRenderer):
                     )
                     self._add_actor(actor)
 
-    def refresh(self):
-        self.clear()
-        if self.scene.is_visible(self.LAYER_NAME):
-            self.build()
+    def _member_mesh(self, bar, member, z: float):
+        """Uses bar.path (Phase 10.1 recovered geometry) when a PhysicalBar
+        exists for this member. Falls back to a straight line from the
+        member's own length/orientation only if no bar was built for it
+        (e.g. viewer running against a Phase 9-only bundle with no
+        reconstruction stage) -- never silently prefers synthesis when real
+        geometry is available."""
+        if bar is not None and bar.path and len(bar.path) >= 2:
+            points = np.array([(x, y, z) for x, y, _ in bar.path])
+            mesh = pv.PolyData()
+            mesh.points = points
+            lines = []
+            for i in range(len(points) - 1):
+                lines.extend([2, i, i + 1])
+            mesh.lines = np.array(lines)
+            return mesh
 
-    def _member_mesh(self, member, length: float, orientation: float, z: float):
         cx, cy = member.centroid
-        angle = math.radians(orientation)
+        angle = math.radians(member.orientation)
         ax, ay = math.cos(angle), math.sin(angle)
-        half = length / 2.0
+        half = member.length / 2.0
         points = np.array([
             [cx - ax * half, cy - ay * half, z],
             [cx + ax * half, cy + ay * half, z],

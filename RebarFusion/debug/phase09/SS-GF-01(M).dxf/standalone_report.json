@@ -2,343 +2,205 @@
   {
     "Component": "03e583a1-da6e-53e9-8a0a-d8eba6095d1a",
     "Details": "recognized as branch geometry",
-    "Image": "standalone/0001.png",
+    "Image": "standalone/isolated/0001.png",
     "Reason": "Branch"
   },
   {
-    "Component": "0692b58e-b742-5774-b7ca-f64a1c154246",
-    "Details": "u_bar vs family N6 branch",
-    "Image": "standalone/0002.png",
-    "Reason": "Different type"
-  },
-  {
-    "Component": "1304a4ae-b0ac-5893-a9ff-ac1f5b992bcf",
-    "Details": "compatible with N4, but outside accepted spacing/axis checks",
-    "Image": "standalone/0003.png",
-    "Reason": "Isolated"
-  },
-  {
-    "Component": "1383ea22-939e-527e-b00e-6a660d47a937",
-    "Details": "straight_bar vs family N4 u_bar",
-    "Image": "standalone/0004.png",
-    "Reason": "Different type"
-  },
-  {
-    "Component": "14fcf283-4281-5413-b5c2-1474cfb001c3",
-    "Details": "u_bar vs family N6 branch",
-    "Image": "standalone/0005.png",
-    "Reason": "Different type"
-  },
-  {
-    "Component": "1b3c25ac-61d6-5da1-84e9-a6b690711f53",
-    "Details": "recognized as stirrup-like geometry",
-    "Image": "standalone/0006.png",
-    "Reason": "Stirrup"
-  },
-  {
-    "Component": "1bdbffb5-4e3a-53ca-91dd-66f18b7f07ee",
-    "Details": "recognized as stirrup-like geometry",
-    "Image": "standalone/0007.png",
-    "Reason": "Stirrup"
-  },
-  {
-    "Component": "21f5db77-bc54-55dc-9c5e-21729ac37e7e",
-    "Details": "orientation differs 90.0 degrees from N4",
-    "Image": "standalone/0008.png",
+    "Component": "0772948b-d973-5dba-95af-3a6139808308",
+    "Details": "orientation differs 72.6 degrees from N4",
+    "Image": "standalone/orientation_rejected/0002.png",
     "Reason": "Different orientation"
   },
   {
-    "Component": "2a7bc07c-3f8d-5d13-8f81-b1920ad91485",
-    "Details": "compatible with N4, but outside accepted spacing/axis checks",
-    "Image": "standalone/0009.png",
-    "Reason": "Isolated"
-  },
-  {
-    "Component": "2c973815-58b5-55ea-ac60-874951a93c8e",
-    "Details": "orientation differs 90.0 degrees from N4",
-    "Image": "standalone/0010.png",
+    "Component": "0cfa7ebe-9e34-5426-b6ef-560cb67bdac8",
+    "Details": "orientation differs 72.6 degrees from N4",
+    "Image": "standalone/orientation_rejected/0003.png",
     "Reason": "Different orientation"
   },
   {
-    "Component": "31fd3c9f-2f73-5ac2-bd27-0fd5f33a24b4",
+    "Component": "150988b2-644b-5a28-a835-c4ea21b3d82e",
+    "Details": "orientation differs 72.6 degrees from N4",
+    "Image": "standalone/orientation_rejected/0004.png",
+    "Reason": "Different orientation"
+  },
+  {
+    "Component": "17e420b1-5c36-5373-aca6-69eb9ef27272",
+    "Details": "orientation differs 72.6 degrees from N4",
+    "Image": "standalone/orientation_rejected/0005.png",
+    "Reason": "Different orientation"
+  },
+  {
+    "Component": "1dbda413-28b0-5f13-9ba5-781d259bfffd",
+    "Details": "l_bar vs family N6 branch",
+    "Image": "standalone/family_rejected/0006.png",
+    "Reason": "Different type"
+  },
+  {
+    "Component": "28e6e9d8-94d3-57ac-817a-eea338d5217b",
     "Details": "recognized as stirrup-like geometry",
-    "Image": "standalone/0011.png",
+    "Image": "standalone/isolated/0007.png",
     "Reason": "Stirrup"
   },
   {
-    "Component": "3294a3b9-2747-55c1-bbd5-22e02cee0ad0",
-    "Details": "compatible with N4, but outside accepted spacing/axis checks",
-    "Image": "standalone/0012.png",
-    "Reason": "Isolated"
-  },
-  {
-    "Component": "3298d176-8701-5d7f-9630-ca7e946d5d9f",
-    "Details": "compatible with N4, but outside accepted spacing/axis checks",
-    "Image": "standalone/0013.png",
-    "Reason": "Isolated"
-  },
-  {
-    "Component": "35dc8034-1919-56da-bda6-36e5d13c7f9d",
-    "Details": "compatible with N4, but outside accepted spacing/axis checks",
-    "Image": "standalone/0014.png",
-    "Reason": "Isolated"
-  },
-  {
-    "Component": "3cdfbcf3-2ed4-57dc-8753-fa1f4589e0dd",
-    "Details": "u_bar vs family N6 branch",
-    "Image": "standalone/0015.png",
-    "Reason": "Different type"
-  },
-  {
-    "Component": "3d4f9569-f65f-5771-b5c4-e44f41507214",
-    "Details": "recognized as stirrup-like geometry",
-    "Image": "standalone/0016.png",
-    "Reason": "Stirrup"
-  },
-  {
-    "Component": "402677fa-758e-597a-b680-be6099d89606",
-    "Details": "u_bar vs family N6 branch",
-    "Image": "standalone/0017.png",
-    "Reason": "Different type"
-  },
-  {
-    "Component": "465d8daf-91ad-54b7-9e29-c6a9e7b5ede2",
-    "Details": "u_bar vs family N6 branch",
-    "Image": "standalone/0018.png",
-    "Reason": "Different type"
-  },
-  {
-    "Component": "4ed3b791-245c-5788-bead-b43f90b9fac7",
-    "Details": "compatible with N4, but outside accepted spacing/axis checks",
-    "Image": "standalone/0019.png",
-    "Reason": "Isolated"
-  },
-  {
-    "Component": "526598c1-6f5d-5201-b8c0-ece11ab7a311",
-    "Details": "nearest family N4 is 3091.9mm away",
-    "Image": "standalone/0020.png",
-    "Reason": "No nearby family"
-  },
-  {
-    "Component": "5c1cda77-b36a-5f5e-95a8-4d569308389a",
+    "Component": "291f1cd5-d95f-55d1-8230-f2975d18819a",
     "Details": "recognized as branch geometry",
-    "Image": "standalone/0021.png",
+    "Image": "standalone/isolated/0008.png",
     "Reason": "Branch"
   },
   {
-    "Component": "615a24c4-2da4-5f6d-b6f7-988d1b496f81",
+    "Component": "2941ec4c-0d9c-5736-b885-9fa1fe617348",
+    "Details": "orientation differs 72.6 degrees from N4",
+    "Image": "standalone/orientation_rejected/0009.png",
+    "Reason": "Different orientation"
+  },
+  {
+    "Component": "378d1fe4-7cbb-5388-9c63-89bc38a58464",
+    "Details": "orientation differs 72.6 degrees from N4",
+    "Image": "standalone/orientation_rejected/0010.png",
+    "Reason": "Different orientation"
+  },
+  {
+    "Component": "49153d10-c922-52ba-a39a-a04cf6fab4ad",
     "Details": "recognized as stirrup-like geometry",
-    "Image": "standalone/0022.png",
+    "Image": "standalone/isolated/0011.png",
     "Reason": "Stirrup"
   },
   {
-    "Component": "61b0232f-8385-529e-b1aa-f5ea71ce16c9",
-    "Details": "compatible with N4, but outside accepted spacing/axis checks",
-    "Image": "standalone/0023.png",
-    "Reason": "Isolated"
+    "Component": "6ba6d600-5c45-5fa5-8d1a-e8eee2cd0d05",
+    "Details": "orientation differs 72.6 degrees from N4",
+    "Image": "standalone/orientation_rejected/0012.png",
+    "Reason": "Different orientation"
   },
   {
-    "Component": "624094ce-48f6-5daa-a133-4c82650b26af",
-    "Details": "compatible with N4, but outside accepted spacing/axis checks",
-    "Image": "standalone/0024.png",
-    "Reason": "Isolated"
-  },
-  {
-    "Component": "744b19a5-2131-59ca-98c8-630d9de943ef",
-    "Details": "recognized as stirrup-like geometry",
-    "Image": "standalone/0025.png",
-    "Reason": "Stirrup"
+    "Component": "73404740-20f0-5cac-969b-e07b39e20547",
+    "Details": "straight_bar vs family N6 branch",
+    "Image": "standalone/family_rejected/0013.png",
+    "Reason": "Different type"
   },
   {
     "Component": "76e6a9e5-f494-529c-a963-152a8c2af019",
-    "Details": "l_bar vs family N4 u_bar",
-    "Image": "standalone/0026.png",
-    "Reason": "Different type"
+    "Details": "orientation differs 72.6 degrees from N4",
+    "Image": "standalone/orientation_rejected/0014.png",
+    "Reason": "Different orientation"
   },
   {
     "Component": "79c94aa3-01f7-50b5-a08e-f8b641dbf178",
     "Details": "recognized as branch geometry",
-    "Image": "standalone/0027.png",
+    "Image": "standalone/isolated/0015.png",
     "Reason": "Branch"
-  },
-  {
-    "Component": "7b1e0c97-c718-5365-a45a-7959f575cdc6",
-    "Details": "compatible with N4, but outside accepted spacing/axis checks",
-    "Image": "standalone/0028.png",
-    "Reason": "Isolated"
-  },
-  {
-    "Component": "7dd0ce15-9d60-5127-a64b-eef52214701c",
-    "Details": "compatible with N4, but outside accepted spacing/axis checks",
-    "Image": "standalone/0029.png",
-    "Reason": "Isolated"
   },
   {
     "Component": "804f350f-5340-5853-a261-a1fed841510e",
     "Details": "recognized as branch geometry",
-    "Image": "standalone/0030.png",
+    "Image": "standalone/isolated/0016.png",
     "Reason": "Branch"
-  },
-  {
-    "Component": "82d03cc1-ae61-5ff6-9218-a5270e7a92fd",
-    "Details": "orientation differs 90.0 degrees from N4",
-    "Image": "standalone/0031.png",
-    "Reason": "Different orientation"
   },
   {
     "Component": "835dceac-3aeb-5dc6-9161-f60788e0054d",
     "Details": "straight_bar vs family N6 branch",
-    "Image": "standalone/0032.png",
+    "Image": "standalone/family_rejected/0017.png",
+    "Reason": "Different type"
+  },
+  {
+    "Component": "8434c1bc-1ab4-58b6-9c3d-dba6c8f69a0a",
+    "Details": "u_bar vs family N6 branch",
+    "Image": "standalone/family_rejected/0018.png",
     "Reason": "Different type"
   },
   {
     "Component": "85dd88aa-4bdb-5952-a7e3-1b0039cb2dfa",
     "Details": "l_bar vs family N6 branch",
-    "Image": "standalone/0033.png",
+    "Image": "standalone/family_rejected/0019.png",
     "Reason": "Different type"
   },
   {
-    "Component": "874866ba-6040-5b64-8831-75e4ed72accc",
-    "Details": "nearest family N4 is 3213.1mm away",
-    "Image": "standalone/0034.png",
-    "Reason": "No nearby family"
-  },
-  {
-    "Component": "8a19b7c0-07e8-58c7-8bdb-2c40df048363",
-    "Details": "orientation differs 90.0 degrees from N4",
-    "Image": "standalone/0035.png",
+    "Component": "8886ef03-169c-5f4b-8fcb-4d36dc5c4ffe",
+    "Details": "orientation differs 72.6 degrees from N4",
+    "Image": "standalone/orientation_rejected/0020.png",
     "Reason": "Different orientation"
   },
   {
-    "Component": "8b43ec80-f451-511f-9b74-b82da870cb37",
-    "Details": "recognized as stirrup-like geometry",
-    "Image": "standalone/0036.png",
-    "Reason": "Stirrup"
+    "Component": "954d7a15-a01a-553a-b805-f2d126c155e3",
+    "Details": "orientation differs 72.6 degrees from N4",
+    "Image": "standalone/orientation_rejected/0021.png",
+    "Reason": "Different orientation"
   },
   {
-    "Component": "95104dbd-656d-5aae-8905-3be6fcb3c0ad",
-    "Details": "straight_bar vs family N4 u_bar",
-    "Image": "standalone/0037.png",
+    "Component": "9b58b19c-fabb-5bf3-b361-55dcd66de7e0",
+    "Details": "straight_bar vs family N6 branch",
+    "Image": "standalone/family_rejected/0022.png",
     "Reason": "Different type"
-  },
-  {
-    "Component": "954ee8e3-2aeb-5331-b0e5-d4c174207b09",
-    "Details": "nearest family N4 is 3341.4mm away",
-    "Image": "standalone/0038.png",
-    "Reason": "No nearby family"
-  },
-  {
-    "Component": "9642e444-db8b-54c7-8b4f-83edeaa0e724",
-    "Details": "u_bar vs family N6 branch",
-    "Image": "standalone/0039.png",
-    "Reason": "Different type"
-  },
-  {
-    "Component": "9bc8ed47-7b7d-5ea6-8155-5d79ed3e10b3",
-    "Details": "compatible with N4, but outside accepted spacing/axis checks",
-    "Image": "standalone/0040.png",
-    "Reason": "Isolated"
-  },
-  {
-    "Component": "9f00dab8-c94f-55c8-a899-4abaf2e1a564",
-    "Details": "compatible with N4, but outside accepted spacing/axis checks",
-    "Image": "standalone/0041.png",
-    "Reason": "Isolated"
-  },
-  {
-    "Component": "b161969c-c737-59cf-8b2e-e25a20828716",
-    "Details": "compatible with N4, but outside accepted spacing/axis checks",
-    "Image": "standalone/0042.png",
-    "Reason": "Isolated"
   },
   {
     "Component": "b4980a02-bb03-5020-951c-93c8d0c8de83",
     "Details": "l_bar vs family N6 branch",
-    "Image": "standalone/0043.png",
+    "Image": "standalone/family_rejected/0023.png",
     "Reason": "Different type"
   },
   {
-    "Component": "b90d7e14-c1ba-5eb6-b368-6d1019daa820",
-    "Details": "nearest family N4 is 3476.0mm away",
-    "Image": "standalone/0044.png",
-    "Reason": "No nearby family"
+    "Component": "b8a4475c-a137-56ca-b7ba-37b3cecd0826",
+    "Details": "u_bar vs family N6 branch",
+    "Image": "standalone/family_rejected/0024.png",
+    "Reason": "Different type"
   },
   {
     "Component": "bcce4099-371b-5b37-9f62-2867a69025a9",
     "Details": "recognized as branch geometry",
-    "Image": "standalone/0045.png",
+    "Image": "standalone/isolated/0025.png",
     "Reason": "Branch"
   },
   {
-    "Component": "cbabd7a9-f5f5-54b8-a7b8-0964e6002103",
-    "Details": "recognized as stirrup-like geometry",
-    "Image": "standalone/0046.png",
-    "Reason": "Stirrup"
+    "Component": "c200c5d0-0d67-543f-9d17-2747b3549317",
+    "Details": "orientation differs 72.6 degrees from N4",
+    "Image": "standalone/orientation_rejected/0026.png",
+    "Reason": "Different orientation"
   },
   {
-    "Component": "cc95f2a9-7f2c-54f0-8c16-53ae54dc914f",
-    "Details": "u_bar vs family N6 branch",
-    "Image": "standalone/0047.png",
+    "Component": "c57f5e4e-88b3-51ba-986c-bfca1a04d33f",
+    "Details": "orientation differs 72.6 degrees from N4",
+    "Image": "standalone/orientation_rejected/0027.png",
+    "Reason": "Different orientation"
+  },
+  {
+    "Component": "cbff62ec-d148-5a46-bdc7-4911449bf2c2",
+    "Details": "l_bar vs family N6 branch",
+    "Image": "standalone/family_rejected/0028.png",
     "Reason": "Different type"
   },
   {
     "Component": "cf3c8ac6-08c2-5201-a67e-1f4d0360d205",
     "Details": "l_bar vs family N6 branch",
-    "Image": "standalone/0048.png",
+    "Image": "standalone/family_rejected/0029.png",
     "Reason": "Different type"
   },
   {
     "Component": "d40a111d-ad3d-5f3c-b430-c78bfc254958",
-    "Details": "l_bar vs family N4 u_bar",
-    "Image": "standalone/0049.png",
-    "Reason": "Different type"
+    "Details": "orientation differs 72.6 degrees from N4",
+    "Image": "standalone/orientation_rejected/0030.png",
+    "Reason": "Different orientation"
   },
   {
     "Component": "d785bd1f-bc2e-5fe0-94ce-6a0a9de7c554",
     "Details": "straight_bar vs family N6 branch",
-    "Image": "standalone/0050.png",
+    "Image": "standalone/family_rejected/0031.png",
     "Reason": "Different type"
   },
   {
-    "Component": "dc14923a-11c0-55f9-bde9-6aa0ea8ab196",
-    "Details": "compatible with N4, but outside accepted spacing/axis checks",
-    "Image": "standalone/0051.png",
-    "Reason": "Isolated"
-  },
-  {
-    "Component": "e13bfe21-4487-5c20-929b-b266e99b05da",
-    "Details": "compatible with N4, but outside accepted spacing/axis checks",
-    "Image": "standalone/0052.png",
-    "Reason": "Isolated"
+    "Component": "f066c176-74ad-5eb7-b326-215ce2f26919",
+    "Details": "orientation differs 72.6 degrees from N4",
+    "Image": "standalone/orientation_rejected/0032.png",
+    "Reason": "Different orientation"
   },
   {
     "Component": "f0cd37bf-3df5-5f74-a928-241bf5379386",
     "Details": "u_bar vs family N6 branch",
-    "Image": "standalone/0053.png",
+    "Image": "standalone/family_rejected/0033.png",
     "Reason": "Different type"
   },
   {
-    "Component": "f706eed6-7b53-570e-ba10-b9d5a5408f1f",
-    "Details": "u_bar vs family N6 branch",
-    "Image": "standalone/0054.png",
-    "Reason": "Different type"
-  },
-  {
-    "Component": "f709ddeb-b1af-5d01-bad6-9d4f52a2e4b2",
-    "Details": "recognized as stirrup-like geometry",
-    "Image": "standalone/0055.png",
-    "Reason": "Stirrup"
-  },
-  {
-    "Component": "f804c9b4-035f-5868-8ea7-ad0d26f25e97",
-    "Details": "compatible with N4, but outside accepted spacing/axis checks",
-    "Image": "standalone/0056.png",
-    "Reason": "Isolated"
-  },
-  {
-    "Component": "ffa386c5-b817-5de1-b23c-6e15eaae6750",
-    "Details": "compatible with N4, but outside accepted spacing/axis checks",
-    "Image": "standalone/0057.png",
-    "Reason": "Isolated"
+    "Component": "f968d5ab-ee37-5025-b36b-17d438706235",
+    "Details": "orientation differs 72.6 degrees from N4",
+    "Image": "standalone/orientation_rejected/0034.png",
+    "Reason": "Different orientation"
   }
 ]

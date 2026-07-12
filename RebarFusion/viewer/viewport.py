@@ -19,7 +19,7 @@ from viewer.renderer.graph_renderer import GraphRenderer
 from viewer.renderer.component_renderer import ComponentRenderer
 from viewer.renderer.recognition_renderer import RecognitionRenderer
 from viewer.renderer.family_renderer import FamilyRenderer
-from viewer.renderer.reconstruction_renderer import BarRenderer, MeshRenderer
+from viewer.renderer.reconstruction_renderer import BarRenderer, MeshRenderer, BoundingBoxRenderer
 
 
 class ViewportWidget(QtInteractor):
@@ -48,11 +48,13 @@ class ViewportWidget(QtInteractor):
         self.add_renderer(ComponentRenderer(scene, self))
         self.add_renderer(RecognitionRenderer(scene, self))  # stub
         self.add_renderer(FamilyRenderer(scene, self))
+        self.add_renderer(BoundingBoxRenderer(scene, self))
         self.add_renderer(BarRenderer(scene, self))
         self.add_renderer(MeshRenderer(scene, self))
 
-        # Camera: top-down 2D view by default
-        self.view_xy()
+        # Camera: 3D isometric view by default
+        self.view_isometric()
+        self.add_axes()
         self.enable_parallel_projection()
 
         # Camera preset actions exposed for toolbar
@@ -72,4 +74,10 @@ class ViewportWidget(QtInteractor):
         self.view_isometric()
 
     def fit_view(self):
-        self.reset_camera()
+        bounds = self.scene.get_normalized_bounds()
+        self.view_isometric()
+        self.reset_camera(bounds=bounds)
+        try:
+            self.camera.zoom(1.5)
+        except Exception:
+            pass

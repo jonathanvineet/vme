@@ -1,0 +1,6662 @@
+[
+  {
+    "component_uuid": "00e68dc8-c98e-5197-8d8b-44c26b38d5ec",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=745.6mm vs 'straight_bar' median=197.4mm, modified z-score=3.59 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=745.6mm is 377.7% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 745.55,
+    "median_for_label": 197.38,
+    "modified_z_score": 3.591
+  },
+  {
+    "component_uuid": "02917ef3-5abf-5bcc-b96e-147b30e90e7c",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=746.4mm vs 'l_bar' median=89.3mm, modified z-score=5.28 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=746.4mm is 836.0% of 'l_bar' median=89.3mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "l_bar",
+    "length": 746.39,
+    "median_for_label": 89.28,
+    "modified_z_score": 5.28
+  },
+  {
+    "component_uuid": "03e583a1-da6e-53e9-8a0a-d8eba6095d1a",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=2770.1mm vs 'branch' median=1454.5mm, modified z-score=1.48 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=2770.1mm is 190.4% of 'branch' median=1454.5mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "branch",
+    "length": 2770.11,
+    "median_for_label": 1454.55,
+    "modified_z_score": 1.482
+  },
+  {
+    "component_uuid": "0423cdd6-1ba3-505b-add9-e929fd635ecf",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=222.4mm vs 'straight_bar' median=197.4mm, modified z-score=0.16 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=222.4mm is 112.7% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 222.35,
+    "median_for_label": 197.38,
+    "modified_z_score": 0.164
+  },
+  {
+    "component_uuid": "05fd7900-56e6-51ce-bc1e-357939068e4f",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=90.7mm vs 'straight_bar' median=197.4mm, modified z-score=-0.70 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=90.7mm is 45.9% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 90.68,
+    "median_for_label": 197.38,
+    "modified_z_score": -0.699
+  },
+  {
+    "component_uuid": "072f0692-e8d5-5600-8c84-b6d7990d154b",
+    "decision": "review",
+    "evidence": [
+      {
+        "detail": "length=18.6mm vs 'straight_bar' median=197.4mm, modified z-score=-1.17 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=18.6mm is 9.4% of 'straight_bar' median=197.4mm -> review",
+        "passed": false,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 18.55,
+    "median_for_label": 197.38,
+    "modified_z_score": -1.171
+  },
+  {
+    "component_uuid": "0757b3e7-243a-5082-bd15-63758e056846",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=267.6mm vs 'straight_bar' median=197.4mm, modified z-score=0.46 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=267.6mm is 135.6% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 267.62,
+    "median_for_label": 197.38,
+    "modified_z_score": 0.46
+  },
+  {
+    "component_uuid": "0772948b-d973-5dba-95af-3a6139808308",
+    "decision": "review",
+    "evidence": [
+      {
+        "detail": "length=5.3mm vs 'l_bar' median=89.3mm, modified z-score=-0.67 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=5.3mm is 6.0% of 'l_bar' median=89.3mm -> review",
+        "passed": false,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "l_bar",
+    "length": 5.34,
+    "median_for_label": 89.28,
+    "modified_z_score": -0.674
+  },
+  {
+    "component_uuid": "07fec298-fdbf-5a01-a6ca-dc20a8f8b0ce",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=229.3mm vs 'straight_bar' median=197.4mm, modified z-score=0.21 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=229.3mm is 116.2% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 229.3,
+    "median_for_label": 197.38,
+    "modified_z_score": 0.209
+  },
+  {
+    "component_uuid": "0cfa7ebe-9e34-5426-b6ef-560cb67bdac8",
+    "decision": "review",
+    "evidence": [
+      {
+        "detail": "length=5.3mm vs 'l_bar' median=89.3mm, modified z-score=-0.67 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=5.3mm is 6.0% of 'l_bar' median=89.3mm -> review",
+        "passed": false,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "l_bar",
+    "length": 5.34,
+    "median_for_label": 89.28,
+    "modified_z_score": -0.674
+  },
+  {
+    "component_uuid": "0d40eb22-0d84-548b-ba9c-0e45ed201ff5",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=56.2mm vs 'straight_bar' median=197.4mm, modified z-score=-0.92 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=56.2mm is 28.5% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 56.19,
+    "median_for_label": 197.38,
+    "modified_z_score": -0.925
+  },
+  {
+    "component_uuid": "0e7ccc85-9782-5b38-929d-0118f8e75fa4",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=115.5mm vs 'straight_bar' median=197.4mm, modified z-score=-0.54 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=115.5mm is 58.5% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 115.47,
+    "median_for_label": 197.38,
+    "modified_z_score": -0.537
+  },
+  {
+    "component_uuid": "0f257149-1ec0-5660-a2a4-26d325dfc23c",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=267.7mm vs 'straight_bar' median=197.4mm, modified z-score=0.46 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=267.7mm is 135.6% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 267.71,
+    "median_for_label": 197.38,
+    "modified_z_score": 0.461
+  },
+  {
+    "component_uuid": "1007d087-51c5-5d13-91a8-eb61c3d550f6",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=267.6mm vs 'straight_bar' median=197.4mm, modified z-score=0.46 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=267.6mm is 135.6% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 267.62,
+    "median_for_label": 197.38,
+    "modified_z_score": 0.46
+  },
+  {
+    "component_uuid": "1135c621-8010-5016-9231-9ed8e1d4e236",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=267.6mm vs 'straight_bar' median=197.4mm, modified z-score=0.46 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=267.6mm is 135.6% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 267.62,
+    "median_for_label": 197.38,
+    "modified_z_score": 0.46
+  },
+  {
+    "component_uuid": "11dd2af7-d58b-52b1-8456-c80747b8bd71",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=49.2mm vs 'straight_bar' median=197.4mm, modified z-score=-0.97 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=49.2mm is 24.9% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 49.22,
+    "median_for_label": 197.38,
+    "modified_z_score": -0.97
+  },
+  {
+    "component_uuid": "12400d61-0de5-500d-a81e-3ea17df34348",
+    "decision": "reject",
+    "evidence": [
+      {
+        "detail": "length=7.4mm vs 'straight_bar' median=197.4mm, modified z-score=-1.24 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=7.4mm is 3.7% of 'straight_bar' median=197.4mm -> reject",
+        "passed": false,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 7.38,
+    "median_for_label": 197.38,
+    "modified_z_score": -1.245
+  },
+  {
+    "component_uuid": "1383ea22-939e-527e-b00e-6a660d47a937",
+    "decision": "reject",
+    "evidence": [
+      {
+        "detail": "length=0.5mm vs 'straight_bar' median=197.4mm, modified z-score=-1.29 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=0.5mm is 0.2% of 'straight_bar' median=197.4mm -> reject",
+        "passed": false,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 0.47,
+    "median_for_label": 197.38,
+    "modified_z_score": -1.29
+  },
+  {
+    "component_uuid": "1431940b-89ac-5287-b483-70a872496678",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=49.2mm vs 'straight_bar' median=197.4mm, modified z-score=-0.97 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=49.2mm is 24.9% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 49.22,
+    "median_for_label": 197.38,
+    "modified_z_score": -0.97
+  },
+  {
+    "component_uuid": "14ee8c44-96bf-5bfd-95b4-872d7921600e",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=746.2mm vs 'l_bar' median=89.3mm, modified z-score=5.28 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=746.2mm is 835.8% of 'l_bar' median=89.3mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "l_bar",
+    "length": 746.24,
+    "median_for_label": 89.28,
+    "modified_z_score": 5.279
+  },
+  {
+    "component_uuid": "150988b2-644b-5a28-a835-c4ea21b3d82e",
+    "decision": "review",
+    "evidence": [
+      {
+        "detail": "length=5.3mm vs 'l_bar' median=89.3mm, modified z-score=-0.67 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=5.3mm is 6.0% of 'l_bar' median=89.3mm -> review",
+        "passed": false,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "l_bar",
+    "length": 5.34,
+    "median_for_label": 89.28,
+    "modified_z_score": -0.674
+  },
+  {
+    "component_uuid": "1737d056-c04f-5a98-9627-047b949b1be7",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=746.4mm vs 'l_bar' median=89.3mm, modified z-score=5.28 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=746.4mm is 836.0% of 'l_bar' median=89.3mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "l_bar",
+    "length": 746.39,
+    "median_for_label": 89.28,
+    "modified_z_score": 5.28
+  },
+  {
+    "component_uuid": "17e420b1-5c36-5373-aca6-69eb9ef27272",
+    "decision": "review",
+    "evidence": [
+      {
+        "detail": "length=5.3mm vs 'l_bar' median=89.3mm, modified z-score=-0.67 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=5.3mm is 6.0% of 'l_bar' median=89.3mm -> review",
+        "passed": false,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "l_bar",
+    "length": 5.34,
+    "median_for_label": 89.28,
+    "modified_z_score": -0.674
+  },
+  {
+    "component_uuid": "188973e6-430f-530e-88d4-f127917af922",
+    "decision": "review",
+    "evidence": [
+      {
+        "detail": "length=13.0mm vs 'straight_bar' median=197.4mm, modified z-score=-1.21 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=13.0mm is 6.6% of 'straight_bar' median=197.4mm -> review",
+        "passed": false,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 13.02,
+    "median_for_label": 197.38,
+    "modified_z_score": -1.208
+  },
+  {
+    "component_uuid": "18c1891a-f279-519e-9550-5764b09b23ff",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=746.2mm vs 'l_bar' median=89.3mm, modified z-score=5.28 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=746.2mm is 835.8% of 'l_bar' median=89.3mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "l_bar",
+    "length": 746.24,
+    "median_for_label": 89.28,
+    "modified_z_score": 5.279
+  },
+  {
+    "component_uuid": "192d019b-d1d3-5281-8e47-184ebd4ef3fb",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=81.9mm vs 'straight_bar' median=197.4mm, modified z-score=-0.76 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=81.9mm is 41.5% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 81.92,
+    "median_for_label": 197.38,
+    "modified_z_score": -0.756
+  },
+  {
+    "component_uuid": "1935a063-f4f7-5ad1-8124-0076b2d0a8dd",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=159.6mm vs 'straight_bar' median=197.4mm, modified z-score=-0.25 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=159.6mm is 80.9% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 159.61,
+    "median_for_label": 197.38,
+    "modified_z_score": -0.247
+  },
+  {
+    "component_uuid": "1bd14294-7078-5d75-92eb-6efd6ef1825f",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=165.1mm vs 'straight_bar' median=197.4mm, modified z-score=-0.21 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=165.1mm is 83.7% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 165.15,
+    "median_for_label": 197.38,
+    "modified_z_score": -0.211
+  },
+  {
+    "component_uuid": "1c051f35-acdb-5c9f-990c-d8d11d1ddb6a",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=223.8mm vs 'straight_bar' median=197.4mm, modified z-score=0.17 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=223.8mm is 113.4% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 223.84,
+    "median_for_label": 197.38,
+    "modified_z_score": 0.173
+  },
+  {
+    "component_uuid": "1cf194e0-afb6-5605-909d-c29764f7dc61",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=861.9mm vs 'straight_bar' median=197.4mm, modified z-score=4.35 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=861.9mm is 436.7% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 861.85,
+    "median_for_label": 197.38,
+    "modified_z_score": 4.353
+  },
+  {
+    "component_uuid": "1d53f060-c6de-5ce0-80b5-64e29c288bd6",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=201.1mm vs 'straight_bar' median=197.4mm, modified z-score=0.02 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=201.1mm is 101.9% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 201.12,
+    "median_for_label": 197.38,
+    "modified_z_score": 0.025
+  },
+  {
+    "component_uuid": "1dbda413-28b0-5f13-9ba5-781d259bfffd",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=33.0mm vs 'l_bar' median=89.3mm, modified z-score=-0.45 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=33.0mm is 37.0% of 'l_bar' median=89.3mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "l_bar",
+    "length": 32.99,
+    "median_for_label": 89.28,
+    "modified_z_score": -0.452
+  },
+  {
+    "component_uuid": "1e64c77a-5193-5abc-9526-f029d1325405",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=738.3mm vs 'straight_bar' median=197.4mm, modified z-score=3.54 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=738.3mm is 374.1% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 738.29,
+    "median_for_label": 197.38,
+    "modified_z_score": 3.543
+  },
+  {
+    "component_uuid": "1f4c1f3c-36c5-5f95-8a13-515ba00899f0",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=82.1mm vs 'straight_bar' median=197.4mm, modified z-score=-0.76 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=82.1mm is 41.6% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 82.1,
+    "median_for_label": 197.38,
+    "modified_z_score": -0.755
+  },
+  {
+    "component_uuid": "1fac0f2f-0f5c-5f9d-9ed7-ffc2f38b8133",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=746.4mm vs 'l_bar' median=89.3mm, modified z-score=5.28 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=746.4mm is 836.0% of 'l_bar' median=89.3mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "l_bar",
+    "length": 746.39,
+    "median_for_label": 89.28,
+    "modified_z_score": 5.28
+  },
+  {
+    "component_uuid": "204fb6bc-24ae-5ea9-a689-f2576ef02b43",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=268.2mm vs 'straight_bar' median=197.4mm, modified z-score=0.46 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=268.2mm is 135.9% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 268.25,
+    "median_for_label": 197.38,
+    "modified_z_score": 0.464
+  },
+  {
+    "component_uuid": "20754cb0-91eb-5104-8595-900102ca5964",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=36.2mm vs 'straight_bar' median=197.4mm, modified z-score=-1.06 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=36.2mm is 18.3% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 36.21,
+    "median_for_label": 197.38,
+    "modified_z_score": -1.056
+  },
+  {
+    "component_uuid": "20dc7eef-2093-50fe-8119-22e898f73a18",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=49.2mm vs 'straight_bar' median=197.4mm, modified z-score=-0.97 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=49.2mm is 24.9% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 49.22,
+    "median_for_label": 197.38,
+    "modified_z_score": -0.97
+  },
+  {
+    "component_uuid": "21186d14-8cf7-55bb-89f9-0a43335df40c",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=267.6mm vs 'straight_bar' median=197.4mm, modified z-score=0.46 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=267.6mm is 135.6% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 267.62,
+    "median_for_label": 197.38,
+    "modified_z_score": 0.46
+  },
+  {
+    "component_uuid": "21a44030-2fa2-5e50-bd64-e5f479931556",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=144.4mm vs 'straight_bar' median=197.4mm, modified z-score=-0.35 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=144.4mm is 73.2% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 144.41,
+    "median_for_label": 197.38,
+    "modified_z_score": -0.347
+  },
+  {
+    "component_uuid": "22857d68-cf55-5245-b99e-1b5553e1dc8e",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=78.6mm vs 'straight_bar' median=197.4mm, modified z-score=-0.78 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=78.6mm is 39.8% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 78.63,
+    "median_for_label": 197.38,
+    "modified_z_score": -0.778
+  },
+  {
+    "component_uuid": "22bafc3a-3f6f-5fcf-89ac-2ec9605ff312",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=323.2mm vs 'straight_bar' median=197.4mm, modified z-score=0.82 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=323.2mm is 163.7% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 323.16,
+    "median_for_label": 197.38,
+    "modified_z_score": 0.824
+  },
+  {
+    "component_uuid": "22ed8c5e-8fc0-5329-9e75-0f6e52f7ab06",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=738.3mm vs 'straight_bar' median=197.4mm, modified z-score=3.54 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=738.3mm is 374.1% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 738.29,
+    "median_for_label": 197.38,
+    "modified_z_score": 3.543
+  },
+  {
+    "component_uuid": "23eb0468-1201-5909-91a4-cb93e4cb7910",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=267.6mm vs 'straight_bar' median=197.4mm, modified z-score=0.46 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=267.6mm is 135.6% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 267.62,
+    "median_for_label": 197.38,
+    "modified_z_score": 0.46
+  },
+  {
+    "component_uuid": "254445a4-fb86-5d1a-b247-1a44e297a8c5",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=738.3mm vs 'straight_bar' median=197.4mm, modified z-score=3.54 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=738.3mm is 374.1% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 738.29,
+    "median_for_label": 197.38,
+    "modified_z_score": 3.543
+  },
+  {
+    "component_uuid": "2559c428-f3e7-526e-996d-fd0fdb83caf0",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=94.4mm vs 'straight_bar' median=197.4mm, modified z-score=-0.67 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=94.4mm is 47.8% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 94.41,
+    "median_for_label": 197.38,
+    "modified_z_score": -0.675
+  },
+  {
+    "component_uuid": "262a413a-7982-564d-89c6-036758f057f8",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=267.6mm vs 'straight_bar' median=197.4mm, modified z-score=0.46 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=267.6mm is 135.6% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 267.62,
+    "median_for_label": 197.38,
+    "modified_z_score": 0.46
+  },
+  {
+    "component_uuid": "262d6f30-bd41-5736-bf06-3be14335ab92",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=793.5mm vs 'straight_bar' median=197.4mm, modified z-score=3.91 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=793.5mm is 402.0% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 793.51,
+    "median_for_label": 197.38,
+    "modified_z_score": 3.905
+  },
+  {
+    "component_uuid": "289c76c4-d2ca-563c-9d76-42ddad51faf4",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=105.7mm vs 'straight_bar' median=197.4mm, modified z-score=-0.60 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=105.7mm is 53.5% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 105.68,
+    "median_for_label": 197.38,
+    "modified_z_score": -0.601
+  },
+  {
+    "component_uuid": "28e6e9d8-94d3-57ac-817a-eea338d5217b",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "Only 4 'stirrup' component(s) in this drawing \u2014 too few to judge a distribution, accepted by default",
+        "passed": true,
+        "rule": "sample_size"
+      }
+    ],
+    "label": "stirrup",
+    "length": 46.96,
+    "median_for_label": 128.08,
+    "modified_z_score": 0.0
+  },
+  {
+    "component_uuid": "291f1cd5-d95f-55d1-8230-f2975d18819a",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=1237.1mm vs 'branch' median=1454.5mm, modified z-score=-0.25 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=1237.1mm is 85.1% of 'branch' median=1454.5mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "branch",
+    "length": 1237.1,
+    "median_for_label": 1454.55,
+    "modified_z_score": -0.245
+  },
+  {
+    "component_uuid": "2941ec4c-0d9c-5736-b885-9fa1fe617348",
+    "decision": "review",
+    "evidence": [
+      {
+        "detail": "length=5.3mm vs 'l_bar' median=89.3mm, modified z-score=-0.67 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=5.3mm is 6.0% of 'l_bar' median=89.3mm -> review",
+        "passed": false,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "l_bar",
+    "length": 5.34,
+    "median_for_label": 89.28,
+    "modified_z_score": -0.674
+  },
+  {
+    "component_uuid": "29471a0f-4c99-5c06-8cd6-9fd295c2ae5f",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=210.9mm vs 'straight_bar' median=197.4mm, modified z-score=0.09 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=210.9mm is 106.8% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 210.88,
+    "median_for_label": 197.38,
+    "modified_z_score": 0.088
+  },
+  {
+    "component_uuid": "2b1c9062-aa2b-5efb-b0ac-3cbc2af97007",
+    "decision": "review",
+    "evidence": [
+      {
+        "detail": "length=25.6mm vs 'straight_bar' median=197.4mm, modified z-score=-1.13 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=25.6mm is 13.0% of 'straight_bar' median=197.4mm -> review",
+        "passed": false,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 25.6,
+    "median_for_label": 197.38,
+    "modified_z_score": -1.125
+  },
+  {
+    "component_uuid": "2bb59432-8cb2-5682-a949-28a610afb94d",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=745.6mm vs 'straight_bar' median=197.4mm, modified z-score=3.59 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=745.6mm is 377.7% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 745.55,
+    "median_for_label": 197.38,
+    "modified_z_score": 3.591
+  },
+  {
+    "component_uuid": "2c282e33-7ad8-5c6e-81b8-02c18a4afd17",
+    "decision": "reject",
+    "evidence": [
+      {
+        "detail": "length=6.1mm vs 'straight_bar' median=197.4mm, modified z-score=-1.25 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=6.1mm is 3.1% of 'straight_bar' median=197.4mm -> reject",
+        "passed": false,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 6.07,
+    "median_for_label": 197.38,
+    "modified_z_score": -1.253
+  },
+  {
+    "component_uuid": "2c7211f5-3edc-5bcb-b470-1cc15cd46a81",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=267.6mm vs 'straight_bar' median=197.4mm, modified z-score=0.46 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=267.6mm is 135.6% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 267.62,
+    "median_for_label": 197.38,
+    "modified_z_score": 0.46
+  },
+  {
+    "component_uuid": "2d5543ff-a6f8-5fda-a6fb-99f31362bdff",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=49.2mm vs 'straight_bar' median=197.4mm, modified z-score=-0.97 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=49.2mm is 24.9% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 49.22,
+    "median_for_label": 197.38,
+    "modified_z_score": -0.97
+  },
+  {
+    "component_uuid": "2dc0291a-d813-5e55-bddd-8a368a7cf930",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=267.6mm vs 'straight_bar' median=197.4mm, modified z-score=0.46 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=267.6mm is 135.6% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 267.62,
+    "median_for_label": 197.38,
+    "modified_z_score": 0.46
+  },
+  {
+    "component_uuid": "2f923580-1872-55aa-a0eb-5dfae7a8aa5e",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=738.3mm vs 'straight_bar' median=197.4mm, modified z-score=3.54 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=738.3mm is 374.1% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 738.29,
+    "median_for_label": 197.38,
+    "modified_z_score": 3.543
+  },
+  {
+    "component_uuid": "3036d933-823c-5f7b-bb74-4ee52e674c4a",
+    "decision": "reject",
+    "evidence": [
+      {
+        "detail": "length=0.5mm vs 'straight_bar' median=197.4mm, modified z-score=-1.29 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=0.5mm is 0.2% of 'straight_bar' median=197.4mm -> reject",
+        "passed": false,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 0.47,
+    "median_for_label": 197.38,
+    "modified_z_score": -1.29
+  },
+  {
+    "component_uuid": "33c13ca4-c577-573a-b013-22ba1a2288f9",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=267.6mm vs 'straight_bar' median=197.4mm, modified z-score=0.46 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=267.6mm is 135.6% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 267.62,
+    "median_for_label": 197.38,
+    "modified_z_score": 0.46
+  },
+  {
+    "component_uuid": "344243e8-bdb8-58cd-a017-80c4bad43959",
+    "decision": "review",
+    "evidence": [
+      {
+        "detail": "length=20.7mm vs 'straight_bar' median=197.4mm, modified z-score=-1.16 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=20.7mm is 10.5% of 'straight_bar' median=197.4mm -> review",
+        "passed": false,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 20.72,
+    "median_for_label": 197.38,
+    "modified_z_score": -1.157
+  },
+  {
+    "component_uuid": "35041c31-0da4-5765-ab0f-63779b1c88b4",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=119.2mm vs 'straight_bar' median=197.4mm, modified z-score=-0.51 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=119.2mm is 60.4% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 119.15,
+    "median_for_label": 197.38,
+    "modified_z_score": -0.512
+  },
+  {
+    "component_uuid": "350d8072-276e-56c7-8468-66a8111117e3",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=207.7mm vs 'straight_bar' median=197.4mm, modified z-score=0.07 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=207.7mm is 105.2% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 207.71,
+    "median_for_label": 197.38,
+    "modified_z_score": 0.068
+  },
+  {
+    "component_uuid": "35213051-f194-50f5-a379-da49a5a35428",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=738.3mm vs 'straight_bar' median=197.4mm, modified z-score=3.54 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=738.3mm is 374.1% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 738.29,
+    "median_for_label": 197.38,
+    "modified_z_score": 3.543
+  },
+  {
+    "component_uuid": "356a2cbf-6e86-53b2-806a-eb61e9166e77",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=209.2mm vs 'straight_bar' median=197.4mm, modified z-score=0.08 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=209.2mm is 106.0% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 209.21,
+    "median_for_label": 197.38,
+    "modified_z_score": 0.078
+  },
+  {
+    "component_uuid": "356b6a4f-7c30-5e25-b156-4fe69cddbd10",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=120.8mm vs 'straight_bar' median=197.4mm, modified z-score=-0.50 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=120.8mm is 61.2% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 120.84,
+    "median_for_label": 197.38,
+    "modified_z_score": -0.501
+  },
+  {
+    "component_uuid": "36ac5ab0-097c-5772-bb3c-3d77225b8b5d",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=267.6mm vs 'straight_bar' median=197.4mm, modified z-score=0.46 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=267.6mm is 135.6% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 267.62,
+    "median_for_label": 197.38,
+    "modified_z_score": 0.46
+  },
+  {
+    "component_uuid": "37787dbf-56d8-5ead-aea1-56a5b2cde01a",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=745.6mm vs 'straight_bar' median=197.4mm, modified z-score=3.59 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=745.6mm is 377.7% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 745.55,
+    "median_for_label": 197.38,
+    "modified_z_score": 3.591
+  },
+  {
+    "component_uuid": "378d1fe4-7cbb-5388-9c63-89bc38a58464",
+    "decision": "review",
+    "evidence": [
+      {
+        "detail": "length=5.3mm vs 'l_bar' median=89.3mm, modified z-score=-0.67 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=5.3mm is 6.0% of 'l_bar' median=89.3mm -> review",
+        "passed": false,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "l_bar",
+    "length": 5.34,
+    "median_for_label": 89.28,
+    "modified_z_score": -0.674
+  },
+  {
+    "component_uuid": "3812593f-44bc-56ab-b9e0-69fa4a2ba6ee",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=738.3mm vs 'straight_bar' median=197.4mm, modified z-score=3.54 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=738.3mm is 374.1% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 738.29,
+    "median_for_label": 197.38,
+    "modified_z_score": 3.543
+  },
+  {
+    "component_uuid": "381eb57b-efb3-5b9c-b917-25d2a1a98be0",
+    "decision": "reject",
+    "evidence": [
+      {
+        "detail": "length=7.5mm vs 'straight_bar' median=197.4mm, modified z-score=-1.24 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=7.5mm is 3.8% of 'straight_bar' median=197.4mm -> reject",
+        "passed": false,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 7.51,
+    "median_for_label": 197.38,
+    "modified_z_score": -1.244
+  },
+  {
+    "component_uuid": "39efeb9a-f52b-5107-9e26-0714089cbee9",
+    "decision": "review",
+    "evidence": [
+      {
+        "detail": "length=5.3mm vs 'l_bar' median=89.3mm, modified z-score=-0.67 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=5.3mm is 6.0% of 'l_bar' median=89.3mm -> review",
+        "passed": false,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "l_bar",
+    "length": 5.34,
+    "median_for_label": 89.28,
+    "modified_z_score": -0.674
+  },
+  {
+    "component_uuid": "3c0f9d8e-0b5e-5147-9fda-e93b5b11691b",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=333.0mm vs 'straight_bar' median=197.4mm, modified z-score=0.89 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=333.0mm is 168.7% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 333.01,
+    "median_for_label": 197.38,
+    "modified_z_score": 0.888
+  },
+  {
+    "component_uuid": "3d1d8580-f63b-5c01-b78a-88af6893e447",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=745.6mm vs 'straight_bar' median=197.4mm, modified z-score=3.59 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=745.6mm is 377.7% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 745.55,
+    "median_for_label": 197.38,
+    "modified_z_score": 3.591
+  },
+  {
+    "component_uuid": "3d41065e-b873-5c52-a910-1f138f48355b",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=222.4mm vs 'straight_bar' median=197.4mm, modified z-score=0.16 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=222.4mm is 112.7% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 222.35,
+    "median_for_label": 197.38,
+    "modified_z_score": 0.164
+  },
+  {
+    "component_uuid": "3ef4dc84-afce-5793-959a-c5bb40a7d1f3",
+    "decision": "reject",
+    "evidence": [
+      {
+        "detail": "length=0.5mm vs 'straight_bar' median=197.4mm, modified z-score=-1.29 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=0.5mm is 0.2% of 'straight_bar' median=197.4mm -> reject",
+        "passed": false,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 0.47,
+    "median_for_label": 197.38,
+    "modified_z_score": -1.29
+  },
+  {
+    "component_uuid": "40635774-7ae9-54f9-b73c-b134c69936df",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=57.4mm vs 'l_bar' median=89.3mm, modified z-score=-0.26 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=57.4mm is 64.3% of 'l_bar' median=89.3mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "l_bar",
+    "length": 57.44,
+    "median_for_label": 89.28,
+    "modified_z_score": -0.256
+  },
+  {
+    "component_uuid": "409b1cb5-c07d-556d-803e-c37d9e1b7f8b",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=199.4mm vs 'straight_bar' median=197.4mm, modified z-score=0.01 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=199.4mm is 101.0% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 199.42,
+    "median_for_label": 197.38,
+    "modified_z_score": 0.013
+  },
+  {
+    "component_uuid": "40ab1cad-09c3-50cb-9615-199ebac35a3e",
+    "decision": "review",
+    "evidence": [
+      {
+        "detail": "length=19.6mm vs 'straight_bar' median=197.4mm, modified z-score=-1.16 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=19.6mm is 9.9% of 'straight_bar' median=197.4mm -> review",
+        "passed": false,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 19.64,
+    "median_for_label": 197.38,
+    "modified_z_score": -1.164
+  },
+  {
+    "component_uuid": "41d1b87c-c273-597d-a4e8-a1a81b162077",
+    "decision": "reject",
+    "evidence": [
+      {
+        "detail": "length=1.8mm vs 'straight_bar' median=197.4mm, modified z-score=-1.28 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=1.8mm is 0.9% of 'straight_bar' median=197.4mm -> reject",
+        "passed": false,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 1.78,
+    "median_for_label": 197.38,
+    "modified_z_score": -1.281
+  },
+  {
+    "component_uuid": "42144bc3-e63d-50b9-9bee-ffef194b0a25",
+    "decision": "reject",
+    "evidence": [
+      {
+        "detail": "length=0.5mm vs 'straight_bar' median=197.4mm, modified z-score=-1.29 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=0.5mm is 0.2% of 'straight_bar' median=197.4mm -> reject",
+        "passed": false,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 0.47,
+    "median_for_label": 197.38,
+    "modified_z_score": -1.29
+  },
+  {
+    "component_uuid": "42cb3a24-9776-5372-8820-6a0d1bb05507",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=746.4mm vs 'l_bar' median=89.3mm, modified z-score=5.28 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=746.4mm is 836.0% of 'l_bar' median=89.3mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "l_bar",
+    "length": 746.39,
+    "median_for_label": 89.28,
+    "modified_z_score": 5.28
+  },
+  {
+    "component_uuid": "438c34d8-adda-5efe-a01f-b5f3e18c7cac",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=267.6mm vs 'straight_bar' median=197.4mm, modified z-score=0.46 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=267.6mm is 135.6% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 267.62,
+    "median_for_label": 197.38,
+    "modified_z_score": 0.46
+  },
+  {
+    "component_uuid": "44916d07-cad6-5577-997b-e22df278096a",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=197.4mm vs 'straight_bar' median=197.4mm, modified z-score=0.00 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=197.4mm is 100.0% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 197.38,
+    "median_for_label": 197.38,
+    "modified_z_score": 0.0
+  },
+  {
+    "component_uuid": "45994b72-067f-5d79-98ba-c169ca2683e0",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=267.6mm vs 'straight_bar' median=197.4mm, modified z-score=0.46 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=267.6mm is 135.6% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 267.62,
+    "median_for_label": 197.38,
+    "modified_z_score": 0.46
+  },
+  {
+    "component_uuid": "45e7e094-c778-5eee-9ef7-e7ffbea71c75",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=745.6mm vs 'straight_bar' median=197.4mm, modified z-score=3.59 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=745.6mm is 377.7% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 745.55,
+    "median_for_label": 197.38,
+    "modified_z_score": 3.591
+  },
+  {
+    "component_uuid": "4658a6de-769c-519e-b1d4-cd9dfdf2873b",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=31.1mm vs 'straight_bar' median=197.4mm, modified z-score=-1.09 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=31.1mm is 15.8% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 31.14,
+    "median_for_label": 197.38,
+    "modified_z_score": -1.089
+  },
+  {
+    "component_uuid": "472fd33a-5e08-57a1-b553-0cd757662fe2",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=229.3mm vs 'straight_bar' median=197.4mm, modified z-score=0.21 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=229.3mm is 116.2% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 229.3,
+    "median_for_label": 197.38,
+    "modified_z_score": 0.209
+  },
+  {
+    "component_uuid": "49153d10-c922-52ba-a39a-a04cf6fab4ad",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "Only 4 'stirrup' component(s) in this drawing \u2014 too few to judge a distribution, accepted by default",
+        "passed": true,
+        "rule": "sample_size"
+      }
+    ],
+    "label": "stirrup",
+    "length": 47.02,
+    "median_for_label": 128.08,
+    "modified_z_score": 0.0
+  },
+  {
+    "component_uuid": "4a53ecbb-d9e9-57ef-a6e4-af683deed577",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=267.6mm vs 'straight_bar' median=197.4mm, modified z-score=0.46 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=267.6mm is 135.6% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 267.62,
+    "median_for_label": 197.38,
+    "modified_z_score": 0.46
+  },
+  {
+    "component_uuid": "4bcda6dd-363a-53bc-b798-3695346f42fe",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=746.2mm vs 'l_bar' median=89.3mm, modified z-score=5.28 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=746.2mm is 835.8% of 'l_bar' median=89.3mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "l_bar",
+    "length": 746.24,
+    "median_for_label": 89.28,
+    "modified_z_score": 5.279
+  },
+  {
+    "component_uuid": "4ce17e34-0415-5bfa-b109-65f88ceaded6",
+    "decision": "reject",
+    "evidence": [
+      {
+        "detail": "length=5.6mm vs 'straight_bar' median=197.4mm, modified z-score=-1.26 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=5.6mm is 2.8% of 'straight_bar' median=197.4mm -> reject",
+        "passed": false,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 5.58,
+    "median_for_label": 197.38,
+    "modified_z_score": -1.256
+  },
+  {
+    "component_uuid": "4d42249c-f9a5-5654-b0e9-abdf69eb0f79",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=95.1mm vs 'straight_bar' median=197.4mm, modified z-score=-0.67 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=95.1mm is 48.2% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 95.14,
+    "median_for_label": 197.38,
+    "modified_z_score": -0.67
+  },
+  {
+    "component_uuid": "4d8cc780-1cfb-5766-8084-fece6e5e4462",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=333.0mm vs 'straight_bar' median=197.4mm, modified z-score=0.89 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=333.0mm is 168.7% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 333.01,
+    "median_for_label": 197.38,
+    "modified_z_score": 0.888
+  },
+  {
+    "component_uuid": "4dbb57c2-a6b2-530c-94c7-5301f7f04565",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=111.2mm vs 'straight_bar' median=197.4mm, modified z-score=-0.56 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=111.2mm is 56.3% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 111.21,
+    "median_for_label": 197.38,
+    "modified_z_score": -0.564
+  },
+  {
+    "component_uuid": "4e5cd89c-b706-5d9e-a340-7df9160ed5a0",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=35.8mm vs 'straight_bar' median=197.4mm, modified z-score=-1.06 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=35.8mm is 18.1% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 35.81,
+    "median_for_label": 197.38,
+    "modified_z_score": -1.058
+  },
+  {
+    "component_uuid": "4fddaa95-a08e-5013-880b-3783b6a569d3",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=340.0mm vs 'straight_bar' median=197.4mm, modified z-score=0.93 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=340.0mm is 172.2% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 339.95,
+    "median_for_label": 197.38,
+    "modified_z_score": 0.934
+  },
+  {
+    "component_uuid": "54adfe6f-0417-53ae-a9dd-c2252a64fa54",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=267.6mm vs 'straight_bar' median=197.4mm, modified z-score=0.46 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=267.6mm is 135.6% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 267.62,
+    "median_for_label": 197.38,
+    "modified_z_score": 0.46
+  },
+  {
+    "component_uuid": "54e371d7-31b5-5130-ac96-5f1d23039896",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=267.6mm vs 'straight_bar' median=197.4mm, modified z-score=0.46 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=267.6mm is 135.6% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 267.62,
+    "median_for_label": 197.38,
+    "modified_z_score": 0.46
+  },
+  {
+    "component_uuid": "557f29f5-f0b3-52a9-ad81-0879298347fb",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=745.6mm vs 'straight_bar' median=197.4mm, modified z-score=3.59 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=745.6mm is 377.7% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 745.55,
+    "median_for_label": 197.38,
+    "modified_z_score": 3.591
+  },
+  {
+    "component_uuid": "5669c895-fb91-5063-a49e-0f629492c5d1",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=54.1mm vs 'straight_bar' median=197.4mm, modified z-score=-0.94 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=54.1mm is 27.4% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 54.12,
+    "median_for_label": 197.38,
+    "modified_z_score": -0.938
+  },
+  {
+    "component_uuid": "568560c9-47c1-53bd-b7c5-de3e02f028d2",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=222.4mm vs 'straight_bar' median=197.4mm, modified z-score=0.16 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=222.4mm is 112.7% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 222.35,
+    "median_for_label": 197.38,
+    "modified_z_score": 0.164
+  },
+  {
+    "component_uuid": "569751a2-d6a1-5897-b2a7-30a911a69561",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=267.6mm vs 'straight_bar' median=197.4mm, modified z-score=0.46 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=267.6mm is 135.6% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 267.62,
+    "median_for_label": 197.38,
+    "modified_z_score": 0.46
+  },
+  {
+    "component_uuid": "56a1f8a6-8fc8-5e5f-ba03-5e4b15d9bedd",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=267.6mm vs 'straight_bar' median=197.4mm, modified z-score=0.46 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=267.6mm is 135.6% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 267.62,
+    "median_for_label": 197.38,
+    "modified_z_score": 0.46
+  },
+  {
+    "component_uuid": "57d870af-f68c-51fe-a789-fa2cf1b9f2a5",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=229.3mm vs 'straight_bar' median=197.4mm, modified z-score=0.21 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=229.3mm is 116.2% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 229.3,
+    "median_for_label": 197.38,
+    "modified_z_score": 0.209
+  },
+  {
+    "component_uuid": "59189da4-2456-5409-9908-17e12b6c73e1",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=222.4mm vs 'straight_bar' median=197.4mm, modified z-score=0.16 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=222.4mm is 112.7% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 222.35,
+    "median_for_label": 197.38,
+    "modified_z_score": 0.164
+  },
+  {
+    "component_uuid": "593881c6-fc64-5196-87be-e41374eb3f5c",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=738.3mm vs 'straight_bar' median=197.4mm, modified z-score=3.54 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=738.3mm is 374.1% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 738.29,
+    "median_for_label": 197.38,
+    "modified_z_score": 3.543
+  },
+  {
+    "component_uuid": "59aee4f1-8b3c-5395-b93c-92feef981afe",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=206.7mm vs 'straight_bar' median=197.4mm, modified z-score=0.06 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=206.7mm is 104.7% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 206.66,
+    "median_for_label": 197.38,
+    "modified_z_score": 0.061
+  },
+  {
+    "component_uuid": "5a233c38-d9ec-5e89-9da1-9d0458f9c843",
+    "decision": "review",
+    "evidence": [
+      {
+        "detail": "length=17.9mm vs 'straight_bar' median=197.4mm, modified z-score=-1.18 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=17.9mm is 9.1% of 'straight_bar' median=197.4mm -> review",
+        "passed": false,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 17.91,
+    "median_for_label": 197.38,
+    "modified_z_score": -1.176
+  },
+  {
+    "component_uuid": "5c1cda77-b36a-5f5e-95a8-4d569308389a",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=3227.8mm vs 'branch' median=1454.5mm, modified z-score=2.00 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=3227.8mm is 221.9% of 'branch' median=1454.5mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "branch",
+    "length": 3227.8,
+    "median_for_label": 1454.55,
+    "modified_z_score": 1.998
+  },
+  {
+    "component_uuid": "5c7e0341-21ef-56b5-a1c2-1927bff893ea",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=267.6mm vs 'straight_bar' median=197.4mm, modified z-score=0.46 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=267.6mm is 135.6% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 267.62,
+    "median_for_label": 197.38,
+    "modified_z_score": 0.46
+  },
+  {
+    "component_uuid": "5d71ad0e-c1b0-5863-870d-4c12bf7e7acc",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=267.6mm vs 'straight_bar' median=197.4mm, modified z-score=0.46 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=267.6mm is 135.6% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 267.62,
+    "median_for_label": 197.38,
+    "modified_z_score": 0.46
+  },
+  {
+    "component_uuid": "5d98abf4-d9bc-5ef4-95c0-223870606455",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=205.1mm vs 'straight_bar' median=197.4mm, modified z-score=0.05 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=205.1mm is 103.9% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 205.14,
+    "median_for_label": 197.38,
+    "modified_z_score": 0.051
+  },
+  {
+    "component_uuid": "5d9fec6a-d6c4-5d72-8b6a-e824987fc06e",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=222.4mm vs 'straight_bar' median=197.4mm, modified z-score=0.16 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=222.4mm is 112.7% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 222.35,
+    "median_for_label": 197.38,
+    "modified_z_score": 0.164
+  },
+  {
+    "component_uuid": "5e007265-ed6c-5fe8-991a-c9ec37ed8fd1",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=746.1mm vs 'l_bar' median=89.3mm, modified z-score=5.28 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=746.1mm is 835.6% of 'l_bar' median=89.3mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "l_bar",
+    "length": 746.07,
+    "median_for_label": 89.28,
+    "modified_z_score": 5.277
+  },
+  {
+    "component_uuid": "5e7885da-19e9-51b6-858a-a9ce9b55aac1",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=267.6mm vs 'straight_bar' median=197.4mm, modified z-score=0.46 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=267.6mm is 135.6% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 267.62,
+    "median_for_label": 197.38,
+    "modified_z_score": 0.46
+  },
+  {
+    "component_uuid": "5f9b30c5-f54e-53d8-aa86-35e5655a1c1a",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=301.5mm vs 'straight_bar' median=197.4mm, modified z-score=0.68 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=301.5mm is 152.8% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 301.5,
+    "median_for_label": 197.38,
+    "modified_z_score": 0.682
+  },
+  {
+    "component_uuid": "5fad347f-6c15-5712-b0fb-ffa76b08dd9b",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=191.4mm vs 'straight_bar' median=197.4mm, modified z-score=-0.04 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=191.4mm is 97.0% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 191.37,
+    "median_for_label": 197.38,
+    "modified_z_score": -0.039
+  },
+  {
+    "component_uuid": "5fb9c96f-c2da-5db2-8ed9-0dd95ed744d7",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=738.3mm vs 'straight_bar' median=197.4mm, modified z-score=3.54 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=738.3mm is 374.1% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 738.29,
+    "median_for_label": 197.38,
+    "modified_z_score": 3.543
+  },
+  {
+    "component_uuid": "60f4d87d-fcf7-549c-9018-b83adc64a9f2",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=267.6mm vs 'straight_bar' median=197.4mm, modified z-score=0.46 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=267.6mm is 135.6% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 267.62,
+    "median_for_label": 197.38,
+    "modified_z_score": 0.46
+  },
+  {
+    "component_uuid": "61c80a56-813b-56a4-a04a-e32ec7d21350",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=746.2mm vs 'l_bar' median=89.3mm, modified z-score=5.28 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=746.2mm is 835.8% of 'l_bar' median=89.3mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "l_bar",
+    "length": 746.24,
+    "median_for_label": 89.28,
+    "modified_z_score": 5.279
+  },
+  {
+    "component_uuid": "625d1042-ad99-5936-8590-ee7d3ff9bbb7",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=185.6mm vs 'straight_bar' median=197.4mm, modified z-score=-0.08 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=185.6mm is 94.0% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 185.56,
+    "median_for_label": 197.38,
+    "modified_z_score": -0.077
+  },
+  {
+    "component_uuid": "62c7a363-917c-5c15-bee6-814fc3552819",
+    "decision": "review",
+    "evidence": [
+      {
+        "detail": "length=25.3mm vs 'straight_bar' median=197.4mm, modified z-score=-1.13 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=25.3mm is 12.8% of 'straight_bar' median=197.4mm -> review",
+        "passed": false,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 25.26,
+    "median_for_label": 197.38,
+    "modified_z_score": -1.127
+  },
+  {
+    "component_uuid": "62d8e17b-2a9c-5b08-a207-28749df10f27",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=32.5mm vs 'straight_bar' median=197.4mm, modified z-score=-1.08 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=32.5mm is 16.5% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 32.52,
+    "median_for_label": 197.38,
+    "modified_z_score": -1.08
+  },
+  {
+    "component_uuid": "62db73f7-56a9-5bb9-bb76-2668f0aa50b0",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=84.2mm vs 'straight_bar' median=197.4mm, modified z-score=-0.74 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=84.2mm is 42.6% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 84.17,
+    "median_for_label": 197.38,
+    "modified_z_score": -0.742
+  },
+  {
+    "component_uuid": "645ad845-cf4a-5a26-bbe2-a19539962930",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=119.7mm vs 'straight_bar' median=197.4mm, modified z-score=-0.51 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=119.7mm is 60.6% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 119.65,
+    "median_for_label": 197.38,
+    "modified_z_score": -0.509
+  },
+  {
+    "component_uuid": "64af21df-c5bd-5359-afb8-e0bed328dd5a",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=268.0mm vs 'straight_bar' median=197.4mm, modified z-score=0.46 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=268.0mm is 135.8% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 268.03,
+    "median_for_label": 197.38,
+    "modified_z_score": 0.463
+  },
+  {
+    "component_uuid": "64fc5fd5-86cd-57c1-9d42-f61bc4018aef",
+    "decision": "reject",
+    "evidence": [
+      {
+        "detail": "length=0.5mm vs 'straight_bar' median=197.4mm, modified z-score=-1.29 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=0.5mm is 0.2% of 'straight_bar' median=197.4mm -> reject",
+        "passed": false,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 0.47,
+    "median_for_label": 197.38,
+    "modified_z_score": -1.29
+  },
+  {
+    "component_uuid": "650d400d-4758-55a1-bea2-7464872f469e",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=166.3mm vs 'straight_bar' median=197.4mm, modified z-score=-0.20 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=166.3mm is 84.2% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 166.26,
+    "median_for_label": 197.38,
+    "modified_z_score": -0.204
+  },
+  {
+    "component_uuid": "65188ef7-4544-53a5-9d9c-64b8a928ce85",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=267.6mm vs 'straight_bar' median=197.4mm, modified z-score=0.46 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=267.6mm is 135.6% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 267.62,
+    "median_for_label": 197.38,
+    "modified_z_score": 0.46
+  },
+  {
+    "component_uuid": "68201c2e-5c1a-5dee-9c2a-fa379c020eb1",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=267.6mm vs 'straight_bar' median=197.4mm, modified z-score=0.46 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=267.6mm is 135.6% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 267.62,
+    "median_for_label": 197.38,
+    "modified_z_score": 0.46
+  },
+  {
+    "component_uuid": "68e01de4-5ba2-51c2-8560-a4fffdd5ba36",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=267.6mm vs 'straight_bar' median=197.4mm, modified z-score=0.46 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=267.6mm is 135.6% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 267.62,
+    "median_for_label": 197.38,
+    "modified_z_score": 0.46
+  },
+  {
+    "component_uuid": "69554021-1785-5600-ab9e-e75bbcbddde9",
+    "decision": "reject",
+    "evidence": [
+      {
+        "detail": "length=8.1mm vs 'straight_bar' median=197.4mm, modified z-score=-1.24 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=8.1mm is 4.1% of 'straight_bar' median=197.4mm -> reject",
+        "passed": false,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 8.09,
+    "median_for_label": 197.38,
+    "modified_z_score": -1.24
+  },
+  {
+    "component_uuid": "69eb8c5b-3606-5f60-b1c8-0d5b9f51b77d",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=185.6mm vs 'straight_bar' median=197.4mm, modified z-score=-0.08 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=185.6mm is 94.0% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 185.56,
+    "median_for_label": 197.38,
+    "modified_z_score": -0.077
+  },
+  {
+    "component_uuid": "6ba6d600-5c45-5fa5-8d1a-e8eee2cd0d05",
+    "decision": "review",
+    "evidence": [
+      {
+        "detail": "length=5.3mm vs 'l_bar' median=89.3mm, modified z-score=-0.67 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=5.3mm is 6.0% of 'l_bar' median=89.3mm -> review",
+        "passed": false,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "l_bar",
+    "length": 5.34,
+    "median_for_label": 89.28,
+    "modified_z_score": -0.674
+  },
+  {
+    "component_uuid": "6c3cba62-22e6-5888-9d7e-14e4ed4eb9c1",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=746.4mm vs 'l_bar' median=89.3mm, modified z-score=5.28 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=746.4mm is 836.0% of 'l_bar' median=89.3mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "l_bar",
+    "length": 746.39,
+    "median_for_label": 89.28,
+    "modified_z_score": 5.28
+  },
+  {
+    "component_uuid": "6da020eb-e69a-5119-a864-d315069e7e76",
+    "decision": "review",
+    "evidence": [
+      {
+        "detail": "length=21.6mm vs 'straight_bar' median=197.4mm, modified z-score=-1.15 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=21.6mm is 10.9% of 'straight_bar' median=197.4mm -> review",
+        "passed": false,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 21.55,
+    "median_for_label": 197.38,
+    "modified_z_score": -1.152
+  },
+  {
+    "component_uuid": "6e40bf4e-e72c-52c5-aa30-a8e5a8e78b19",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=89.6mm vs 'straight_bar' median=197.4mm, modified z-score=-0.71 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=89.6mm is 45.4% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 89.62,
+    "median_for_label": 197.38,
+    "modified_z_score": -0.706
+  },
+  {
+    "component_uuid": "6e84fc29-60b6-5eec-b7f1-5c0133971cba",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=135.8mm vs 'straight_bar' median=197.4mm, modified z-score=-0.40 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=135.8mm is 68.8% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 135.78,
+    "median_for_label": 197.38,
+    "modified_z_score": -0.403
+  },
+  {
+    "component_uuid": "6ed5f28b-c047-56bf-ae61-1820c112c4b0",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=104.2mm vs 'straight_bar' median=197.4mm, modified z-score=-0.61 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=104.2mm is 52.8% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 104.21,
+    "median_for_label": 197.38,
+    "modified_z_score": -0.61
+  },
+  {
+    "component_uuid": "6ee00c2b-71a7-58b4-844f-9ce66010f718",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=267.6mm vs 'straight_bar' median=197.4mm, modified z-score=0.46 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=267.6mm is 135.6% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 267.62,
+    "median_for_label": 197.38,
+    "modified_z_score": 0.46
+  },
+  {
+    "component_uuid": "6eefabfa-921b-5faf-821c-873329210408",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=52.2mm vs 'straight_bar' median=197.4mm, modified z-score=-0.95 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=52.2mm is 26.4% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 52.21,
+    "median_for_label": 197.38,
+    "modified_z_score": -0.951
+  },
+  {
+    "component_uuid": "6f242718-a529-5f05-a0a8-e8c054e246ff",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=738.3mm vs 'straight_bar' median=197.4mm, modified z-score=3.54 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=738.3mm is 374.1% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 738.29,
+    "median_for_label": 197.38,
+    "modified_z_score": 3.543
+  },
+  {
+    "component_uuid": "6f8a7522-7a53-520e-b76d-ca06327fc869",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=113.9mm vs 'straight_bar' median=197.4mm, modified z-score=-0.55 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=113.9mm is 57.7% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 113.88,
+    "median_for_label": 197.38,
+    "modified_z_score": -0.547
+  },
+  {
+    "component_uuid": "7006efb9-2e5d-5e4e-a372-0d814f4510ad",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=194.9mm vs 'straight_bar' median=197.4mm, modified z-score=-0.02 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=194.9mm is 98.8% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 194.93,
+    "median_for_label": 197.38,
+    "modified_z_score": -0.016
+  },
+  {
+    "component_uuid": "7045ffb0-c8f7-55b0-9463-1f3115dbd0e3",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=117.3mm vs 'straight_bar' median=197.4mm, modified z-score=-0.52 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=117.3mm is 59.4% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 117.31,
+    "median_for_label": 197.38,
+    "modified_z_score": -0.524
+  },
+  {
+    "component_uuid": "70df7379-152e-52f4-a209-bc255edbd461",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=738.3mm vs 'straight_bar' median=197.4mm, modified z-score=3.54 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=738.3mm is 374.1% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 738.29,
+    "median_for_label": 197.38,
+    "modified_z_score": 3.543
+  },
+  {
+    "component_uuid": "73404740-20f0-5cac-969b-e07b39e20547",
+    "decision": "review",
+    "evidence": [
+      {
+        "detail": "length=23.8mm vs 'straight_bar' median=197.4mm, modified z-score=-1.14 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=23.8mm is 12.1% of 'straight_bar' median=197.4mm -> review",
+        "passed": false,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 23.83,
+    "median_for_label": 197.38,
+    "modified_z_score": -1.137
+  },
+  {
+    "component_uuid": "7370db8c-1cb4-5c52-baff-70c6595f7013",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=804.6mm vs 'straight_bar' median=197.4mm, modified z-score=3.98 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=804.6mm is 407.6% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 804.6,
+    "median_for_label": 197.38,
+    "modified_z_score": 3.978
+  },
+  {
+    "component_uuid": "738d6758-281a-5110-ba33-46d40e707066",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=861.9mm vs 'straight_bar' median=197.4mm, modified z-score=4.35 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=861.9mm is 436.7% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 861.85,
+    "median_for_label": 197.38,
+    "modified_z_score": 4.353
+  },
+  {
+    "component_uuid": "745472a8-341d-5e44-9aec-31064fddcdcb",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=267.6mm vs 'straight_bar' median=197.4mm, modified z-score=0.46 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=267.6mm is 135.6% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 267.62,
+    "median_for_label": 197.38,
+    "modified_z_score": 0.46
+  },
+  {
+    "component_uuid": "74b6a53f-b9de-5834-bc45-97bd00b362d9",
+    "decision": "reject",
+    "evidence": [
+      {
+        "detail": "length=7.7mm vs 'straight_bar' median=197.4mm, modified z-score=-1.24 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=7.7mm is 3.9% of 'straight_bar' median=197.4mm -> reject",
+        "passed": false,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 7.74,
+    "median_for_label": 197.38,
+    "modified_z_score": -1.242
+  },
+  {
+    "component_uuid": "75e687f2-48f8-5fc8-b5a6-f3d228397558",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=222.4mm vs 'straight_bar' median=197.4mm, modified z-score=0.16 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=222.4mm is 112.7% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 222.35,
+    "median_for_label": 197.38,
+    "modified_z_score": 0.164
+  },
+  {
+    "component_uuid": "76e6a9e5-f494-529c-a963-152a8c2af019",
+    "decision": "review",
+    "evidence": [
+      {
+        "detail": "length=5.3mm vs 'l_bar' median=89.3mm, modified z-score=-0.67 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=5.3mm is 6.0% of 'l_bar' median=89.3mm -> review",
+        "passed": false,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "l_bar",
+    "length": 5.34,
+    "median_for_label": 89.28,
+    "modified_z_score": -0.674
+  },
+  {
+    "component_uuid": "78052e85-d8b3-5f66-b916-1b47ae8691d2",
+    "decision": "reject",
+    "evidence": [
+      {
+        "detail": "length=7.5mm vs 'straight_bar' median=197.4mm, modified z-score=-1.24 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=7.5mm is 3.8% of 'straight_bar' median=197.4mm -> reject",
+        "passed": false,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 7.54,
+    "median_for_label": 197.38,
+    "modified_z_score": -1.244
+  },
+  {
+    "component_uuid": "79c94aa3-01f7-50b5-a08e-f8b641dbf178",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=856.0mm vs 'branch' median=1454.5mm, modified z-score=-0.67 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=856.0mm is 58.8% of 'branch' median=1454.5mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "branch",
+    "length": 856.0,
+    "median_for_label": 1454.55,
+    "modified_z_score": -0.674
+  },
+  {
+    "component_uuid": "7b9c778e-ddfc-560b-bb25-93246e90b184",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=46.7mm vs 'straight_bar' median=197.4mm, modified z-score=-0.99 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=46.7mm is 23.6% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 46.65,
+    "median_for_label": 197.38,
+    "modified_z_score": -0.987
+  },
+  {
+    "component_uuid": "7ca51c74-2d1e-55c1-ba99-1f022efd151c",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=210.7mm vs 'straight_bar' median=197.4mm, modified z-score=0.09 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=210.7mm is 106.8% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 210.74,
+    "median_for_label": 197.38,
+    "modified_z_score": 0.088
+  },
+  {
+    "component_uuid": "7d5cca34-f215-5a5f-9677-cb145e532f22",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=46.7mm vs 'straight_bar' median=197.4mm, modified z-score=-0.99 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=46.7mm is 23.7% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 46.75,
+    "median_for_label": 197.38,
+    "modified_z_score": -0.987
+  },
+  {
+    "component_uuid": "7e48c8e0-53eb-5262-b321-af194461958e",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=333.0mm vs 'straight_bar' median=197.4mm, modified z-score=0.89 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=333.0mm is 168.7% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 333.01,
+    "median_for_label": 197.38,
+    "modified_z_score": 0.888
+  },
+  {
+    "component_uuid": "7eae8fc5-7805-5f08-8626-2b23ea405481",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=267.6mm vs 'straight_bar' median=197.4mm, modified z-score=0.46 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=267.6mm is 135.6% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 267.62,
+    "median_for_label": 197.38,
+    "modified_z_score": 0.46
+  },
+  {
+    "component_uuid": "7f049da2-8a06-50ad-b520-370144e1feb0",
+    "decision": "review",
+    "evidence": [
+      {
+        "detail": "length=5.3mm vs 'l_bar' median=89.3mm, modified z-score=-0.67 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=5.3mm is 6.0% of 'l_bar' median=89.3mm -> review",
+        "passed": false,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "l_bar",
+    "length": 5.34,
+    "median_for_label": 89.28,
+    "modified_z_score": -0.674
+  },
+  {
+    "component_uuid": "7f060762-e3c2-5c6c-99bb-63b3b105b954",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=746.2mm vs 'l_bar' median=89.3mm, modified z-score=5.28 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=746.2mm is 835.8% of 'l_bar' median=89.3mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "l_bar",
+    "length": 746.24,
+    "median_for_label": 89.28,
+    "modified_z_score": 5.279
+  },
+  {
+    "component_uuid": "7fd69983-5f14-567c-98c0-3b99bc025920",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=49.2mm vs 'straight_bar' median=197.4mm, modified z-score=-0.97 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=49.2mm is 24.9% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 49.22,
+    "median_for_label": 197.38,
+    "modified_z_score": -0.97
+  },
+  {
+    "component_uuid": "804f350f-5340-5853-a261-a1fed841510e",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=856.0mm vs 'branch' median=1454.5mm, modified z-score=-0.67 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=856.0mm is 58.8% of 'branch' median=1454.5mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "branch",
+    "length": 856.0,
+    "median_for_label": 1454.55,
+    "modified_z_score": -0.674
+  },
+  {
+    "component_uuid": "8086dc8b-ba19-5e78-b59e-72ad3bf691c2",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=121.0mm vs 'straight_bar' median=197.4mm, modified z-score=-0.50 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=121.0mm is 61.3% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 121.01,
+    "median_for_label": 197.38,
+    "modified_z_score": -0.5
+  },
+  {
+    "component_uuid": "810f185a-19cc-54d3-be02-217b64223a85",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=119.7mm vs 'straight_bar' median=197.4mm, modified z-score=-0.51 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=119.7mm is 60.6% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 119.65,
+    "median_for_label": 197.38,
+    "modified_z_score": -0.509
+  },
+  {
+    "component_uuid": "812584f1-0dc7-5a2f-82f8-4d2550ba4d72",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=205.3mm vs 'straight_bar' median=197.4mm, modified z-score=0.05 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=205.3mm is 104.0% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 205.34,
+    "median_for_label": 197.38,
+    "modified_z_score": 0.052
+  },
+  {
+    "component_uuid": "81f89f12-9ef1-5010-b20a-22b98c33f58d",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=134.2mm vs 'straight_bar' median=197.4mm, modified z-score=-0.41 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=134.2mm is 68.0% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 134.24,
+    "median_for_label": 197.38,
+    "modified_z_score": -0.414
+  },
+  {
+    "component_uuid": "835d9813-a1c9-5c09-91b3-173184b35421",
+    "decision": "review",
+    "evidence": [
+      {
+        "detail": "length=24.3mm vs 'straight_bar' median=197.4mm, modified z-score=-1.13 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=24.3mm is 12.3% of 'straight_bar' median=197.4mm -> review",
+        "passed": false,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 24.31,
+    "median_for_label": 197.38,
+    "modified_z_score": -1.134
+  },
+  {
+    "component_uuid": "835dceac-3aeb-5dc6-9161-f60788e0054d",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=56.2mm vs 'straight_bar' median=197.4mm, modified z-score=-0.92 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=56.2mm is 28.5% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 56.19,
+    "median_for_label": 197.38,
+    "modified_z_score": -0.925
+  },
+  {
+    "component_uuid": "8434c1bc-1ab4-58b6-9c3d-dba6c8f69a0a",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=106.2mm vs 'u_bar' median=94.9mm, modified z-score=0.10 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=106.2mm is 111.9% of 'u_bar' median=94.9mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "u_bar",
+    "length": 106.23,
+    "median_for_label": 94.94,
+    "modified_z_score": 0.102
+  },
+  {
+    "component_uuid": "8578bb7f-5d80-593a-a6a5-f4c967a53aeb",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=185.6mm vs 'straight_bar' median=197.4mm, modified z-score=-0.08 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=185.6mm is 94.0% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 185.56,
+    "median_for_label": 197.38,
+    "modified_z_score": -0.077
+  },
+  {
+    "component_uuid": "85cdac40-6eae-5397-97a4-65a02e7b1b09",
+    "decision": "reject",
+    "evidence": [
+      {
+        "detail": "length=0.5mm vs 'straight_bar' median=197.4mm, modified z-score=-1.29 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=0.5mm is 0.2% of 'straight_bar' median=197.4mm -> reject",
+        "passed": false,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 0.47,
+    "median_for_label": 197.38,
+    "modified_z_score": -1.29
+  },
+  {
+    "component_uuid": "85dd88aa-4bdb-5952-a7e3-1b0039cb2dfa",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=285.1mm vs 'l_bar' median=89.3mm, modified z-score=1.57 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=285.1mm is 319.3% of 'l_bar' median=89.3mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "l_bar",
+    "length": 285.05,
+    "median_for_label": 89.28,
+    "modified_z_score": 1.573
+  },
+  {
+    "component_uuid": "8724cba6-2d7d-5903-8e24-dbc6af4c3b7f",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=267.6mm vs 'straight_bar' median=197.4mm, modified z-score=0.46 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=267.6mm is 135.6% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 267.62,
+    "median_for_label": 197.38,
+    "modified_z_score": 0.46
+  },
+  {
+    "component_uuid": "882cefe2-64c8-57a8-a752-85f97ccf283e",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=229.3mm vs 'straight_bar' median=197.4mm, modified z-score=0.21 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=229.3mm is 116.2% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 229.3,
+    "median_for_label": 197.38,
+    "modified_z_score": 0.209
+  },
+  {
+    "component_uuid": "8886ef03-169c-5f4b-8fcb-4d36dc5c4ffe",
+    "decision": "review",
+    "evidence": [
+      {
+        "detail": "length=5.3mm vs 'l_bar' median=89.3mm, modified z-score=-0.67 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=5.3mm is 6.0% of 'l_bar' median=89.3mm -> review",
+        "passed": false,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "l_bar",
+    "length": 5.34,
+    "median_for_label": 89.28,
+    "modified_z_score": -0.674
+  },
+  {
+    "component_uuid": "890dc6f6-012e-5b67-b537-eb6064372026",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=54.5mm vs 'straight_bar' median=197.4mm, modified z-score=-0.94 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=54.5mm is 27.6% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 54.47,
+    "median_for_label": 197.38,
+    "modified_z_score": -0.936
+  },
+  {
+    "component_uuid": "8ac5b9c3-3523-5887-b617-e91f9c389143",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=303.5mm vs 'straight_bar' median=197.4mm, modified z-score=0.70 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=303.5mm is 153.8% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 303.54,
+    "median_for_label": 197.38,
+    "modified_z_score": 0.695
+  },
+  {
+    "component_uuid": "8adaf301-3988-58bc-a7ba-47ff7efcf90c",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=138.9mm vs 'straight_bar' median=197.4mm, modified z-score=-0.38 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=138.9mm is 70.4% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 138.87,
+    "median_for_label": 197.38,
+    "modified_z_score": -0.383
+  },
+  {
+    "component_uuid": "8b179117-12c5-5a0e-8ccf-e80e9a92bd76",
+    "decision": "reject",
+    "evidence": [
+      {
+        "detail": "length=7.9mm vs 'straight_bar' median=197.4mm, modified z-score=-1.24 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=7.9mm is 4.0% of 'straight_bar' median=197.4mm -> reject",
+        "passed": false,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 7.95,
+    "median_for_label": 197.38,
+    "modified_z_score": -1.241
+  },
+  {
+    "component_uuid": "8b4fa6b0-9871-5e2e-9f0a-2d5ad2600fa2",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=51.9mm vs 'straight_bar' median=197.4mm, modified z-score=-0.95 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=51.9mm is 26.3% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 51.85,
+    "median_for_label": 197.38,
+    "modified_z_score": -0.953
+  },
+  {
+    "component_uuid": "8bde8779-69b8-554e-8f73-906493bae4b5",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=267.6mm vs 'straight_bar' median=197.4mm, modified z-score=0.46 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=267.6mm is 135.6% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 267.62,
+    "median_for_label": 197.38,
+    "modified_z_score": 0.46
+  },
+  {
+    "component_uuid": "8da061d4-c4ea-5168-9063-b7675e4dbf58",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=267.6mm vs 'straight_bar' median=197.4mm, modified z-score=0.46 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=267.6mm is 135.6% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 267.62,
+    "median_for_label": 197.38,
+    "modified_z_score": 0.46
+  },
+  {
+    "component_uuid": "8ecd60aa-02b3-5c0b-8001-e9ee481e4652",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=1672.0mm vs 'branch' median=1454.5mm, modified z-score=0.25 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=1672.0mm is 114.9% of 'branch' median=1454.5mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "branch",
+    "length": 1672.0,
+    "median_for_label": 1454.55,
+    "modified_z_score": 0.245
+  },
+  {
+    "component_uuid": "8f5704c9-efc3-51d4-a577-e8452a5f4234",
+    "decision": "reject",
+    "evidence": [
+      {
+        "detail": "length=1.6mm vs 'straight_bar' median=197.4mm, modified z-score=-1.28 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=1.6mm is 0.8% of 'straight_bar' median=197.4mm -> reject",
+        "passed": false,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 1.65,
+    "median_for_label": 197.38,
+    "modified_z_score": -1.282
+  },
+  {
+    "component_uuid": "9049d772-4e88-5d22-bdf8-24c575743803",
+    "decision": "reject",
+    "evidence": [
+      {
+        "detail": "length=0.5mm vs 'straight_bar' median=197.4mm, modified z-score=-1.29 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=0.5mm is 0.2% of 'straight_bar' median=197.4mm -> reject",
+        "passed": false,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 0.47,
+    "median_for_label": 197.38,
+    "modified_z_score": -1.29
+  },
+  {
+    "component_uuid": "9134e0f2-243a-5600-86af-b9f9e73067a0",
+    "decision": "reject",
+    "evidence": [
+      {
+        "detail": "length=2.2mm vs 'straight_bar' median=197.4mm, modified z-score=-1.28 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=2.2mm is 1.1% of 'straight_bar' median=197.4mm -> reject",
+        "passed": false,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 2.2,
+    "median_for_label": 197.38,
+    "modified_z_score": -1.279
+  },
+  {
+    "component_uuid": "916aa38b-ff5f-5163-b185-75a71e2c1f00",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=267.6mm vs 'straight_bar' median=197.4mm, modified z-score=0.46 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=267.6mm is 135.6% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 267.62,
+    "median_for_label": 197.38,
+    "modified_z_score": 0.46
+  },
+  {
+    "component_uuid": "9177f5ff-46b7-5661-8c95-42b205e0c27b",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=222.4mm vs 'straight_bar' median=197.4mm, modified z-score=0.16 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=222.4mm is 112.7% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 222.35,
+    "median_for_label": 197.38,
+    "modified_z_score": 0.164
+  },
+  {
+    "component_uuid": "917d5c3c-f9aa-56c4-afda-40f6e84b7f78",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=171.8mm vs 'straight_bar' median=197.4mm, modified z-score=-0.17 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=171.8mm is 87.1% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 171.82,
+    "median_for_label": 197.38,
+    "modified_z_score": -0.167
+  },
+  {
+    "component_uuid": "91eb57a2-dcd2-59b3-ba60-a68c6590e4f1",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=131.6mm vs 'straight_bar' median=197.4mm, modified z-score=-0.43 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=131.6mm is 66.7% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 131.63,
+    "median_for_label": 197.38,
+    "modified_z_score": -0.431
+  },
+  {
+    "component_uuid": "933eaf4c-a67c-550e-9479-53406e108a69",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=738.3mm vs 'straight_bar' median=197.4mm, modified z-score=3.54 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=738.3mm is 374.1% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 738.29,
+    "median_for_label": 197.38,
+    "modified_z_score": 3.543
+  },
+  {
+    "component_uuid": "949353ea-e53b-54fd-8286-f2ea3806a67e",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=190.1mm vs 'straight_bar' median=197.4mm, modified z-score=-0.05 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=190.1mm is 96.3% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 190.13,
+    "median_for_label": 197.38,
+    "modified_z_score": -0.047
+  },
+  {
+    "component_uuid": "94d4d57e-d7e9-551f-888a-601c9250b3fa",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=267.6mm vs 'straight_bar' median=197.4mm, modified z-score=0.46 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=267.6mm is 135.6% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 267.62,
+    "median_for_label": 197.38,
+    "modified_z_score": 0.46
+  },
+  {
+    "component_uuid": "95104dbd-656d-5aae-8905-3be6fcb3c0ad",
+    "decision": "reject",
+    "evidence": [
+      {
+        "detail": "length=0.5mm vs 'straight_bar' median=197.4mm, modified z-score=-1.29 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=0.5mm is 0.2% of 'straight_bar' median=197.4mm -> reject",
+        "passed": false,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 0.47,
+    "median_for_label": 197.38,
+    "modified_z_score": -1.29
+  },
+  {
+    "component_uuid": "954d7a15-a01a-553a-b805-f2d126c155e3",
+    "decision": "review",
+    "evidence": [
+      {
+        "detail": "length=5.3mm vs 'l_bar' median=89.3mm, modified z-score=-0.67 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=5.3mm is 6.0% of 'l_bar' median=89.3mm -> review",
+        "passed": false,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "l_bar",
+    "length": 5.34,
+    "median_for_label": 89.28,
+    "modified_z_score": -0.674
+  },
+  {
+    "component_uuid": "954f0759-94b1-5706-8ec3-2c6ad86a45de",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "Only 4 'stirrup' component(s) in this drawing \u2014 too few to judge a distribution, accepted by default",
+        "passed": true,
+        "rule": "sample_size"
+      }
+    ],
+    "label": "stirrup",
+    "length": 209.13,
+    "median_for_label": 128.08,
+    "modified_z_score": 0.0
+  },
+  {
+    "component_uuid": "9782532e-1587-53b5-bbbd-7dbb17ba644e",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=50.3mm vs 'straight_bar' median=197.4mm, modified z-score=-0.96 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=50.3mm is 25.5% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 50.25,
+    "median_for_label": 197.38,
+    "modified_z_score": -0.964
+  },
+  {
+    "component_uuid": "97848e0d-a517-52ea-a9a0-abe5765fc187",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=126.3mm vs 'straight_bar' median=197.4mm, modified z-score=-0.47 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=126.3mm is 64.0% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 126.3,
+    "median_for_label": 197.38,
+    "modified_z_score": -0.466
+  },
+  {
+    "component_uuid": "97cdc339-28f8-5cc5-bfe4-911036e41dc4",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=184.6mm vs 'straight_bar' median=197.4mm, modified z-score=-0.08 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=184.6mm is 93.5% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 184.6,
+    "median_for_label": 197.38,
+    "modified_z_score": -0.084
+  },
+  {
+    "component_uuid": "98e62353-b947-5d1b-a39b-62a354c01300",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=184.3mm vs 'straight_bar' median=197.4mm, modified z-score=-0.09 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=184.3mm is 93.4% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 184.3,
+    "median_for_label": 197.38,
+    "modified_z_score": -0.086
+  },
+  {
+    "component_uuid": "9aad8570-dd4b-5b5d-8a22-df497cbe6979",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=267.6mm vs 'straight_bar' median=197.4mm, modified z-score=0.46 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=267.6mm is 135.6% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 267.62,
+    "median_for_label": 197.38,
+    "modified_z_score": 0.46
+  },
+  {
+    "component_uuid": "9ad92866-0233-5712-90f3-50d710aff41d",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=195.2mm vs 'straight_bar' median=197.4mm, modified z-score=-0.01 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=195.2mm is 98.9% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 195.23,
+    "median_for_label": 197.38,
+    "modified_z_score": -0.014
+  },
+  {
+    "component_uuid": "9ae155ec-e194-5303-b555-3b6a8996d2f5",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=91.7mm vs 'straight_bar' median=197.4mm, modified z-score=-0.69 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=91.7mm is 46.5% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 91.72,
+    "median_for_label": 197.38,
+    "modified_z_score": -0.692
+  },
+  {
+    "component_uuid": "9b39681b-bd07-5196-9ae8-ae26198af13a",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=49.2mm vs 'straight_bar' median=197.4mm, modified z-score=-0.97 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=49.2mm is 24.9% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 49.22,
+    "median_for_label": 197.38,
+    "modified_z_score": -0.97
+  },
+  {
+    "component_uuid": "9b58b19c-fabb-5bf3-b361-55dcd66de7e0",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=225.0mm vs 'straight_bar' median=197.4mm, modified z-score=0.18 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=225.0mm is 114.0% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 225.02,
+    "median_for_label": 197.38,
+    "modified_z_score": 0.181
+  },
+  {
+    "component_uuid": "9b87b61c-f5e9-5eed-90e5-85facf721389",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=267.6mm vs 'straight_bar' median=197.4mm, modified z-score=0.46 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=267.6mm is 135.6% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 267.62,
+    "median_for_label": 197.38,
+    "modified_z_score": 0.46
+  },
+  {
+    "component_uuid": "9c26f827-d225-59b7-bcdf-472765e91da1",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=738.3mm vs 'straight_bar' median=197.4mm, modified z-score=3.54 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=738.3mm is 374.1% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 738.29,
+    "median_for_label": 197.38,
+    "modified_z_score": 3.543
+  },
+  {
+    "component_uuid": "9d163d00-5b95-524f-875c-2dca3e7f163e",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=37.8mm vs 'straight_bar' median=197.4mm, modified z-score=-1.05 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=37.8mm is 19.1% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 37.77,
+    "median_for_label": 197.38,
+    "modified_z_score": -1.046
+  },
+  {
+    "component_uuid": "9d4976d9-b698-5f41-a2f5-931c26d8478c",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=267.6mm vs 'straight_bar' median=197.4mm, modified z-score=0.46 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=267.6mm is 135.6% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 267.62,
+    "median_for_label": 197.38,
+    "modified_z_score": 0.46
+  },
+  {
+    "component_uuid": "9fc10f31-7e6d-51d6-bb9d-8e3c8c2ac92d",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=119.6mm vs 'straight_bar' median=197.4mm, modified z-score=-0.51 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=119.6mm is 60.6% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 119.55,
+    "median_for_label": 197.38,
+    "modified_z_score": -0.51
+  },
+  {
+    "component_uuid": "a14ebd03-1674-5390-a413-a59e22090865",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=203.9mm vs 'straight_bar' median=197.4mm, modified z-score=0.04 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=203.9mm is 103.3% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 203.92,
+    "median_for_label": 197.38,
+    "modified_z_score": 0.043
+  },
+  {
+    "component_uuid": "a2814ab1-8fcb-576e-a973-b4b72abd46cd",
+    "decision": "review",
+    "evidence": [
+      {
+        "detail": "length=28.9mm vs 'straight_bar' median=197.4mm, modified z-score=-1.10 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=28.9mm is 14.6% of 'straight_bar' median=197.4mm -> review",
+        "passed": false,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 28.9,
+    "median_for_label": 197.38,
+    "modified_z_score": -1.104
+  },
+  {
+    "component_uuid": "a3020bc5-7afb-5fbf-8a49-9aa6102fd58d",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=746.4mm vs 'l_bar' median=89.3mm, modified z-score=5.28 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=746.4mm is 836.0% of 'l_bar' median=89.3mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "l_bar",
+    "length": 746.39,
+    "median_for_label": 89.28,
+    "modified_z_score": 5.28
+  },
+  {
+    "component_uuid": "a5c33bca-a1ea-5792-b2f6-36e0bb87b09c",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=267.6mm vs 'straight_bar' median=197.4mm, modified z-score=0.46 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=267.6mm is 135.6% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 267.62,
+    "median_for_label": 197.38,
+    "modified_z_score": 0.46
+  },
+  {
+    "component_uuid": "a6af65de-4fec-57c4-bde7-264299052b07",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=738.3mm vs 'straight_bar' median=197.4mm, modified z-score=3.54 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=738.3mm is 374.1% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 738.29,
+    "median_for_label": 197.38,
+    "modified_z_score": 3.543
+  },
+  {
+    "component_uuid": "a6d7ccea-242d-5ede-a68a-34148496fa52",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=20.2mm vs 'u_bar' median=94.9mm, modified z-score=-0.67 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=20.2mm is 21.3% of 'u_bar' median=94.9mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "u_bar",
+    "length": 20.22,
+    "median_for_label": 94.94,
+    "modified_z_score": -0.674
+  },
+  {
+    "component_uuid": "a822a0cc-9f2d-5818-bfa9-ef80c78de342",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=229.3mm vs 'straight_bar' median=197.4mm, modified z-score=0.21 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=229.3mm is 116.2% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 229.3,
+    "median_for_label": 197.38,
+    "modified_z_score": 0.209
+  },
+  {
+    "component_uuid": "a979d99c-aa21-5709-ad06-3f55e3730480",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=738.3mm vs 'straight_bar' median=197.4mm, modified z-score=3.54 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=738.3mm is 374.1% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 738.29,
+    "median_for_label": 197.38,
+    "modified_z_score": 3.543
+  },
+  {
+    "component_uuid": "a9a01094-5ac3-5e00-b787-e718a163dfbc",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=323.2mm vs 'straight_bar' median=197.4mm, modified z-score=0.82 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=323.2mm is 163.7% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 323.15,
+    "median_for_label": 197.38,
+    "modified_z_score": 0.824
+  },
+  {
+    "component_uuid": "aa6f8606-5572-5906-87e8-c416782f6d74",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=267.6mm vs 'straight_bar' median=197.4mm, modified z-score=0.46 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=267.6mm is 135.6% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 267.62,
+    "median_for_label": 197.38,
+    "modified_z_score": 0.46
+  },
+  {
+    "component_uuid": "aa97628d-9337-504e-96d1-43fb1a5ea59d",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=76.6mm vs 'straight_bar' median=197.4mm, modified z-score=-0.79 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=76.6mm is 38.8% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 76.57,
+    "median_for_label": 197.38,
+    "modified_z_score": -0.791
+  },
+  {
+    "component_uuid": "ab71ef5b-cc2f-5c89-8c92-acbc79fa6814",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "Only 4 'stirrup' component(s) in this drawing \u2014 too few to judge a distribution, accepted by default",
+        "passed": true,
+        "rule": "sample_size"
+      }
+    ],
+    "label": "stirrup",
+    "length": 209.13,
+    "median_for_label": 128.08,
+    "modified_z_score": 0.0
+  },
+  {
+    "component_uuid": "ab7a9111-b4af-5700-ab47-fb7beba3421d",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=222.4mm vs 'straight_bar' median=197.4mm, modified z-score=0.16 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=222.4mm is 112.7% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 222.35,
+    "median_for_label": 197.38,
+    "modified_z_score": 0.164
+  },
+  {
+    "component_uuid": "ac4a9da6-bebd-508d-8ba0-da4e68d61d71",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=267.6mm vs 'straight_bar' median=197.4mm, modified z-score=0.46 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=267.6mm is 135.6% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 267.62,
+    "median_for_label": 197.38,
+    "modified_z_score": 0.46
+  },
+  {
+    "component_uuid": "ad37a01b-7661-5317-9f10-ea5b9871645e",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=71.0mm vs 'straight_bar' median=197.4mm, modified z-score=-0.83 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=71.0mm is 36.0% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 71.0,
+    "median_for_label": 197.38,
+    "modified_z_score": -0.828
+  },
+  {
+    "component_uuid": "ad45a0e6-151c-56be-86db-e478b9f8764f",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=340.0mm vs 'straight_bar' median=197.4mm, modified z-score=0.93 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=340.0mm is 172.2% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 339.95,
+    "median_for_label": 197.38,
+    "modified_z_score": 0.934
+  },
+  {
+    "component_uuid": "ade130d0-7920-53d1-a7af-34fea349b37b",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=738.3mm vs 'straight_bar' median=197.4mm, modified z-score=3.54 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=738.3mm is 374.1% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 738.29,
+    "median_for_label": 197.38,
+    "modified_z_score": 3.543
+  },
+  {
+    "component_uuid": "ae96d40a-6c6e-529d-a53a-3afb4b051604",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=738.3mm vs 'straight_bar' median=197.4mm, modified z-score=3.54 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=738.3mm is 374.1% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 738.29,
+    "median_for_label": 197.38,
+    "modified_z_score": 3.543
+  },
+  {
+    "component_uuid": "aeafd5e6-b25c-5b33-8e6f-55c23042393c",
+    "decision": "review",
+    "evidence": [
+      {
+        "detail": "length=27.2mm vs 'straight_bar' median=197.4mm, modified z-score=-1.12 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=27.2mm is 13.8% of 'straight_bar' median=197.4mm -> review",
+        "passed": false,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 27.15,
+    "median_for_label": 197.38,
+    "modified_z_score": -1.115
+  },
+  {
+    "component_uuid": "b0492b1c-d683-5b9f-8e49-5659a7663e37",
+    "decision": "reject",
+    "evidence": [
+      {
+        "detail": "length=0.5mm vs 'straight_bar' median=197.4mm, modified z-score=-1.29 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=0.5mm is 0.2% of 'straight_bar' median=197.4mm -> reject",
+        "passed": false,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 0.47,
+    "median_for_label": 197.38,
+    "modified_z_score": -1.29
+  },
+  {
+    "component_uuid": "b0e7f751-1ae1-5509-a641-87b0b87a1d94",
+    "decision": "review",
+    "evidence": [
+      {
+        "detail": "length=29.2mm vs 'straight_bar' median=197.4mm, modified z-score=-1.10 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=29.2mm is 14.8% of 'straight_bar' median=197.4mm -> review",
+        "passed": false,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 29.19,
+    "median_for_label": 197.38,
+    "modified_z_score": -1.102
+  },
+  {
+    "component_uuid": "b27eac26-5585-5935-bbbb-669353154aef",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=196.9mm vs 'straight_bar' median=197.4mm, modified z-score=-0.00 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=196.9mm is 99.8% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 196.91,
+    "median_for_label": 197.38,
+    "modified_z_score": -0.003
+  },
+  {
+    "component_uuid": "b2ee8cb4-9ea2-5122-9351-f062e0cbfcb5",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=229.3mm vs 'straight_bar' median=197.4mm, modified z-score=0.21 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=229.3mm is 116.2% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 229.3,
+    "median_for_label": 197.38,
+    "modified_z_score": 0.209
+  },
+  {
+    "component_uuid": "b3373ff1-8db5-572c-9dad-5bee97b2d6b1",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=267.6mm vs 'straight_bar' median=197.4mm, modified z-score=0.46 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=267.6mm is 135.6% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 267.62,
+    "median_for_label": 197.38,
+    "modified_z_score": 0.46
+  },
+  {
+    "component_uuid": "b4980a02-bb03-5020-951c-93c8d0c8de83",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=121.1mm vs 'l_bar' median=89.3mm, modified z-score=0.26 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=121.1mm is 135.7% of 'l_bar' median=89.3mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "l_bar",
+    "length": 121.13,
+    "median_for_label": 89.28,
+    "modified_z_score": 0.256
+  },
+  {
+    "component_uuid": "b50359d5-6bf1-56d3-b32f-ba3f95714b1a",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=164.4mm vs 'straight_bar' median=197.4mm, modified z-score=-0.22 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=164.4mm is 83.3% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 164.38,
+    "median_for_label": 197.38,
+    "modified_z_score": -0.216
+  },
+  {
+    "component_uuid": "b56a9f72-3138-5c6f-ae5d-150c87482a3f",
+    "decision": "reject",
+    "evidence": [
+      {
+        "detail": "length=0.5mm vs 'straight_bar' median=197.4mm, modified z-score=-1.29 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=0.5mm is 0.2% of 'straight_bar' median=197.4mm -> reject",
+        "passed": false,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 0.47,
+    "median_for_label": 197.38,
+    "modified_z_score": -1.29
+  },
+  {
+    "component_uuid": "b6118bc8-90ea-5169-a1a3-3475683db84b",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=745.6mm vs 'straight_bar' median=197.4mm, modified z-score=3.59 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=745.6mm is 377.7% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 745.55,
+    "median_for_label": 197.38,
+    "modified_z_score": 3.591
+  },
+  {
+    "component_uuid": "b614f67b-6410-5bd9-9aa0-6f9f914c0a54",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=267.6mm vs 'straight_bar' median=197.4mm, modified z-score=0.46 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=267.6mm is 135.6% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 267.62,
+    "median_for_label": 197.38,
+    "modified_z_score": 0.46
+  },
+  {
+    "component_uuid": "b67c28d7-0221-5bbf-a1e7-1d00e6a92388",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=746.1mm vs 'l_bar' median=89.3mm, modified z-score=5.28 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=746.1mm is 835.6% of 'l_bar' median=89.3mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "l_bar",
+    "length": 746.07,
+    "median_for_label": 89.28,
+    "modified_z_score": 5.277
+  },
+  {
+    "component_uuid": "b6976873-e911-53b0-96c7-6b9d5055bd3a",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=36.7mm vs 'straight_bar' median=197.4mm, modified z-score=-1.05 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=36.7mm is 18.6% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 36.66,
+    "median_for_label": 197.38,
+    "modified_z_score": -1.053
+  },
+  {
+    "component_uuid": "b729e2a7-b713-5cb7-8e69-f36fe9112ffa",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=45.9mm vs 'straight_bar' median=197.4mm, modified z-score=-0.99 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=45.9mm is 23.2% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 45.86,
+    "median_for_label": 197.38,
+    "modified_z_score": -0.993
+  },
+  {
+    "component_uuid": "b8327ed6-89ab-5836-949a-e3dcc940fdb1",
+    "decision": "review",
+    "evidence": [
+      {
+        "detail": "length=21.9mm vs 'straight_bar' median=197.4mm, modified z-score=-1.15 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=21.9mm is 11.1% of 'straight_bar' median=197.4mm -> review",
+        "passed": false,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 21.89,
+    "median_for_label": 197.38,
+    "modified_z_score": -1.15
+  },
+  {
+    "component_uuid": "b8a4475c-a137-56ca-b7ba-37b3cecd0826",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=63.5mm vs 'u_bar' median=94.9mm, modified z-score=-0.28 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=63.5mm is 66.9% of 'u_bar' median=94.9mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "u_bar",
+    "length": 63.47,
+    "median_for_label": 94.94,
+    "modified_z_score": -0.284
+  },
+  {
+    "component_uuid": "b8b0395e-3ea6-5ae7-821d-509de0cc8853",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=160.7mm vs 'straight_bar' median=197.4mm, modified z-score=-0.24 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=160.7mm is 81.4% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 160.72,
+    "median_for_label": 197.38,
+    "modified_z_score": -0.24
+  },
+  {
+    "component_uuid": "b8d041ab-dc5d-5e8c-a5f9-14e54b285e9b",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=229.3mm vs 'straight_bar' median=197.4mm, modified z-score=0.21 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=229.3mm is 116.2% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 229.3,
+    "median_for_label": 197.38,
+    "modified_z_score": 0.209
+  },
+  {
+    "component_uuid": "ba711fed-a1d4-51a7-bbbf-cfb04b70ad21",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=185.6mm vs 'straight_bar' median=197.4mm, modified z-score=-0.08 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=185.6mm is 94.0% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 185.56,
+    "median_for_label": 197.38,
+    "modified_z_score": -0.077
+  },
+  {
+    "component_uuid": "badd3ef2-946f-59f6-8390-9aad41e259a3",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=195.4mm vs 'straight_bar' median=197.4mm, modified z-score=-0.01 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=195.4mm is 99.0% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 195.37,
+    "median_for_label": 197.38,
+    "modified_z_score": -0.013
+  },
+  {
+    "component_uuid": "bb1475f4-0414-5540-9c16-393c659c1048",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=123.9mm vs 'straight_bar' median=197.4mm, modified z-score=-0.48 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=123.9mm is 62.7% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 123.85,
+    "median_for_label": 197.38,
+    "modified_z_score": -0.482
+  },
+  {
+    "component_uuid": "bb32eb45-5ad3-5a66-9090-f9e51b9e34f9",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=267.6mm vs 'straight_bar' median=197.4mm, modified z-score=0.46 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=267.6mm is 135.6% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 267.62,
+    "median_for_label": 197.38,
+    "modified_z_score": 0.46
+  },
+  {
+    "component_uuid": "bc4802a5-3ad2-588a-b19a-086cf885ed5a",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=746.2mm vs 'l_bar' median=89.3mm, modified z-score=5.28 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=746.2mm is 835.8% of 'l_bar' median=89.3mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "l_bar",
+    "length": 746.24,
+    "median_for_label": 89.28,
+    "modified_z_score": 5.279
+  },
+  {
+    "component_uuid": "bcacee99-345b-597b-9dcf-ce7d316a70c8",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=745.6mm vs 'straight_bar' median=197.4mm, modified z-score=3.59 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=745.6mm is 377.7% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 745.55,
+    "median_for_label": 197.38,
+    "modified_z_score": 3.591
+  },
+  {
+    "component_uuid": "bcb96b3c-a03a-5992-8154-19c835bca18e",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=223.2mm vs 'straight_bar' median=197.4mm, modified z-score=0.17 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=223.2mm is 113.1% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 223.22,
+    "median_for_label": 197.38,
+    "modified_z_score": 0.169
+  },
+  {
+    "component_uuid": "bcce4099-371b-5b37-9f62-2867a69025a9",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=855.2mm vs 'branch' median=1454.5mm, modified z-score=-0.68 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=855.2mm is 58.8% of 'branch' median=1454.5mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "branch",
+    "length": 855.19,
+    "median_for_label": 1454.55,
+    "modified_z_score": -0.675
+  },
+  {
+    "component_uuid": "bd6272b1-37ef-5668-b9d3-7beac5aa75cd",
+    "decision": "reject",
+    "evidence": [
+      {
+        "detail": "length=0.5mm vs 'straight_bar' median=197.4mm, modified z-score=-1.29 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=0.5mm is 0.2% of 'straight_bar' median=197.4mm -> reject",
+        "passed": false,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 0.47,
+    "median_for_label": 197.38,
+    "modified_z_score": -1.29
+  },
+  {
+    "component_uuid": "bdb057a0-ffb6-5022-8982-a02ec4b7ee4b",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=267.6mm vs 'straight_bar' median=197.4mm, modified z-score=0.46 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=267.6mm is 135.6% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 267.62,
+    "median_for_label": 197.38,
+    "modified_z_score": 0.46
+  },
+  {
+    "component_uuid": "be345b6a-f854-520b-9db9-b462672070c3",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=738.3mm vs 'straight_bar' median=197.4mm, modified z-score=3.54 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=738.3mm is 374.1% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 738.29,
+    "median_for_label": 197.38,
+    "modified_z_score": 3.543
+  },
+  {
+    "component_uuid": "bf004d8a-ae09-549d-b99e-173de7aa7e56",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=333.0mm vs 'straight_bar' median=197.4mm, modified z-score=0.89 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=333.0mm is 168.7% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 333.01,
+    "median_for_label": 197.38,
+    "modified_z_score": 0.888
+  },
+  {
+    "component_uuid": "c10655b5-ec12-5d03-bf12-7b9808186655",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=99.7mm vs 'straight_bar' median=197.4mm, modified z-score=-0.64 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=99.7mm is 50.5% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 99.67,
+    "median_for_label": 197.38,
+    "modified_z_score": -0.64
+  },
+  {
+    "component_uuid": "c200c5d0-0d67-543f-9d17-2747b3549317",
+    "decision": "review",
+    "evidence": [
+      {
+        "detail": "length=5.3mm vs 'l_bar' median=89.3mm, modified z-score=-0.67 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=5.3mm is 6.0% of 'l_bar' median=89.3mm -> review",
+        "passed": false,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "l_bar",
+    "length": 5.34,
+    "median_for_label": 89.28,
+    "modified_z_score": -0.674
+  },
+  {
+    "component_uuid": "c323d028-6907-5519-abc3-2330820e69c4",
+    "decision": "reject",
+    "evidence": [
+      {
+        "detail": "length=0.5mm vs 'straight_bar' median=197.4mm, modified z-score=-1.29 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=0.5mm is 0.2% of 'straight_bar' median=197.4mm -> reject",
+        "passed": false,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 0.47,
+    "median_for_label": 197.38,
+    "modified_z_score": -1.29
+  },
+  {
+    "component_uuid": "c5282ce8-d441-55b8-9d8d-f684db52ba1a",
+    "decision": "reject",
+    "evidence": [
+      {
+        "detail": "length=0.5mm vs 'straight_bar' median=197.4mm, modified z-score=-1.29 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=0.5mm is 0.2% of 'straight_bar' median=197.4mm -> reject",
+        "passed": false,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 0.47,
+    "median_for_label": 197.38,
+    "modified_z_score": -1.29
+  },
+  {
+    "component_uuid": "c52af4a9-4723-5456-a063-0966ad08b77e",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=267.6mm vs 'straight_bar' median=197.4mm, modified z-score=0.46 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=267.6mm is 135.6% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 267.62,
+    "median_for_label": 197.38,
+    "modified_z_score": 0.46
+  },
+  {
+    "component_uuid": "c57f5e4e-88b3-51ba-986c-bfca1a04d33f",
+    "decision": "review",
+    "evidence": [
+      {
+        "detail": "length=5.3mm vs 'l_bar' median=89.3mm, modified z-score=-0.67 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=5.3mm is 6.0% of 'l_bar' median=89.3mm -> review",
+        "passed": false,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "l_bar",
+    "length": 5.34,
+    "median_for_label": 89.28,
+    "modified_z_score": -0.674
+  },
+  {
+    "component_uuid": "c58d90b5-4191-57af-82ad-91017246ba45",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=270.5mm vs 'u_bar' median=94.9mm, modified z-score=1.58 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=270.5mm is 284.9% of 'u_bar' median=94.9mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "u_bar",
+    "length": 270.46,
+    "median_for_label": 94.94,
+    "modified_z_score": 1.584
+  },
+  {
+    "component_uuid": "c59bb528-03e8-5188-ac6b-b1af1cde3941",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=340.0mm vs 'straight_bar' median=197.4mm, modified z-score=0.93 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=340.0mm is 172.2% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 339.95,
+    "median_for_label": 197.38,
+    "modified_z_score": 0.934
+  },
+  {
+    "component_uuid": "c7a4409a-9721-5edf-bc5a-6447ed855a60",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=164.2mm vs 'straight_bar' median=197.4mm, modified z-score=-0.22 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=164.2mm is 83.2% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 164.17,
+    "median_for_label": 197.38,
+    "modified_z_score": -0.218
+  },
+  {
+    "component_uuid": "c7e7c6ac-4102-56e9-9eb4-df8235628f78",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=267.6mm vs 'straight_bar' median=197.4mm, modified z-score=0.46 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=267.6mm is 135.6% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 267.62,
+    "median_for_label": 197.38,
+    "modified_z_score": 0.46
+  },
+  {
+    "component_uuid": "c894a8e5-ab37-57b5-901c-70d5201d5b85",
+    "decision": "reject",
+    "evidence": [
+      {
+        "detail": "length=0.5mm vs 'straight_bar' median=197.4mm, modified z-score=-1.29 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=0.5mm is 0.2% of 'straight_bar' median=197.4mm -> reject",
+        "passed": false,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 0.47,
+    "median_for_label": 197.38,
+    "modified_z_score": -1.29
+  },
+  {
+    "component_uuid": "c9485398-4e52-57fb-b141-7cbfae25fcd8",
+    "decision": "reject",
+    "evidence": [
+      {
+        "detail": "length=0.5mm vs 'straight_bar' median=197.4mm, modified z-score=-1.29 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=0.5mm is 0.2% of 'straight_bar' median=197.4mm -> reject",
+        "passed": false,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 0.47,
+    "median_for_label": 197.38,
+    "modified_z_score": -1.29
+  },
+  {
+    "component_uuid": "ca7fad88-c330-5a35-84da-f25a99fc6043",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=225.9mm vs 'straight_bar' median=197.4mm, modified z-score=0.19 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=225.9mm is 114.4% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 225.88,
+    "median_for_label": 197.38,
+    "modified_z_score": 0.187
+  },
+  {
+    "component_uuid": "cbda573a-5878-5171-9682-ff14aece7a9e",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=49.2mm vs 'straight_bar' median=197.4mm, modified z-score=-0.97 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=49.2mm is 24.9% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 49.22,
+    "median_for_label": 197.38,
+    "modified_z_score": -0.97
+  },
+  {
+    "component_uuid": "cbff62ec-d148-5a46-bdc7-4911449bf2c2",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=320.4mm vs 'l_bar' median=89.3mm, modified z-score=1.86 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=320.4mm is 358.8% of 'l_bar' median=89.3mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "l_bar",
+    "length": 320.38,
+    "median_for_label": 89.28,
+    "modified_z_score": 1.857
+  },
+  {
+    "component_uuid": "cd384126-5744-5ca1-b2ca-feb0cda4d817",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=77.1mm vs 'straight_bar' median=197.4mm, modified z-score=-0.79 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=77.1mm is 39.1% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 77.14,
+    "median_for_label": 197.38,
+    "modified_z_score": -0.788
+  },
+  {
+    "component_uuid": "ce57b8f6-b4a6-5753-bf55-cb6f8297b346",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=221.7mm vs 'straight_bar' median=197.4mm, modified z-score=0.16 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=221.7mm is 112.3% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 221.69,
+    "median_for_label": 197.38,
+    "modified_z_score": 0.159
+  },
+  {
+    "component_uuid": "cf3c8ac6-08c2-5201-a67e-1f4d0360d205",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=285.1mm vs 'l_bar' median=89.3mm, modified z-score=1.57 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=285.1mm is 319.3% of 'l_bar' median=89.3mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "l_bar",
+    "length": 285.05,
+    "median_for_label": 89.28,
+    "modified_z_score": 1.573
+  },
+  {
+    "component_uuid": "cfa65002-1cbe-5650-a783-493576a5c87f",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=189.8mm vs 'straight_bar' median=197.4mm, modified z-score=-0.05 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=189.8mm is 96.2% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 189.83,
+    "median_for_label": 197.38,
+    "modified_z_score": -0.049
+  },
+  {
+    "component_uuid": "cfe05320-50bf-5715-aaa9-dd6d02167347",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=229.3mm vs 'straight_bar' median=197.4mm, modified z-score=0.21 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=229.3mm is 116.2% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 229.3,
+    "median_for_label": 197.38,
+    "modified_z_score": 0.209
+  },
+  {
+    "component_uuid": "d3a29a0d-043d-593d-b0bb-ef17a05e15ef",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=49.1mm vs 'straight_bar' median=197.4mm, modified z-score=-0.97 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=49.1mm is 24.9% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 49.14,
+    "median_for_label": 197.38,
+    "modified_z_score": -0.971
+  },
+  {
+    "component_uuid": "d3c695fa-d15c-5d35-a19c-f7071655c277",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=203.3mm vs 'l_bar' median=89.3mm, modified z-score=0.92 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=203.3mm is 227.7% of 'l_bar' median=89.3mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "l_bar",
+    "length": 203.3,
+    "median_for_label": 89.28,
+    "modified_z_score": 0.916
+  },
+  {
+    "component_uuid": "d3ee9785-47ad-5093-be6f-af45ab96a51d",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=746.4mm vs 'l_bar' median=89.3mm, modified z-score=5.28 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=746.4mm is 836.0% of 'l_bar' median=89.3mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "l_bar",
+    "length": 746.39,
+    "median_for_label": 89.28,
+    "modified_z_score": 5.28
+  },
+  {
+    "component_uuid": "d40a111d-ad3d-5f3c-b430-c78bfc254958",
+    "decision": "review",
+    "evidence": [
+      {
+        "detail": "length=5.3mm vs 'l_bar' median=89.3mm, modified z-score=-0.67 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=5.3mm is 6.0% of 'l_bar' median=89.3mm -> review",
+        "passed": false,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "l_bar",
+    "length": 5.34,
+    "median_for_label": 89.28,
+    "modified_z_score": -0.674
+  },
+  {
+    "component_uuid": "d4378a7a-1a40-5157-bb64-6c6347a808be",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=745.6mm vs 'straight_bar' median=197.4mm, modified z-score=3.59 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=745.6mm is 377.7% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 745.55,
+    "median_for_label": 197.38,
+    "modified_z_score": 3.591
+  },
+  {
+    "component_uuid": "d76ad987-376a-5c22-8e8a-0abd5f7d4e2f",
+    "decision": "review",
+    "evidence": [
+      {
+        "detail": "length=12.3mm vs 'straight_bar' median=197.4mm, modified z-score=-1.21 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=12.3mm is 6.2% of 'straight_bar' median=197.4mm -> review",
+        "passed": false,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 12.32,
+    "median_for_label": 197.38,
+    "modified_z_score": -1.212
+  },
+  {
+    "component_uuid": "d771afdb-e778-5a3f-8d33-470891b623ae",
+    "decision": "reject",
+    "evidence": [
+      {
+        "detail": "length=0.5mm vs 'straight_bar' median=197.4mm, modified z-score=-1.29 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=0.5mm is 0.2% of 'straight_bar' median=197.4mm -> reject",
+        "passed": false,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 0.47,
+    "median_for_label": 197.38,
+    "modified_z_score": -1.29
+  },
+  {
+    "component_uuid": "d785bd1f-bc2e-5fe0-94ce-6a0a9de7c554",
+    "decision": "review",
+    "evidence": [
+      {
+        "detail": "length=23.1mm vs 'straight_bar' median=197.4mm, modified z-score=-1.14 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=23.1mm is 11.7% of 'straight_bar' median=197.4mm -> review",
+        "passed": false,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 23.08,
+    "median_for_label": 197.38,
+    "modified_z_score": -1.142
+  },
+  {
+    "component_uuid": "d79b658d-a0f5-5e89-9fc6-d130e5e95a5c",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=229.3mm vs 'straight_bar' median=197.4mm, modified z-score=0.21 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=229.3mm is 116.2% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 229.3,
+    "median_for_label": 197.38,
+    "modified_z_score": 0.209
+  },
+  {
+    "component_uuid": "d8a1dcf5-b2c7-5641-ac75-87b384fd5885",
+    "decision": "reject",
+    "evidence": [
+      {
+        "detail": "length=4.5mm vs 'straight_bar' median=197.4mm, modified z-score=-1.26 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=4.5mm is 2.3% of 'straight_bar' median=197.4mm -> reject",
+        "passed": false,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 4.51,
+    "median_for_label": 197.38,
+    "modified_z_score": -1.263
+  },
+  {
+    "component_uuid": "d8e4964b-ce65-5388-a91a-492a90324324",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=230.6mm vs 'straight_bar' median=197.4mm, modified z-score=0.22 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=230.6mm is 116.8% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 230.59,
+    "median_for_label": 197.38,
+    "modified_z_score": 0.218
+  },
+  {
+    "component_uuid": "d973ccb8-300f-5f3e-b5a0-c1858dcfef7f",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=267.6mm vs 'straight_bar' median=197.4mm, modified z-score=0.46 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=267.6mm is 135.6% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 267.62,
+    "median_for_label": 197.38,
+    "modified_z_score": 0.46
+  },
+  {
+    "component_uuid": "d9a0cb5b-6f68-54a7-bb8e-8c0a74b08612",
+    "decision": "review",
+    "evidence": [
+      {
+        "detail": "length=5.3mm vs 'l_bar' median=89.3mm, modified z-score=-0.67 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=5.3mm is 6.0% of 'l_bar' median=89.3mm -> review",
+        "passed": false,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "l_bar",
+    "length": 5.34,
+    "median_for_label": 89.28,
+    "modified_z_score": -0.674
+  },
+  {
+    "component_uuid": "dc3d566c-ddfc-5823-ba57-a4f02fb98fbd",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=267.6mm vs 'straight_bar' median=197.4mm, modified z-score=0.46 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=267.6mm is 135.6% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 267.62,
+    "median_for_label": 197.38,
+    "modified_z_score": 0.46
+  },
+  {
+    "component_uuid": "de4ae34e-6670-57d0-97d7-20441e9d96c6",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=738.3mm vs 'straight_bar' median=197.4mm, modified z-score=3.54 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=738.3mm is 374.1% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 738.29,
+    "median_for_label": 197.38,
+    "modified_z_score": 3.543
+  },
+  {
+    "component_uuid": "dea60877-4dea-581d-826d-0b04e593f5b7",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=340.0mm vs 'straight_bar' median=197.4mm, modified z-score=0.93 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=340.0mm is 172.2% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 339.95,
+    "median_for_label": 197.38,
+    "modified_z_score": 0.934
+  },
+  {
+    "component_uuid": "e1aeb482-8112-5e27-a653-ae2df232aa26",
+    "decision": "reject",
+    "evidence": [
+      {
+        "detail": "length=0.5mm vs 'straight_bar' median=197.4mm, modified z-score=-1.29 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=0.5mm is 0.2% of 'straight_bar' median=197.4mm -> reject",
+        "passed": false,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 0.47,
+    "median_for_label": 197.38,
+    "modified_z_score": -1.29
+  },
+  {
+    "component_uuid": "e3662c75-d825-5e08-aa12-a53987ff06fd",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=222.4mm vs 'straight_bar' median=197.4mm, modified z-score=0.16 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=222.4mm is 112.7% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 222.35,
+    "median_for_label": 197.38,
+    "modified_z_score": 0.164
+  },
+  {
+    "component_uuid": "e3bd8518-bf29-5885-9f74-cd4ed145479d",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=267.6mm vs 'straight_bar' median=197.4mm, modified z-score=0.46 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=267.6mm is 135.6% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 267.62,
+    "median_for_label": 197.38,
+    "modified_z_score": 0.46
+  },
+  {
+    "component_uuid": "e4afab37-42cb-514a-946d-cca2115ad53e",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=267.6mm vs 'straight_bar' median=197.4mm, modified z-score=0.46 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=267.6mm is 135.6% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 267.62,
+    "median_for_label": 197.38,
+    "modified_z_score": 0.46
+  },
+  {
+    "component_uuid": "e564c9b9-76ad-5740-9514-a594ce7276e7",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=228.7mm vs 'straight_bar' median=197.4mm, modified z-score=0.21 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=228.7mm is 115.9% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 228.74,
+    "median_for_label": 197.38,
+    "modified_z_score": 0.205
+  },
+  {
+    "component_uuid": "e6634bbb-bfac-58ce-89d7-18d72e68a4a3",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=221.6mm vs 'straight_bar' median=197.4mm, modified z-score=0.16 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=221.6mm is 112.3% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 221.59,
+    "median_for_label": 197.38,
+    "modified_z_score": 0.159
+  },
+  {
+    "component_uuid": "e6ca2481-a734-5964-9bb1-1cbd8aef4f64",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=267.6mm vs 'straight_bar' median=197.4mm, modified z-score=0.46 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=267.6mm is 135.6% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 267.62,
+    "median_for_label": 197.38,
+    "modified_z_score": 0.46
+  },
+  {
+    "component_uuid": "e72e40df-c11a-5845-8a47-d1cac1c2ff16",
+    "decision": "review",
+    "evidence": [
+      {
+        "detail": "length=12.8mm vs 'straight_bar' median=197.4mm, modified z-score=-1.21 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=12.8mm is 6.5% of 'straight_bar' median=197.4mm -> review",
+        "passed": false,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 12.78,
+    "median_for_label": 197.38,
+    "modified_z_score": -1.209
+  },
+  {
+    "component_uuid": "ea87a4bd-61db-5aa2-816e-735765917cb9",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=133.3mm vs 'straight_bar' median=197.4mm, modified z-score=-0.42 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=133.3mm is 67.5% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 133.32,
+    "median_for_label": 197.38,
+    "modified_z_score": -0.42
+  },
+  {
+    "component_uuid": "eaba0e7b-4a58-544c-8773-185ad581ef82",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=20.2mm vs 'u_bar' median=94.9mm, modified z-score=-0.67 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=20.2mm is 21.3% of 'u_bar' median=94.9mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "u_bar",
+    "length": 20.22,
+    "median_for_label": 94.94,
+    "modified_z_score": -0.674
+  },
+  {
+    "component_uuid": "ebfc6ea8-4cd1-5834-b666-dd89aae1d24e",
+    "decision": "review",
+    "evidence": [
+      {
+        "detail": "length=27.5mm vs 'straight_bar' median=197.4mm, modified z-score=-1.11 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=27.5mm is 13.9% of 'straight_bar' median=197.4mm -> review",
+        "passed": false,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 27.5,
+    "median_for_label": 197.38,
+    "modified_z_score": -1.113
+  },
+  {
+    "component_uuid": "eeec0925-3af3-5aa3-9e48-7dd282ac469d",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=46.7mm vs 'straight_bar' median=197.4mm, modified z-score=-0.99 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=46.7mm is 23.7% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 46.75,
+    "median_for_label": 197.38,
+    "modified_z_score": -0.987
+  },
+  {
+    "component_uuid": "efdcd99c-f5b7-5b56-9395-efea6f3ab11e",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=267.6mm vs 'straight_bar' median=197.4mm, modified z-score=0.46 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=267.6mm is 135.6% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 267.62,
+    "median_for_label": 197.38,
+    "modified_z_score": 0.46
+  },
+  {
+    "component_uuid": "f066c176-74ad-5eb7-b326-215ce2f26919",
+    "decision": "review",
+    "evidence": [
+      {
+        "detail": "length=5.3mm vs 'l_bar' median=89.3mm, modified z-score=-0.67 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=5.3mm is 6.0% of 'l_bar' median=89.3mm -> review",
+        "passed": false,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "l_bar",
+    "length": 5.34,
+    "median_for_label": 89.28,
+    "modified_z_score": -0.674
+  },
+  {
+    "component_uuid": "f0cd37bf-3df5-5f74-a928-241bf5379386",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=94.9mm vs 'u_bar' median=94.9mm, modified z-score=0.00 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=94.9mm is 100.0% of 'u_bar' median=94.9mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "u_bar",
+    "length": 94.94,
+    "median_for_label": 94.94,
+    "modified_z_score": 0.0
+  },
+  {
+    "component_uuid": "f0cecc4d-af5d-566c-b15d-f8a762741c5a",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=745.6mm vs 'straight_bar' median=197.4mm, modified z-score=3.59 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=745.6mm is 377.7% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 745.55,
+    "median_for_label": 197.38,
+    "modified_z_score": 3.591
+  },
+  {
+    "component_uuid": "f1285ff0-83b1-5533-8852-0ece229289be",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=93.1mm vs 'straight_bar' median=197.4mm, modified z-score=-0.68 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=93.1mm is 47.2% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 93.09,
+    "median_for_label": 197.38,
+    "modified_z_score": -0.683
+  },
+  {
+    "component_uuid": "f1336028-c897-5662-9266-f3a1ad6dd755",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=114.9mm vs 'straight_bar' median=197.4mm, modified z-score=-0.54 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=114.9mm is 58.2% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 114.89,
+    "median_for_label": 197.38,
+    "modified_z_score": -0.54
+  },
+  {
+    "component_uuid": "f3e639ef-cd45-5464-87f1-dc6302d18162",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=1964.8mm vs 'branch' median=1454.5mm, modified z-score=0.58 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=1964.8mm is 135.1% of 'branch' median=1454.5mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "branch",
+    "length": 1964.84,
+    "median_for_label": 1454.55,
+    "modified_z_score": 0.575
+  },
+  {
+    "component_uuid": "f4b9c3cf-c02f-5e5b-be99-ca942621aa54",
+    "decision": "reject",
+    "evidence": [
+      {
+        "detail": "length=0.5mm vs 'straight_bar' median=197.4mm, modified z-score=-1.29 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=0.5mm is 0.2% of 'straight_bar' median=197.4mm -> reject",
+        "passed": false,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 0.47,
+    "median_for_label": 197.38,
+    "modified_z_score": -1.29
+  },
+  {
+    "component_uuid": "f5e6588d-5b4c-5846-af82-c7cfd0174ed7",
+    "decision": "review",
+    "evidence": [
+      {
+        "detail": "length=20.0mm vs 'straight_bar' median=197.4mm, modified z-score=-1.16 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=20.0mm is 10.1% of 'straight_bar' median=197.4mm -> review",
+        "passed": false,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 20.02,
+    "median_for_label": 197.38,
+    "modified_z_score": -1.162
+  },
+  {
+    "component_uuid": "f60fac28-1200-5272-8557-dd266151c541",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=746.2mm vs 'l_bar' median=89.3mm, modified z-score=5.28 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=746.2mm is 835.8% of 'l_bar' median=89.3mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "l_bar",
+    "length": 746.24,
+    "median_for_label": 89.28,
+    "modified_z_score": 5.279
+  },
+  {
+    "component_uuid": "f67ffcb3-8eee-5400-8d62-2e570462f062",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=65.5mm vs 'straight_bar' median=197.4mm, modified z-score=-0.86 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=65.5mm is 33.2% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 65.49,
+    "median_for_label": 197.38,
+    "modified_z_score": -0.864
+  },
+  {
+    "component_uuid": "f7317d91-d5d6-5247-96cb-f29a701b3555",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=58.5mm vs 'straight_bar' median=197.4mm, modified z-score=-0.91 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=58.5mm is 29.6% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 58.52,
+    "median_for_label": 197.38,
+    "modified_z_score": -0.91
+  },
+  {
+    "component_uuid": "f73dfa40-d183-55b6-977e-6cc4e3a01ac4",
+    "decision": "review",
+    "evidence": [
+      {
+        "detail": "length=5.3mm vs 'l_bar' median=89.3mm, modified z-score=-0.67 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=5.3mm is 6.0% of 'l_bar' median=89.3mm -> review",
+        "passed": false,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "l_bar",
+    "length": 5.34,
+    "median_for_label": 89.28,
+    "modified_z_score": -0.674
+  },
+  {
+    "component_uuid": "f7d87dac-3947-5d9c-80d9-a77b36c14b2c",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=267.6mm vs 'straight_bar' median=197.4mm, modified z-score=0.46 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=267.6mm is 135.6% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 267.62,
+    "median_for_label": 197.38,
+    "modified_z_score": 0.46
+  },
+  {
+    "component_uuid": "f8aa8513-b657-5514-81f0-8165fe0c4ea0",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=290.0mm vs 'u_bar' median=94.9mm, modified z-score=1.76 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=290.0mm is 305.4% of 'u_bar' median=94.9mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "u_bar",
+    "length": 289.98,
+    "median_for_label": 94.94,
+    "modified_z_score": 1.761
+  },
+  {
+    "component_uuid": "f968d5ab-ee37-5025-b36b-17d438706235",
+    "decision": "review",
+    "evidence": [
+      {
+        "detail": "length=5.3mm vs 'l_bar' median=89.3mm, modified z-score=-0.67 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=5.3mm is 6.0% of 'l_bar' median=89.3mm -> review",
+        "passed": false,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "l_bar",
+    "length": 5.34,
+    "median_for_label": 89.28,
+    "modified_z_score": -0.674
+  },
+  {
+    "component_uuid": "fa269ff1-5f49-5aad-b441-7f929a714f14",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=738.3mm vs 'straight_bar' median=197.4mm, modified z-score=3.54 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=738.3mm is 374.1% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 738.29,
+    "median_for_label": 197.38,
+    "modified_z_score": 3.543
+  },
+  {
+    "component_uuid": "fa828be6-add6-57d3-ace9-2d1fec21828d",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=49.2mm vs 'straight_bar' median=197.4mm, modified z-score=-0.97 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=49.2mm is 24.9% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 49.22,
+    "median_for_label": 197.38,
+    "modified_z_score": -0.97
+  },
+  {
+    "component_uuid": "fa9fcfec-508a-5e91-9163-a564b29b60fa",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=135.8mm vs 'straight_bar' median=197.4mm, modified z-score=-0.40 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=135.8mm is 68.8% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 135.78,
+    "median_for_label": 197.38,
+    "modified_z_score": -0.403
+  },
+  {
+    "component_uuid": "fac7ba59-ee67-5064-8585-bffa4e961518",
+    "decision": "reject",
+    "evidence": [
+      {
+        "detail": "length=0.5mm vs 'straight_bar' median=197.4mm, modified z-score=-1.29 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=0.5mm is 0.2% of 'straight_bar' median=197.4mm -> reject",
+        "passed": false,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 0.47,
+    "median_for_label": 197.38,
+    "modified_z_score": -1.29
+  },
+  {
+    "component_uuid": "fbbb6fed-1bbe-575b-a21a-cbab55c7f5db",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=121.6mm vs 'straight_bar' median=197.4mm, modified z-score=-0.50 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=121.6mm is 61.6% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 121.6,
+    "median_for_label": 197.38,
+    "modified_z_score": -0.496
+  },
+  {
+    "component_uuid": "fbf3df44-91e9-569a-be9b-b527ae7c2b3f",
+    "decision": "accept",
+    "evidence": [
+      {
+        "detail": "length=738.3mm vs 'straight_bar' median=197.4mm, modified z-score=3.54 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=738.3mm is 374.1% of 'straight_bar' median=197.4mm -> accept",
+        "passed": true,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 738.29,
+    "median_for_label": 197.38,
+    "modified_z_score": 3.543
+  },
+  {
+    "component_uuid": "fe5a7b78-5407-502c-8ae8-8464c6aacafc",
+    "decision": "review",
+    "evidence": [
+      {
+        "detail": "length=24.3mm vs 'straight_bar' median=197.4mm, modified z-score=-1.13 -> accept",
+        "passed": true,
+        "rule": "length_outlier"
+      },
+      {
+        "detail": "length=24.3mm is 12.3% of 'straight_bar' median=197.4mm -> review",
+        "passed": false,
+        "rule": "relative_scale"
+      }
+    ],
+    "label": "straight_bar",
+    "length": 24.31,
+    "median_for_label": 197.38,
+    "modified_z_score": -1.134
+  }
+]

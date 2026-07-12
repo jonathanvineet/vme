@@ -52,6 +52,26 @@ class BarPath:
     bends: List[BarBend] = field(default_factory=list)
     hooks: List[BarHook] = field(default_factory=list)
     closed: bool = False
+    # Phase 10B geometry recovery provenance (see core/reconstruction/geometry_recovery.py):
+    # recovery_method records how this path was derived ('simple_path',
+    # 'closed_loop', 'longest_path_in_branch', or 'fallback_straight'), and
+    # truncated_branch/excluded_edge_count are set honestly when the source
+    # component was a branch/junction shape with no single unambiguous bar
+    # path -- the longest leaf-to-leaf path is kept, the rest is not
+    # silently discarded without a record of it.
+    recovery_method: str = "unknown"
+    truncated_branch: bool = False
+    excluded_edge_count: int = 0
+    # recovery_confidence is deliberately independent of engineering
+    # confidence (EngineeringFamily.confidence / PhysicalBar.confidence,
+    # which reflect annotation/association/spacing trust). This answers a
+    # different question: how faithfully was the GEOMETRY recovered from
+    # the component, regardless of whether the engineering data attached to
+    # it is trustworthy. 1.0 for simple_path/closed_loop (nothing
+    # excluded), proportional to edges_used/total_edges for a truncated
+    # branch, 0.5 for the straight-line fallback (no real recovery at all).
+    recovery_confidence: float = 1.0
+    recovery_notes: List[str] = field(default_factory=list)
 
 
 @dataclass
@@ -78,6 +98,15 @@ class PhysicalBar:
     layer_uuid: Optional[UUID]
     adjustment_notes: List[str]
     confidence: float
+    # Never fabricate engineering data silently (see
+    # docs/audits/phase10/10.0_reconstruction_audit.md, 10F finding):
+    # diameter_source is 'annotation' when `diameter` came from real Phase 8
+    # association data, or 'missing_visual_fallback' when no diameter data
+    # existed and `diameter` is only a nominal value for mesh visualization.
+    # diameter_confidence is 1.0 for a real annotation-backed value, 0.0 for
+    # the fallback -- a viewer/consumer should never treat these the same.
+    diameter_source: str = "annotation"
+    diameter_confidence: float = 1.0
 
 
 @dataclass

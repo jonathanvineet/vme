@@ -1,9 +1,15 @@
 {
-  "Annotations Parsed": "100.0%",
-  "Average Candidates": 1.2,
-  "Average Confidence": 0.71,
-  "Components Associated": "2.0%",
-  "Engineering Objects": 13,
-  "QA Warnings": 35,
-  "Unresolved Tokens": 0
+  "Annotations Parsed": "98.1%",
+  "Average Candidates": 2.4,
+  "Average Confidence": 0.48,
+  "Components Associated": "6.1%",
+  "Engineering Objects": 40,
+  "Plausibility Rejected (excluded from candidacy)": 31,
+  "Plausibility Review (kept, flagged)": 39,
+  "QA Warnings": 6,
+  "Shared Marks (info, Phase 9 groups these)": {
+    "N4": 1,
+    "N6": 1
+  },
+  "Unresolved Tokens": 3
 }

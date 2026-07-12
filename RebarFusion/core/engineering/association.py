@@ -6,8 +6,9 @@ from core.topology.graph import ConnectivityGraph, ConnectedComponent
 from core.recognition.registry import RecognitionCache
 from core.spatial.engine import SpatialQueryEngine
 from core.recognition.annotations import Annotation, AnnotationToken
+from core.recognition.leaders import Leader
 from core.engineering.models import (
-    AssociationCandidate, Evidence, EngineeringConstraint, 
+    AssociationCandidate, Evidence, EngineeringConstraint,
     DiameterConstraint, SpacingConstraint, MarkConstraint, LengthConstraint, CountConstraint
 )
 
@@ -20,51 +21,55 @@ class AnnotationGroup:
         self.leader_endpoint = leader_endpoint
 
 class EngineeringAssociationEngine:
-    def __init__(self, graph: ConnectivityGraph, comp_repo, spatial_engine: SpatialQueryEngine, cache: RecognitionCache):
+    def __init__(self, graph: ConnectivityGraph, comp_repo, spatial_engine: SpatialQueryEngine, cache: RecognitionCache,
+                 plausibility: Optional[Dict[UUID, object]] = None):
         self.graph = graph
         self.comp_repo = comp_repo
         self.spatial = spatial_engine
         self.cache = cache
+        # Phase 7.6 plausibility results (component_uuid -> PlausibilityResult),
+        # optional for backward compatibility. Components with decision
+        # 'reject' are excluded from candidacy below — see
+        # core/recognition/plausibility.py for why this is a separate
+        # evidence layer rather than a change to the recognizers themselves.
+        self.plausibility = plausibility or {}
 
-    def cluster_annotations(self, annotations: List[Annotation], parser, leaders: List[Tuple[Tuple[float, float, float], Tuple[float, float, float]]]) -> List[AnnotationGroup]:
+    def cluster_annotations(self, annotations: List[Annotation], parser, leaders: List[Leader]) -> List[AnnotationGroup]:
         """
         Group annotations based on spatial proximity (within 300mm) and leader association.
         """
         groups: List[AnnotationGroup] = []
         visited = set()
 
-        # Build groups based on leader attachment first
+        # Build groups based on leader attachment first. Leaders are already
+        # reconstructed (see core/recognition/leaders.py) with a known tail
+        # (near the text) and tip (pointing at the target) — no need to
+        # re-derive which end is which from raw endpoints here.
         for leader in leaders:
-            p1, p2 = leader
+            tail = leader.tail
             attached_anns = []
-            
-            # Check proximity of either endpoint to determine if it is near the annotation
+
+            # Check proximity of the text-side end to determine if it is near the annotation
             for ann in annotations:
                 if ann.uuid in visited:
                     continue
-                d1 = ((ann.insertion[0] - p1[0])**2 + (ann.insertion[1] - p1[1])**2)**0.5
-                d2 = ((ann.insertion[0] - p2[0])**2 + (ann.insertion[1] - p2[1])**2)**0.5
-                if min(d1, d2) < 800.0:  # Allow 800mm tolerance for leader landing near text
+                d = ((ann.insertion[0] - tail[0])**2 + (ann.insertion[1] - tail[1])**2)**0.5
+                if d < 800.0:  # Allow 800mm tolerance for leader landing near text
                     attached_anns.append(ann)
-            
+
             if attached_anns:
                 # Mark as visited
                 for ann in attached_anns:
                     visited.add(ann.uuid)
-                    
+
                 tokens = []
                 for a in attached_anns:
                     tokens.extend(parser.parse(a))
                 xs = [a.insertion[0] for a in attached_anns]
                 ys = [a.insertion[1] for a in attached_anns]
                 centroid = (sum(xs)/len(xs), sum(ys)/len(ys), 0.0)
-                
-                # Determine which leader point is further from text centroid (the rebar pointer end)
-                dc1 = ((centroid[0] - p1[0])**2 + (centroid[1] - p1[1])**2)**0.5
-                dc2 = ((centroid[0] - p2[0])**2 + (centroid[1] - p2[1])**2)**0.5
-                pointer_end = p2 if dc1 < dc2 else p1
-                
-                groups.append(AnnotationGroup(attached_anns, tokens, centroid, pointer_end))
+
+                groups.append(AnnotationGroup(attached_anns, tokens, centroid, leader.tip))
 
         # Cluster remaining unassociated annotations by proximity
         for i, ann in enumerate(annotations):
@@ -98,10 +103,15 @@ class EngineeringAssociationEngine:
         Finds the top-K component candidates for an annotation group.
         Uses leader tip if available, falling back to KDTree centroid query.
         """
-        # If leader tip is present, search directly from the pointer end
+        # If leader tip is present, search directly from the pointer end.
+        # Radius set from measured tip->nearest-rebar distances after fixing
+        # leader reconstruction (audit_phase08_engineering_association.md):
+        # median ~1470mm, max ~3470mm on the audited drawing — the leader
+        # shafts in this convention often don't reach all the way to the bar.
+        # 1200mm (the old value) missed the majority of genuine leaders.
         if group.leader_endpoint:
             x, y, _ = group.leader_endpoint
-            radius = 1200.0  # Wider to catch close rebar; leader is still precise
+            radius = 3600.0
         else:
             x, y, _ = group.centroid
             radius = 6000.0  # Wide radius: annotations may be in legend/table away from bars
@@ -113,7 +123,16 @@ class EngineeringAssociationEngine:
 
         for comp in self.comp_repo.components.values():
             recog_result = self.cache.get(comp.id)
-            if not recog_result or recog_result.label in ['unknown', 'dimension', 'structural_outline']:
+            # 'symbol' = confirmed non-rebar CAD marker (see Phase 7.5 audit);
+            # 'leader'/'dimension' are annotation geometry, not bars.
+            if not recog_result or recog_result.label in ['unknown', 'dimension', 'structural_outline', 'symbol', 'leader']:
+                continue
+            # Phase 7.6: exclude components whose length is implausible for
+            # their recognized shape (see core/recognition/plausibility.py).
+            # 'review'-decision components are NOT excluded here — only
+            # 'reject' is confident enough to remove from candidacy.
+            plaus = self.plausibility.get(comp.id)
+            if plaus is not None and getattr(plaus, "decision", None) == "reject":
                 continue
             # Only associate with rebar-layer components
             if comp.edge_ids:
@@ -191,9 +210,32 @@ class EngineeringAssociationEngine:
         sorted_cands = sorted(candidates_map.values(), key=lambda c: c.score, reverse=True)
         return sorted_cands[:k]
 
+    # A mark is an identity, not a shared property: one annotation must
+    # identify at most the single bar it actually labels, not fan out to
+    # every nearby candidate the way a diameter or spacing legitimately can
+    # (see audit_phase09_1_mark_provenance.md — this was traced to a concrete
+    # bug where one "N6" annotation produced a MarkConstraint on 3 unrelated
+    # components: two different lengths of `branch` plus an unrelated
+    # `straight_bar`). Property tokens keep the existing fan-out behavior.
+    IDENTITY_TOKEN_TYPES = {'TOKEN_MARK'}
+
     def build_constraints(self, candidates: List[AssociationCandidate]) -> List[EngineeringConstraint]:
         constraints = []
+
+        # Identity tokens: keep only the single best-scoring candidate per
+        # (token_type, value) pair, so one mark annotation assigns to exactly
+        # one component instead of every candidate that clears the threshold.
+        best_identity: Dict[Tuple[str, object], AssociationCandidate] = {}
+        property_candidates: List[AssociationCandidate] = []
         for cand in candidates:
+            if cand.token.token_type in self.IDENTITY_TOKEN_TYPES:
+                key = (cand.token.token_type, cand.token.value)
+                if key not in best_identity or cand.score > best_identity[key].score:
+                    best_identity[key] = cand
+            else:
+                property_candidates.append(cand)
+
+        for cand in list(best_identity.values()) + property_candidates:
             if cand.score >= 0.5:
                 ttype = cand.token.token_type
                 if ttype == 'TOKEN_DIAMETER':

@@ -1,6 +1,6 @@
 {
   "critical_errors": [],
-  "warnings": [
+  "errors": [
     "Duplicate topological edge between nodes (UUID('3cd6ffff-009b-51e2-ada4-eb22f394758e'), UUID('bac23673-70f5-5309-aa2d-3aa3393d0956'))",
     "Duplicate topological edge between nodes (UUID('41340249-9c39-56e0-a2c7-c136bb2959c2'), UUID('f3395feb-b569-5fb3-a829-e5e3bc39967b'))",
     "Duplicate topological edge between nodes (UUID('2c6dd472-8cc5-53a6-b8a2-aeb1b76780da'), UUID('97b9113c-3225-598d-8e25-04d28787ed84'))",
@@ -19,7 +19,10 @@
     "Duplicate topological edge between nodes (UUID('5931b42e-1a18-546c-96cb-e9c251b06cf5'), UUID('c1cf62b2-700d-5f63-ad6c-4ebc4ee372ab'))",
     "Duplicate topological edge between nodes (UUID('70cdc5b2-b671-5cf0-99d7-e1088244de5a'), UUID('ea394f0f-c8ad-5cc6-8cdf-49097079f49c'))",
     "Duplicate topological edge between nodes (UUID('abbb3a18-8ef6-5f92-891f-ab19c02cb4ba'), UUID('d209cc5c-7183-5c04-817e-bfb94b2ae949'))",
-    "Duplicate topological edge between nodes (UUID('9edbe752-8199-5a62-ac90-b5493c735f28'), UUID('d444fd83-31d7-5f04-978c-4fd928a0b1eb'))",
-    "87 orphan nodes (degree 0) in graph"
+    "Duplicate topological edge between nodes (UUID('9edbe752-8199-5a62-ac90-b5493c735f28'), UUID('d444fd83-31d7-5f04-978c-4fd928a0b1eb'))"
+  ],
+  "warnings": [],
+  "info": [
+    "87 orphan nodes are ARC/CIRCLE center reference points (expected, not a topology defect)"
   ]
 }

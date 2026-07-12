@@ -8,6 +8,8 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING
 
+import numpy as np
+
 if TYPE_CHECKING:
     import pyvista as pv
     from viewer.scene import SceneManager
@@ -78,7 +80,9 @@ class BaseRenderer(ABC):
             self.clear()
 
     def _on_selection_changed(self):
-        self.refresh()
+        # For renderers whose appearance depends on selection, a rebuild is often needed.
+        # Triggering a layer change ensures they are rebuilt if visible.
+        self._on_layer_changed(self.LAYER_NAME)
 
     # ─── Helpers ──────────────────────────────────────────────────────────
 
@@ -86,3 +90,34 @@ class BaseRenderer(ABC):
         if actor is not None:
             self._actors.append(actor)
         return actor
+
+    def _apply_scene_transform(self, points, assembly_uuid=None):
+        transformed = np.array(points, dtype=float)
+        if transformed.size == 0:
+            return transformed
+
+        if transformed.ndim != 2:
+            transformed = np.reshape(transformed, (-1, 3))
+        if transformed.shape[1] < 3:
+            padded = np.zeros((transformed.shape[0], 3), dtype=float)
+            padded[:, :transformed.shape[1]] = transformed
+            transformed = padded
+
+        # Center and scale the model to fit in a unit cube
+        if self.scene._model_bounds:
+            transformed -= self.scene._model_center
+            transformed *= self.scene._model_scale
+
+        # Apply debug Z-scaling
+        z_scale = float(getattr(self.scene, "debug_z_scale", 1.0) or 1.0)
+        if z_scale != 1.0:
+            transformed[:, 2] *= z_scale
+
+        if getattr(self.scene, "debug_exploded_view", False) and assembly_uuid is not None:
+            assembly_index = getattr(self.scene, "get_assembly_index", lambda *_: -1)(assembly_uuid)
+            if assembly_index >= 0:
+                step = float(getattr(self.scene, "debug_explode_step", 250.0) or 250.0)
+                # Scale the explosion step relative to the model size
+                transformed[:, 2] += assembly_index * step * self.scene._model_scale
+
+        return transformed

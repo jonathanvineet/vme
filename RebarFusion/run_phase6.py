@@ -130,16 +130,23 @@ def run_phase6(directory: str, write_golden: bool = False):
         print(f"Largest Component (nodes)  : {metrics['largest_component']}")
         
         crit_errs = len(validation["critical_errors"])
+        errs = len(validation["errors"])
         warns = len(validation["warnings"])
-        
+        infos = len(validation["info"])
+
         print("\nValidation Checks:")
         print(f"  Critical Errors          : {crit_errs}")
+        print(f"  Errors                   : {errs}")
         print(f"  Warnings                 : {warns}")
+        print(f"  Info                     : {infos}")
         if crit_errs > 0:
             for e in validation["critical_errors"][:5]:
                 print(f"    - {e}")
+        if errs > 0:
+            for e in validation["errors"][:5]:
+                print(f"    - {e}")
 
-        ready = crit_errs == 0
+        ready = crit_errs == 0 and errs == 0
         print(f"\nREADY FOR PHASE 7          : {'YES ✅' if ready else 'NO ❌'}")
 
         out_dir = os.path.join("debug", "phase06", filename)

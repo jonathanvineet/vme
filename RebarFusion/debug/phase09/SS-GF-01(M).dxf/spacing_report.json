@@ -1,49 +1,40 @@
 [
   {
-    "Annotated Spacing": 200.0,
-    "Average Error": 4.504,
-    "Confidence": 0.977,
-    "Family UUID": "77ef0d1e-82b1-5625-b34a-49a5cec76a8d",
-    "Inferred Spacing": 195.496,
+    "Annotated Spacing": 0.0,
+    "Average Error": 60.436,
+    "Confidence": 0.796,
+    "Family UUID": "21d96a0e-5d0f-5368-9565-1bf7d00efaba",
+    "Inferred Spacing": 295.818,
     "Mark": "N4",
     "Offsets": [
-      -390.992,
-      -195.496,
       0.0,
-      195.496,
-      390.992,
-      586.488,
-      781.984,
-      977.481,
-      1172.977,
-      1368.473,
-      1563.969,
-      1759.465,
-      1954.961,
-      2150.457,
-      2345.953,
-      2541.449,
-      2736.946,
-      2932.442,
-      3127.938,
-      3323.434,
-      3518.93,
-      3714.426,
-      3909.922,
-      4105.418,
-      4300.914,
-      4496.411
+      295.818,
+      772.944,
+      1068.762
     ],
-    "Selected Spacing": 200.0,
-    "Spacing Source": "annotation"
+    "Selected Spacing": 295.818,
+    "Spacing Source": "inferred"
   },
   {
     "Annotated Spacing": 0.0,
     "Average Error": 0.0,
     "Confidence": 0.0,
-    "Family UUID": "9a6b2122-fcfc-57c6-9b4a-fae9d29b7817",
+    "Family UUID": "837ef1e5-7c9c-5c7f-b45b-a5676aa14ced",
     "Inferred Spacing": 0.0,
     "Mark": "N6",
+    "Offsets": [
+      0.0
+    ],
+    "Selected Spacing": 0.0,
+    "Spacing Source": "inferred"
+  },
+  {
+    "Annotated Spacing": 0.0,
+    "Average Error": 0.0,
+    "Confidence": 0.0,
+    "Family UUID": "153a8c83-e9cc-589a-97d4-144f893a2229",
+    "Inferred Spacing": 0.0,
+    "Mark": "N7",
     "Offsets": [
       0.0
     ],

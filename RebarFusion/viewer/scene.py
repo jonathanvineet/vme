@@ -10,6 +10,8 @@ from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional, Set
 from uuid import UUID
 
+import numpy as np
+
 from viewer.workbench_project import WorkbenchProject
 
 
@@ -99,9 +101,19 @@ class SceneManager:
         self.show_family_missing = True
         self.show_family_qa = True
 
+        # Debug visualization controls
+        self.debug_z_scale: float = 1.0
+        self.debug_exploded_view: bool = False
+        self.debug_explode_step: float = 250.0
+
+        # Model transform
+        self._model_bounds: Optional[List[float]] = None
+        self._model_center: List[float] = [0.0, 0.0, 0.0]
+        self._model_scale: float = 1.0
+
         # Layer states
         self.layers: Dict[str, LayerState] = {
-            name: LayerState(visible=(name == self.LAYER_GEOMETRY))
+            name: LayerState(visible=False)
             for name in self.DEFAULT_LAYERS
         }
 
@@ -118,6 +130,9 @@ class SceneManager:
         self._on_layer_changed_callbacks: List = []
         self._on_selection_changed_callbacks: List = []
         self._on_stage_changed_callbacks: List = []
+
+        # Initialize layers based on the default stage
+        self.set_stage(self.current_stage, force_update=True)
 
     # ─── Data loading ────────────────────────────────────────────────────────
 
@@ -136,6 +151,7 @@ class SceneManager:
         self.physical_bars = project.physical_bars
         self.reconstruction_meshes = project.reconstruction_meshes
 
+        self._compute_model_transform()
         # Legacy project data property for panels that might still use it
         self.project_data = getattr(project, 'bundle', None)
 
@@ -143,6 +159,34 @@ class SceneManager:
         self._fire(self._on_data_loaded_callbacks)
 
     # ─── Layer management ─────────────────────────────────────────────────────
+
+    def _compute_model_transform(self):
+        """Calculate the bounding box, center, and scale of the reconstructed model."""
+        if not self.reconstruction_meshes and not self.physical_bars:
+            self._model_bounds = None
+            return
+
+        xmin = ymin = zmin = float("inf")
+        xmax = ymax = zmax = float("-inf")
+
+        for mesh in self.reconstruction_meshes:
+            if not mesh.vertices: continue
+            points = np.array(mesh.vertices)
+            xmin, xmax = min(xmin, points[:, 0].min()), max(xmax, points[:, 0].max())
+            ymin, ymax = min(ymin, points[:, 1].min()), max(ymax, points[:, 1].max())
+            zmin, zmax = min(zmin, points[:, 2].min()), max(zmax, points[:, 2].max())
+
+        self._model_bounds = [xmin, xmax, ymin, ymax, zmin, zmax]
+        self._model_center = [
+            (xmin + xmax) / 2.0,
+            (ymin + ymax) / 2.0,
+            (zmin + zmax) / 2.0,
+        ]
+        size = max(xmax - xmin, ymax - ymin, zmax - zmin)
+        self._model_scale = 1.0 / size if size > 1e-6 else 1.0
+
+    def get_normalized_bounds(self) -> Optional[List[float]]:
+        return [-0.5, 0.5, -0.5, 0.5, -0.5, 0.5] if self._model_bounds else None
 
     def set_layer_visible(self, name: str, visible: bool):
         if name in self.layers:
@@ -160,8 +204,8 @@ class SceneManager:
             self.show_family_qa = visible
         self._fire(self._on_layer_changed_callbacks, self.LAYER_FAMILIES)
 
-    def set_stage(self, stage: str):
-        if stage not in self.STAGES:
+    def set_stage(self, stage: str, force_update: bool = False):
+        if stage not in self.STAGES or (self.current_stage == stage and not force_update):
             return
         self.current_stage = stage
         visible_layers = {
@@ -169,13 +213,45 @@ class SceneManager:
             "Recognition": {self.LAYER_GEOMETRY, self.LAYER_RECOGNITION},
             "Families": {self.LAYER_GEOMETRY, self.LAYER_FAMILIES, self.LAYER_QA},
             "Assemblies": {self.LAYER_FAMILIES, self.LAYER_ASSEMBLIES, self.LAYER_QA},
-            "Bars": {self.LAYER_FAMILIES, self.LAYER_ASSEMBLIES, self.LAYER_BARS},
+            "Bars": {self.LAYER_FAMILIES, self.LAYER_ASSEMBLIES, self.LAYER_BARS, self.LAYER_BBOXES},
             "Meshes": {self.LAYER_BARS, self.LAYER_MESHES},
         }[stage]
         for name in self.layers:
             self.layers[name].visible = name in visible_layers
         self._fire(self._on_stage_changed_callbacks, stage)
         self._fire(self._on_layer_changed_callbacks, "")
+
+    def set_debug_z_scale(self, scale: float):
+        scale = max(1.0, float(scale))
+        if self.debug_z_scale == scale:
+            return
+        self.debug_z_scale = scale
+        self._fire(self._on_layer_changed_callbacks, "")
+
+    def set_debug_exploded_view(self, enabled: bool):
+        enabled = bool(enabled)
+        if self.debug_exploded_view == enabled:
+            return
+        self.debug_exploded_view = enabled
+        self._fire(self._on_layer_changed_callbacks, "")
+
+    def reset_debug_view(self):
+        self.debug_z_scale = 1.0
+        self.debug_exploded_view = False
+        self._fire(self._on_layer_changed_callbacks, "")
+
+    def get_assembly_for_layer(self, layer_uuid):
+        for assembly in self.reinforcement_assemblies:
+            for layer in getattr(assembly, "layers", []) or []:
+                if layer.uuid == layer_uuid:
+                    return assembly
+        return None
+
+    def get_assembly_index(self, assembly_uuid) -> int:
+        for index, assembly in enumerate(self.reinforcement_assemblies):
+            if assembly.uuid == assembly_uuid:
+                return index
+        return -1
 
     def is_visible(self, name: str) -> bool:
         return self.layers.get(name, LayerState()).visible

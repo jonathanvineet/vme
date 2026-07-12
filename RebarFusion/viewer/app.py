@@ -240,6 +240,28 @@ class MainWindow(QMainWindow):
         fit_act.triggered.connect(self.viewport.fit_view)
         debug_menu.addAction(fit_act)
 
+        debug_menu.addSeparator()
+
+        explode_act = QAction("Exploded View", self)
+        explode_act.setCheckable(True)
+        explode_act.toggled.connect(self.scene.set_debug_exploded_view)
+        debug_menu.addAction(explode_act)
+
+        z_scale_act = QAction("Z Exaggeration x30", self)
+        z_scale_act.setCheckable(True)
+        z_scale_act.toggled.connect(lambda checked: self.scene.set_debug_z_scale(30.0 if checked else 1.0))
+        debug_menu.addAction(z_scale_act)
+
+        reset_debug_act = QAction("Reset Debug View", self)
+        reset_debug_act.triggered.connect(lambda: self._reset_debug_view(explode_act, z_scale_act))
+        debug_menu.addAction(reset_debug_act)
+
+    def _reset_debug_view(self, explode_act: QAction, z_scale_act: QAction):
+        self.scene.reset_debug_view()
+        explode_act.setChecked(False)
+        z_scale_act.setChecked(False)
+
+
     # ─── Toolbar ──────────────────────────────────────────────────────────────
 
     def _build_toolbar(self):
@@ -272,11 +294,33 @@ class MainWindow(QMainWindow):
         self._search_box.returnPressed.connect(lambda: self._search(self._search_box.text()))
         tb.addWidget(self._search_box)
 
+        tb.addSeparator()
+        explode_btn = QAction("Explode", self)
+        explode_btn.setCheckable(True)
+        explode_btn.toggled.connect(self.scene.set_debug_exploded_view)
+        tb.addAction(explode_btn)
+
+        z_btn = QAction("Z x30", self)
+        z_btn.setCheckable(True)
+        z_btn.toggled.connect(lambda checked: self.scene.set_debug_z_scale(30.0 if checked else 1.0))
+        tb.addAction(z_btn)
+
     def _search(self, query: str):
         if self.scene.search(query):
             self.status.showMessage(f"Selected: {query}")
         else:
             self.status.showMessage(f"No match: {query}")
+
+    def _reset_debug_view(self, explode_act: QAction, z_scale_act: QAction):
+        self.scene.reset_debug_view()
+        explode_act.blockSignals(True)
+        z_scale_act.blockSignals(True)
+        try:
+            explode_act.setChecked(False)
+            z_scale_act.setChecked(False)
+        finally:
+            explode_act.blockSignals(False)
+            z_scale_act.blockSignals(False)
 
     def _open_project_dialog(self):
         directory = QFileDialog.getExistingDirectory(

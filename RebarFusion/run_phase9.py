@@ -20,14 +20,18 @@ from core.topology.node_builder import build_nodes
 from core.topology.builder import TopologyBuilder
 from core.recognition.registry import RecognizerRegistry, RecognitionCache
 from core.recognition.recognizers import (
-    StraightBarRecognizer, LBarRecognizer, UBarRecognizer, StirrupRecognizer,
+    StraightBarRecognizer, LBarRecognizer, UBarRecognizer, ClosedShapeRecognizer,
     BranchRecognizer, DimensionRecognizer, LeaderRecognizer,
     StructuralOutlineRecognizer
 )
 from core.recognition.annotations import Annotation, AnnotationParser
+from core.recognition.leaders import reconstruct_leaders
+from core.recognition.plausibility import evaluate_plausibility
 from core.engineering.association import EngineeringAssociationEngine
 from core.engineering.solver import ConstraintSolver
 from core.engineering.family import FamilyBuilder
+from core.engineering.spacing import measure_family_spacing, compute_family_statistics
+from core.engineering.confidence import build_confidence_breakdown
 
 class UUIDEncoder(json.JSONEncoder):
     def default(self, obj):
@@ -102,6 +106,106 @@ def _write_family_overlay(path, families):
     img.save(path)
     return True
 
+def _draw_spacing_gallery(path, family, measurements):
+    """Phase 9.3: one card per family with measurable spacing — members
+    along the perpendicular axis, each gap labeled with its measured
+    distance, outlier gaps drawn in red instead of green."""
+    try:
+        from PIL import Image, ImageDraw
+    except Exception:
+        return False
+    if not family.members:
+        return False
+
+    angle = math.radians(family.orientation)
+    ax, ay = math.cos(angle), math.sin(angle)
+    px, py = -ay, ax
+    half = family.length / 2.0
+
+    members = sorted(family.members, key=lambda m: m.offset_from_representative)
+    boxes = []
+    for m in members:
+        cx, cy = m.centroid
+        boxes.append((cx - ax * half, cy - ay * half))
+        boxes.append((cx + ax * half, cy + ay * half))
+
+    min_x = min(b[0] for b in boxes) - 150.0
+    min_y = min(b[1] for b in boxes) - 150.0
+    max_x = max(b[0] for b in boxes) + 150.0
+    max_y = max(b[1] for b in boxes) + 150.0
+
+    width, height = 1000, 700
+    scale = min(width / max(max_x - min_x, 1.0), (height - 60) / max(max_y - min_y, 1.0))
+
+    def xy(point):
+        x, y = point
+        return ((x - min_x) * scale, height - 60 - ((y - min_y) * scale))
+
+    img = Image.new("RGB", (width, height), "#101018")
+    draw = ImageDraw.Draw(img)
+
+    for m in members:
+        cx, cy = m.centroid
+        draw.line([xy((cx - ax * half, cy - ay * half)), xy((cx + ax * half, cy + ay * half))], fill="#4da3ff", width=4)
+
+    by_pair = {(m.member_a, m.member_b): m for m in measurements}
+    for a, b in zip(members, members[1:]):
+        meas = by_pair.get((a.component_uuid, b.component_uuid))
+        color = "#ff4d4d" if (meas and meas.is_outlier) else "#65d46e"
+        mid = ((a.centroid[0] + b.centroid[0]) / 2.0, (a.centroid[1] + b.centroid[1]) / 2.0)
+        draw.line([xy(a.centroid), xy(b.centroid)], fill=color, width=2)
+        label = f"{meas.measured_spacing:.0f}mm" if meas else "?"
+        if meas and meas.is_outlier:
+            label += f" OUTLIER (residual {meas.residual:+.0f}mm)"
+        lx, ly = xy(mid)
+        draw.text((lx + 6, ly - 14), label, fill=color)
+
+    draw.text((10, height - 40), f"Family {family.mark}  ref spacing {family.spacing:.0f}mm  members {len(members)}", fill="#e5e5e5")
+    img.save(path)
+    return True
+
+
+def _draw_confidence_card(path, breakdown):
+    """Phase 9.4: one glance card showing every confidence dimension as a
+    labeled bar, so a low overall score is immediately traceable to which
+    stage caused it."""
+    try:
+        from PIL import Image, ImageDraw
+    except Exception:
+        return False
+
+    rows = [
+        ("Geometry", breakdown.geometry),
+        ("Recognition", breakdown.recognition),
+        ("Plausibility", breakdown.plausibility),
+        ("Annotation", breakdown.annotation),
+        ("Association", breakdown.association),
+        ("Spacing", breakdown.spacing),
+        ("Family", breakdown.family_consistency),
+        ("Overall", breakdown.overall),
+    ]
+
+    width, height = 640, 60 + 40 * len(rows)
+    img = Image.new("RGB", (width, height), "#101018")
+    draw = ImageDraw.Draw(img)
+    draw.text((10, 10), f"Family {breakdown.mark}  (weakest: {breakdown.weakest_dimension})", fill="#e5e5e5")
+
+    bar_x0 = 140
+    bar_max_w = width - bar_x0 - 60
+    for i, (label, score) in enumerate(rows):
+        y = 50 + i * 40
+        color = "#65d46e" if score >= 0.8 else ("#ffd166" if score >= 0.5 else "#ff4d4d")
+        if label == "Overall":
+            color = "#4da3ff"
+        draw.text((10, y), label, fill="#e5e5e5")
+        draw.rectangle([bar_x0, y, bar_x0 + bar_max_w, y + 22], outline="#3a3a4a")
+        draw.rectangle([bar_x0, y, bar_x0 + int(bar_max_w * max(0.0, min(1.0, score))), y + 22], fill=color)
+        draw.text((bar_x0 + bar_max_w + 8, y), f"{score:.2f}", fill="#e5e5e5")
+
+    img.save(path)
+    return True
+
+
 def _draw_dashed_line(draw, p1, p2, fill, width):
     x1, y1 = p1
     x2, y2 = p2
@@ -120,47 +224,92 @@ def _draw_dashed_line(draw, p1, p2, fill, width):
         draw.line([a, b], fill=fill, width=width)
         t += dash + gap
 
+# Maps a fine-grained rejection reason to the gallery bucket requested for
+# Phase 9.2 (family_rejected / orientation_rejected / length_rejected /
+# isolated), so images are organized by *why* rather than dumped flat.
+_GALLERY_BUCKETS = {
+    "Different type": "family_rejected",
+    "Different layer": "family_rejected",
+    "No nearby family": "family_rejected",
+    "Different orientation": "orientation_rejected",
+    "Different length": "length_rejected",
+    "Isolated": "isolated",
+    "Confidence too low": "isolated",
+    "Stirrup": "isolated",
+    "Branch": "isolated",
+    "Unknown": "isolated",
+}
+
+
 def _write_standalone_inspector(out_dir, standalone_component_uuids, graph, comp_repo, cache, families, annotations):
     try:
         from PIL import Image, ImageDraw
     except Exception:
-        return [], {}, False
+        return [], {}, [], True
 
     standalone_dir = os.path.join(out_dir, "standalone")
     os.makedirs(standalone_dir, exist_ok=True)
 
     reports = []
+    provenance = []
     reason_counts = Counter()
     for index, comp_uuid in enumerate(sorted(standalone_component_uuids, key=str), start=1):
         comp = comp_repo.components.get(comp_uuid)
         if not comp:
             continue
-        reason, details = _classify_standalone(comp, graph, cache, families)
+        reason, details, evidence = _classify_standalone(comp, graph, cache, families)
         reason_counts[reason] += 1
+
+        bucket = _GALLERY_BUCKETS.get(reason, "isolated")
+        bucket_dir = os.path.join(standalone_dir, bucket)
+        os.makedirs(bucket_dir, exist_ok=True)
         image_name = f"{index:04d}.png"
-        image_path = os.path.join(standalone_dir, image_name)
+        image_path = os.path.join(bucket_dir, image_name)
         _draw_standalone_card(image_path, comp, reason, details, graph, comp_repo, families, annotations)
+        image_rel = os.path.join("standalone", bucket, image_name)
+
         reports.append({
             "Component": comp_uuid,
             "Reason": reason,
             "Details": details,
-            "Image": os.path.join("standalone", image_name),
+            "Image": image_rel,
+        })
+        provenance.append({
+            "component_uuid": str(comp_uuid),
+            "reason": reason,
+            "details": details,
+            "image": image_rel,
+            **evidence,
         })
 
-    return reports, dict(reason_counts), True
+    return reports, dict(reason_counts), provenance, True
 
 def _classify_standalone(comp, graph, cache, families):
+    """
+    Returns (reason, details, evidence). `evidence` carries the full numeric
+    comparison against the nearest family (Phase 9.2 standalone provenance
+    audit) rather than only a formatted text summary, so every standalone
+    object's rejection can be inspected/aggregated precisely instead of
+    re-parsed from prose.
+    """
     profile = _component_profile(comp, graph, cache)
     if not profile:
-        return "Unknown", "component has no drawable profile"
+        return "Unknown", "component has no drawable profile", {"nearest_family": None}
 
     label = profile["recognition_type"]
+    base_evidence = {
+        "recognition_type": label,
+        "layer": profile["layer"],
+        "length": round(profile["length"], 2),
+        "orientation": round(profile["orientation"], 2),
+        "confidence": round(profile["confidence"], 3),
+    }
     if label == "stirrup":
-        return "Stirrup", "recognized as stirrup-like geometry"
+        return "Stirrup", "recognized as stirrup-like geometry", {**base_evidence, "nearest_family": None}
     if label == "branch":
-        return "Branch", "recognized as branch geometry"
+        return "Branch", "recognized as branch geometry", {**base_evidence, "nearest_family": None}
     if label == "unknown":
-        return "Unknown", "recognizer did not assign a structural bar type"
+        return "Unknown", "recognizer did not assign a structural bar type", {**base_evidence, "nearest_family": None}
 
     nearest = None
     for family in families:
@@ -170,30 +319,42 @@ def _classify_standalone(comp, graph, cache, families):
             nearest = candidate
 
     if nearest is None:
-        return "No nearby family", "no engineering families were available for comparison"
+        return "No nearby family", "no engineering families were available for comparison", \
+            {**base_evidence, "nearest_family": None}
 
-    _, family = nearest
-    if profile["layer"] != family.layer:
-        return "Different layer", f"nearest family {family.mark} is on {family.layer}"
-    if profile["recognition_type"] != family.recognition_type:
-        return "Different type", f"{profile['recognition_type']} vs family {family.mark} {family.recognition_type}"
-
+    distance, family = nearest
     orientation_delta = _angle_diff(profile["orientation"], family.orientation)
-    if orientation_delta > 5.0:
-        return "Different orientation", f"orientation differs {orientation_delta:.1f} degrees from {family.mark}"
+    length_delta_pct = (abs(profile["length"] - family.length) / family.length * 100.0) if family.length > 0 else None
+    nearest_info = {
+        "nearest_family_uuid": str(family.uuid),
+        "nearest_family_mark": family.mark,
+        "distance_mm": round(distance, 1),
+        "family_layer": family.layer,
+        "family_recognition_type": family.recognition_type,
+        "family_length": round(family.length, 2),
+        "orientation_delta_deg": round(orientation_delta, 2),
+        "length_delta_pct": round(length_delta_pct, 1) if length_delta_pct is not None else None,
+    }
+    evidence = {**base_evidence, "nearest_family": nearest_info}
 
-    if family.length > 0:
-        length_delta = abs(profile["length"] - family.length) / family.length
-        if length_delta > 0.05:
-            return "Different length", f"length differs {length_delta * 100:.1f}% from {family.mark}"
+    if profile["layer"] != family.layer:
+        return "Different layer", f"nearest family {family.mark} is on {family.layer}", evidence
+    if profile["recognition_type"] != family.recognition_type:
+        return "Different type", f"{profile['recognition_type']} vs family {family.mark} {family.recognition_type}", evidence
+
+    if orientation_delta > 5.0:
+        return "Different orientation", f"orientation differs {orientation_delta:.1f} degrees from {family.mark}", evidence
+
+    if length_delta_pct is not None and length_delta_pct > 5.0:
+        return "Different length", f"length differs {length_delta_pct:.1f}% from {family.mark}", evidence
 
     if profile["confidence"] < 0.5:
-        return "Confidence too low", f"recognition confidence {profile['confidence']:.2f}"
+        return "Confidence too low", f"recognition confidence {profile['confidence']:.2f}", evidence
 
-    if nearest[0] > max(family.length * 2.0, 3000.0):
-        return "No nearby family", f"nearest family {family.mark} is {nearest[0]:.1f}mm away"
+    if distance > max(family.length * 2.0, 3000.0):
+        return "No nearby family", f"nearest family {family.mark} is {distance:.1f}mm away", evidence
 
-    return "Isolated", f"compatible with {family.mark}, but outside accepted spacing/axis checks"
+    return "Isolated", f"compatible with {family.mark}, but outside accepted spacing/axis checks", evidence
 
 def _draw_standalone_card(path, comp, reason, details, graph, comp_repo, families, annotations):
     from PIL import Image, ImageDraw
@@ -334,7 +495,7 @@ def main():
     registry.register(StraightBarRecognizer())
     registry.register(LBarRecognizer())
     registry.register(UBarRecognizer())
-    registry.register(StirrupRecognizer())
+    registry.register(ClosedShapeRecognizer())
     registry.register(BranchRecognizer())
     registry.register(StructuralOutlineRecognizer())
     registry.register(DimensionRecognizer())
@@ -359,7 +520,16 @@ def main():
         for comp in comp_repo.components.values():
             result = registry.evaluate(comp, graph)
             cache.set(comp.id, result)
-            
+
+        # Phase 7.6: Physical Plausibility (see core/recognition/plausibility.py)
+        plausibility_records = {
+            comp.id: {"label": cache.get(comp.id).label, "length": float(comp.statistics.get("total_length", 0.0))}
+            for comp in comp_repo.components.values()
+            if cache.get(comp.id) and cache.get(comp.id).label in
+            {"straight_bar", "l_bar", "u_bar", "stirrup", "branch"}
+        }
+        plausibility = evaluate_plausibility(plausibility_records)
+
         # Phase 8
         annotations = []
         for t in canon_repo.texts:
@@ -369,29 +539,26 @@ def main():
         for d in canon_repo.dimensions:
             annotations.append(Annotation(uuid.uuid4(), 'DIMENSION', d.text, d.defpoint, d.bounding_box, 0.0, d.layer, d.id, d.measurement, d.p1, d.p2))
             
-        leaders = []
-        import ezdxf
-        doc = ezdxf.readfile(drawing.filepath)
-        msp = doc.modelspace()
-        for e in msp:
-            if e.dxftype() == 'LINE' and e.dxf.layer == 'G-ANNO-TEXT':
-                leaders.append(((e.dxf.start.x, e.dxf.start.y, e.dxf.start.z), (e.dxf.end.x, e.dxf.end.y, e.dxf.end.z)))
-            
+        leader_repo = reconstruct_leaders(graph, comp_repo, layer="G-ANNO-TEXT")
+        leaders = list(leader_repo.leaders.values())
+
         parser = AnnotationParser()
-        assoc_engine = EngineeringAssociationEngine(graph, comp_repo, engine, cache)
+        assoc_engine = EngineeringAssociationEngine(graph, comp_repo, engine, cache, plausibility=plausibility)
         solver = ConstraintSolver()
         
         groups = assoc_engine.cluster_annotations(annotations, parser, leaders)
-        
+
+        all_candidates = []
         for group in groups:
             if not group.tokens:
                 continue
             candidates = assoc_engine.find_group_candidates(group, k=5)
             if candidates:
+                all_candidates.extend(candidates)
                 constraints = assoc_engine.build_constraints(candidates)
                 for c in constraints:
                     solver.add_constraint(c)
-                    
+
         eng_objects = solver.solve()
         
         # Phase 9: Family Builder
@@ -406,6 +573,64 @@ def main():
         associated_comp_uuids = set()
         for f in families:
             associated_comp_uuids.update(f.member_component_uuids)
+
+        # Phase 9.3: Spacing Validation Audit — per-gap provenance and
+        # per-family statistics (RMSE/bias/std dev), not one pooled average.
+        all_spacing_measurements = []
+        family_spacing_stats = []
+        family_measurements_by_uuid = {}
+        for f in families:
+            measurements = measure_family_spacing(f)
+            stats = compute_family_statistics(f, measurements)
+            all_spacing_measurements.extend(measurements)
+            family_measurements_by_uuid[f.uuid] = measurements
+            if stats:
+                family_spacing_stats.append(stats)
+        spacing_outliers = [m for m in all_spacing_measurements if m.is_outlier]
+
+        spacing_gallery_dir = os.path.join(out_dir, "spacing")
+        os.makedirs(spacing_gallery_dir, exist_ok=True)
+        for f in families:
+            measurements = family_measurements_by_uuid.get(f.uuid, [])
+            if measurements:
+                _draw_spacing_gallery(os.path.join(spacing_gallery_dir, f"{f.mark}_{str(f.uuid)[:8]}.png"), f, measurements)
+
+        # Phase 9.4: Confidence Decomposition (see core/engineering/confidence.py)
+        confidence_dir = os.path.join("debug", "phase09_4", filename)
+        confidence_gallery_dir = os.path.join(confidence_dir, "family_confidence_gallery")
+        os.makedirs(confidence_gallery_dir, exist_ok=True)
+        confidence_breakdowns = [
+            build_confidence_breakdown(f, cache, plausibility, all_candidates) for f in families
+        ]
+        for cb in confidence_breakdowns:
+            _draw_confidence_card(
+                os.path.join(confidence_gallery_dir, f"{cb.mark}_{str(cb.family_uuid)[:8]}.png"), cb
+            )
+        low_confidence_objects = [
+            {
+                "family_uuid": str(cb.family_uuid),
+                "mark": cb.mark,
+                "overall": cb.overall,
+                "weakest_dimension": cb.weakest_dimension,
+                "weakest_score": getattr(cb, cb.weakest_dimension),
+                "evidence": [asdict(e) for e in cb.evidence],
+            }
+            for cb in confidence_breakdowns if cb.overall < 0.70
+        ]
+        confidence_histogram = Counter()
+        for cb in confidence_breakdowns:
+            bucket = round(cb.overall, 1)
+            confidence_histogram[bucket] += 1
+
+        _jdump(os.path.join(confidence_dir, "confidence_breakdown.json"), [asdict(cb) for cb in confidence_breakdowns])
+        _jdump(os.path.join(confidence_dir, "confidence_summary.json"), {
+            "families_evaluated": len(confidence_breakdowns),
+            "mean_overall": round(sum(cb.overall for cb in confidence_breakdowns) / len(confidence_breakdowns), 3) if confidence_breakdowns else 0.0,
+            "low_confidence_count": len(low_confidence_objects),
+            "weakest_dimension_counts": dict(Counter(cb.weakest_dimension for cb in confidence_breakdowns)),
+        })
+        _jdump(os.path.join(confidence_dir, "confidence_histogram.json"), dict(sorted(confidence_histogram.items())))
+        _jdump(os.path.join(confidence_dir, "low_confidence_objects.json"), low_confidence_objects)
 
         spacing_report = [
             {
@@ -475,7 +700,7 @@ def main():
             }
             for f in families
         ]
-        standalone_report, standalone_summary, standalone_images_written = _write_standalone_inspector(
+        standalone_report, standalone_summary, standalone_provenance, standalone_images_written = _write_standalone_inspector(
             out_dir,
             standalone_objects,
             graph,
@@ -484,7 +709,20 @@ def main():
             families,
             annotations,
         )
-            
+
+        # Informational only: which marks are claimed by more than one family.
+        # This is expected in general (the same mark can legitimately label
+        # multiple separate physical bar groups), but it's worth surfacing
+        # for review rather than staying silent, since it can also indicate
+        # family fragmentation (a group that should be one family split into
+        # several) or a spurious mark association upstream in Phase 8.
+        mark_to_families: Dict[str, List[str]] = {}
+        for f in families:
+            mark_to_families.setdefault(f.mark, []).append(str(f.uuid))
+        cross_family_marks = {
+            mark: fam_uuids for mark, fam_uuids in mark_to_families.items() if len(fam_uuids) > 1
+        }
+
         summary = {
             "Engineering Families": len(families),
             "Detected Members": sum(f.detected_count for f in families),
@@ -493,23 +731,53 @@ def main():
             "Unique Member Components": len(associated_comp_uuids),
             "Average Members": round((sum(f.detected_count for f in families) / len(families)), 2) if families else 0,
             "Families With Spacing": sum(1 for f in families if f.spacing > 0),
-            "Average Spacing Error": round((sum(spacing_errors) / len(spacing_errors)), 3) if spacing_errors else 0.0,
-            "Average Confidence": round((sum(confidences) / len(confidences)), 3) if confidences else 0.0,
+            "Average Spacing Error (pooled, legacy metric)": round((sum(spacing_errors) / len(spacing_errors)), 3) if spacing_errors else 0.0,
+            "Per-Family Spacing RMSE (see spacing_statistics.json)": {
+                s.mark: {"rmse": s.rmse, "bias": s.bias, "std_dev": s.std_dev, "gaps": s.gap_count, "outliers": s.outlier_count}
+                for s in family_spacing_stats
+            },
+            "Spacing Outliers": len(spacing_outliers),
+            "Average Confidence (legacy pooled metric)": round((sum(confidences) / len(confidences)), 3) if confidences else 0.0,
+            "Confidence Breakdown (see confidence_breakdown.json)": {
+                cb.mark: {
+                    "geometry": cb.geometry, "recognition": cb.recognition, "plausibility": cb.plausibility,
+                    "annotation": cb.annotation, "association": cb.association, "spacing": cb.spacing,
+                    "family": cb.family_consistency, "overall": cb.overall, "weakest": cb.weakest_dimension,
+                }
+                for cb in confidence_breakdowns
+            },
+            "Low Confidence Families (<0.70)": len(low_confidence_objects),
             "Standalone Engineering Objects": len(standalone_objects),
             "Duplicate Object Memberships": len(duplicate_object_memberships),
             "Standalone Summary": standalone_summary,
             "Family QA Warnings": qa_warning_count,
+            "Cross-Family Shared Marks (info)": cross_family_marks,
+            "Plausibility Rejected (excluded from candidacy)": sum(1 for p in plausibility.values() if p.decision == "reject"),
+            "Plausibility Review (kept, flagged)": sum(1 for p in plausibility.values() if p.decision == "review"),
         }
+
+        # Spacing histogram: measured-gap distribution across every family,
+        # 50mm bins, for a quick shape check independent of per-family stats.
+        spacing_histogram = Counter()
+        for m in all_spacing_measurements:
+            bucket = int(m.measured_spacing // 50) * 50
+            spacing_histogram[bucket] += 1
 
         families_payload = [asdict(f) for f in families]
         _jdump(os.path.join(out_dir, "engineering_families.json"), families_payload)
         _jdump(os.path.join(out_dir, "families.json"), families_payload)
         _jdump(os.path.join(out_dir, "spacing_report.json"), spacing_report)
+        _jdump(os.path.join(out_dir, "spacing_measurements.json"), [asdict(m) for m in all_spacing_measurements])
+        _jdump(os.path.join(out_dir, "spacing_statistics.json"), [asdict(s) for s in family_spacing_stats])
+        _jdump(os.path.join(out_dir, "spacing_outliers.json"), [asdict(m) for m in spacing_outliers])
+        _jdump(os.path.join(out_dir, "spacing_histogram.json"), dict(sorted(spacing_histogram.items())))
         _jdump(os.path.join(out_dir, "count_report.json"), count_report)
         _jdump(os.path.join(out_dir, "family_membership_report.json"), membership_report)
         _jdump(os.path.join(out_dir, "standalone_report.json"), standalone_report)
+        _jdump(os.path.join(out_dir, "standalone_provenance.json"), standalone_provenance)
         _jdump(os.path.join(out_dir, "qa_report.json"), qa_report)
         _jdump(os.path.join(out_dir, "family_qa.json"), qa_report)
+        _jdump(os.path.join(out_dir, "cross_family_marks.json"), cross_family_marks)
         _jdump(os.path.join(out_dir, "metrics.json"), summary)
         overlay_written = _write_family_overlay(os.path.join(out_dir, "family_overlay.png"), families)
 
@@ -519,14 +787,18 @@ def main():
 
         print("\nValidation Checks:")
         multi_member = sum(1 for f in families if len(f.members) > 1)
-        print(f"  Families built from members      : {'PASS' if families else 'FAIL'}")
+        families_built_ok = bool(families)
+        qa_generated_ok = bool(qa_report)
+        membership_deterministic_ok = not duplicate_object_memberships
+        print(f"  Families built from members      : {'PASS' if families_built_ok else 'FAIL'}")
         print(f"  Multi-member families discovered : {multi_member}/{len(families)}")
-        print(f"  Family QA generated              : {'PASS' if qa_report else 'FAIL'}")
-        print(f"  Object membership deterministic  : {'PASS' if not duplicate_object_memberships else 'FAIL'}")
+        print(f"  Family QA generated              : {'PASS' if qa_generated_ok else 'FAIL'}")
+        print(f"  Object membership deterministic  : {'PASS' if membership_deterministic_ok else 'FAIL'}")
         print(f"  Family overlay generated         : {'PASS' if overlay_written else 'SKIP'}")
         print(f"  Standalone inspector generated   : {'PASS' if standalone_images_written else 'SKIP'}")
-        
-        print("\nREADY FOR PHASE 10         : YES")
+
+        ready = families_built_ok and qa_generated_ok and membership_deterministic_ok
+        print(f"\nREADY FOR PHASE 10         : {'YES' if ready else 'NO'}")
         print("=" * 60)
         break
 

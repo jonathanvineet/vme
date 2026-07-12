@@ -1,0 +1,152 @@
+[
+  {
+    "annotation": 0.522,
+    "association": 0.57,
+    "evidence": [
+      {
+        "dimension": "geometry",
+        "explanation": "All members have valid geometry",
+        "score": 1.0
+      },
+      {
+        "dimension": "recognition",
+        "explanation": "Mean recognizer confidence across 4 member(s)",
+        "score": 0.95
+      },
+      {
+        "dimension": "plausibility",
+        "explanation": "4/4 member(s) flagged by physical plausibility",
+        "score": 0.6
+      },
+      {
+        "dimension": "annotation",
+        "explanation": "Best direct mark-annotation candidate score for representative: 0.52",
+        "score": 0.522
+      },
+      {
+        "dimension": "association",
+        "explanation": "Mean of 4 association candidate score(s) for the representative component",
+        "score": 0.57
+      },
+      {
+        "dimension": "spacing",
+        "explanation": "Spacing confidence 0.80 from 4 member(s), average error 60.4mm",
+        "score": 0.796
+      },
+      {
+        "dimension": "family_consistency",
+        "explanation": "Mean member-discovery agreement across 4 member(s)",
+        "score": 1.0
+      }
+    ],
+    "family_consistency": 1.0,
+    "family_uuid": "21d96a0e-5d0f-5368-9565-1bf7d00efaba",
+    "geometry": 1.0,
+    "mark": "N4",
+    "overall": 0.751,
+    "plausibility": 0.6,
+    "recognition": 0.95,
+    "spacing": 0.796,
+    "weakest_dimension": "annotation"
+  },
+  {
+    "annotation": 0.95,
+    "association": 0.65,
+    "evidence": [
+      {
+        "dimension": "geometry",
+        "explanation": "All members have valid geometry",
+        "score": 1.0
+      },
+      {
+        "dimension": "recognition",
+        "explanation": "Mean recognizer confidence across 1 member(s)",
+        "score": 1.0
+      },
+      {
+        "dimension": "plausibility",
+        "explanation": "0/1 member(s) flagged by physical plausibility",
+        "score": 1.0
+      },
+      {
+        "dimension": "annotation",
+        "explanation": "Best direct mark-annotation candidate score for representative: 0.95",
+        "score": 0.95
+      },
+      {
+        "dimension": "association",
+        "explanation": "Mean of 16 association candidate score(s) for the representative component",
+        "score": 0.65
+      },
+      {
+        "dimension": "spacing",
+        "explanation": "Single-member family \u2014 spacing not applicable",
+        "score": 1.0
+      },
+      {
+        "dimension": "family_consistency",
+        "explanation": "Mean member-discovery agreement across 1 member(s)",
+        "score": 1.0
+      }
+    ],
+    "family_consistency": 1.0,
+    "family_uuid": "837ef1e5-7c9c-5c7f-b45b-a5676aa14ced",
+    "geometry": 1.0,
+    "mark": "N6",
+    "overall": 0.933,
+    "plausibility": 1.0,
+    "recognition": 1.0,
+    "spacing": 1.0,
+    "weakest_dimension": "association"
+  },
+  {
+    "annotation": 0.537,
+    "association": 0.695,
+    "evidence": [
+      {
+        "dimension": "geometry",
+        "explanation": "All members have valid geometry",
+        "score": 1.0
+      },
+      {
+        "dimension": "recognition",
+        "explanation": "Mean recognizer confidence across 1 member(s)",
+        "score": 1.0
+      },
+      {
+        "dimension": "plausibility",
+        "explanation": "0/1 member(s) flagged by physical plausibility",
+        "score": 1.0
+      },
+      {
+        "dimension": "annotation",
+        "explanation": "Best direct mark-annotation candidate score for representative: 0.54",
+        "score": 0.537
+      },
+      {
+        "dimension": "association",
+        "explanation": "Mean of 9 association candidate score(s) for the representative component",
+        "score": 0.695
+      },
+      {
+        "dimension": "spacing",
+        "explanation": "Single-member family \u2014 spacing not applicable",
+        "score": 1.0
+      },
+      {
+        "dimension": "family_consistency",
+        "explanation": "Mean member-discovery agreement across 1 member(s)",
+        "score": 1.0
+      }
+    ],
+    "family_consistency": 1.0,
+    "family_uuid": "153a8c83-e9cc-589a-97d4-144f893a2229",
+    "geometry": 1.0,
+    "mark": "N7",
+    "overall": 0.869,
+    "plausibility": 1.0,
+    "recognition": 1.0,
+    "spacing": 1.0,
+    "weakest_dimension": "annotation"
+  }
+]

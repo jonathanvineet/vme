@@ -38,6 +38,12 @@ class WorkbenchProject:
     physical_bars: List[Any] = field(default_factory=list)
     reconstruction_meshes: List[Any] = field(default_factory=list)
 
+    # Phase 8 leader reconstruction / Phase 7.6 plausibility (Phase 11.1:
+    # the viewer now gets these from core.full_pipeline like everything
+    # else, instead of never having them at all).
+    leader_repo: Any = None
+    plausibility: Dict[UUID, Any] = field(default_factory=dict)
+
     @property
     def is_loaded(self) -> bool:
         """Check if any substantial data has been loaded."""

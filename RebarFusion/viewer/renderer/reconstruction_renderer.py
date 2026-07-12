@@ -15,7 +15,10 @@ class BarRenderer(BaseRenderer):
         for bar in bars:
             if len(bar.path) < 2:
                 continue
-            points = np.array(bar.path, dtype=float)
+            assembly = None
+            if getattr(bar, 'layer_uuid', None):
+                assembly = self.scene.get_assembly_for_layer(bar.layer_uuid)
+            points = self._apply_scene_transform(np.array(bar.path, dtype=float), assembly.uuid if assembly else None)
             lines = []
             for idx in range(len(points) - 1):
                 lines.extend([2, idx, idx + 1])
@@ -45,7 +48,7 @@ class MeshRenderer(BaseRenderer):
             for face in mesh.faces:
                 cells.extend([3, *face])
             poly = pv.PolyData()
-            poly.points = np.array(mesh.vertices, dtype=float)
+            poly.points = self._apply_scene_transform(np.array(mesh.vertices, dtype=float), mesh.assembly_uuid)
             poly.faces = np.array(cells)
             selected = mesh.uuid == self.scene.selected_mesh_uuid
             actor = self.plotter.add_mesh(
@@ -56,3 +59,19 @@ class MeshRenderer(BaseRenderer):
                 name=f"reconstruction_mesh_{str(mesh.uuid)[:8]}",
             )
             self._add_actor(actor)
+
+
+class BoundingBoxRenderer(BaseRenderer):
+    LAYER_NAME = SceneManager.LAYER_BBOXES
+
+    def build(self):
+        bounds = self.scene.get_normalized_bounds()
+        if not bounds:
+            return
+
+        box = pv.Box(bounds)
+        actor = self.plotter.add_mesh(
+            box, style='wireframe', color=(0.8, 0.8, 0.8),
+            line_width=1.0, opacity=0.5, name="scene_bounds"
+        )
+        self._add_actor(actor)

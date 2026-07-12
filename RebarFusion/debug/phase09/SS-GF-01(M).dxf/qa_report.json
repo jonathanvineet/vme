@@ -1,20 +1,41 @@
 [
   {
-    "Confidence": 0.977,
+    "Confidence": 0.637,
     "Expected Members": null,
-    "Family UUID": "77ef0d1e-82b1-5625-b34a-49a5cec76a8d",
-    "Found Members": 26,
+    "Family UUID": "21d96a0e-5d0f-5368-9565-1bf7d00efaba",
+    "Found Members": 4,
     "Mark": "N4",
-    "Missing Members": null,
-    "Missing Offsets": [],
-    "Warnings": []
+    "Missing Members": 1,
+    "Missing Offsets": [
+      591.636,
+      887.454,
+      1183.272
+    ],
+    "Warnings": [
+      "inferred_missing_1_members",
+      "spacing_gaps_detected"
+    ]
   },
   {
     "Confidence": 0.0,
     "Expected Members": null,
-    "Family UUID": "9a6b2122-fcfc-57c6-9b4a-fae9d29b7817",
+    "Family UUID": "837ef1e5-7c9c-5c7f-b45b-a5676aa14ced",
     "Found Members": 1,
     "Mark": "N6",
+    "Missing Members": null,
+    "Missing Offsets": [],
+    "Warnings": [
+      "missing_spacing",
+      "missing_diameter",
+      "single_member_family"
+    ]
+  },
+  {
+    "Confidence": 0.0,
+    "Expected Members": null,
+    "Family UUID": "153a8c83-e9cc-589a-97d4-144f893a2229",
+    "Found Members": 1,
+    "Mark": "N7",
     "Missing Members": null,
     "Missing Offsets": [],
     "Warnings": [

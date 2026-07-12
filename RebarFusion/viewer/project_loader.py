@@ -8,6 +8,15 @@ from uuid import UUID
 import json
 
 from core.project import DrawingProject
+from core.full_pipeline import PIPELINE_VERSION
+
+
+class BundleVersionMismatch(Exception):
+    """Raised when a debug/output bundle predates the current pipeline
+    (see docs/audits/phase11/11.0_viewer_audit.md, Stage 3) -- rather than
+    silently loading stale engineering data, load_workbench_bundle refuses
+    and the caller falls through to the live pipeline instead."""
+    pass
 
 
 UUID_KEYS = {
@@ -177,11 +186,15 @@ def load_workbench_bundle(project_root: str | Path) -> WorkbenchBundle:
 
     drawing = None
     for candidate in manifest.drawings.values():
-        if candidate.duplicate_of:
+        # Must match core.full_pipeline.run_pipeline_through_phase9's
+        # selection exactly (duplicate_of + capabilities.geometry), or the
+        # bundle loader can pick a different drawing than the one that was
+        # actually reconstructed -- e.g. a .dwg/.pdf with no registered
+        # reader, which has no real pipeline data at all.
+        if candidate.duplicate_of or not candidate.capabilities.geometry:
             continue
-        if candidate.extension.lower() in {"dxf", "dwg", "pdf"}:
-            drawing = candidate
-            break
+        drawing = candidate
+        break
     if drawing is None:
         raise FileNotFoundError(f"No supported drawing found in {root}")
 
@@ -202,6 +215,18 @@ def load_workbench_bundle(project_root: str | Path) -> WorkbenchBundle:
 
     if report_path:
         phase_reports["phase10"] = _load_json(report_path)
+
+    # Phase 11.1 Step 5: refuse a bundle whose Phase 10 output predates the
+    # current pipeline, rather than silently rendering it as if current.
+    # A bundle with no reconstruction_report.json at all (e.g. Phase 9 ran
+    # but Phase 10 never did) has no version to check and is rejected too --
+    # there's nothing for MeshRenderer/BarRenderer to show regardless.
+    bundle_version = (phase_reports.get("phase10") or {}).get("pipeline_version")
+    if bundle_version != PIPELINE_VERSION:
+        raise BundleVersionMismatch(
+            f"debug/output bundle at {root} has pipeline_version={bundle_version!r}, "
+            f"current is {PIPELINE_VERSION!r} -- rejecting stale bundle, falling back to live pipeline"
+        )
 
     canon_repo = _build_canon_repo(_load_json(canon_path)) if canon_path else None
     graph = _build_graph(_load_json(graph_path)) if graph_path else None

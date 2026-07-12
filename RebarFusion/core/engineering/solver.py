@@ -4,6 +4,13 @@ import uuid
 
 from core.engineering.models import EngineeringObject, EngineeringBar, EngineeringConstraint
 
+# EngineeringObject UUIDs must be a pure function of the source component,
+# not random per run — see audit_phase07_determinism.md for the class of bug
+# this avoids (a uuid4() here would make every downstream object/family ID
+# nondeterministic across identical runs, same failure mode as the Phase 1
+# drawing-identity bug).
+NAMESPACE_ENGINEERING_OBJECT = uuid.UUID('7c2b6e0a-9b7d-4a2b-8c4a-1a6f5e3d2b90')
+
 class ConstraintSolver:
     """
     Groups constraints by component, resolves conflicting constraints,
@@ -11,23 +18,23 @@ class ConstraintSolver:
     """
     def __init__(self):
         self.constraints: List[EngineeringConstraint] = []
-        
+
     def add_constraint(self, constraint: EngineeringConstraint):
         self.constraints.append(constraint)
-        
+
     def solve(self) -> Dict[UUID, EngineeringObject]:
         # Group constraints by target component
         by_component: Dict[UUID, List[EngineeringConstraint]] = {}
         for c in self.constraints:
             by_component.setdefault(c.component_uuid, []).append(c)
-            
+
         objects: Dict[UUID, EngineeringObject] = {}
-        
+
         for comp_uuid, constraints in by_component.items():
             # Create a base EngineeringBar for this component
             # (In a real system, you might determine object_type based on the component's shape)
             obj = EngineeringBar(
-                uuid=uuid.uuid4(),
+                uuid=uuid.uuid5(NAMESPACE_ENGINEERING_OBJECT, str(comp_uuid)),
                 object_type="Bar"
             )
             # Add source reference placeholder (drawing/view info would be injected later)

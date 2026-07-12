@@ -2,39 +2,17 @@
   {
     "Family": "N4",
     "Family Type": "SECONDARY_DISTRIBUTION",
-    "Family UUID": "77ef0d1e-82b1-5625-b34a-49a5cec76a8d",
+    "Family UUID": "21d96a0e-5d0f-5368-9565-1bf7d00efaba",
     "Members": [
-      "c968e2c9-e04b-5e8c-8ecf-d390ee336cd9",
-      "7f01330f-0f8a-536e-b7a1-735a79117aa7",
-      "f3cc6164-25eb-5992-a85e-f1995d77472c",
-      "3b103237-31b7-5af3-b094-4969a1d64da8",
-      "23c3a9b3-44ba-51d4-84bf-ccf6eab36fc6",
-      "e9615203-97e2-56a4-91d8-75659348a7e8",
-      "9dd1c4c0-f20c-5ec6-a004-0ebf8a5449af",
-      "bd3e9dfc-2874-59e1-b80c-3b6eba256229",
-      "1610b632-46d7-5c4c-a02c-6ac22934027b",
-      "42625daa-58af-57cf-ba55-65d0b09f71d4",
-      "fd17d70f-2e08-503a-a4f4-4138c77caa67",
-      "233516d9-0858-5ec9-a37b-3ed48af1e431",
-      "c90a1876-b60e-5067-b8ce-f612328ecf36",
-      "7d320992-a46a-5d3c-a3e0-7237e7cc86bb",
-      "714c457f-75a8-58bb-aebf-b2e2b1db04e9",
-      "b87eab10-74c8-5aa8-87ac-7748e22cc23f",
-      "f6d37336-4012-575f-a53a-705aa67ab51a",
-      "106ee874-8c8f-5746-9db6-7790e41f00e3",
-      "e2c74a8a-ea61-5e22-8866-bd374c1c99b0",
-      "86e4a846-3425-58e5-8c99-8a51458f5abf",
-      "9609e5cb-b075-5ff9-a7e0-cb387bb810b0",
-      "7e8a92e6-2af2-5183-b357-76f4ffc515fb",
-      "892c4f52-883d-5c3d-8cae-cab8af50bedb",
-      "91ff7f25-a016-58bc-8d16-5c086427189f",
-      "826a14c7-b263-55ed-9901-129f1b49feb1",
-      "528f7db4-daa1-5de4-9c34-fb0dc8d0c833"
+      "7f049da2-8a06-50ad-b520-370144e1feb0",
+      "39efeb9a-f52b-5107-9e26-0714089cbee9",
+      "f73dfa40-d183-55b6-977e-6cc4e3a01ac4",
+      "d9a0cb5b-6f68-54a7-bb8e-8c0a74b08612"
     ],
     "Rejected": [
       {
         "component": "00e68dc8-c98e-5197-8d8b-44c26b38d5ec",
-        "detail": "recognition differs: straight_bar vs u_bar",
+        "detail": "recognition differs: straight_bar vs l_bar",
         "layer": "S-RBAR",
         "length": 745.554,
         "orientation": 90.0,
@@ -48,15 +26,15 @@
         "length": 1079.745,
         "orientation": 0.0,
         "reason": "different_layer",
-        "recognition_type": "l_bar"
+        "recognition_type": "unknown"
       },
       {
         "component": "02917ef3-5abf-5bcc-b96e-147b30e90e7c",
-        "detail": "recognition differs: l_bar vs u_bar",
+        "detail": "orientation differs 17.4 degrees",
         "layer": "S-RBAR",
         "length": 746.385,
         "orientation": 90.0,
-        "reason": "different_recognition_type",
+        "reason": "different_orientation",
         "recognition_type": "l_bar"
       },
       {
@@ -66,11 +44,11 @@
         "length": 301.008,
         "orientation": 165.644,
         "reason": "different_layer",
-        "recognition_type": "straight_bar"
+        "recognition_type": "unknown"
       },
       {
         "component": "03e583a1-da6e-53e9-8a0a-d8eba6095d1a",
-        "detail": "recognition differs: branch vs u_bar",
+        "detail": "recognition differs: branch vs l_bar",
         "layer": "S-RBAR",
         "length": 2770.108,
         "orientation": 0.0,
@@ -79,7 +57,7 @@
       },
       {
         "component": "0423cdd6-1ba3-505b-add9-e929fd635ecf",
-        "detail": "recognition differs: straight_bar vs u_bar",
+        "detail": "recognition differs: straight_bar vs l_bar",
         "layer": "S-RBAR",
         "length": 222.352,
         "orientation": 34.686,
@@ -88,7 +66,7 @@
       },
       {
         "component": "05fd7900-56e6-51ce-bc1e-357939068e4f",
-        "detail": "recognition differs: straight_bar vs u_bar",
+        "detail": "recognition differs: straight_bar vs l_bar",
         "layer": "S-RBAR",
         "length": 90.684,
         "orientation": 165.644,
@@ -102,20 +80,20 @@
         "length": 323.07,
         "orientation": 165.644,
         "reason": "different_layer",
-        "recognition_type": "straight_bar"
+        "recognition_type": "unknown"
       },
       {
         "component": "0692b58e-b742-5774-b7ca-f64a1c154246",
-        "detail": "length differs 95.3%",
+        "detail": "recognition differs: unknown vs l_bar",
         "layer": "S-RBAR",
         "length": 1656.0,
         "orientation": 90.0,
-        "reason": "different_length",
-        "recognition_type": "u_bar"
+        "reason": "different_recognition_type",
+        "recognition_type": "unknown"
       },
       {
         "component": "072f0692-e8d5-5600-8c84-b6d7990d154b",
-        "detail": "recognition differs: straight_bar vs u_bar",
+        "detail": "recognition differs: straight_bar vs l_bar",
         "layer": "S-RBAR",
         "length": 18.554,
         "orientation": 34.686,
@@ -129,11 +107,11 @@
         "length": 4606.108,
         "orientation": 90.0,
         "reason": "different_layer",
-        "recognition_type": "l_bar"
+        "recognition_type": "unknown"
       },
       {
         "component": "0757b3e7-243a-5082-bd15-63758e056846",
-        "detail": "recognition differs: straight_bar vs u_bar",
+        "detail": "recognition differs: straight_bar vs l_bar",
         "layer": "S-RBAR",
         "length": 267.618,
         "orientation": 34.686,
@@ -142,25 +120,25 @@
       },
       {
         "component": "0772948b-d973-5dba-95af-3a6139808308",
-        "detail": "recognition differs: l_bar vs u_bar",
+        "detail": "axis differs 1107.8mm",
         "layer": "S-RBAR",
         "length": 5.337,
         "orientation": 107.398,
-        "reason": "different_recognition_type",
+        "reason": "not_collinear",
         "recognition_type": "l_bar"
       },
       {
         "component": "07e75aa2-58e9-5781-87da-f885d0649f05",
-        "detail": "recognition differs: stirrup vs u_bar",
+        "detail": "recognition differs: symbol vs l_bar",
         "layer": "S-RBAR",
         "length": 47.023,
         "orientation": 126.0,
         "reason": "different_recognition_type",
-        "recognition_type": "stirrup"
+        "recognition_type": "symbol"
       },
       {
         "component": "07fec298-fdbf-5a01-a6ca-dc20a8f8b0ce",
-        "detail": "recognition differs: straight_bar vs u_bar",
+        "detail": "recognition differs: straight_bar vs l_bar",
         "layer": "S-RBAR",
         "length": 229.297,
         "orientation": 34.686,
@@ -174,7 +152,7 @@
         "length": 5.443,
         "orientation": 90.0,
         "reason": "different_layer",
-        "recognition_type": "straight_bar"
+        "recognition_type": "unknown"
       },
       {
         "component": "09d06de6-849a-56b9-a049-a261fc678f53",
@@ -183,7 +161,7 @@
         "length": 140.0,
         "orientation": 90.0,
         "reason": "different_layer",
-        "recognition_type": "branch"
+        "recognition_type": "unknown"
       },
       {
         "component": "0c199c98-49db-5c3a-938f-29acdcdb80d7",
@@ -192,7 +170,7 @@
         "length": 1197.824,
         "orientation": 0.0,
         "reason": "different_layer",
-        "recognition_type": "branch"
+        "recognition_type": "dimension"
       },
       {
         "component": "0c9952b6-c29b-5dbc-91da-efcf83ff706b",
@@ -201,15 +179,15 @@
         "length": 120.323,
         "orientation": 165.644,
         "reason": "different_layer",
-        "recognition_type": "straight_bar"
+        "recognition_type": "unknown"
       },
       {
         "component": "0cfa7ebe-9e34-5426-b6ef-560cb67bdac8",
-        "detail": "recognition differs: l_bar vs u_bar",
+        "detail": "axis differs 2882.9mm",
         "layer": "S-RBAR",
         "length": 5.337,
         "orientation": 107.398,
-        "reason": "different_recognition_type",
+        "reason": "not_collinear",
         "recognition_type": "l_bar"
       },
       {
@@ -219,11 +197,11 @@
         "length": 112.776,
         "orientation": 90.0,
         "reason": "different_layer",
-        "recognition_type": "branch"
+        "recognition_type": "unknown"
       },
       {
         "component": "0d40eb22-0d84-548b-ba9c-0e45ed201ff5",
-        "detail": "recognition differs: straight_bar vs u_bar",
+        "detail": "recognition differs: straight_bar vs l_bar",
         "layer": "S-RBAR",
         "length": 56.188,
         "orientation": 59.534,
@@ -237,11 +215,11 @@
         "length": 1163.16,
         "orientation": 0.0,
         "reason": "different_layer",
-        "recognition_type": "branch"
+        "recognition_type": "unknown"
       },
       {
         "component": "0e7ccc85-9782-5b38-929d-0118f8e75fa4",
-        "detail": "recognition differs: straight_bar vs u_bar",
+        "detail": "recognition differs: straight_bar vs l_bar",
         "layer": "S-RBAR",
         "length": 115.47,
         "orientation": 34.686,
@@ -250,7 +228,7 @@
       },
       {
         "component": "0ecf578f-b556-5b0e-bb53-a3bd0ee2d9e7",
-        "detail": "recognition differs: unknown vs u_bar",
+        "detail": "recognition differs: unknown vs l_bar",
         "layer": "S-RBAR",
         "length": 9.783,
         "orientation": 54.22,
@@ -259,7 +237,7 @@
       },
       {
         "component": "0f257149-1ec0-5660-a2a4-26d325dfc23c",
-        "detail": "recognition differs: straight_bar vs u_bar",
+        "detail": "recognition differs: straight_bar vs l_bar",
         "layer": "S-RBAR",
         "length": 267.71,
         "orientation": 34.686,
@@ -273,20 +251,20 @@
         "length": 301.021,
         "orientation": 165.644,
         "reason": "different_layer",
-        "recognition_type": "straight_bar"
+        "recognition_type": "unknown"
       },
       {
         "component": "0ff871ed-b9ad-5af7-9ebe-4cfd5ed01c6f",
-        "detail": "recognition differs: stirrup vs u_bar",
+        "detail": "recognition differs: symbol vs l_bar",
         "layer": "S-RBAR",
         "length": 47.023,
         "orientation": 54.0,
         "reason": "different_recognition_type",
-        "recognition_type": "stirrup"
+        "recognition_type": "symbol"
       },
       {
         "component": "1007d087-51c5-5d13-91a8-eb61c3d550f6",
-        "detail": "recognition differs: straight_bar vs u_bar",
+        "detail": "recognition differs: straight_bar vs l_bar",
         "layer": "S-RBAR",
         "length": 267.618,
         "orientation": 34.686,
@@ -300,11 +278,20 @@
         "length": 55.982,
         "orientation": 0.0,
         "reason": "different_layer",
-        "recognition_type": "stirrup"
+        "recognition_type": "unknown"
+      },
+      {
+        "component": "106ee874-8c8f-5746-9db6-7790e41f00e3",
+        "detail": "recognition differs: unknown vs l_bar",
+        "layer": "S-RBAR",
+        "length": 848.0,
+        "orientation": 90.0,
+        "reason": "different_recognition_type",
+        "recognition_type": "unknown"
       },
       {
         "component": "1135c621-8010-5016-9231-9ed8e1d4e236",
-        "detail": "recognition differs: straight_bar vs u_bar",
+        "detail": "recognition differs: straight_bar vs l_bar",
         "layer": "S-RBAR",
         "length": 267.618,
         "orientation": 34.686,
@@ -313,7 +300,7 @@
       },
       {
         "component": "11b07c0e-a33e-506a-9819-50bf96d63944",
-        "detail": "recognition differs: unknown vs u_bar",
+        "detail": "recognition differs: unknown vs l_bar",
         "layer": "S-RBAR",
         "length": 9.741,
         "orientation": 162.193,
@@ -336,11 +323,11 @@
         "length": 382.234,
         "orientation": 0.0,
         "reason": "different_layer",
-        "recognition_type": "branch"
+        "recognition_type": "unknown"
       },
       {
         "component": "11dd2af7-d58b-52b1-8456-c80747b8bd71",
-        "detail": "recognition differs: straight_bar vs u_bar",
+        "detail": "recognition differs: straight_bar vs l_bar",
         "layer": "S-RBAR",
         "length": 49.222,
         "orientation": 90.0,
@@ -349,16 +336,16 @@
       },
       {
         "component": "1209b4d0-227f-5e6e-9457-6190e59cc572",
-        "detail": "recognition differs: stirrup vs u_bar",
+        "detail": "recognition differs: symbol vs l_bar",
         "layer": "S-RBAR",
         "length": 47.023,
         "orientation": 54.0,
         "reason": "different_recognition_type",
-        "recognition_type": "stirrup"
+        "recognition_type": "symbol"
       },
       {
         "component": "12400d61-0de5-500d-a81e-3ea17df34348",
-        "detail": "recognition differs: straight_bar vs u_bar",
+        "detail": "recognition differs: straight_bar vs l_bar",
         "layer": "S-RBAR",
         "length": 7.382,
         "orientation": 34.686,
@@ -367,16 +354,16 @@
       },
       {
         "component": "1304a4ae-b0ac-5893-a9ff-ac1f5b992bcf",
-        "detail": "axis differs 2474.0mm",
+        "detail": "recognition differs: unknown vs l_bar",
         "layer": "S-RBAR",
         "length": 848.0,
         "orientation": 90.0,
-        "reason": "not_collinear",
-        "recognition_type": "u_bar"
+        "reason": "different_recognition_type",
+        "recognition_type": "unknown"
       },
       {
         "component": "1383ea22-939e-527e-b00e-6a660d47a937",
-        "detail": "recognition differs: straight_bar vs u_bar",
+        "detail": "recognition differs: straight_bar vs l_bar",
         "layer": "S-RBAR",
         "length": 0.473,
         "orientation": 90.0,
@@ -385,7 +372,7 @@
       },
       {
         "component": "1431940b-89ac-5287-b483-70a872496678",
-        "detail": "recognition differs: straight_bar vs u_bar",
+        "detail": "recognition differs: straight_bar vs l_bar",
         "layer": "S-RBAR",
         "length": 49.222,
         "orientation": 90.0,
@@ -394,43 +381,43 @@
       },
       {
         "component": "14d848e9-0ad2-569a-af5e-9bd454a1827f",
-        "detail": "recognition differs: stirrup vs u_bar",
+        "detail": "recognition differs: symbol vs l_bar",
         "layer": "S-RBAR",
         "length": 47.023,
         "orientation": 54.0,
         "reason": "different_recognition_type",
-        "recognition_type": "stirrup"
+        "recognition_type": "symbol"
       },
       {
         "component": "14ee8c44-96bf-5bfd-95b4-872d7921600e",
-        "detail": "recognition differs: l_bar vs u_bar",
+        "detail": "orientation differs 17.4 degrees",
         "layer": "S-RBAR",
         "length": 746.243,
         "orientation": 90.0,
-        "reason": "different_recognition_type",
+        "reason": "different_orientation",
         "recognition_type": "l_bar"
       },
       {
         "component": "14fcf283-4281-5413-b5c2-1474cfb001c3",
-        "detail": "orientation differs 90.0 degrees",
+        "detail": "recognition differs: unknown vs l_bar",
         "layer": "S-RBAR",
         "length": 937.842,
         "orientation": 0.0,
-        "reason": "different_orientation",
-        "recognition_type": "u_bar"
+        "reason": "different_recognition_type",
+        "recognition_type": "unknown"
       },
       {
         "component": "150988b2-644b-5a28-a835-c4ea21b3d82e",
-        "detail": "recognition differs: l_bar vs u_bar",
+        "detail": "axis differs 2423.9mm",
         "layer": "S-RBAR",
         "length": 5.337,
         "orientation": 107.398,
-        "reason": "different_recognition_type",
+        "reason": "not_collinear",
         "recognition_type": "l_bar"
       },
       {
         "component": "156f37e2-9c9b-53de-9ca6-1c51e07b08c8",
-        "detail": "recognition differs: unknown vs u_bar",
+        "detail": "recognition differs: unknown vs l_bar",
         "layer": "S-RBAR",
         "length": 9.783,
         "orientation": 54.22,
@@ -438,13 +425,22 @@
         "recognition_type": "unknown"
       },
       {
+        "component": "1610b632-46d7-5c4c-a02c-6ac22934027b",
+        "detail": "recognition differs: unknown vs l_bar",
+        "layer": "S-RBAR",
+        "length": 848.0,
+        "orientation": 90.0,
+        "reason": "different_recognition_type",
+        "recognition_type": "unknown"
+      },
+      {
         "component": "168fdcc3-3d64-57d3-a0d6-27df264c29b6",
-        "detail": "recognition differs: stirrup vs u_bar",
+        "detail": "recognition differs: symbol vs l_bar",
         "layer": "S-RBAR",
         "length": 47.023,
         "orientation": 54.0,
         "reason": "different_recognition_type",
-        "recognition_type": "stirrup"
+        "recognition_type": "symbol"
       },
       {
         "component": "16b132c2-253e-5ad4-be64-0d246ffba56c",
@@ -453,20 +449,20 @@
         "length": 100.0,
         "orientation": 90.0,
         "reason": "different_layer",
-        "recognition_type": "branch"
+        "recognition_type": "unknown"
       },
       {
         "component": "1737d056-c04f-5a98-9627-047b949b1be7",
-        "detail": "recognition differs: l_bar vs u_bar",
+        "detail": "orientation differs 17.4 degrees",
         "layer": "S-RBAR",
         "length": 746.385,
         "orientation": 90.0,
-        "reason": "different_recognition_type",
+        "reason": "different_orientation",
         "recognition_type": "l_bar"
       },
       {
         "component": "177e9c70-797b-5467-af88-40973a69a80e",
-        "detail": "recognition differs: unknown vs u_bar",
+        "detail": "recognition differs: unknown vs l_bar",
         "layer": "S-RBAR",
         "length": 9.783,
         "orientation": 54.22,
@@ -475,11 +471,11 @@
       },
       {
         "component": "17e420b1-5c36-5373-aca6-69eb9ef27272",
-        "detail": "recognition differs: l_bar vs u_bar",
+        "detail": "axis differs 958.3mm",
         "layer": "S-RBAR",
         "length": 5.337,
         "orientation": 107.398,
-        "reason": "different_recognition_type",
+        "reason": "not_collinear",
         "recognition_type": "l_bar"
       },
       {
@@ -493,7 +489,7 @@
       },
       {
         "component": "188973e6-430f-530e-88d4-f127917af922",
-        "detail": "recognition differs: straight_bar vs u_bar",
+        "detail": "recognition differs: straight_bar vs l_bar",
         "layer": "S-RBAR",
         "length": 13.022,
         "orientation": 165.644,
@@ -502,16 +498,16 @@
       },
       {
         "component": "18c1891a-f279-519e-9550-5764b09b23ff",
-        "detail": "recognition differs: l_bar vs u_bar",
+        "detail": "orientation differs 17.4 degrees",
         "layer": "S-RBAR",
         "length": 746.243,
         "orientation": 90.0,
-        "reason": "different_recognition_type",
+        "reason": "different_orientation",
         "recognition_type": "l_bar"
       },
       {
         "component": "192d019b-d1d3-5281-8e47-184ebd4ef3fb",
-        "detail": "recognition differs: straight_bar vs u_bar",
+        "detail": "recognition differs: straight_bar vs l_bar",
         "layer": "S-RBAR",
         "length": 81.924,
         "orientation": 34.686,
@@ -520,7 +516,7 @@
       },
       {
         "component": "1935a063-f4f7-5ad1-8124-0076b2d0a8dd",
-        "detail": "recognition differs: straight_bar vs u_bar",
+        "detail": "recognition differs: straight_bar vs l_bar",
         "layer": "S-RBAR",
         "length": 159.611,
         "orientation": 34.686,
@@ -529,7 +525,7 @@
       },
       {
         "component": "199344fc-0486-542d-99ec-b9eeae32f689",
-        "detail": "recognition differs: unknown vs u_bar",
+        "detail": "recognition differs: unknown vs l_bar",
         "layer": "S-RBAR",
         "length": 9.741,
         "orientation": 162.193,
@@ -543,7 +539,7 @@
         "length": 718.528,
         "orientation": 0.0,
         "reason": "different_layer",
-        "recognition_type": "branch"
+        "recognition_type": "unknown"
       },
       {
         "component": "1a6ffcc9-438e-54e5-8e48-7f92fd00a7c4",
@@ -552,20 +548,20 @@
         "length": 119.389,
         "orientation": 34.686,
         "reason": "different_layer",
-        "recognition_type": "straight_bar"
+        "recognition_type": "unknown"
       },
       {
         "component": "1b3c25ac-61d6-5da1-84e9-a6b690711f53",
-        "detail": "recognition differs: stirrup vs u_bar",
+        "detail": "recognition differs: symbol vs l_bar",
         "layer": "S-RBAR",
         "length": 47.023,
         "orientation": 126.0,
         "reason": "different_recognition_type",
-        "recognition_type": "stirrup"
+        "recognition_type": "symbol"
       },
       {
         "component": "1bd14294-7078-5d75-92eb-6efd6ef1825f",
-        "detail": "recognition differs: straight_bar vs u_bar",
+        "detail": "recognition differs: straight_bar vs l_bar",
         "layer": "S-RBAR",
         "length": 165.148,
         "orientation": 34.686,
@@ -574,16 +570,16 @@
       },
       {
         "component": "1bdbffb5-4e3a-53ca-91dd-66f18b7f07ee",
-        "detail": "recognition differs: stirrup vs u_bar",
+        "detail": "recognition differs: symbol vs l_bar",
         "layer": "S-RBAR",
         "length": 47.023,
-        "orientation": 18.0,
+        "orientation": 162.0,
         "reason": "different_recognition_type",
-        "recognition_type": "stirrup"
+        "recognition_type": "symbol"
       },
       {
         "component": "1c051f35-acdb-5c9f-990c-d8d11d1ddb6a",
-        "detail": "recognition differs: straight_bar vs u_bar",
+        "detail": "recognition differs: straight_bar vs l_bar",
         "layer": "S-RBAR",
         "length": 223.837,
         "orientation": 165.644,
@@ -592,7 +588,7 @@
       },
       {
         "component": "1ca7d7ef-0c87-52af-ab87-f718f7a527c9",
-        "detail": "recognition differs: unknown vs u_bar",
+        "detail": "recognition differs: unknown vs l_bar",
         "layer": "S-RBAR",
         "length": 9.741,
         "orientation": 162.193,
@@ -601,7 +597,7 @@
       },
       {
         "component": "1cf194e0-afb6-5605-909d-c29764f7dc61",
-        "detail": "recognition differs: straight_bar vs u_bar",
+        "detail": "recognition differs: straight_bar vs l_bar",
         "layer": "S-RBAR",
         "length": 861.853,
         "orientation": 90.0,
@@ -610,7 +606,7 @@
       },
       {
         "component": "1d53f060-c6de-5ce0-80b5-64e29c288bd6",
-        "detail": "recognition differs: straight_bar vs u_bar",
+        "detail": "recognition differs: straight_bar vs l_bar",
         "layer": "S-RBAR",
         "length": 201.12,
         "orientation": 34.686,
@@ -619,16 +615,16 @@
       },
       {
         "component": "1dbda413-28b0-5f13-9ba5-781d259bfffd",
-        "detail": "recognition differs: l_bar vs u_bar",
+        "detail": "orientation differs 36.3 degrees",
         "layer": "S-RBAR",
         "length": 32.991,
         "orientation": 71.067,
-        "reason": "different_recognition_type",
+        "reason": "different_orientation",
         "recognition_type": "l_bar"
       },
       {
         "component": "1e21ce84-e321-5610-978b-ecc428f384fb",
-        "detail": "recognition differs: unknown vs u_bar",
+        "detail": "recognition differs: unknown vs l_bar",
         "layer": "S-RBAR",
         "length": 9.783,
         "orientation": 54.22,
@@ -642,11 +638,11 @@
         "length": 140.0,
         "orientation": 90.0,
         "reason": "different_layer",
-        "recognition_type": "branch"
+        "recognition_type": "unknown"
       },
       {
         "component": "1e64c77a-5193-5abc-9526-f029d1325405",
-        "detail": "recognition differs: straight_bar vs u_bar",
+        "detail": "recognition differs: straight_bar vs l_bar",
         "layer": "S-RBAR",
         "length": 738.293,
         "orientation": 90.0,
@@ -669,11 +665,11 @@
         "length": 2784.081,
         "orientation": 90.0,
         "reason": "different_layer",
-        "recognition_type": "straight_bar"
+        "recognition_type": "unknown"
       },
       {
         "component": "1eee4d10-1ae0-578b-af02-0a382c2bcdc5",
-        "detail": "recognition differs: unknown vs u_bar",
+        "detail": "recognition differs: unknown vs l_bar",
         "layer": "S-RBAR",
         "length": 9.741,
         "orientation": 162.193,
@@ -682,7 +678,7 @@
       },
       {
         "component": "1f4c1f3c-36c5-5f95-8a13-515ba00899f0",
-        "detail": "recognition differs: straight_bar vs u_bar",
+        "detail": "recognition differs: straight_bar vs l_bar",
         "layer": "S-RBAR",
         "length": 82.102,
         "orientation": 34.686,
@@ -691,11 +687,11 @@
       },
       {
         "component": "1fac0f2f-0f5c-5f9d-9ed7-ffc2f38b8133",
-        "detail": "recognition differs: l_bar vs u_bar",
+        "detail": "orientation differs 17.4 degrees",
         "layer": "S-RBAR",
         "length": 746.385,
         "orientation": 90.0,
-        "reason": "different_recognition_type",
+        "reason": "different_orientation",
         "recognition_type": "l_bar"
       },
       {
@@ -705,11 +701,11 @@
         "length": 145.924,
         "orientation": 165.644,
         "reason": "different_layer",
-        "recognition_type": "straight_bar"
+        "recognition_type": "unknown"
       },
       {
         "component": "204fb6bc-24ae-5ea9-a689-f2576ef02b43",
-        "detail": "recognition differs: straight_bar vs u_bar",
+        "detail": "recognition differs: straight_bar vs l_bar",
         "layer": "S-RBAR",
         "length": 268.25,
         "orientation": 34.686,
@@ -718,7 +714,7 @@
       },
       {
         "component": "20754cb0-91eb-5104-8595-900102ca5964",
-        "detail": "recognition differs: straight_bar vs u_bar",
+        "detail": "recognition differs: straight_bar vs l_bar",
         "layer": "S-RBAR",
         "length": 36.206,
         "orientation": 90.0,
@@ -732,11 +728,11 @@
         "length": 4304.482,
         "orientation": 90.0,
         "reason": "different_layer",
-        "recognition_type": "l_bar"
+        "recognition_type": "unknown"
       },
       {
         "component": "20dc7eef-2093-50fe-8119-22e898f73a18",
-        "detail": "recognition differs: straight_bar vs u_bar",
+        "detail": "recognition differs: straight_bar vs l_bar",
         "layer": "S-RBAR",
         "length": 49.222,
         "orientation": 90.0,
@@ -745,7 +741,7 @@
       },
       {
         "component": "21186d14-8cf7-55bb-89f9-0a43335df40c",
-        "detail": "recognition differs: straight_bar vs u_bar",
+        "detail": "recognition differs: straight_bar vs l_bar",
         "layer": "S-RBAR",
         "length": 267.618,
         "orientation": 34.686,
@@ -754,7 +750,7 @@
       },
       {
         "component": "21a44030-2fa2-5e50-bd64-e5f479931556",
-        "detail": "recognition differs: straight_bar vs u_bar",
+        "detail": "recognition differs: straight_bar vs l_bar",
         "layer": "S-RBAR",
         "length": 144.406,
         "orientation": 34.686,
@@ -763,16 +759,16 @@
       },
       {
         "component": "21f5db77-bc54-55dc-9c5e-21729ac37e7e",
-        "detail": "orientation differs 90.0 degrees",
+        "detail": "recognition differs: unknown vs l_bar",
         "layer": "S-RBAR",
         "length": 847.189,
         "orientation": 0.0,
-        "reason": "different_orientation",
-        "recognition_type": "u_bar"
+        "reason": "different_recognition_type",
+        "recognition_type": "unknown"
       },
       {
         "component": "22857d68-cf55-5245-b99e-1b5553e1dc8e",
-        "detail": "recognition differs: straight_bar vs u_bar",
+        "detail": "recognition differs: straight_bar vs l_bar",
         "layer": "S-RBAR",
         "length": 78.633,
         "orientation": 34.686,
@@ -781,7 +777,7 @@
       },
       {
         "component": "22bafc3a-3f6f-5fcf-89ac-2ec9605ff312",
-        "detail": "recognition differs: straight_bar vs u_bar",
+        "detail": "recognition differs: straight_bar vs l_bar",
         "layer": "S-RBAR",
         "length": 323.155,
         "orientation": 165.644,
@@ -790,7 +786,7 @@
       },
       {
         "component": "22ed8c5e-8fc0-5329-9e75-0f6e52f7ab06",
-        "detail": "recognition differs: straight_bar vs u_bar",
+        "detail": "recognition differs: straight_bar vs l_bar",
         "layer": "S-RBAR",
         "length": 738.293,
         "orientation": 90.0,
@@ -804,11 +800,29 @@
         "length": 323.817,
         "orientation": 165.644,
         "reason": "different_layer",
-        "recognition_type": "l_bar"
+        "recognition_type": "unknown"
+      },
+      {
+        "component": "233516d9-0858-5ec9-a37b-3ed48af1e431",
+        "detail": "recognition differs: unknown vs l_bar",
+        "layer": "S-RBAR",
+        "length": 848.0,
+        "orientation": 90.0,
+        "reason": "different_recognition_type",
+        "recognition_type": "unknown"
+      },
+      {
+        "component": "23c3a9b3-44ba-51d4-84bf-ccf6eab36fc6",
+        "detail": "recognition differs: unknown vs l_bar",
+        "layer": "S-RBAR",
+        "length": 848.0,
+        "orientation": 90.0,
+        "reason": "different_recognition_type",
+        "recognition_type": "unknown"
       },
       {
         "component": "23eb0468-1201-5909-91a4-cb93e4cb7910",
-        "detail": "recognition differs: straight_bar vs u_bar",
+        "detail": "recognition differs: straight_bar vs l_bar",
         "layer": "S-RBAR",
         "length": 267.618,
         "orientation": 34.686,
@@ -817,7 +831,7 @@
       },
       {
         "component": "242743ac-acf1-5578-8bde-00350b807159",
-        "detail": "recognition differs: unknown vs u_bar",
+        "detail": "recognition differs: unknown vs l_bar",
         "layer": "S-RBAR",
         "length": 1666.929,
         "orientation": 90.0,
@@ -826,7 +840,7 @@
       },
       {
         "component": "254445a4-fb86-5d1a-b247-1a44e297a8c5",
-        "detail": "recognition differs: straight_bar vs u_bar",
+        "detail": "recognition differs: straight_bar vs l_bar",
         "layer": "S-RBAR",
         "length": 738.293,
         "orientation": 90.0,
@@ -835,7 +849,7 @@
       },
       {
         "component": "2559c428-f3e7-526e-996d-fd0fdb83caf0",
-        "detail": "recognition differs: straight_bar vs u_bar",
+        "detail": "recognition differs: straight_bar vs l_bar",
         "layer": "S-RBAR",
         "length": 94.408,
         "orientation": 34.686,
@@ -844,16 +858,16 @@
       },
       {
         "component": "260d46d8-b7a4-5904-9d39-d967ac0209fa",
-        "detail": "orientation differs 90.0 degrees",
+        "detail": "recognition differs: unknown vs l_bar",
         "layer": "S-RBAR",
         "length": 847.189,
         "orientation": 0.0,
-        "reason": "different_orientation",
-        "recognition_type": "u_bar"
+        "reason": "different_recognition_type",
+        "recognition_type": "unknown"
       },
       {
         "component": "262a413a-7982-564d-89c6-036758f057f8",
-        "detail": "recognition differs: straight_bar vs u_bar",
+        "detail": "recognition differs: straight_bar vs l_bar",
         "layer": "S-RBAR",
         "length": 267.618,
         "orientation": 34.686,
@@ -862,7 +876,7 @@
       },
       {
         "component": "262d6f30-bd41-5736-bf06-3be14335ab92",
-        "detail": "recognition differs: straight_bar vs u_bar",
+        "detail": "recognition differs: straight_bar vs l_bar",
         "layer": "S-RBAR",
         "length": 793.513,
         "orientation": 90.0,
@@ -876,16 +890,16 @@
         "length": 1084.482,
         "orientation": 90.0,
         "reason": "different_layer",
-        "recognition_type": "l_bar"
+        "recognition_type": "unknown"
       },
       {
         "component": "27109bbd-7d40-5c6c-9754-77a8f667d313",
-        "detail": "layer differs: A-FLOR vs S-RBAR",
-        "layer": "A-FLOR",
+        "detail": "layer differs: A-DETL-THIN vs S-RBAR",
+        "layer": "A-DETL-THIN",
         "length": 15314.0,
         "orientation": 0.0,
         "reason": "different_layer",
-        "recognition_type": "branch"
+        "recognition_type": "unknown"
       },
       {
         "component": "283f34b7-0217-5dda-aa2d-ff86058977f6",
@@ -894,11 +908,11 @@
         "length": 185.723,
         "orientation": 90.0,
         "reason": "different_layer",
-        "recognition_type": "branch"
+        "recognition_type": "unknown"
       },
       {
         "component": "289c76c4-d2ca-563c-9d76-42ddad51faf4",
-        "detail": "recognition differs: straight_bar vs u_bar",
+        "detail": "recognition differs: straight_bar vs l_bar",
         "layer": "S-RBAR",
         "length": 105.676,
         "orientation": 34.686,
@@ -912,11 +926,11 @@
         "length": 380.868,
         "orientation": 34.686,
         "reason": "different_layer",
-        "recognition_type": "straight_bar"
+        "recognition_type": "unknown"
       },
       {
         "component": "28e6e9d8-94d3-57ac-817a-eea338d5217b",
-        "detail": "recognition differs: stirrup vs u_bar",
+        "detail": "recognition differs: stirrup vs l_bar",
         "layer": "S-RBAR",
         "length": 46.957,
         "orientation": 126.553,
@@ -930,20 +944,20 @@
         "length": 5.443,
         "orientation": 90.0,
         "reason": "different_layer",
-        "recognition_type": "straight_bar"
+        "recognition_type": "unknown"
       },
       {
         "component": "2915e6c7-3c8a-5cfb-932e-2e8f2e4fd0c5",
-        "detail": "axis differs 2474.0mm",
+        "detail": "recognition differs: unknown vs l_bar",
         "layer": "S-RBAR",
         "length": 848.0,
         "orientation": 90.0,
-        "reason": "not_collinear",
-        "recognition_type": "u_bar"
+        "reason": "different_recognition_type",
+        "recognition_type": "unknown"
       },
       {
         "component": "291f1cd5-d95f-55d1-8230-f2975d18819a",
-        "detail": "recognition differs: branch vs u_bar",
+        "detail": "recognition differs: branch vs l_bar",
         "layer": "S-RBAR",
         "length": 1237.096,
         "orientation": 90.0,
@@ -952,16 +966,16 @@
       },
       {
         "component": "2941ec4c-0d9c-5736-b885-9fa1fe617348",
-        "detail": "recognition differs: l_bar vs u_bar",
+        "detail": "axis differs 1860.3mm",
         "layer": "S-RBAR",
         "length": 5.337,
         "orientation": 107.398,
-        "reason": "different_recognition_type",
+        "reason": "not_collinear",
         "recognition_type": "l_bar"
       },
       {
         "component": "29471a0f-4c99-5c06-8cd6-9fd295c2ae5f",
-        "detail": "recognition differs: straight_bar vs u_bar",
+        "detail": "recognition differs: straight_bar vs l_bar",
         "layer": "S-RBAR",
         "length": 210.875,
         "orientation": 34.686,
@@ -970,16 +984,16 @@
       },
       {
         "component": "2a7bc07c-3f8d-5d13-8f81-b1920ad91485",
-        "detail": "axis differs 2474.0mm",
+        "detail": "recognition differs: unknown vs l_bar",
         "layer": "S-RBAR",
         "length": 848.0,
         "orientation": 90.0,
-        "reason": "not_collinear",
-        "recognition_type": "u_bar"
+        "reason": "different_recognition_type",
+        "recognition_type": "unknown"
       },
       {
         "component": "2b1c9062-aa2b-5efb-b0ac-3cbc2af97007",
-        "detail": "recognition differs: straight_bar vs u_bar",
+        "detail": "recognition differs: straight_bar vs l_bar",
         "layer": "S-RBAR",
         "length": 25.602,
         "orientation": 34.686,
@@ -988,7 +1002,7 @@
       },
       {
         "component": "2bb59432-8cb2-5682-a949-28a610afb94d",
-        "detail": "recognition differs: straight_bar vs u_bar",
+        "detail": "recognition differs: straight_bar vs l_bar",
         "layer": "S-RBAR",
         "length": 745.554,
         "orientation": 90.0,
@@ -997,16 +1011,16 @@
       },
       {
         "component": "2bb96ba9-decb-5ed6-a260-93e99722757e",
-        "detail": "recognition differs: stirrup vs u_bar",
+        "detail": "recognition differs: symbol vs l_bar",
         "layer": "S-RBAR",
         "length": 47.023,
         "orientation": 54.0,
         "reason": "different_recognition_type",
-        "recognition_type": "stirrup"
+        "recognition_type": "symbol"
       },
       {
         "component": "2c282e33-7ad8-5c6e-81b8-02c18a4afd17",
-        "detail": "recognition differs: straight_bar vs u_bar",
+        "detail": "recognition differs: straight_bar vs l_bar",
         "layer": "S-RBAR",
         "length": 6.073,
         "orientation": 34.686,
@@ -1015,7 +1029,7 @@
       },
       {
         "component": "2c7211f5-3edc-5bcb-b470-1cc15cd46a81",
-        "detail": "recognition differs: straight_bar vs u_bar",
+        "detail": "recognition differs: straight_bar vs l_bar",
         "layer": "S-RBAR",
         "length": 267.618,
         "orientation": 34.686,
@@ -1024,12 +1038,12 @@
       },
       {
         "component": "2c973815-58b5-55ea-ac60-874951a93c8e",
-        "detail": "orientation differs 90.0 degrees",
+        "detail": "recognition differs: unknown vs l_bar",
         "layer": "S-RBAR",
         "length": 847.189,
         "orientation": 0.0,
-        "reason": "different_orientation",
-        "recognition_type": "u_bar"
+        "reason": "different_recognition_type",
+        "recognition_type": "unknown"
       },
       {
         "component": "2cf6672d-9c73-5506-90ec-143179e2b70c",
@@ -1038,20 +1052,20 @@
         "length": 28.154,
         "orientation": 90.0,
         "reason": "different_layer",
-        "recognition_type": "straight_bar"
+        "recognition_type": "unknown"
       },
       {
         "component": "2d4695a3-f8ac-5a7d-adda-c687025d1d9d",
-        "detail": "recognition differs: stirrup vs u_bar",
+        "detail": "recognition differs: symbol vs l_bar",
         "layer": "S-RBAR",
         "length": 47.023,
-        "orientation": 126.0,
+        "orientation": 54.0,
         "reason": "different_recognition_type",
-        "recognition_type": "stirrup"
+        "recognition_type": "symbol"
       },
       {
         "component": "2d5543ff-a6f8-5fda-a6fb-99f31362bdff",
-        "detail": "recognition differs: straight_bar vs u_bar",
+        "detail": "recognition differs: straight_bar vs l_bar",
         "layer": "S-RBAR",
         "length": 49.222,
         "orientation": 90.0,
@@ -1060,7 +1074,7 @@
       },
       {
         "component": "2dc0291a-d813-5e55-bddd-8a368a7cf930",
-        "detail": "recognition differs: straight_bar vs u_bar",
+        "detail": "recognition differs: straight_bar vs l_bar",
         "layer": "S-RBAR",
         "length": 267.618,
         "orientation": 34.686,
@@ -1074,20 +1088,20 @@
         "length": 323.057,
         "orientation": 165.644,
         "reason": "different_layer",
-        "recognition_type": "straight_bar"
+        "recognition_type": "unknown"
       },
       {
         "component": "2f3f81c6-2db8-5722-8046-fa357665a604",
-        "detail": "recognition differs: stirrup vs u_bar",
+        "detail": "recognition differs: symbol vs l_bar",
         "layer": "S-RBAR",
         "length": 47.023,
         "orientation": 126.0,
         "reason": "different_recognition_type",
-        "recognition_type": "stirrup"
+        "recognition_type": "symbol"
       },
       {
         "component": "2f923580-1872-55aa-a0eb-5dfae7a8aa5e",
-        "detail": "recognition differs: straight_bar vs u_bar",
+        "detail": "recognition differs: straight_bar vs l_bar",
         "layer": "S-RBAR",
         "length": 738.293,
         "orientation": 90.0,
@@ -1096,7 +1110,7 @@
       },
       {
         "component": "3036d933-823c-5f7b-bb74-4ee52e674c4a",
-        "detail": "recognition differs: straight_bar vs u_bar",
+        "detail": "recognition differs: straight_bar vs l_bar",
         "layer": "S-RBAR",
         "length": 0.473,
         "orientation": 90.0,
@@ -1105,7 +1119,7 @@
       },
       {
         "component": "30ac55e3-f079-51cc-bc15-ba29a3594e69",
-        "detail": "recognition differs: unknown vs u_bar",
+        "detail": "recognition differs: unknown vs l_bar",
         "layer": "S-RBAR",
         "length": 9.741,
         "orientation": 162.193,
@@ -1114,30 +1128,30 @@
       },
       {
         "component": "31fd3c9f-2f73-5ac2-bd27-0fd5f33a24b4",
-        "detail": "recognition differs: stirrup vs u_bar",
+        "detail": "recognition differs: symbol vs l_bar",
         "layer": "S-RBAR",
         "length": 47.023,
         "orientation": 54.0,
         "reason": "different_recognition_type",
-        "recognition_type": "stirrup"
+        "recognition_type": "symbol"
       },
       {
         "component": "3294a3b9-2747-55c1-bbd5-22e02cee0ad0",
-        "detail": "axis differs 2474.0mm",
+        "detail": "recognition differs: unknown vs l_bar",
         "layer": "S-RBAR",
         "length": 848.0,
         "orientation": 90.0,
-        "reason": "not_collinear",
-        "recognition_type": "u_bar"
+        "reason": "different_recognition_type",
+        "recognition_type": "unknown"
       },
       {
         "component": "3298d176-8701-5d7f-9630-ca7e946d5d9f",
-        "detail": "axis differs 2474.0mm",
+        "detail": "recognition differs: unknown vs l_bar",
         "layer": "S-RBAR",
         "length": 848.0,
         "orientation": 90.0,
-        "reason": "not_collinear",
-        "recognition_type": "u_bar"
+        "reason": "different_recognition_type",
+        "recognition_type": "unknown"
       },
       {
         "component": "33bacfac-69bd-56be-9395-2ac683b3c6d9",
@@ -1146,11 +1160,11 @@
         "length": 16550.0,
         "orientation": 0.0,
         "reason": "different_layer",
-        "recognition_type": "branch"
+        "recognition_type": "unknown"
       },
       {
         "component": "33c13ca4-c577-573a-b013-22ba1a2288f9",
-        "detail": "recognition differs: straight_bar vs u_bar",
+        "detail": "recognition differs: straight_bar vs l_bar",
         "layer": "S-RBAR",
         "length": 267.618,
         "orientation": 34.686,
@@ -1164,11 +1178,11 @@
         "length": 424.495,
         "orientation": 165.644,
         "reason": "different_layer",
-        "recognition_type": "straight_bar"
+        "recognition_type": "unknown"
       },
       {
         "component": "344243e8-bdb8-58cd-a017-80c4bad43959",
-        "detail": "recognition differs: straight_bar vs u_bar",
+        "detail": "recognition differs: straight_bar vs l_bar",
         "layer": "S-RBAR",
         "length": 20.721,
         "orientation": 34.686,
@@ -1177,7 +1191,7 @@
       },
       {
         "component": "35041c31-0da4-5765-ab0f-63779b1c88b4",
-        "detail": "recognition differs: straight_bar vs u_bar",
+        "detail": "recognition differs: straight_bar vs l_bar",
         "layer": "S-RBAR",
         "length": 119.15,
         "orientation": 34.686,
@@ -1186,7 +1200,7 @@
       },
       {
         "component": "350d8072-276e-56c7-8468-66a8111117e3",
-        "detail": "recognition differs: straight_bar vs u_bar",
+        "detail": "recognition differs: straight_bar vs l_bar",
         "layer": "S-RBAR",
         "length": 207.709,
         "orientation": 34.686,
@@ -1195,7 +1209,7 @@
       },
       {
         "component": "35213051-f194-50f5-a379-da49a5a35428",
-        "detail": "recognition differs: straight_bar vs u_bar",
+        "detail": "recognition differs: straight_bar vs l_bar",
         "layer": "S-RBAR",
         "length": 738.293,
         "orientation": 90.0,
@@ -1204,7 +1218,7 @@
       },
       {
         "component": "356a2cbf-6e86-53b2-806a-eb61e9166e77",
-        "detail": "recognition differs: straight_bar vs u_bar",
+        "detail": "recognition differs: straight_bar vs l_bar",
         "layer": "S-RBAR",
         "length": 209.21,
         "orientation": 34.686,
@@ -1213,7 +1227,7 @@
       },
       {
         "component": "356b6a4f-7c30-5e25-b156-4fe69cddbd10",
-        "detail": "recognition differs: straight_bar vs u_bar",
+        "detail": "recognition differs: straight_bar vs l_bar",
         "layer": "S-RBAR",
         "length": 120.84,
         "orientation": 34.686,
@@ -1222,12 +1236,12 @@
       },
       {
         "component": "35dc8034-1919-56da-bda6-36e5d13c7f9d",
-        "detail": "axis differs 2474.0mm",
+        "detail": "recognition differs: unknown vs l_bar",
         "layer": "S-RBAR",
         "length": 848.0,
         "orientation": 90.0,
-        "reason": "not_collinear",
-        "recognition_type": "u_bar"
+        "reason": "different_recognition_type",
+        "recognition_type": "unknown"
       },
       {
         "component": "35f0e826-f7d0-5829-b05f-ee0d9e2aa0b7",
@@ -1236,20 +1250,20 @@
         "length": 424.482,
         "orientation": 165.644,
         "reason": "different_layer",
-        "recognition_type": "straight_bar"
+        "recognition_type": "unknown"
       },
       {
         "component": "366abc2a-4d75-5c30-a683-5cf3fdda2d4c",
-        "detail": "orientation differs 90.0 degrees",
+        "detail": "recognition differs: unknown vs l_bar",
         "layer": "S-RBAR",
         "length": 847.189,
         "orientation": 0.0,
-        "reason": "different_orientation",
-        "recognition_type": "u_bar"
+        "reason": "different_recognition_type",
+        "recognition_type": "unknown"
       },
       {
         "component": "36ac5ab0-097c-5772-bb3c-3d77225b8b5d",
-        "detail": "recognition differs: straight_bar vs u_bar",
+        "detail": "recognition differs: straight_bar vs l_bar",
         "layer": "S-RBAR",
         "length": 267.618,
         "orientation": 34.686,
@@ -1263,11 +1277,11 @@
         "length": 141.758,
         "orientation": 34.686,
         "reason": "different_layer",
-        "recognition_type": "straight_bar"
+        "recognition_type": "unknown"
       },
       {
         "component": "37787dbf-56d8-5ead-aea1-56a5b2cde01a",
-        "detail": "recognition differs: straight_bar vs u_bar",
+        "detail": "recognition differs: straight_bar vs l_bar",
         "layer": "S-RBAR",
         "length": 745.554,
         "orientation": 90.0,
@@ -1276,16 +1290,16 @@
       },
       {
         "component": "378d1fe4-7cbb-5388-9c63-89bc38a58464",
-        "detail": "recognition differs: l_bar vs u_bar",
+        "detail": "axis differs 2539.1mm",
         "layer": "S-RBAR",
         "length": 5.337,
         "orientation": 107.398,
-        "reason": "different_recognition_type",
+        "reason": "not_collinear",
         "recognition_type": "l_bar"
       },
       {
         "component": "3812593f-44bc-56ab-b9e0-69fa4a2ba6ee",
-        "detail": "recognition differs: straight_bar vs u_bar",
+        "detail": "recognition differs: straight_bar vs l_bar",
         "layer": "S-RBAR",
         "length": 738.293,
         "orientation": 90.0,
@@ -1294,7 +1308,7 @@
       },
       {
         "component": "381eb57b-efb3-5b9c-b917-25d2a1a98be0",
-        "detail": "recognition differs: straight_bar vs u_bar",
+        "detail": "recognition differs: straight_bar vs l_bar",
         "layer": "S-RBAR",
         "length": 7.513,
         "orientation": 90.0,
@@ -1308,7 +1322,7 @@
         "length": 18928.036,
         "orientation": 0.0,
         "reason": "different_layer",
-        "recognition_type": "branch"
+        "recognition_type": "unknown"
       },
       {
         "component": "397fac51-2054-5c1c-94de-94f195922e7a",
@@ -1317,7 +1331,7 @@
         "length": 424.474,
         "orientation": 165.644,
         "reason": "different_layer",
-        "recognition_type": "straight_bar"
+        "recognition_type": "unknown"
       },
       {
         "component": "39b2a687-9964-5bb9-b6a9-6788247ba4bd",
@@ -1326,20 +1340,11 @@
         "length": 382.234,
         "orientation": 0.0,
         "reason": "different_layer",
-        "recognition_type": "branch"
-      },
-      {
-        "component": "39efeb9a-f52b-5107-9e26-0714089cbee9",
-        "detail": "recognition differs: l_bar vs u_bar",
-        "layer": "S-RBAR",
-        "length": 5.337,
-        "orientation": 107.398,
-        "reason": "different_recognition_type",
-        "recognition_type": "l_bar"
+        "recognition_type": "unknown"
       },
       {
         "component": "3ab91da3-1027-5707-adf8-92080fa7180e",
-        "detail": "recognition differs: unknown vs u_bar",
+        "detail": "recognition differs: unknown vs l_bar",
         "layer": "S-RBAR",
         "length": 9.783,
         "orientation": 54.22,
@@ -1347,8 +1352,17 @@
         "recognition_type": "unknown"
       },
       {
+        "component": "3b103237-31b7-5af3-b094-4969a1d64da8",
+        "detail": "recognition differs: unknown vs l_bar",
+        "layer": "S-RBAR",
+        "length": 848.0,
+        "orientation": 90.0,
+        "reason": "different_recognition_type",
+        "recognition_type": "unknown"
+      },
+      {
         "component": "3c0f9d8e-0b5e-5147-9fda-e93b5b11691b",
-        "detail": "recognition differs: straight_bar vs u_bar",
+        "detail": "recognition differs: straight_bar vs l_bar",
         "layer": "S-RBAR",
         "length": 333.01,
         "orientation": 165.644,
@@ -1357,16 +1371,16 @@
       },
       {
         "component": "3cdfbcf3-2ed4-57dc-8753-fa1f4589e0dd",
-        "detail": "orientation differs 90.0 degrees",
+        "detail": "recognition differs: unknown vs l_bar",
         "layer": "S-RBAR",
         "length": 937.842,
         "orientation": 0.0,
-        "reason": "different_orientation",
-        "recognition_type": "u_bar"
+        "reason": "different_recognition_type",
+        "recognition_type": "unknown"
       },
       {
         "component": "3d1d8580-f63b-5c01-b78a-88af6893e447",
-        "detail": "recognition differs: straight_bar vs u_bar",
+        "detail": "recognition differs: straight_bar vs l_bar",
         "layer": "S-RBAR",
         "length": 745.554,
         "orientation": 90.0,
@@ -1380,11 +1394,11 @@
         "length": 7824.874,
         "orientation": 0.0,
         "reason": "different_layer",
-        "recognition_type": "branch"
+        "recognition_type": "unknown"
       },
       {
         "component": "3d41065e-b873-5c52-a910-1f138f48355b",
-        "detail": "recognition differs: straight_bar vs u_bar",
+        "detail": "recognition differs: straight_bar vs l_bar",
         "layer": "S-RBAR",
         "length": 222.352,
         "orientation": 34.686,
@@ -1393,7 +1407,7 @@
       },
       {
         "component": "3d491c3b-38cd-5ceb-8e2e-2b9e8d54bb6f",
-        "detail": "recognition differs: unknown vs u_bar",
+        "detail": "recognition differs: unknown vs l_bar",
         "layer": "S-RBAR",
         "length": 9.741,
         "orientation": 162.193,
@@ -1402,25 +1416,25 @@
       },
       {
         "component": "3d4f9569-f65f-5771-b5c4-e44f41507214",
-        "detail": "recognition differs: stirrup vs u_bar",
+        "detail": "recognition differs: symbol vs l_bar",
         "layer": "S-RBAR",
         "length": 47.023,
         "orientation": 18.0,
         "reason": "different_recognition_type",
-        "recognition_type": "stirrup"
+        "recognition_type": "symbol"
       },
       {
         "component": "3d5b18c8-039e-5065-a2e0-4a6352f9a9dc",
-        "detail": "axis differs 2474.0mm",
+        "detail": "recognition differs: unknown vs l_bar",
         "layer": "S-RBAR",
         "length": 848.0,
         "orientation": 90.0,
-        "reason": "not_collinear",
-        "recognition_type": "u_bar"
+        "reason": "different_recognition_type",
+        "recognition_type": "unknown"
       },
       {
         "component": "3ef4dc84-afce-5793-959a-c5bb40a7d1f3",
-        "detail": "recognition differs: straight_bar vs u_bar",
+        "detail": "recognition differs: straight_bar vs l_bar",
         "layer": "S-RBAR",
         "length": 0.473,
         "orientation": 90.0,
@@ -1429,25 +1443,25 @@
       },
       {
         "component": "402677fa-758e-597a-b680-be6099d89606",
-        "detail": "length differs 154.2%",
+        "detail": "recognition differs: unknown vs l_bar",
         "layer": "S-RBAR",
         "length": 2156.0,
         "orientation": 90.0,
-        "reason": "different_length",
-        "recognition_type": "u_bar"
+        "reason": "different_recognition_type",
+        "recognition_type": "unknown"
       },
       {
         "component": "40635774-7ae9-54f9-b73c-b134c69936df",
-        "detail": "recognition differs: l_bar vs u_bar",
+        "detail": "orientation differs 58.2 degrees",
         "layer": "S-RBAR",
         "length": 57.439,
         "orientation": 165.644,
-        "reason": "different_recognition_type",
+        "reason": "different_orientation",
         "recognition_type": "l_bar"
       },
       {
         "component": "409b1cb5-c07d-556d-803e-c37d9e1b7f8b",
-        "detail": "recognition differs: straight_bar vs u_bar",
+        "detail": "recognition differs: straight_bar vs l_bar",
         "layer": "S-RBAR",
         "length": 199.423,
         "orientation": 165.644,
@@ -1456,7 +1470,7 @@
       },
       {
         "component": "40ab1cad-09c3-50cb-9615-199ebac35a3e",
-        "detail": "recognition differs: straight_bar vs u_bar",
+        "detail": "recognition differs: straight_bar vs l_bar",
         "layer": "S-RBAR",
         "length": 19.636,
         "orientation": 34.686,
@@ -1465,12 +1479,12 @@
       },
       {
         "component": "4112a858-144b-5e4e-93c1-63ab8134e2a7",
-        "detail": "orientation differs 90.0 degrees",
+        "detail": "recognition differs: unknown vs l_bar",
         "layer": "S-RBAR",
         "length": 847.189,
         "orientation": 0.0,
-        "reason": "different_orientation",
-        "recognition_type": "u_bar"
+        "reason": "different_recognition_type",
+        "recognition_type": "unknown"
       },
       {
         "component": "4167aed1-2156-5e4e-b5da-ef32e8406b7f",
@@ -1479,11 +1493,11 @@
         "length": 298.934,
         "orientation": 0.0,
         "reason": "different_layer",
-        "recognition_type": "branch"
+        "recognition_type": "unknown"
       },
       {
         "component": "41d1b87c-c273-597d-a4e8-a1a81b162077",
-        "detail": "recognition differs: straight_bar vs u_bar",
+        "detail": "recognition differs: straight_bar vs l_bar",
         "layer": "S-RBAR",
         "length": 1.781,
         "orientation": 127.196,
@@ -1492,7 +1506,7 @@
       },
       {
         "component": "42144bc3-e63d-50b9-9bee-ffef194b0a25",
-        "detail": "recognition differs: straight_bar vs u_bar",
+        "detail": "recognition differs: straight_bar vs l_bar",
         "layer": "S-RBAR",
         "length": 0.473,
         "orientation": 90.0,
@@ -1500,17 +1514,26 @@
         "recognition_type": "straight_bar"
       },
       {
+        "component": "42625daa-58af-57cf-ba55-65d0b09f71d4",
+        "detail": "recognition differs: unknown vs l_bar",
+        "layer": "S-RBAR",
+        "length": 848.0,
+        "orientation": 90.0,
+        "reason": "different_recognition_type",
+        "recognition_type": "unknown"
+      },
+      {
         "component": "42cb3a24-9776-5372-8820-6a0d1bb05507",
-        "detail": "recognition differs: l_bar vs u_bar",
+        "detail": "orientation differs 17.4 degrees",
         "layer": "S-RBAR",
         "length": 746.385,
         "orientation": 90.0,
-        "reason": "different_recognition_type",
+        "reason": "different_orientation",
         "recognition_type": "l_bar"
       },
       {
         "component": "438c34d8-adda-5efe-a01f-b5f3e18c7cac",
-        "detail": "recognition differs: straight_bar vs u_bar",
+        "detail": "recognition differs: straight_bar vs l_bar",
         "layer": "S-RBAR",
         "length": 267.618,
         "orientation": 34.686,
@@ -1519,16 +1542,16 @@
       },
       {
         "component": "43e8a93e-cff4-5126-ae97-3fb69ca59a21",
-        "detail": "axis differs 2474.0mm",
+        "detail": "recognition differs: unknown vs l_bar",
         "layer": "S-RBAR",
         "length": 848.0,
         "orientation": 90.0,
-        "reason": "not_collinear",
-        "recognition_type": "u_bar"
+        "reason": "different_recognition_type",
+        "recognition_type": "unknown"
       },
       {
         "component": "44916d07-cad6-5577-997b-e22df278096a",
-        "detail": "recognition differs: straight_bar vs u_bar",
+        "detail": "recognition differs: straight_bar vs l_bar",
         "layer": "S-RBAR",
         "length": 197.376,
         "orientation": 165.644,
@@ -1537,7 +1560,7 @@
       },
       {
         "component": "45994b72-067f-5d79-98ba-c169ca2683e0",
-        "detail": "recognition differs: straight_bar vs u_bar",
+        "detail": "recognition differs: straight_bar vs l_bar",
         "layer": "S-RBAR",
         "length": 267.618,
         "orientation": 34.686,
@@ -1551,11 +1574,11 @@
         "length": 424.482,
         "orientation": 165.644,
         "reason": "different_layer",
-        "recognition_type": "straight_bar"
+        "recognition_type": "unknown"
       },
       {
         "component": "45e7e094-c778-5eee-9ef7-e7ffbea71c75",
-        "detail": "recognition differs: straight_bar vs u_bar",
+        "detail": "recognition differs: straight_bar vs l_bar",
         "layer": "S-RBAR",
         "length": 745.554,
         "orientation": 90.0,
@@ -1564,7 +1587,7 @@
       },
       {
         "component": "4658a6de-769c-519e-b1d4-cd9dfdf2873b",
-        "detail": "recognition differs: straight_bar vs u_bar",
+        "detail": "recognition differs: straight_bar vs l_bar",
         "layer": "S-RBAR",
         "length": 31.138,
         "orientation": 34.686,
@@ -1573,12 +1596,12 @@
       },
       {
         "component": "465d8daf-91ad-54b7-9e29-c6a9e7b5ede2",
-        "detail": "length differs 95.3%",
+        "detail": "recognition differs: unknown vs l_bar",
         "layer": "S-RBAR",
         "length": 1656.0,
         "orientation": 90.0,
-        "reason": "different_length",
-        "recognition_type": "u_bar"
+        "reason": "different_recognition_type",
+        "recognition_type": "unknown"
       },
       {
         "component": "46b0069d-72aa-5f22-b863-b834b16d0ac4",
@@ -1591,7 +1614,7 @@
       },
       {
         "component": "472fd33a-5e08-57a1-b553-0cd757662fe2",
-        "detail": "recognition differs: straight_bar vs u_bar",
+        "detail": "recognition differs: straight_bar vs l_bar",
         "layer": "S-RBAR",
         "length": 229.297,
         "orientation": 34.686,
@@ -1600,12 +1623,12 @@
       },
       {
         "component": "47abc5dd-270a-51c3-856d-35cef9168f69",
-        "detail": "recognition differs: stirrup vs u_bar",
+        "detail": "recognition differs: symbol vs l_bar",
         "layer": "S-RBAR",
         "length": 47.023,
-        "orientation": 162.0,
+        "orientation": 18.0,
         "reason": "different_recognition_type",
-        "recognition_type": "stirrup"
+        "recognition_type": "symbol"
       },
       {
         "component": "486c288d-093f-5ca2-8911-f89c85d14e24",
@@ -1614,11 +1637,11 @@
         "length": 382.234,
         "orientation": 0.0,
         "reason": "different_layer",
-        "recognition_type": "branch"
+        "recognition_type": "unknown"
       },
       {
         "component": "49153d10-c922-52ba-a39a-a04cf6fab4ad",
-        "detail": "recognition differs: stirrup vs u_bar",
+        "detail": "recognition differs: stirrup vs l_bar",
         "layer": "S-RBAR",
         "length": 47.023,
         "orientation": 54.0,
@@ -1632,11 +1655,11 @@
         "length": 3454.482,
         "orientation": 90.0,
         "reason": "different_layer",
-        "recognition_type": "l_bar"
+        "recognition_type": "unknown"
       },
       {
         "component": "4a53ecbb-d9e9-57ef-a6e4-af683deed577",
-        "detail": "recognition differs: straight_bar vs u_bar",
+        "detail": "recognition differs: straight_bar vs l_bar",
         "layer": "S-RBAR",
         "length": 267.618,
         "orientation": 34.686,
@@ -1650,15 +1673,15 @@
         "length": 754.359,
         "orientation": 0.0,
         "reason": "different_layer",
-        "recognition_type": "branch"
+        "recognition_type": "unknown"
       },
       {
         "component": "4bcda6dd-363a-53bc-b798-3695346f42fe",
-        "detail": "recognition differs: l_bar vs u_bar",
+        "detail": "orientation differs 17.4 degrees",
         "layer": "S-RBAR",
         "length": 746.243,
         "orientation": 90.0,
-        "reason": "different_recognition_type",
+        "reason": "different_orientation",
         "recognition_type": "l_bar"
       },
       {
@@ -1668,11 +1691,11 @@
         "length": 1182.91,
         "orientation": 90.0,
         "reason": "different_layer",
-        "recognition_type": "branch"
+        "recognition_type": "unknown"
       },
       {
         "component": "4ce17e34-0415-5bfa-b109-65f88ceaded6",
-        "detail": "recognition differs: straight_bar vs u_bar",
+        "detail": "recognition differs: straight_bar vs l_bar",
         "layer": "S-RBAR",
         "length": 5.582,
         "orientation": 34.686,
@@ -1686,11 +1709,11 @@
         "length": 112.776,
         "orientation": 90.0,
         "reason": "different_layer",
-        "recognition_type": "branch"
+        "recognition_type": "unknown"
       },
       {
         "component": "4d42249c-f9a5-5654-b0e9-abdf69eb0f79",
-        "detail": "recognition differs: straight_bar vs u_bar",
+        "detail": "recognition differs: straight_bar vs l_bar",
         "layer": "S-RBAR",
         "length": 95.137,
         "orientation": 165.644,
@@ -1699,7 +1722,7 @@
       },
       {
         "component": "4d8cc780-1cfb-5766-8084-fece6e5e4462",
-        "detail": "recognition differs: straight_bar vs u_bar",
+        "detail": "recognition differs: straight_bar vs l_bar",
         "layer": "S-RBAR",
         "length": 333.01,
         "orientation": 165.644,
@@ -1708,7 +1731,7 @@
       },
       {
         "component": "4dbb57c2-a6b2-530c-94c7-5301f7f04565",
-        "detail": "recognition differs: straight_bar vs u_bar",
+        "detail": "recognition differs: straight_bar vs l_bar",
         "layer": "S-RBAR",
         "length": 111.212,
         "orientation": 34.686,
@@ -1717,7 +1740,7 @@
       },
       {
         "component": "4e5cd89c-b706-5d9e-a340-7df9160ed5a0",
-        "detail": "recognition differs: straight_bar vs u_bar",
+        "detail": "recognition differs: straight_bar vs l_bar",
         "layer": "S-RBAR",
         "length": 35.809,
         "orientation": 165.644,
@@ -1726,12 +1749,12 @@
       },
       {
         "component": "4ed3b791-245c-5788-bead-b43f90b9fac7",
-        "detail": "axis differs 2474.0mm",
+        "detail": "recognition differs: unknown vs l_bar",
         "layer": "S-RBAR",
         "length": 848.0,
         "orientation": 90.0,
-        "reason": "not_collinear",
-        "recognition_type": "u_bar"
+        "reason": "different_recognition_type",
+        "recognition_type": "unknown"
       },
       {
         "component": "4f349a97-f92a-5137-bd61-ff163c4d145d",
@@ -1740,7 +1763,7 @@
         "length": 5.443,
         "orientation": 90.0,
         "reason": "different_layer",
-        "recognition_type": "straight_bar"
+        "recognition_type": "unknown"
       },
       {
         "component": "4f7279de-8109-5a35-b966-46aaa0fe9ae2",
@@ -1749,11 +1772,11 @@
         "length": 300.0,
         "orientation": 90.0,
         "reason": "different_layer",
-        "recognition_type": "straight_bar"
+        "recognition_type": "dimension"
       },
       {
         "component": "4fddaa95-a08e-5013-880b-3783b6a569d3",
-        "detail": "recognition differs: straight_bar vs u_bar",
+        "detail": "recognition differs: straight_bar vs l_bar",
         "layer": "S-RBAR",
         "length": 339.954,
         "orientation": 165.644,
@@ -1767,34 +1790,43 @@
         "length": 100.0,
         "orientation": 90.0,
         "reason": "different_layer",
-        "recognition_type": "branch"
+        "recognition_type": "unknown"
       },
       {
         "component": "526598c1-6f5d-5201-b8c0-ece11ab7a311",
-        "detail": "axis differs 2474.0mm",
+        "detail": "recognition differs: unknown vs l_bar",
         "layer": "S-RBAR",
         "length": 848.0,
         "orientation": 90.0,
-        "reason": "not_collinear",
-        "recognition_type": "u_bar"
+        "reason": "different_recognition_type",
+        "recognition_type": "unknown"
       },
       {
         "component": "5282f2c2-d48b-5c06-a1b1-9c2ee6aca0a5",
-        "detail": "recognition differs: stirrup vs u_bar",
+        "detail": "recognition differs: symbol vs l_bar",
         "layer": "S-RBAR",
         "length": 47.023,
         "orientation": 126.0,
         "reason": "different_recognition_type",
-        "recognition_type": "stirrup"
+        "recognition_type": "symbol"
       },
       {
-        "component": "52c7dbee-9d1d-5db5-aad0-a6d47afa8dd5",
-        "detail": "axis differs 2474.0mm",
+        "component": "528f7db4-daa1-5de4-9c34-fb0dc8d0c833",
+        "detail": "recognition differs: unknown vs l_bar",
         "layer": "S-RBAR",
         "length": 848.0,
         "orientation": 90.0,
-        "reason": "not_collinear",
-        "recognition_type": "u_bar"
+        "reason": "different_recognition_type",
+        "recognition_type": "unknown"
+      },
+      {
+        "component": "52c7dbee-9d1d-5db5-aad0-a6d47afa8dd5",
+        "detail": "recognition differs: unknown vs l_bar",
+        "layer": "S-RBAR",
+        "length": 848.0,
+        "orientation": 90.0,
+        "reason": "different_recognition_type",
+        "recognition_type": "unknown"
       },
       {
         "component": "52d745b3-a3a2-5edc-878c-048d800eee33",
@@ -1812,7 +1844,7 @@
         "length": 101.486,
         "orientation": 165.644,
         "reason": "different_layer",
-        "recognition_type": "straight_bar"
+        "recognition_type": "unknown"
       },
       {
         "component": "53798b4e-d3a1-5d1c-8c7d-97b6a3ba5ee3",
@@ -1821,11 +1853,11 @@
         "length": 100.0,
         "orientation": 90.0,
         "reason": "different_layer",
-        "recognition_type": "branch"
+        "recognition_type": "unknown"
       },
       {
         "component": "53ab38e4-400f-591b-916c-4be735828bb3",
-        "detail": "recognition differs: unknown vs u_bar",
+        "detail": "recognition differs: unknown vs l_bar",
         "layer": "S-RBAR",
         "length": 1941.894,
         "orientation": 0.0,
@@ -1839,7 +1871,7 @@
         "length": 115.948,
         "orientation": 2.616,
         "reason": "different_layer",
-        "recognition_type": "structural_outline"
+        "recognition_type": "unknown"
       },
       {
         "component": "54add3a9-ca4d-5cea-b5c0-5155395ea088",
@@ -1848,11 +1880,11 @@
         "length": 3806.108,
         "orientation": 90.0,
         "reason": "different_layer",
-        "recognition_type": "l_bar"
+        "recognition_type": "unknown"
       },
       {
         "component": "54adfe6f-0417-53ae-a9dd-c2252a64fa54",
-        "detail": "recognition differs: straight_bar vs u_bar",
+        "detail": "recognition differs: straight_bar vs l_bar",
         "layer": "S-RBAR",
         "length": 267.618,
         "orientation": 34.686,
@@ -1866,11 +1898,11 @@
         "length": 380.594,
         "orientation": 34.686,
         "reason": "different_layer",
-        "recognition_type": "straight_bar"
+        "recognition_type": "unknown"
       },
       {
         "component": "54e371d7-31b5-5130-ac96-5f1d23039896",
-        "detail": "recognition differs: straight_bar vs u_bar",
+        "detail": "recognition differs: straight_bar vs l_bar",
         "layer": "S-RBAR",
         "length": 267.618,
         "orientation": 34.686,
@@ -1879,7 +1911,7 @@
       },
       {
         "component": "557f29f5-f0b3-52a9-ad81-0879298347fb",
-        "detail": "recognition differs: straight_bar vs u_bar",
+        "detail": "recognition differs: straight_bar vs l_bar",
         "layer": "S-RBAR",
         "length": 745.554,
         "orientation": 90.0,
@@ -1888,7 +1920,7 @@
       },
       {
         "component": "5593836b-645f-5332-9a86-ce4b6e6eacd1",
-        "detail": "recognition differs: unknown vs u_bar",
+        "detail": "recognition differs: unknown vs l_bar",
         "layer": "S-RBAR",
         "length": 9.783,
         "orientation": 54.22,
@@ -1897,7 +1929,7 @@
       },
       {
         "component": "56263df2-f3e2-5a00-9298-b55800112b6c",
-        "detail": "recognition differs: unknown vs u_bar",
+        "detail": "recognition differs: unknown vs l_bar",
         "layer": "S-RBAR",
         "length": 9.783,
         "orientation": 54.22,
@@ -1906,7 +1938,7 @@
       },
       {
         "component": "5669c895-fb91-5063-a49e-0f629492c5d1",
-        "detail": "recognition differs: straight_bar vs u_bar",
+        "detail": "recognition differs: straight_bar vs l_bar",
         "layer": "S-RBAR",
         "length": 54.115,
         "orientation": 127.197,
@@ -1915,7 +1947,7 @@
       },
       {
         "component": "568560c9-47c1-53bd-b7c5-de3e02f028d2",
-        "detail": "recognition differs: straight_bar vs u_bar",
+        "detail": "recognition differs: straight_bar vs l_bar",
         "layer": "S-RBAR",
         "length": 222.352,
         "orientation": 34.686,
@@ -1924,7 +1956,7 @@
       },
       {
         "component": "569751a2-d6a1-5897-b2a7-30a911a69561",
-        "detail": "recognition differs: straight_bar vs u_bar",
+        "detail": "recognition differs: straight_bar vs l_bar",
         "layer": "S-RBAR",
         "length": 267.618,
         "orientation": 34.686,
@@ -1933,7 +1965,7 @@
       },
       {
         "component": "56a1f8a6-8fc8-5e5f-ba03-5e4b15d9bedd",
-        "detail": "recognition differs: straight_bar vs u_bar",
+        "detail": "recognition differs: straight_bar vs l_bar",
         "layer": "S-RBAR",
         "length": 267.618,
         "orientation": 34.686,
@@ -1947,11 +1979,11 @@
         "length": 119.623,
         "orientation": 34.686,
         "reason": "different_layer",
-        "recognition_type": "straight_bar"
+        "recognition_type": "unknown"
       },
       {
         "component": "57d870af-f68c-51fe-a789-fa2cf1b9f2a5",
-        "detail": "recognition differs: straight_bar vs u_bar",
+        "detail": "recognition differs: straight_bar vs l_bar",
         "layer": "S-RBAR",
         "length": 229.297,
         "orientation": 34.686,
@@ -1965,7 +1997,7 @@
         "length": 147.973,
         "orientation": 165.644,
         "reason": "different_layer",
-        "recognition_type": "straight_bar"
+        "recognition_type": "unknown"
       },
       {
         "component": "58adcee6-e5f4-53a6-b93a-f435d823a5de",
@@ -1974,11 +2006,11 @@
         "length": 6606.108,
         "orientation": 0.0,
         "reason": "different_layer",
-        "recognition_type": "l_bar"
+        "recognition_type": "unknown"
       },
       {
         "component": "59189da4-2456-5409-9908-17e12b6c73e1",
-        "detail": "recognition differs: straight_bar vs u_bar",
+        "detail": "recognition differs: straight_bar vs l_bar",
         "layer": "S-RBAR",
         "length": 222.352,
         "orientation": 34.686,
@@ -1987,7 +2019,7 @@
       },
       {
         "component": "593881c6-fc64-5196-87be-e41374eb3f5c",
-        "detail": "recognition differs: straight_bar vs u_bar",
+        "detail": "recognition differs: straight_bar vs l_bar",
         "layer": "S-RBAR",
         "length": 738.293,
         "orientation": 90.0,
@@ -2001,11 +2033,11 @@
         "length": 754.359,
         "orientation": 0.0,
         "reason": "different_layer",
-        "recognition_type": "branch"
+        "recognition_type": "unknown"
       },
       {
         "component": "59aee4f1-8b3c-5395-b93c-92feef981afe",
-        "detail": "recognition differs: straight_bar vs u_bar",
+        "detail": "recognition differs: straight_bar vs l_bar",
         "layer": "S-RBAR",
         "length": 206.656,
         "orientation": 34.686,
@@ -2014,7 +2046,7 @@
       },
       {
         "component": "5a233c38-d9ec-5e89-9da1-9d0458f9c843",
-        "detail": "recognition differs: straight_bar vs u_bar",
+        "detail": "recognition differs: straight_bar vs l_bar",
         "layer": "S-RBAR",
         "length": 17.913,
         "orientation": 34.686,
@@ -2023,7 +2055,7 @@
       },
       {
         "component": "5c1cda77-b36a-5f5e-95a8-4d569308389a",
-        "detail": "recognition differs: branch vs u_bar",
+        "detail": "recognition differs: branch vs l_bar",
         "layer": "S-RBAR",
         "length": 3227.803,
         "orientation": 90.0,
@@ -2032,7 +2064,7 @@
       },
       {
         "component": "5c7e0341-21ef-56b5-a1c2-1927bff893ea",
-        "detail": "recognition differs: straight_bar vs u_bar",
+        "detail": "recognition differs: straight_bar vs l_bar",
         "layer": "S-RBAR",
         "length": 267.618,
         "orientation": 34.686,
@@ -2041,7 +2073,7 @@
       },
       {
         "component": "5cf3429c-cbdd-50bc-8220-775c63ad8b68",
-        "detail": "recognition differs: unknown vs u_bar",
+        "detail": "recognition differs: unknown vs l_bar",
         "layer": "S-RBAR",
         "length": 9.741,
         "orientation": 162.193,
@@ -2050,7 +2082,7 @@
       },
       {
         "component": "5d71ad0e-c1b0-5863-870d-4c12bf7e7acc",
-        "detail": "recognition differs: straight_bar vs u_bar",
+        "detail": "recognition differs: straight_bar vs l_bar",
         "layer": "S-RBAR",
         "length": 267.618,
         "orientation": 34.686,
@@ -2059,7 +2091,7 @@
       },
       {
         "component": "5d98abf4-d9bc-5ef4-95c0-223870606455",
-        "detail": "recognition differs: straight_bar vs u_bar",
+        "detail": "recognition differs: straight_bar vs l_bar",
         "layer": "S-RBAR",
         "length": 205.137,
         "orientation": 90.0,
@@ -2068,7 +2100,7 @@
       },
       {
         "component": "5d9fec6a-d6c4-5d72-8b6a-e824987fc06e",
-        "detail": "recognition differs: straight_bar vs u_bar",
+        "detail": "recognition differs: straight_bar vs l_bar",
         "layer": "S-RBAR",
         "length": 222.352,
         "orientation": 34.686,
@@ -2082,20 +2114,20 @@
         "length": 837.6,
         "orientation": 165.644,
         "reason": "different_layer",
-        "recognition_type": "straight_bar"
+        "recognition_type": "unknown"
       },
       {
         "component": "5e007265-ed6c-5fe8-991a-c9ec37ed8fd1",
-        "detail": "recognition differs: l_bar vs u_bar",
+        "detail": "orientation differs 17.4 degrees",
         "layer": "S-RBAR",
         "length": 746.067,
         "orientation": 90.0,
-        "reason": "different_recognition_type",
+        "reason": "different_orientation",
         "recognition_type": "l_bar"
       },
       {
         "component": "5e7885da-19e9-51b6-858a-a9ce9b55aac1",
-        "detail": "recognition differs: straight_bar vs u_bar",
+        "detail": "recognition differs: straight_bar vs l_bar",
         "layer": "S-RBAR",
         "length": 267.618,
         "orientation": 34.686,
@@ -2104,7 +2136,7 @@
       },
       {
         "component": "5f9b30c5-f54e-53d8-aa86-35e5655a1c1a",
-        "detail": "recognition differs: straight_bar vs u_bar",
+        "detail": "recognition differs: straight_bar vs l_bar",
         "layer": "S-RBAR",
         "length": 301.496,
         "orientation": 165.644,
@@ -2113,7 +2145,7 @@
       },
       {
         "component": "5fad347f-6c15-5712-b0fb-ffa76b08dd9b",
-        "detail": "recognition differs: straight_bar vs u_bar",
+        "detail": "recognition differs: straight_bar vs l_bar",
         "layer": "S-RBAR",
         "length": 191.374,
         "orientation": 34.686,
@@ -2122,7 +2154,7 @@
       },
       {
         "component": "5fb9c96f-c2da-5db2-8ed9-0dd95ed744d7",
-        "detail": "recognition differs: straight_bar vs u_bar",
+        "detail": "recognition differs: straight_bar vs l_bar",
         "layer": "S-RBAR",
         "length": 738.293,
         "orientation": 90.0,
@@ -2136,11 +2168,11 @@
         "length": 120.31,
         "orientation": 165.644,
         "reason": "different_layer",
-        "recognition_type": "straight_bar"
+        "recognition_type": "unknown"
       },
       {
         "component": "60c8f552-bb61-54ad-a73e-2b7f68668fac",
-        "detail": "recognition differs: unknown vs u_bar",
+        "detail": "recognition differs: unknown vs l_bar",
         "layer": "S-RBAR",
         "length": 1635.914,
         "orientation": 0.0,
@@ -2149,7 +2181,7 @@
       },
       {
         "component": "60f4d87d-fcf7-549c-9018-b83adc64a9f2",
-        "detail": "recognition differs: straight_bar vs u_bar",
+        "detail": "recognition differs: straight_bar vs l_bar",
         "layer": "S-RBAR",
         "length": 267.618,
         "orientation": 34.686,
@@ -2158,43 +2190,43 @@
       },
       {
         "component": "615a24c4-2da4-5f6d-b6f7-988d1b496f81",
-        "detail": "recognition differs: stirrup vs u_bar",
+        "detail": "recognition differs: symbol vs l_bar",
         "layer": "S-RBAR",
         "length": 47.023,
-        "orientation": 162.0,
+        "orientation": 18.0,
         "reason": "different_recognition_type",
-        "recognition_type": "stirrup"
+        "recognition_type": "symbol"
       },
       {
         "component": "61b0232f-8385-529e-b1aa-f5ea71ce16c9",
-        "detail": "axis differs 2474.0mm",
+        "detail": "recognition differs: unknown vs l_bar",
         "layer": "S-RBAR",
         "length": 848.0,
         "orientation": 90.0,
-        "reason": "not_collinear",
-        "recognition_type": "u_bar"
+        "reason": "different_recognition_type",
+        "recognition_type": "unknown"
       },
       {
         "component": "61c80a56-813b-56a4-a04a-e32ec7d21350",
-        "detail": "recognition differs: l_bar vs u_bar",
+        "detail": "orientation differs 17.4 degrees",
         "layer": "S-RBAR",
         "length": 746.243,
         "orientation": 90.0,
-        "reason": "different_recognition_type",
+        "reason": "different_orientation",
         "recognition_type": "l_bar"
       },
       {
         "component": "624094ce-48f6-5daa-a133-4c82650b26af",
-        "detail": "axis differs 2474.0mm",
+        "detail": "recognition differs: unknown vs l_bar",
         "layer": "S-RBAR",
         "length": 848.0,
         "orientation": 90.0,
-        "reason": "not_collinear",
-        "recognition_type": "u_bar"
+        "reason": "different_recognition_type",
+        "recognition_type": "unknown"
       },
       {
         "component": "625d1042-ad99-5936-8590-ee7d3ff9bbb7",
-        "detail": "recognition differs: straight_bar vs u_bar",
+        "detail": "recognition differs: straight_bar vs l_bar",
         "layer": "S-RBAR",
         "length": 185.556,
         "orientation": 90.0,
@@ -2203,7 +2235,7 @@
       },
       {
         "component": "62c7a363-917c-5c15-bee6-814fc3552819",
-        "detail": "recognition differs: straight_bar vs u_bar",
+        "detail": "recognition differs: straight_bar vs l_bar",
         "layer": "S-RBAR",
         "length": 25.261,
         "orientation": 34.686,
@@ -2212,7 +2244,7 @@
       },
       {
         "component": "62d8e17b-2a9c-5b08-a207-28749df10f27",
-        "detail": "recognition differs: straight_bar vs u_bar",
+        "detail": "recognition differs: straight_bar vs l_bar",
         "layer": "S-RBAR",
         "length": 32.523,
         "orientation": 34.686,
@@ -2221,76 +2253,22 @@
       },
       {
         "component": "62db73f7-56a9-5bb9-bb76-2668f0aa50b0",
-        "detail": "recognition differs: straight_bar vs u_bar",
+        "detail": "recognition differs: straight_bar vs l_bar",
         "layer": "S-RBAR",
         "length": 84.174,
         "orientation": 34.686,
         "reason": "different_recognition_type",
         "recognition_type": "straight_bar"
-      },
-      {
-        "component": "635d1976-a8d5-5f2d-99c1-3fd8160dd6f1",
-        "detail": "recognition differs: stirrup vs u_bar",
-        "layer": "S-RBAR",
-        "length": 47.023,
-        "orientation": 54.0,
-        "reason": "different_recognition_type",
-        "recognition_type": "stirrup"
-      },
-      {
-        "component": "645ad845-cf4a-5a26-bbe2-a19539962930",
-        "detail": "recognition differs: straight_bar vs u_bar",
-        "layer": "S-RBAR",
-        "length": 119.654,
-        "orientation": 34.686,
-        "reason": "different_recognition_type",
-        "recognition_type": "straight_bar"
-      },
-      {
-        "component": "64af21df-c5bd-5359-afb8-e0bed328dd5a",
-        "detail": "recognition differs: straight_bar vs u_bar",
-        "layer": "S-RBAR",
-        "length": 268.026,
-        "orientation": 34.686,
-        "reason": "different_recognition_type",
-        "recognition_type": "straight_bar"
-      },
-      {
-        "component": "64e3b88f-4d8f-5206-8e29-36b08685c1b5",
-        "detail": "layer differs: A-GENM vs S-RBAR",
-        "layer": "A-GENM",
-        "length": 5.443,
-        "orientation": 90.0,
-        "reason": "different_layer",
-        "recognition_type": "straight_bar"
-      },
-      {
-        "component": "64fc5fd5-86cd-57c1-9d42-f61bc4018aef",
-        "detail": "recognition differs: straight_bar vs u_bar",
-        "layer": "S-RBAR",
-        "length": 0.473,
-        "orientation": 90.0,
-        "reason": "different_recognition_type",
-        "recognition_type": "straight_bar"
-      },
-      {
-        "component": "650d400d-4758-55a1-bea2-7464872f469e",
-        "detail": "recognition differs: straight_bar vs u_bar",
-        "layer": "S-RBAR",
-        "length": 166.259,
-        "orientation": 34.686,
-        "reason": "different_recognition_type",
-        "recognition_type": "straight_bar"
       }
     ],
-    "Representative": "f3cc6164-25eb-5992-a85e-f1995d77472c"
+    "Representative": "7f049da2-8a06-50ad-b520-370144e1feb0"
   },
   {
     "Family": "N6",
     "Family Type": "EDGE",
-    "Family UUID": "9a6b2122-fcfc-57c6-9b4a-fae9d29b7817",
+    "Family UUID": "837ef1e5-7c9c-5c7f-b45b-a5676aa14ced",
     "Members": [
-      "f3e639ef-cd45-5464-87f1-dc6302d18162"
+      "5c1cda77-b36a-5f5e-95a8-4d569308389a"
     ],
     "Rejected": [
       {
@@ -2309,7 +2287,7 @@
         "length": 1079.745,
         "orientation": 0.0,
         "reason": "different_layer",
-        "recognition_type": "l_bar"
+        "recognition_type": "unknown"
       },
       {
         "component": "02917ef3-5abf-5bcc-b96e-147b30e90e7c",
@@ -2327,7 +2305,7 @@
         "length": 301.008,
         "orientation": 165.644,
         "reason": "different_layer",
-        "recognition_type": "straight_bar"
+        "recognition_type": "unknown"
       },
       {
         "component": "03e583a1-da6e-53e9-8a0a-d8eba6095d1a",
@@ -2363,16 +2341,16 @@
         "length": 323.07,
         "orientation": 165.644,
         "reason": "different_layer",
-        "recognition_type": "straight_bar"
+        "recognition_type": "unknown"
       },
       {
         "component": "0692b58e-b742-5774-b7ca-f64a1c154246",
-        "detail": "recognition differs: u_bar vs branch",
+        "detail": "recognition differs: unknown vs branch",
         "layer": "S-RBAR",
         "length": 1656.0,
         "orientation": 90.0,
         "reason": "different_recognition_type",
-        "recognition_type": "u_bar"
+        "recognition_type": "unknown"
       },
       {
         "component": "072f0692-e8d5-5600-8c84-b6d7990d154b",
@@ -2390,7 +2368,7 @@
         "length": 4606.108,
         "orientation": 90.0,
         "reason": "different_layer",
-        "recognition_type": "l_bar"
+        "recognition_type": "unknown"
       },
       {
         "component": "0757b3e7-243a-5082-bd15-63758e056846",
@@ -2412,12 +2390,12 @@
       },
       {
         "component": "07e75aa2-58e9-5781-87da-f885d0649f05",
-        "detail": "recognition differs: stirrup vs branch",
+        "detail": "recognition differs: symbol vs branch",
         "layer": "S-RBAR",
         "length": 47.023,
         "orientation": 126.0,
         "reason": "different_recognition_type",
-        "recognition_type": "stirrup"
+        "recognition_type": "symbol"
       },
       {
         "component": "07fec298-fdbf-5a01-a6ca-dc20a8f8b0ce",
@@ -2435,7 +2413,7 @@
         "length": 5.443,
         "orientation": 90.0,
         "reason": "different_layer",
-        "recognition_type": "straight_bar"
+        "recognition_type": "unknown"
       },
       {
         "component": "09d06de6-849a-56b9-a049-a261fc678f53",
@@ -2444,7 +2422,7 @@
         "length": 140.0,
         "orientation": 90.0,
         "reason": "different_layer",
-        "recognition_type": "branch"
+        "recognition_type": "unknown"
       },
       {
         "component": "0c199c98-49db-5c3a-938f-29acdcdb80d7",
@@ -2453,7 +2431,7 @@
         "length": 1197.824,
         "orientation": 0.0,
         "reason": "different_layer",
-        "recognition_type": "branch"
+        "recognition_type": "dimension"
       },
       {
         "component": "0c9952b6-c29b-5dbc-91da-efcf83ff706b",
@@ -2462,7 +2440,7 @@
         "length": 120.323,
         "orientation": 165.644,
         "reason": "different_layer",
-        "recognition_type": "straight_bar"
+        "recognition_type": "unknown"
       },
       {
         "component": "0cfa7ebe-9e34-5426-b6ef-560cb67bdac8",
@@ -2480,7 +2458,7 @@
         "length": 112.776,
         "orientation": 90.0,
         "reason": "different_layer",
-        "recognition_type": "branch"
+        "recognition_type": "unknown"
       },
       {
         "component": "0d40eb22-0d84-548b-ba9c-0e45ed201ff5",
@@ -2498,7 +2476,7 @@
         "length": 1163.16,
         "orientation": 0.0,
         "reason": "different_layer",
-        "recognition_type": "branch"
+        "recognition_type": "unknown"
       },
       {
         "component": "0e7ccc85-9782-5b38-929d-0118f8e75fa4",
@@ -2534,16 +2512,16 @@
         "length": 301.021,
         "orientation": 165.644,
         "reason": "different_layer",
-        "recognition_type": "straight_bar"
+        "recognition_type": "unknown"
       },
       {
         "component": "0ff871ed-b9ad-5af7-9ebe-4cfd5ed01c6f",
-        "detail": "recognition differs: stirrup vs branch",
+        "detail": "recognition differs: symbol vs branch",
         "layer": "S-RBAR",
         "length": 47.023,
         "orientation": 54.0,
         "reason": "different_recognition_type",
-        "recognition_type": "stirrup"
+        "recognition_type": "symbol"
       },
       {
         "component": "1007d087-51c5-5d13-91a8-eb61c3d550f6",
@@ -2561,16 +2539,16 @@
         "length": 55.982,
         "orientation": 0.0,
         "reason": "different_layer",
-        "recognition_type": "stirrup"
+        "recognition_type": "unknown"
       },
       {
         "component": "106ee874-8c8f-5746-9db6-7790e41f00e3",
-        "detail": "recognition differs: u_bar vs branch",
+        "detail": "recognition differs: unknown vs branch",
         "layer": "S-RBAR",
         "length": 848.0,
         "orientation": 90.0,
         "reason": "different_recognition_type",
-        "recognition_type": "u_bar"
+        "recognition_type": "unknown"
       },
       {
         "component": "1135c621-8010-5016-9231-9ed8e1d4e236",
@@ -2606,7 +2584,7 @@
         "length": 382.234,
         "orientation": 0.0,
         "reason": "different_layer",
-        "recognition_type": "branch"
+        "recognition_type": "unknown"
       },
       {
         "component": "11dd2af7-d58b-52b1-8456-c80747b8bd71",
@@ -2619,12 +2597,12 @@
       },
       {
         "component": "1209b4d0-227f-5e6e-9457-6190e59cc572",
-        "detail": "recognition differs: stirrup vs branch",
+        "detail": "recognition differs: symbol vs branch",
         "layer": "S-RBAR",
         "length": 47.023,
         "orientation": 54.0,
         "reason": "different_recognition_type",
-        "recognition_type": "stirrup"
+        "recognition_type": "symbol"
       },
       {
         "component": "12400d61-0de5-500d-a81e-3ea17df34348",
@@ -2637,12 +2615,12 @@
       },
       {
         "component": "1304a4ae-b0ac-5893-a9ff-ac1f5b992bcf",
-        "detail": "recognition differs: u_bar vs branch",
+        "detail": "recognition differs: unknown vs branch",
         "layer": "S-RBAR",
         "length": 848.0,
         "orientation": 90.0,
         "reason": "different_recognition_type",
-        "recognition_type": "u_bar"
+        "recognition_type": "unknown"
       },
       {
         "component": "1383ea22-939e-527e-b00e-6a660d47a937",
@@ -2664,12 +2642,12 @@
       },
       {
         "component": "14d848e9-0ad2-569a-af5e-9bd454a1827f",
-        "detail": "recognition differs: stirrup vs branch",
+        "detail": "recognition differs: symbol vs branch",
         "layer": "S-RBAR",
         "length": 47.023,
         "orientation": 54.0,
         "reason": "different_recognition_type",
-        "recognition_type": "stirrup"
+        "recognition_type": "symbol"
       },
       {
         "component": "14ee8c44-96bf-5bfd-95b4-872d7921600e",
@@ -2682,12 +2660,12 @@
       },
       {
         "component": "14fcf283-4281-5413-b5c2-1474cfb001c3",
-        "detail": "recognition differs: u_bar vs branch",
+        "detail": "recognition differs: unknown vs branch",
         "layer": "S-RBAR",
         "length": 937.842,
         "orientation": 0.0,
         "reason": "different_recognition_type",
-        "recognition_type": "u_bar"
+        "recognition_type": "unknown"
       },
       {
         "component": "150988b2-644b-5a28-a835-c4ea21b3d82e",
@@ -2709,21 +2687,21 @@
       },
       {
         "component": "1610b632-46d7-5c4c-a02c-6ac22934027b",
-        "detail": "recognition differs: u_bar vs branch",
+        "detail": "recognition differs: unknown vs branch",
         "layer": "S-RBAR",
         "length": 848.0,
         "orientation": 90.0,
         "reason": "different_recognition_type",
-        "recognition_type": "u_bar"
+        "recognition_type": "unknown"
       },
       {
         "component": "168fdcc3-3d64-57d3-a0d6-27df264c29b6",
-        "detail": "recognition differs: stirrup vs branch",
+        "detail": "recognition differs: symbol vs branch",
         "layer": "S-RBAR",
         "length": 47.023,
         "orientation": 54.0,
         "reason": "different_recognition_type",
-        "recognition_type": "stirrup"
+        "recognition_type": "symbol"
       },
       {
         "component": "16b132c2-253e-5ad4-be64-0d246ffba56c",
@@ -2732,7 +2710,7 @@
         "length": 100.0,
         "orientation": 90.0,
         "reason": "different_layer",
-        "recognition_type": "branch"
+        "recognition_type": "unknown"
       },
       {
         "component": "1737d056-c04f-5a98-9627-047b949b1be7",
@@ -2822,7 +2800,7 @@
         "length": 718.528,
         "orientation": 0.0,
         "reason": "different_layer",
-        "recognition_type": "branch"
+        "recognition_type": "unknown"
       },
       {
         "component": "1a6ffcc9-438e-54e5-8e48-7f92fd00a7c4",
@@ -2831,16 +2809,16 @@
         "length": 119.389,
         "orientation": 34.686,
         "reason": "different_layer",
-        "recognition_type": "straight_bar"
+        "recognition_type": "unknown"
       },
       {
         "component": "1b3c25ac-61d6-5da1-84e9-a6b690711f53",
-        "detail": "recognition differs: stirrup vs branch",
+        "detail": "recognition differs: symbol vs branch",
         "layer": "S-RBAR",
         "length": 47.023,
         "orientation": 126.0,
         "reason": "different_recognition_type",
-        "recognition_type": "stirrup"
+        "recognition_type": "symbol"
       },
       {
         "component": "1bd14294-7078-5d75-92eb-6efd6ef1825f",
@@ -2853,12 +2831,12 @@
       },
       {
         "component": "1bdbffb5-4e3a-53ca-91dd-66f18b7f07ee",
-        "detail": "recognition differs: stirrup vs branch",
+        "detail": "recognition differs: symbol vs branch",
         "layer": "S-RBAR",
         "length": 47.023,
-        "orientation": 18.0,
+        "orientation": 162.0,
         "reason": "different_recognition_type",
-        "recognition_type": "stirrup"
+        "recognition_type": "symbol"
       },
       {
         "component": "1c051f35-acdb-5c9f-990c-d8d11d1ddb6a",
@@ -2921,7 +2899,7 @@
         "length": 140.0,
         "orientation": 90.0,
         "reason": "different_layer",
-        "recognition_type": "branch"
+        "recognition_type": "unknown"
       },
       {
         "component": "1e64c77a-5193-5abc-9526-f029d1325405",
@@ -2948,7 +2926,7 @@
         "length": 2784.081,
         "orientation": 90.0,
         "reason": "different_layer",
-        "recognition_type": "straight_bar"
+        "recognition_type": "unknown"
       },
       {
         "component": "1eee4d10-1ae0-578b-af02-0a382c2bcdc5",
@@ -2984,7 +2962,7 @@
         "length": 145.924,
         "orientation": 165.644,
         "reason": "different_layer",
-        "recognition_type": "straight_bar"
+        "recognition_type": "unknown"
       },
       {
         "component": "204fb6bc-24ae-5ea9-a689-f2576ef02b43",
@@ -3011,7 +2989,7 @@
         "length": 4304.482,
         "orientation": 90.0,
         "reason": "different_layer",
-        "recognition_type": "l_bar"
+        "recognition_type": "unknown"
       },
       {
         "component": "20dc7eef-2093-50fe-8119-22e898f73a18",
@@ -3042,12 +3020,12 @@
       },
       {
         "component": "21f5db77-bc54-55dc-9c5e-21729ac37e7e",
-        "detail": "recognition differs: u_bar vs branch",
+        "detail": "recognition differs: unknown vs branch",
         "layer": "S-RBAR",
         "length": 847.189,
         "orientation": 0.0,
         "reason": "different_recognition_type",
-        "recognition_type": "u_bar"
+        "recognition_type": "unknown"
       },
       {
         "component": "22857d68-cf55-5245-b99e-1b5553e1dc8e",
@@ -3083,25 +3061,25 @@
         "length": 323.817,
         "orientation": 165.644,
         "reason": "different_layer",
-        "recognition_type": "l_bar"
+        "recognition_type": "unknown"
       },
       {
         "component": "233516d9-0858-5ec9-a37b-3ed48af1e431",
-        "detail": "recognition differs: u_bar vs branch",
+        "detail": "recognition differs: unknown vs branch",
         "layer": "S-RBAR",
         "length": 848.0,
         "orientation": 90.0,
         "reason": "different_recognition_type",
-        "recognition_type": "u_bar"
+        "recognition_type": "unknown"
       },
       {
         "component": "23c3a9b3-44ba-51d4-84bf-ccf6eab36fc6",
-        "detail": "recognition differs: u_bar vs branch",
+        "detail": "recognition differs: unknown vs branch",
         "layer": "S-RBAR",
         "length": 848.0,
         "orientation": 90.0,
         "reason": "different_recognition_type",
-        "recognition_type": "u_bar"
+        "recognition_type": "unknown"
       },
       {
         "component": "23eb0468-1201-5909-91a4-cb93e4cb7910",
@@ -3141,12 +3119,12 @@
       },
       {
         "component": "260d46d8-b7a4-5904-9d39-d967ac0209fa",
-        "detail": "recognition differs: u_bar vs branch",
+        "detail": "recognition differs: unknown vs branch",
         "layer": "S-RBAR",
         "length": 847.189,
         "orientation": 0.0,
         "reason": "different_recognition_type",
-        "recognition_type": "u_bar"
+        "recognition_type": "unknown"
       },
       {
         "component": "262a413a-7982-564d-89c6-036758f057f8",
@@ -3173,16 +3151,16 @@
         "length": 1084.482,
         "orientation": 90.0,
         "reason": "different_layer",
-        "recognition_type": "l_bar"
+        "recognition_type": "unknown"
       },
       {
         "component": "27109bbd-7d40-5c6c-9754-77a8f667d313",
-        "detail": "layer differs: A-FLOR vs S-RBAR",
-        "layer": "A-FLOR",
+        "detail": "layer differs: A-DETL-THIN vs S-RBAR",
+        "layer": "A-DETL-THIN",
         "length": 15314.0,
         "orientation": 0.0,
         "reason": "different_layer",
-        "recognition_type": "branch"
+        "recognition_type": "unknown"
       },
       {
         "component": "283f34b7-0217-5dda-aa2d-ff86058977f6",
@@ -3191,7 +3169,7 @@
         "length": 185.723,
         "orientation": 90.0,
         "reason": "different_layer",
-        "recognition_type": "branch"
+        "recognition_type": "unknown"
       },
       {
         "component": "289c76c4-d2ca-563c-9d76-42ddad51faf4",
@@ -3209,7 +3187,7 @@
         "length": 380.868,
         "orientation": 34.686,
         "reason": "different_layer",
-        "recognition_type": "straight_bar"
+        "recognition_type": "unknown"
       },
       {
         "component": "28e6e9d8-94d3-57ac-817a-eea338d5217b",
@@ -3227,16 +3205,2277 @@
         "length": 5.443,
         "orientation": 90.0,
         "reason": "different_layer",
-        "recognition_type": "straight_bar"
+        "recognition_type": "unknown"
       },
       {
         "component": "2915e6c7-3c8a-5cfb-932e-2e8f2e4fd0c5",
-        "detail": "recognition differs: u_bar vs branch",
+        "detail": "recognition differs: unknown vs branch",
         "layer": "S-RBAR",
         "length": 848.0,
         "orientation": 90.0,
         "reason": "different_recognition_type",
-        "recognition_type": "u_bar"
+        "recognition_type": "unknown"
+      },
+      {
+        "component": "291f1cd5-d95f-55d1-8230-f2975d18819a",
+        "detail": "length differs 61.7%",
+        "layer": "S-RBAR",
+        "length": 1237.096,
+        "orientation": 90.0,
+        "reason": "different_length",
+        "recognition_type": "branch"
+      },
+      {
+        "component": "2941ec4c-0d9c-5736-b885-9fa1fe617348",
+        "detail": "recognition differs: l_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 5.337,
+        "orientation": 107.398,
+        "reason": "different_recognition_type",
+        "recognition_type": "l_bar"
+      },
+      {
+        "component": "29471a0f-4c99-5c06-8cd6-9fd295c2ae5f",
+        "detail": "recognition differs: straight_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 210.875,
+        "orientation": 34.686,
+        "reason": "different_recognition_type",
+        "recognition_type": "straight_bar"
+      },
+      {
+        "component": "2a7bc07c-3f8d-5d13-8f81-b1920ad91485",
+        "detail": "recognition differs: unknown vs branch",
+        "layer": "S-RBAR",
+        "length": 848.0,
+        "orientation": 90.0,
+        "reason": "different_recognition_type",
+        "recognition_type": "unknown"
+      },
+      {
+        "component": "2b1c9062-aa2b-5efb-b0ac-3cbc2af97007",
+        "detail": "recognition differs: straight_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 25.602,
+        "orientation": 34.686,
+        "reason": "different_recognition_type",
+        "recognition_type": "straight_bar"
+      },
+      {
+        "component": "2bb59432-8cb2-5682-a949-28a610afb94d",
+        "detail": "recognition differs: straight_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 745.554,
+        "orientation": 90.0,
+        "reason": "different_recognition_type",
+        "recognition_type": "straight_bar"
+      },
+      {
+        "component": "2bb96ba9-decb-5ed6-a260-93e99722757e",
+        "detail": "recognition differs: symbol vs branch",
+        "layer": "S-RBAR",
+        "length": 47.023,
+        "orientation": 54.0,
+        "reason": "different_recognition_type",
+        "recognition_type": "symbol"
+      },
+      {
+        "component": "2c282e33-7ad8-5c6e-81b8-02c18a4afd17",
+        "detail": "recognition differs: straight_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 6.073,
+        "orientation": 34.686,
+        "reason": "different_recognition_type",
+        "recognition_type": "straight_bar"
+      },
+      {
+        "component": "2c7211f5-3edc-5bcb-b470-1cc15cd46a81",
+        "detail": "recognition differs: straight_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 267.618,
+        "orientation": 34.686,
+        "reason": "different_recognition_type",
+        "recognition_type": "straight_bar"
+      },
+      {
+        "component": "2c973815-58b5-55ea-ac60-874951a93c8e",
+        "detail": "recognition differs: unknown vs branch",
+        "layer": "S-RBAR",
+        "length": 847.189,
+        "orientation": 0.0,
+        "reason": "different_recognition_type",
+        "recognition_type": "unknown"
+      },
+      {
+        "component": "2cf6672d-9c73-5506-90ec-143179e2b70c",
+        "detail": "layer differs: A-FLOR vs S-RBAR",
+        "layer": "A-FLOR",
+        "length": 28.154,
+        "orientation": 90.0,
+        "reason": "different_layer",
+        "recognition_type": "unknown"
+      },
+      {
+        "component": "2d4695a3-f8ac-5a7d-adda-c687025d1d9d",
+        "detail": "recognition differs: symbol vs branch",
+        "layer": "S-RBAR",
+        "length": 47.023,
+        "orientation": 54.0,
+        "reason": "different_recognition_type",
+        "recognition_type": "symbol"
+      },
+      {
+        "component": "2d5543ff-a6f8-5fda-a6fb-99f31362bdff",
+        "detail": "recognition differs: straight_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 49.222,
+        "orientation": 90.0,
+        "reason": "different_recognition_type",
+        "recognition_type": "straight_bar"
+      },
+      {
+        "component": "2dc0291a-d813-5e55-bddd-8a368a7cf930",
+        "detail": "recognition differs: straight_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 267.618,
+        "orientation": 34.686,
+        "reason": "different_recognition_type",
+        "recognition_type": "straight_bar"
+      },
+      {
+        "component": "2eafffd5-3944-5069-8c66-322a24b244ac",
+        "detail": "layer differs: A-FLOR vs S-RBAR",
+        "layer": "A-FLOR",
+        "length": 323.057,
+        "orientation": 165.644,
+        "reason": "different_layer",
+        "recognition_type": "unknown"
+      },
+      {
+        "component": "2f3f81c6-2db8-5722-8046-fa357665a604",
+        "detail": "recognition differs: symbol vs branch",
+        "layer": "S-RBAR",
+        "length": 47.023,
+        "orientation": 126.0,
+        "reason": "different_recognition_type",
+        "recognition_type": "symbol"
+      },
+      {
+        "component": "2f923580-1872-55aa-a0eb-5dfae7a8aa5e",
+        "detail": "recognition differs: straight_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 738.293,
+        "orientation": 90.0,
+        "reason": "different_recognition_type",
+        "recognition_type": "straight_bar"
+      },
+      {
+        "component": "3036d933-823c-5f7b-bb74-4ee52e674c4a",
+        "detail": "recognition differs: straight_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 0.473,
+        "orientation": 90.0,
+        "reason": "different_recognition_type",
+        "recognition_type": "straight_bar"
+      },
+      {
+        "component": "30ac55e3-f079-51cc-bc15-ba29a3594e69",
+        "detail": "recognition differs: unknown vs branch",
+        "layer": "S-RBAR",
+        "length": 9.741,
+        "orientation": 162.193,
+        "reason": "different_recognition_type",
+        "recognition_type": "unknown"
+      },
+      {
+        "component": "31fd3c9f-2f73-5ac2-bd27-0fd5f33a24b4",
+        "detail": "recognition differs: symbol vs branch",
+        "layer": "S-RBAR",
+        "length": 47.023,
+        "orientation": 54.0,
+        "reason": "different_recognition_type",
+        "recognition_type": "symbol"
+      },
+      {
+        "component": "3294a3b9-2747-55c1-bbd5-22e02cee0ad0",
+        "detail": "recognition differs: unknown vs branch",
+        "layer": "S-RBAR",
+        "length": 848.0,
+        "orientation": 90.0,
+        "reason": "different_recognition_type",
+        "recognition_type": "unknown"
+      },
+      {
+        "component": "3298d176-8701-5d7f-9630-ca7e946d5d9f",
+        "detail": "recognition differs: unknown vs branch",
+        "layer": "S-RBAR",
+        "length": 848.0,
+        "orientation": 90.0,
+        "reason": "different_recognition_type",
+        "recognition_type": "unknown"
+      },
+      {
+        "component": "33bacfac-69bd-56be-9395-2ac683b3c6d9",
+        "detail": "layer differs: A-FLOR vs S-RBAR",
+        "layer": "A-FLOR",
+        "length": 16550.0,
+        "orientation": 0.0,
+        "reason": "different_layer",
+        "recognition_type": "unknown"
+      },
+      {
+        "component": "33c13ca4-c577-573a-b013-22ba1a2288f9",
+        "detail": "recognition differs: straight_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 267.618,
+        "orientation": 34.686,
+        "reason": "different_recognition_type",
+        "recognition_type": "straight_bar"
+      },
+      {
+        "component": "34199095-0478-5f11-9d95-e8f622ea6fe2",
+        "detail": "layer differs: A-FLOR vs S-RBAR",
+        "layer": "A-FLOR",
+        "length": 424.495,
+        "orientation": 165.644,
+        "reason": "different_layer",
+        "recognition_type": "unknown"
+      },
+      {
+        "component": "344243e8-bdb8-58cd-a017-80c4bad43959",
+        "detail": "recognition differs: straight_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 20.721,
+        "orientation": 34.686,
+        "reason": "different_recognition_type",
+        "recognition_type": "straight_bar"
+      },
+      {
+        "component": "35041c31-0da4-5765-ab0f-63779b1c88b4",
+        "detail": "recognition differs: straight_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 119.15,
+        "orientation": 34.686,
+        "reason": "different_recognition_type",
+        "recognition_type": "straight_bar"
+      },
+      {
+        "component": "350d8072-276e-56c7-8468-66a8111117e3",
+        "detail": "recognition differs: straight_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 207.709,
+        "orientation": 34.686,
+        "reason": "different_recognition_type",
+        "recognition_type": "straight_bar"
+      },
+      {
+        "component": "35213051-f194-50f5-a379-da49a5a35428",
+        "detail": "recognition differs: straight_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 738.293,
+        "orientation": 90.0,
+        "reason": "different_recognition_type",
+        "recognition_type": "straight_bar"
+      },
+      {
+        "component": "356a2cbf-6e86-53b2-806a-eb61e9166e77",
+        "detail": "recognition differs: straight_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 209.21,
+        "orientation": 34.686,
+        "reason": "different_recognition_type",
+        "recognition_type": "straight_bar"
+      },
+      {
+        "component": "356b6a4f-7c30-5e25-b156-4fe69cddbd10",
+        "detail": "recognition differs: straight_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 120.84,
+        "orientation": 34.686,
+        "reason": "different_recognition_type",
+        "recognition_type": "straight_bar"
+      },
+      {
+        "component": "35dc8034-1919-56da-bda6-36e5d13c7f9d",
+        "detail": "recognition differs: unknown vs branch",
+        "layer": "S-RBAR",
+        "length": 848.0,
+        "orientation": 90.0,
+        "reason": "different_recognition_type",
+        "recognition_type": "unknown"
+      },
+      {
+        "component": "35f0e826-f7d0-5829-b05f-ee0d9e2aa0b7",
+        "detail": "layer differs: A-FLOR vs S-RBAR",
+        "layer": "A-FLOR",
+        "length": 424.482,
+        "orientation": 165.644,
+        "reason": "different_layer",
+        "recognition_type": "unknown"
+      },
+      {
+        "component": "366abc2a-4d75-5c30-a683-5cf3fdda2d4c",
+        "detail": "recognition differs: unknown vs branch",
+        "layer": "S-RBAR",
+        "length": 847.189,
+        "orientation": 0.0,
+        "reason": "different_recognition_type",
+        "recognition_type": "unknown"
+      },
+      {
+        "component": "36ac5ab0-097c-5772-bb3c-3d77225b8b5d",
+        "detail": "recognition differs: straight_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 267.618,
+        "orientation": 34.686,
+        "reason": "different_recognition_type",
+        "recognition_type": "straight_bar"
+      },
+      {
+        "component": "37468396-5def-5f7e-a6e1-c69f89f66aa6",
+        "detail": "layer differs: A-FLOR vs S-RBAR",
+        "layer": "A-FLOR",
+        "length": 141.758,
+        "orientation": 34.686,
+        "reason": "different_layer",
+        "recognition_type": "unknown"
+      },
+      {
+        "component": "37787dbf-56d8-5ead-aea1-56a5b2cde01a",
+        "detail": "recognition differs: straight_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 745.554,
+        "orientation": 90.0,
+        "reason": "different_recognition_type",
+        "recognition_type": "straight_bar"
+      },
+      {
+        "component": "378d1fe4-7cbb-5388-9c63-89bc38a58464",
+        "detail": "recognition differs: l_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 5.337,
+        "orientation": 107.398,
+        "reason": "different_recognition_type",
+        "recognition_type": "l_bar"
+      },
+      {
+        "component": "3812593f-44bc-56ab-b9e0-69fa4a2ba6ee",
+        "detail": "recognition differs: straight_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 738.293,
+        "orientation": 90.0,
+        "reason": "different_recognition_type",
+        "recognition_type": "straight_bar"
+      },
+      {
+        "component": "381eb57b-efb3-5b9c-b917-25d2a1a98be0",
+        "detail": "recognition differs: straight_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 7.513,
+        "orientation": 90.0,
+        "reason": "different_recognition_type",
+        "recognition_type": "straight_bar"
+      },
+      {
+        "component": "3934d2dc-d058-5a6d-8fdb-e4e896ed8132",
+        "detail": "layer differs: A-DETL-MBND vs S-RBAR",
+        "layer": "A-DETL-MBND",
+        "length": 18928.036,
+        "orientation": 0.0,
+        "reason": "different_layer",
+        "recognition_type": "unknown"
+      },
+      {
+        "component": "397fac51-2054-5c1c-94de-94f195922e7a",
+        "detail": "layer differs: A-FLOR vs S-RBAR",
+        "layer": "A-FLOR",
+        "length": 424.474,
+        "orientation": 165.644,
+        "reason": "different_layer",
+        "recognition_type": "unknown"
+      },
+      {
+        "component": "39b2a687-9964-5bb9-b6a9-6788247ba4bd",
+        "detail": "layer differs: G-ANNO-TEXT vs S-RBAR",
+        "layer": "G-ANNO-TEXT",
+        "length": 382.234,
+        "orientation": 0.0,
+        "reason": "different_layer",
+        "recognition_type": "unknown"
+      },
+      {
+        "component": "39efeb9a-f52b-5107-9e26-0714089cbee9",
+        "detail": "recognition differs: l_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 5.337,
+        "orientation": 107.398,
+        "reason": "different_recognition_type",
+        "recognition_type": "l_bar"
+      },
+      {
+        "component": "3ab91da3-1027-5707-adf8-92080fa7180e",
+        "detail": "recognition differs: unknown vs branch",
+        "layer": "S-RBAR",
+        "length": 9.783,
+        "orientation": 54.22,
+        "reason": "different_recognition_type",
+        "recognition_type": "unknown"
+      },
+      {
+        "component": "3b103237-31b7-5af3-b094-4969a1d64da8",
+        "detail": "recognition differs: unknown vs branch",
+        "layer": "S-RBAR",
+        "length": 848.0,
+        "orientation": 90.0,
+        "reason": "different_recognition_type",
+        "recognition_type": "unknown"
+      },
+      {
+        "component": "3c0f9d8e-0b5e-5147-9fda-e93b5b11691b",
+        "detail": "recognition differs: straight_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 333.01,
+        "orientation": 165.644,
+        "reason": "different_recognition_type",
+        "recognition_type": "straight_bar"
+      },
+      {
+        "component": "3cdfbcf3-2ed4-57dc-8753-fa1f4589e0dd",
+        "detail": "recognition differs: unknown vs branch",
+        "layer": "S-RBAR",
+        "length": 937.842,
+        "orientation": 0.0,
+        "reason": "different_recognition_type",
+        "recognition_type": "unknown"
+      },
+      {
+        "component": "3d1d8580-f63b-5c01-b78a-88af6893e447",
+        "detail": "recognition differs: straight_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 745.554,
+        "orientation": 90.0,
+        "reason": "different_recognition_type",
+        "recognition_type": "straight_bar"
+      },
+      {
+        "component": "3d2ce936-613b-5b94-ad92-0509c5f5e95f",
+        "detail": "layer differs: A-DETL-MBND vs S-RBAR",
+        "layer": "A-DETL-MBND",
+        "length": 7824.874,
+        "orientation": 0.0,
+        "reason": "different_layer",
+        "recognition_type": "unknown"
+      },
+      {
+        "component": "3d41065e-b873-5c52-a910-1f138f48355b",
+        "detail": "recognition differs: straight_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 222.352,
+        "orientation": 34.686,
+        "reason": "different_recognition_type",
+        "recognition_type": "straight_bar"
+      },
+      {
+        "component": "3d491c3b-38cd-5ceb-8e2e-2b9e8d54bb6f",
+        "detail": "recognition differs: unknown vs branch",
+        "layer": "S-RBAR",
+        "length": 9.741,
+        "orientation": 162.193,
+        "reason": "different_recognition_type",
+        "recognition_type": "unknown"
+      },
+      {
+        "component": "3d4f9569-f65f-5771-b5c4-e44f41507214",
+        "detail": "recognition differs: symbol vs branch",
+        "layer": "S-RBAR",
+        "length": 47.023,
+        "orientation": 18.0,
+        "reason": "different_recognition_type",
+        "recognition_type": "symbol"
+      },
+      {
+        "component": "3d5b18c8-039e-5065-a2e0-4a6352f9a9dc",
+        "detail": "recognition differs: unknown vs branch",
+        "layer": "S-RBAR",
+        "length": 848.0,
+        "orientation": 90.0,
+        "reason": "different_recognition_type",
+        "recognition_type": "unknown"
+      },
+      {
+        "component": "3ef4dc84-afce-5793-959a-c5bb40a7d1f3",
+        "detail": "recognition differs: straight_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 0.473,
+        "orientation": 90.0,
+        "reason": "different_recognition_type",
+        "recognition_type": "straight_bar"
+      },
+      {
+        "component": "402677fa-758e-597a-b680-be6099d89606",
+        "detail": "recognition differs: unknown vs branch",
+        "layer": "S-RBAR",
+        "length": 2156.0,
+        "orientation": 90.0,
+        "reason": "different_recognition_type",
+        "recognition_type": "unknown"
+      },
+      {
+        "component": "40635774-7ae9-54f9-b73c-b134c69936df",
+        "detail": "recognition differs: l_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 57.439,
+        "orientation": 165.644,
+        "reason": "different_recognition_type",
+        "recognition_type": "l_bar"
+      },
+      {
+        "component": "409b1cb5-c07d-556d-803e-c37d9e1b7f8b",
+        "detail": "recognition differs: straight_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 199.423,
+        "orientation": 165.644,
+        "reason": "different_recognition_type",
+        "recognition_type": "straight_bar"
+      },
+      {
+        "component": "40ab1cad-09c3-50cb-9615-199ebac35a3e",
+        "detail": "recognition differs: straight_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 19.636,
+        "orientation": 34.686,
+        "reason": "different_recognition_type",
+        "recognition_type": "straight_bar"
+      },
+      {
+        "component": "4112a858-144b-5e4e-93c1-63ab8134e2a7",
+        "detail": "recognition differs: unknown vs branch",
+        "layer": "S-RBAR",
+        "length": 847.189,
+        "orientation": 0.0,
+        "reason": "different_recognition_type",
+        "recognition_type": "unknown"
+      },
+      {
+        "component": "4167aed1-2156-5e4e-b5da-ef32e8406b7f",
+        "detail": "layer differs: G-ANNO-TEXT vs S-RBAR",
+        "layer": "G-ANNO-TEXT",
+        "length": 298.934,
+        "orientation": 0.0,
+        "reason": "different_layer",
+        "recognition_type": "unknown"
+      },
+      {
+        "component": "41d1b87c-c273-597d-a4e8-a1a81b162077",
+        "detail": "recognition differs: straight_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 1.781,
+        "orientation": 127.196,
+        "reason": "different_recognition_type",
+        "recognition_type": "straight_bar"
+      },
+      {
+        "component": "42144bc3-e63d-50b9-9bee-ffef194b0a25",
+        "detail": "recognition differs: straight_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 0.473,
+        "orientation": 90.0,
+        "reason": "different_recognition_type",
+        "recognition_type": "straight_bar"
+      },
+      {
+        "component": "42625daa-58af-57cf-ba55-65d0b09f71d4",
+        "detail": "recognition differs: unknown vs branch",
+        "layer": "S-RBAR",
+        "length": 848.0,
+        "orientation": 90.0,
+        "reason": "different_recognition_type",
+        "recognition_type": "unknown"
+      },
+      {
+        "component": "42cb3a24-9776-5372-8820-6a0d1bb05507",
+        "detail": "recognition differs: l_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 746.385,
+        "orientation": 90.0,
+        "reason": "different_recognition_type",
+        "recognition_type": "l_bar"
+      },
+      {
+        "component": "438c34d8-adda-5efe-a01f-b5f3e18c7cac",
+        "detail": "recognition differs: straight_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 267.618,
+        "orientation": 34.686,
+        "reason": "different_recognition_type",
+        "recognition_type": "straight_bar"
+      },
+      {
+        "component": "43e8a93e-cff4-5126-ae97-3fb69ca59a21",
+        "detail": "recognition differs: unknown vs branch",
+        "layer": "S-RBAR",
+        "length": 848.0,
+        "orientation": 90.0,
+        "reason": "different_recognition_type",
+        "recognition_type": "unknown"
+      },
+      {
+        "component": "44916d07-cad6-5577-997b-e22df278096a",
+        "detail": "recognition differs: straight_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 197.376,
+        "orientation": 165.644,
+        "reason": "different_recognition_type",
+        "recognition_type": "straight_bar"
+      },
+      {
+        "component": "45994b72-067f-5d79-98ba-c169ca2683e0",
+        "detail": "recognition differs: straight_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 267.618,
+        "orientation": 34.686,
+        "reason": "different_recognition_type",
+        "recognition_type": "straight_bar"
+      },
+      {
+        "component": "45e70e30-6805-5f46-afec-6c49c721f45b",
+        "detail": "layer differs: A-FLOR vs S-RBAR",
+        "layer": "A-FLOR",
+        "length": 424.482,
+        "orientation": 165.644,
+        "reason": "different_layer",
+        "recognition_type": "unknown"
+      },
+      {
+        "component": "45e7e094-c778-5eee-9ef7-e7ffbea71c75",
+        "detail": "recognition differs: straight_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 745.554,
+        "orientation": 90.0,
+        "reason": "different_recognition_type",
+        "recognition_type": "straight_bar"
+      },
+      {
+        "component": "4658a6de-769c-519e-b1d4-cd9dfdf2873b",
+        "detail": "recognition differs: straight_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 31.138,
+        "orientation": 34.686,
+        "reason": "different_recognition_type",
+        "recognition_type": "straight_bar"
+      },
+      {
+        "component": "465d8daf-91ad-54b7-9e29-c6a9e7b5ede2",
+        "detail": "recognition differs: unknown vs branch",
+        "layer": "S-RBAR",
+        "length": 1656.0,
+        "orientation": 90.0,
+        "reason": "different_recognition_type",
+        "recognition_type": "unknown"
+      },
+      {
+        "component": "46b0069d-72aa-5f22-b863-b834b16d0ac4",
+        "detail": "layer differs: A-DETL-MBND vs S-RBAR",
+        "layer": "A-DETL-MBND",
+        "length": 887.696,
+        "orientation": 0.0,
+        "reason": "different_layer",
+        "recognition_type": "unknown"
+      },
+      {
+        "component": "472fd33a-5e08-57a1-b553-0cd757662fe2",
+        "detail": "recognition differs: straight_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 229.297,
+        "orientation": 34.686,
+        "reason": "different_recognition_type",
+        "recognition_type": "straight_bar"
+      },
+      {
+        "component": "47abc5dd-270a-51c3-856d-35cef9168f69",
+        "detail": "recognition differs: symbol vs branch",
+        "layer": "S-RBAR",
+        "length": 47.023,
+        "orientation": 18.0,
+        "reason": "different_recognition_type",
+        "recognition_type": "symbol"
+      },
+      {
+        "component": "486c288d-093f-5ca2-8911-f89c85d14e24",
+        "detail": "layer differs: G-ANNO-TEXT vs S-RBAR",
+        "layer": "G-ANNO-TEXT",
+        "length": 382.234,
+        "orientation": 0.0,
+        "reason": "different_layer",
+        "recognition_type": "unknown"
+      },
+      {
+        "component": "49153d10-c922-52ba-a39a-a04cf6fab4ad",
+        "detail": "recognition differs: stirrup vs branch",
+        "layer": "S-RBAR",
+        "length": 47.023,
+        "orientation": 54.0,
+        "reason": "different_recognition_type",
+        "recognition_type": "stirrup"
+      },
+      {
+        "component": "496c65b9-df3f-5115-8642-89e59d987260",
+        "detail": "layer differs: A-DETL-MBND vs S-RBAR",
+        "layer": "A-DETL-MBND",
+        "length": 3454.482,
+        "orientation": 90.0,
+        "reason": "different_layer",
+        "recognition_type": "unknown"
+      },
+      {
+        "component": "4a53ecbb-d9e9-57ef-a6e4-af683deed577",
+        "detail": "recognition differs: straight_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 267.618,
+        "orientation": 34.686,
+        "reason": "different_recognition_type",
+        "recognition_type": "straight_bar"
+      },
+      {
+        "component": "4b5cb26e-60c4-5f9d-ae7b-df945c6cb288",
+        "detail": "layer differs: G-ANNO-TEXT vs S-RBAR",
+        "layer": "G-ANNO-TEXT",
+        "length": 754.359,
+        "orientation": 0.0,
+        "reason": "different_layer",
+        "recognition_type": "unknown"
+      },
+      {
+        "component": "4bcda6dd-363a-53bc-b798-3695346f42fe",
+        "detail": "recognition differs: l_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 746.243,
+        "orientation": 90.0,
+        "reason": "different_recognition_type",
+        "recognition_type": "l_bar"
+      },
+      {
+        "component": "4c63881e-bb2e-5d0e-b515-9515a5eb4949",
+        "detail": "layer differs: G-ANNO-SYMB vs S-RBAR",
+        "layer": "G-ANNO-SYMB",
+        "length": 1182.91,
+        "orientation": 90.0,
+        "reason": "different_layer",
+        "recognition_type": "unknown"
+      },
+      {
+        "component": "4ce17e34-0415-5bfa-b109-65f88ceaded6",
+        "detail": "recognition differs: straight_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 5.582,
+        "orientation": 34.686,
+        "reason": "different_recognition_type",
+        "recognition_type": "straight_bar"
+      },
+      {
+        "component": "4d067100-0f73-5ee4-a8c8-702af150b511",
+        "detail": "layer differs: A-GENM vs S-RBAR",
+        "layer": "A-GENM",
+        "length": 112.776,
+        "orientation": 90.0,
+        "reason": "different_layer",
+        "recognition_type": "unknown"
+      },
+      {
+        "component": "4d42249c-f9a5-5654-b0e9-abdf69eb0f79",
+        "detail": "recognition differs: straight_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 95.137,
+        "orientation": 165.644,
+        "reason": "different_recognition_type",
+        "recognition_type": "straight_bar"
+      },
+      {
+        "component": "4d8cc780-1cfb-5766-8084-fece6e5e4462",
+        "detail": "recognition differs: straight_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 333.01,
+        "orientation": 165.644,
+        "reason": "different_recognition_type",
+        "recognition_type": "straight_bar"
+      },
+      {
+        "component": "4dbb57c2-a6b2-530c-94c7-5301f7f04565",
+        "detail": "recognition differs: straight_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 111.212,
+        "orientation": 34.686,
+        "reason": "different_recognition_type",
+        "recognition_type": "straight_bar"
+      },
+      {
+        "component": "4e5cd89c-b706-5d9e-a340-7df9160ed5a0",
+        "detail": "recognition differs: straight_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 35.809,
+        "orientation": 165.644,
+        "reason": "different_recognition_type",
+        "recognition_type": "straight_bar"
+      },
+      {
+        "component": "4ed3b791-245c-5788-bead-b43f90b9fac7",
+        "detail": "recognition differs: unknown vs branch",
+        "layer": "S-RBAR",
+        "length": 848.0,
+        "orientation": 90.0,
+        "reason": "different_recognition_type",
+        "recognition_type": "unknown"
+      },
+      {
+        "component": "4f349a97-f92a-5137-bd61-ff163c4d145d",
+        "detail": "layer differs: A-GENM vs S-RBAR",
+        "layer": "A-GENM",
+        "length": 5.443,
+        "orientation": 90.0,
+        "reason": "different_layer",
+        "recognition_type": "unknown"
+      },
+      {
+        "component": "4f7279de-8109-5a35-b966-46aaa0fe9ae2",
+        "detail": "layer differs: G-ANNO-DIMS vs S-RBAR",
+        "layer": "G-ANNO-DIMS",
+        "length": 300.0,
+        "orientation": 90.0,
+        "reason": "different_layer",
+        "recognition_type": "dimension"
+      },
+      {
+        "component": "4fddaa95-a08e-5013-880b-3783b6a569d3",
+        "detail": "recognition differs: straight_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 339.954,
+        "orientation": 165.644,
+        "reason": "different_recognition_type",
+        "recognition_type": "straight_bar"
+      },
+      {
+        "component": "51b3f53a-09d3-547c-977d-6950833b42e9",
+        "detail": "layer differs: A-GENM vs S-RBAR",
+        "layer": "A-GENM",
+        "length": 100.0,
+        "orientation": 90.0,
+        "reason": "different_layer",
+        "recognition_type": "unknown"
+      },
+      {
+        "component": "526598c1-6f5d-5201-b8c0-ece11ab7a311",
+        "detail": "recognition differs: unknown vs branch",
+        "layer": "S-RBAR",
+        "length": 848.0,
+        "orientation": 90.0,
+        "reason": "different_recognition_type",
+        "recognition_type": "unknown"
+      },
+      {
+        "component": "5282f2c2-d48b-5c06-a1b1-9c2ee6aca0a5",
+        "detail": "recognition differs: symbol vs branch",
+        "layer": "S-RBAR",
+        "length": 47.023,
+        "orientation": 126.0,
+        "reason": "different_recognition_type",
+        "recognition_type": "symbol"
+      },
+      {
+        "component": "528f7db4-daa1-5de4-9c34-fb0dc8d0c833",
+        "detail": "recognition differs: unknown vs branch",
+        "layer": "S-RBAR",
+        "length": 848.0,
+        "orientation": 90.0,
+        "reason": "different_recognition_type",
+        "recognition_type": "unknown"
+      },
+      {
+        "component": "52c7dbee-9d1d-5db5-aad0-a6d47afa8dd5",
+        "detail": "recognition differs: unknown vs branch",
+        "layer": "S-RBAR",
+        "length": 848.0,
+        "orientation": 90.0,
+        "reason": "different_recognition_type",
+        "recognition_type": "unknown"
+      },
+      {
+        "component": "52d745b3-a3a2-5edc-878c-048d800eee33",
+        "detail": "layer differs: A-GENM vs S-RBAR",
+        "layer": "A-GENM",
+        "length": 21.991,
+        "orientation": 0.0,
+        "reason": "different_layer",
+        "recognition_type": "unknown"
+      },
+      {
+        "component": "535b4cc4-8f67-5122-b183-ab3851306616",
+        "detail": "layer differs: A-FLOR vs S-RBAR",
+        "layer": "A-FLOR",
+        "length": 101.486,
+        "orientation": 165.644,
+        "reason": "different_layer",
+        "recognition_type": "unknown"
+      },
+      {
+        "component": "53798b4e-d3a1-5d1c-8c7d-97b6a3ba5ee3",
+        "detail": "layer differs: A-GENM vs S-RBAR",
+        "layer": "A-GENM",
+        "length": 100.0,
+        "orientation": 90.0,
+        "reason": "different_layer",
+        "recognition_type": "unknown"
+      },
+      {
+        "component": "53ab38e4-400f-591b-916c-4be735828bb3",
+        "detail": "recognition differs: unknown vs branch",
+        "layer": "S-RBAR",
+        "length": 1941.894,
+        "orientation": 0.0,
+        "reason": "different_recognition_type",
+        "recognition_type": "unknown"
+      },
+      {
+        "component": "53b35678-a6f5-5726-af45-b1028b0c85b9",
+        "detail": "layer differs: A-FLOR vs S-RBAR",
+        "layer": "A-FLOR",
+        "length": 115.948,
+        "orientation": 2.616,
+        "reason": "different_layer",
+        "recognition_type": "unknown"
+      },
+      {
+        "component": "54add3a9-ca4d-5cea-b5c0-5155395ea088",
+        "detail": "layer differs: A-DETL-MBND vs S-RBAR",
+        "layer": "A-DETL-MBND",
+        "length": 3806.108,
+        "orientation": 90.0,
+        "reason": "different_layer",
+        "recognition_type": "unknown"
+      },
+      {
+        "component": "54adfe6f-0417-53ae-a9dd-c2252a64fa54",
+        "detail": "recognition differs: straight_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 267.618,
+        "orientation": 34.686,
+        "reason": "different_recognition_type",
+        "recognition_type": "straight_bar"
+      },
+      {
+        "component": "54b64f40-4793-5cbd-9c97-cc6b9ea9c7c9",
+        "detail": "layer differs: A-FLOR vs S-RBAR",
+        "layer": "A-FLOR",
+        "length": 380.594,
+        "orientation": 34.686,
+        "reason": "different_layer",
+        "recognition_type": "unknown"
+      },
+      {
+        "component": "54e371d7-31b5-5130-ac96-5f1d23039896",
+        "detail": "recognition differs: straight_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 267.618,
+        "orientation": 34.686,
+        "reason": "different_recognition_type",
+        "recognition_type": "straight_bar"
+      },
+      {
+        "component": "557f29f5-f0b3-52a9-ad81-0879298347fb",
+        "detail": "recognition differs: straight_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 745.554,
+        "orientation": 90.0,
+        "reason": "different_recognition_type",
+        "recognition_type": "straight_bar"
+      },
+      {
+        "component": "5593836b-645f-5332-9a86-ce4b6e6eacd1",
+        "detail": "recognition differs: unknown vs branch",
+        "layer": "S-RBAR",
+        "length": 9.783,
+        "orientation": 54.22,
+        "reason": "different_recognition_type",
+        "recognition_type": "unknown"
+      },
+      {
+        "component": "56263df2-f3e2-5a00-9298-b55800112b6c",
+        "detail": "recognition differs: unknown vs branch",
+        "layer": "S-RBAR",
+        "length": 9.783,
+        "orientation": 54.22,
+        "reason": "different_recognition_type",
+        "recognition_type": "unknown"
+      },
+      {
+        "component": "5669c895-fb91-5063-a49e-0f629492c5d1",
+        "detail": "recognition differs: straight_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 54.115,
+        "orientation": 127.197,
+        "reason": "different_recognition_type",
+        "recognition_type": "straight_bar"
+      },
+      {
+        "component": "568560c9-47c1-53bd-b7c5-de3e02f028d2",
+        "detail": "recognition differs: straight_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 222.352,
+        "orientation": 34.686,
+        "reason": "different_recognition_type",
+        "recognition_type": "straight_bar"
+      },
+      {
+        "component": "569751a2-d6a1-5897-b2a7-30a911a69561",
+        "detail": "recognition differs: straight_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 267.618,
+        "orientation": 34.686,
+        "reason": "different_recognition_type",
+        "recognition_type": "straight_bar"
+      },
+      {
+        "component": "56a1f8a6-8fc8-5e5f-ba03-5e4b15d9bedd",
+        "detail": "recognition differs: straight_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 267.618,
+        "orientation": 34.686,
+        "reason": "different_recognition_type",
+        "recognition_type": "straight_bar"
+      },
+      {
+        "component": "57ba7e4f-29bf-5be4-9b15-fd3d65e638a2",
+        "detail": "layer differs: A-FLOR vs S-RBAR",
+        "layer": "A-FLOR",
+        "length": 119.623,
+        "orientation": 34.686,
+        "reason": "different_layer",
+        "recognition_type": "unknown"
+      },
+      {
+        "component": "57d870af-f68c-51fe-a789-fa2cf1b9f2a5",
+        "detail": "recognition differs: straight_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 229.297,
+        "orientation": 34.686,
+        "reason": "different_recognition_type",
+        "recognition_type": "straight_bar"
+      },
+      {
+        "component": "57f38709-f205-5942-839d-5bde3cb1976c",
+        "detail": "layer differs: A-FLOR vs S-RBAR",
+        "layer": "A-FLOR",
+        "length": 147.973,
+        "orientation": 165.644,
+        "reason": "different_layer",
+        "recognition_type": "unknown"
+      },
+      {
+        "component": "58adcee6-e5f4-53a6-b93a-f435d823a5de",
+        "detail": "layer differs: A-DETL-MBND vs S-RBAR",
+        "layer": "A-DETL-MBND",
+        "length": 6606.108,
+        "orientation": 0.0,
+        "reason": "different_layer",
+        "recognition_type": "unknown"
+      },
+      {
+        "component": "59189da4-2456-5409-9908-17e12b6c73e1",
+        "detail": "recognition differs: straight_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 222.352,
+        "orientation": 34.686,
+        "reason": "different_recognition_type",
+        "recognition_type": "straight_bar"
+      },
+      {
+        "component": "593881c6-fc64-5196-87be-e41374eb3f5c",
+        "detail": "recognition differs: straight_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 738.293,
+        "orientation": 90.0,
+        "reason": "different_recognition_type",
+        "recognition_type": "straight_bar"
+      },
+      {
+        "component": "598378cd-295c-5ecc-8a7d-e73fb67daea0",
+        "detail": "layer differs: G-ANNO-TEXT vs S-RBAR",
+        "layer": "G-ANNO-TEXT",
+        "length": 754.359,
+        "orientation": 0.0,
+        "reason": "different_layer",
+        "recognition_type": "unknown"
+      },
+      {
+        "component": "59aee4f1-8b3c-5395-b93c-92feef981afe",
+        "detail": "recognition differs: straight_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 206.656,
+        "orientation": 34.686,
+        "reason": "different_recognition_type",
+        "recognition_type": "straight_bar"
+      },
+      {
+        "component": "5a233c38-d9ec-5e89-9da1-9d0458f9c843",
+        "detail": "recognition differs: straight_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 17.913,
+        "orientation": 34.686,
+        "reason": "different_recognition_type",
+        "recognition_type": "straight_bar"
+      },
+      {
+        "component": "5c7e0341-21ef-56b5-a1c2-1927bff893ea",
+        "detail": "recognition differs: straight_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 267.618,
+        "orientation": 34.686,
+        "reason": "different_recognition_type",
+        "recognition_type": "straight_bar"
+      },
+      {
+        "component": "5cf3429c-cbdd-50bc-8220-775c63ad8b68",
+        "detail": "recognition differs: unknown vs branch",
+        "layer": "S-RBAR",
+        "length": 9.741,
+        "orientation": 162.193,
+        "reason": "different_recognition_type",
+        "recognition_type": "unknown"
+      },
+      {
+        "component": "5d71ad0e-c1b0-5863-870d-4c12bf7e7acc",
+        "detail": "recognition differs: straight_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 267.618,
+        "orientation": 34.686,
+        "reason": "different_recognition_type",
+        "recognition_type": "straight_bar"
+      },
+      {
+        "component": "5d98abf4-d9bc-5ef4-95c0-223870606455",
+        "detail": "recognition differs: straight_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 205.137,
+        "orientation": 90.0,
+        "reason": "different_recognition_type",
+        "recognition_type": "straight_bar"
+      },
+      {
+        "component": "5d9fec6a-d6c4-5d72-8b6a-e824987fc06e",
+        "detail": "recognition differs: straight_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 222.352,
+        "orientation": 34.686,
+        "reason": "different_recognition_type",
+        "recognition_type": "straight_bar"
+      },
+      {
+        "component": "5da3b0b3-56c0-593b-bf08-0338affcef88",
+        "detail": "layer differs: A-FLOR vs S-RBAR",
+        "layer": "A-FLOR",
+        "length": 837.6,
+        "orientation": 165.644,
+        "reason": "different_layer",
+        "recognition_type": "unknown"
+      },
+      {
+        "component": "5e007265-ed6c-5fe8-991a-c9ec37ed8fd1",
+        "detail": "recognition differs: l_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 746.067,
+        "orientation": 90.0,
+        "reason": "different_recognition_type",
+        "recognition_type": "l_bar"
+      },
+      {
+        "component": "5e7885da-19e9-51b6-858a-a9ce9b55aac1",
+        "detail": "recognition differs: straight_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 267.618,
+        "orientation": 34.686,
+        "reason": "different_recognition_type",
+        "recognition_type": "straight_bar"
+      },
+      {
+        "component": "5f9b30c5-f54e-53d8-aa86-35e5655a1c1a",
+        "detail": "recognition differs: straight_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 301.496,
+        "orientation": 165.644,
+        "reason": "different_recognition_type",
+        "recognition_type": "straight_bar"
+      },
+      {
+        "component": "5fad347f-6c15-5712-b0fb-ffa76b08dd9b",
+        "detail": "recognition differs: straight_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 191.374,
+        "orientation": 34.686,
+        "reason": "different_recognition_type",
+        "recognition_type": "straight_bar"
+      },
+      {
+        "component": "5fb9c96f-c2da-5db2-8ed9-0dd95ed744d7",
+        "detail": "recognition differs: straight_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 738.293,
+        "orientation": 90.0,
+        "reason": "different_recognition_type",
+        "recognition_type": "straight_bar"
+      },
+      {
+        "component": "5fc40368-cf20-5035-a3b6-cb8990a683c7",
+        "detail": "layer differs: A-FLOR vs S-RBAR",
+        "layer": "A-FLOR",
+        "length": 120.31,
+        "orientation": 165.644,
+        "reason": "different_layer",
+        "recognition_type": "unknown"
+      },
+      {
+        "component": "60c8f552-bb61-54ad-a73e-2b7f68668fac",
+        "detail": "recognition differs: unknown vs branch",
+        "layer": "S-RBAR",
+        "length": 1635.914,
+        "orientation": 0.0,
+        "reason": "different_recognition_type",
+        "recognition_type": "unknown"
+      },
+      {
+        "component": "60f4d87d-fcf7-549c-9018-b83adc64a9f2",
+        "detail": "recognition differs: straight_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 267.618,
+        "orientation": 34.686,
+        "reason": "different_recognition_type",
+        "recognition_type": "straight_bar"
+      },
+      {
+        "component": "615a24c4-2da4-5f6d-b6f7-988d1b496f81",
+        "detail": "recognition differs: symbol vs branch",
+        "layer": "S-RBAR",
+        "length": 47.023,
+        "orientation": 18.0,
+        "reason": "different_recognition_type",
+        "recognition_type": "symbol"
+      },
+      {
+        "component": "61b0232f-8385-529e-b1aa-f5ea71ce16c9",
+        "detail": "recognition differs: unknown vs branch",
+        "layer": "S-RBAR",
+        "length": 848.0,
+        "orientation": 90.0,
+        "reason": "different_recognition_type",
+        "recognition_type": "unknown"
+      },
+      {
+        "component": "61c80a56-813b-56a4-a04a-e32ec7d21350",
+        "detail": "recognition differs: l_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 746.243,
+        "orientation": 90.0,
+        "reason": "different_recognition_type",
+        "recognition_type": "l_bar"
+      },
+      {
+        "component": "624094ce-48f6-5daa-a133-4c82650b26af",
+        "detail": "recognition differs: unknown vs branch",
+        "layer": "S-RBAR",
+        "length": 848.0,
+        "orientation": 90.0,
+        "reason": "different_recognition_type",
+        "recognition_type": "unknown"
+      },
+      {
+        "component": "625d1042-ad99-5936-8590-ee7d3ff9bbb7",
+        "detail": "recognition differs: straight_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 185.556,
+        "orientation": 90.0,
+        "reason": "different_recognition_type",
+        "recognition_type": "straight_bar"
+      },
+      {
+        "component": "62c7a363-917c-5c15-bee6-814fc3552819",
+        "detail": "recognition differs: straight_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 25.261,
+        "orientation": 34.686,
+        "reason": "different_recognition_type",
+        "recognition_type": "straight_bar"
+      },
+      {
+        "component": "62d8e17b-2a9c-5b08-a207-28749df10f27",
+        "detail": "recognition differs: straight_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 32.523,
+        "orientation": 34.686,
+        "reason": "different_recognition_type",
+        "recognition_type": "straight_bar"
+      },
+      {
+        "component": "62db73f7-56a9-5bb9-bb76-2668f0aa50b0",
+        "detail": "recognition differs: straight_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 84.174,
+        "orientation": 34.686,
+        "reason": "different_recognition_type",
+        "recognition_type": "straight_bar"
+      }
+    ],
+    "Representative": "5c1cda77-b36a-5f5e-95a8-4d569308389a"
+  },
+  {
+    "Family": "N7",
+    "Family Type": "EDGE",
+    "Family UUID": "153a8c83-e9cc-589a-97d4-144f893a2229",
+    "Members": [
+      "f3e639ef-cd45-5464-87f1-dc6302d18162"
+    ],
+    "Rejected": [
+      {
+        "component": "00e68dc8-c98e-5197-8d8b-44c26b38d5ec",
+        "detail": "recognition differs: straight_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 745.554,
+        "orientation": 90.0,
+        "reason": "different_recognition_type",
+        "recognition_type": "straight_bar"
+      },
+      {
+        "component": "0286b50c-ed8a-5daf-93dc-3d1e00816151",
+        "detail": "layer differs: A-DETL-MBND vs S-RBAR",
+        "layer": "A-DETL-MBND",
+        "length": 1079.745,
+        "orientation": 0.0,
+        "reason": "different_layer",
+        "recognition_type": "unknown"
+      },
+      {
+        "component": "02917ef3-5abf-5bcc-b96e-147b30e90e7c",
+        "detail": "recognition differs: l_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 746.385,
+        "orientation": 90.0,
+        "reason": "different_recognition_type",
+        "recognition_type": "l_bar"
+      },
+      {
+        "component": "02938ee0-44fb-583a-94f2-9715a9735197",
+        "detail": "layer differs: A-FLOR vs S-RBAR",
+        "layer": "A-FLOR",
+        "length": 301.008,
+        "orientation": 165.644,
+        "reason": "different_layer",
+        "recognition_type": "unknown"
+      },
+      {
+        "component": "03e583a1-da6e-53e9-8a0a-d8eba6095d1a",
+        "detail": "orientation differs 90.0 degrees",
+        "layer": "S-RBAR",
+        "length": 2770.108,
+        "orientation": 0.0,
+        "reason": "different_orientation",
+        "recognition_type": "branch"
+      },
+      {
+        "component": "0423cdd6-1ba3-505b-add9-e929fd635ecf",
+        "detail": "recognition differs: straight_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 222.352,
+        "orientation": 34.686,
+        "reason": "different_recognition_type",
+        "recognition_type": "straight_bar"
+      },
+      {
+        "component": "05fd7900-56e6-51ce-bc1e-357939068e4f",
+        "detail": "recognition differs: straight_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 90.684,
+        "orientation": 165.644,
+        "reason": "different_recognition_type",
+        "recognition_type": "straight_bar"
+      },
+      {
+        "component": "06840fe5-7cb7-532d-916c-28802178ceab",
+        "detail": "layer differs: A-FLOR vs S-RBAR",
+        "layer": "A-FLOR",
+        "length": 323.07,
+        "orientation": 165.644,
+        "reason": "different_layer",
+        "recognition_type": "unknown"
+      },
+      {
+        "component": "0692b58e-b742-5774-b7ca-f64a1c154246",
+        "detail": "recognition differs: unknown vs branch",
+        "layer": "S-RBAR",
+        "length": 1656.0,
+        "orientation": 90.0,
+        "reason": "different_recognition_type",
+        "recognition_type": "unknown"
+      },
+      {
+        "component": "072f0692-e8d5-5600-8c84-b6d7990d154b",
+        "detail": "recognition differs: straight_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 18.554,
+        "orientation": 34.686,
+        "reason": "different_recognition_type",
+        "recognition_type": "straight_bar"
+      },
+      {
+        "component": "0733af4a-f9cf-5e7d-97b8-1b70e40e8aef",
+        "detail": "layer differs: A-DETL-MBND vs S-RBAR",
+        "layer": "A-DETL-MBND",
+        "length": 4606.108,
+        "orientation": 90.0,
+        "reason": "different_layer",
+        "recognition_type": "unknown"
+      },
+      {
+        "component": "0757b3e7-243a-5082-bd15-63758e056846",
+        "detail": "recognition differs: straight_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 267.618,
+        "orientation": 34.686,
+        "reason": "different_recognition_type",
+        "recognition_type": "straight_bar"
+      },
+      {
+        "component": "0772948b-d973-5dba-95af-3a6139808308",
+        "detail": "recognition differs: l_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 5.337,
+        "orientation": 107.398,
+        "reason": "different_recognition_type",
+        "recognition_type": "l_bar"
+      },
+      {
+        "component": "07e75aa2-58e9-5781-87da-f885d0649f05",
+        "detail": "recognition differs: symbol vs branch",
+        "layer": "S-RBAR",
+        "length": 47.023,
+        "orientation": 126.0,
+        "reason": "different_recognition_type",
+        "recognition_type": "symbol"
+      },
+      {
+        "component": "07fec298-fdbf-5a01-a6ca-dc20a8f8b0ce",
+        "detail": "recognition differs: straight_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 229.297,
+        "orientation": 34.686,
+        "reason": "different_recognition_type",
+        "recognition_type": "straight_bar"
+      },
+      {
+        "component": "0974a10c-4a72-59d9-8aea-764bc78ff696",
+        "detail": "layer differs: A-GENM vs S-RBAR",
+        "layer": "A-GENM",
+        "length": 5.443,
+        "orientation": 90.0,
+        "reason": "different_layer",
+        "recognition_type": "unknown"
+      },
+      {
+        "component": "09d06de6-849a-56b9-a049-a261fc678f53",
+        "detail": "layer differs: A-GENM vs S-RBAR",
+        "layer": "A-GENM",
+        "length": 140.0,
+        "orientation": 90.0,
+        "reason": "different_layer",
+        "recognition_type": "unknown"
+      },
+      {
+        "component": "0c199c98-49db-5c3a-938f-29acdcdb80d7",
+        "detail": "layer differs: G-ANNO-DIMS vs S-RBAR",
+        "layer": "G-ANNO-DIMS",
+        "length": 1197.824,
+        "orientation": 0.0,
+        "reason": "different_layer",
+        "recognition_type": "dimension"
+      },
+      {
+        "component": "0c9952b6-c29b-5dbc-91da-efcf83ff706b",
+        "detail": "layer differs: A-FLOR vs S-RBAR",
+        "layer": "A-FLOR",
+        "length": 120.323,
+        "orientation": 165.644,
+        "reason": "different_layer",
+        "recognition_type": "unknown"
+      },
+      {
+        "component": "0cfa7ebe-9e34-5426-b6ef-560cb67bdac8",
+        "detail": "recognition differs: l_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 5.337,
+        "orientation": 107.398,
+        "reason": "different_recognition_type",
+        "recognition_type": "l_bar"
+      },
+      {
+        "component": "0d39f1c7-192c-5d2d-bad5-141787a5c494",
+        "detail": "layer differs: A-GENM vs S-RBAR",
+        "layer": "A-GENM",
+        "length": 112.776,
+        "orientation": 90.0,
+        "reason": "different_layer",
+        "recognition_type": "unknown"
+      },
+      {
+        "component": "0d40eb22-0d84-548b-ba9c-0e45ed201ff5",
+        "detail": "recognition differs: straight_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 56.188,
+        "orientation": 59.534,
+        "reason": "different_recognition_type",
+        "recognition_type": "straight_bar"
+      },
+      {
+        "component": "0da7c9a0-4286-5d6f-a5c7-da277bda628e",
+        "detail": "layer differs: G-ANNO-SYMB vs S-RBAR",
+        "layer": "G-ANNO-SYMB",
+        "length": 1163.16,
+        "orientation": 0.0,
+        "reason": "different_layer",
+        "recognition_type": "unknown"
+      },
+      {
+        "component": "0e7ccc85-9782-5b38-929d-0118f8e75fa4",
+        "detail": "recognition differs: straight_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 115.47,
+        "orientation": 34.686,
+        "reason": "different_recognition_type",
+        "recognition_type": "straight_bar"
+      },
+      {
+        "component": "0ecf578f-b556-5b0e-bb53-a3bd0ee2d9e7",
+        "detail": "recognition differs: unknown vs branch",
+        "layer": "S-RBAR",
+        "length": 9.783,
+        "orientation": 54.22,
+        "reason": "different_recognition_type",
+        "recognition_type": "unknown"
+      },
+      {
+        "component": "0f257149-1ec0-5660-a2a4-26d325dfc23c",
+        "detail": "recognition differs: straight_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 267.71,
+        "orientation": 34.686,
+        "reason": "different_recognition_type",
+        "recognition_type": "straight_bar"
+      },
+      {
+        "component": "0fddf827-2cca-5b56-acde-1e09eaa7714c",
+        "detail": "layer differs: A-FLOR vs S-RBAR",
+        "layer": "A-FLOR",
+        "length": 301.021,
+        "orientation": 165.644,
+        "reason": "different_layer",
+        "recognition_type": "unknown"
+      },
+      {
+        "component": "0ff871ed-b9ad-5af7-9ebe-4cfd5ed01c6f",
+        "detail": "recognition differs: symbol vs branch",
+        "layer": "S-RBAR",
+        "length": 47.023,
+        "orientation": 54.0,
+        "reason": "different_recognition_type",
+        "recognition_type": "symbol"
+      },
+      {
+        "component": "1007d087-51c5-5d13-91a8-eb61c3d550f6",
+        "detail": "recognition differs: straight_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 267.618,
+        "orientation": 34.686,
+        "reason": "different_recognition_type",
+        "recognition_type": "straight_bar"
+      },
+      {
+        "component": "10092f00-d989-5800-8e69-fc19d9bb5726",
+        "detail": "layer differs: A-GENM vs S-RBAR",
+        "layer": "A-GENM",
+        "length": 55.982,
+        "orientation": 0.0,
+        "reason": "different_layer",
+        "recognition_type": "unknown"
+      },
+      {
+        "component": "106ee874-8c8f-5746-9db6-7790e41f00e3",
+        "detail": "recognition differs: unknown vs branch",
+        "layer": "S-RBAR",
+        "length": 848.0,
+        "orientation": 90.0,
+        "reason": "different_recognition_type",
+        "recognition_type": "unknown"
+      },
+      {
+        "component": "1135c621-8010-5016-9231-9ed8e1d4e236",
+        "detail": "recognition differs: straight_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 267.618,
+        "orientation": 34.686,
+        "reason": "different_recognition_type",
+        "recognition_type": "straight_bar"
+      },
+      {
+        "component": "11b07c0e-a33e-506a-9819-50bf96d63944",
+        "detail": "recognition differs: unknown vs branch",
+        "layer": "S-RBAR",
+        "length": 9.741,
+        "orientation": 162.193,
+        "reason": "different_recognition_type",
+        "recognition_type": "unknown"
+      },
+      {
+        "component": "11b63e22-7d11-5dc1-9e7c-862a51221eb7",
+        "detail": "layer differs: A-FLOR vs S-RBAR",
+        "layer": "A-FLOR",
+        "length": 157.08,
+        "orientation": 0.0,
+        "reason": "different_layer",
+        "recognition_type": "unknown"
+      },
+      {
+        "component": "11d47357-dcab-5618-8fb6-9ef0bd358cae",
+        "detail": "layer differs: G-ANNO-TEXT vs S-RBAR",
+        "layer": "G-ANNO-TEXT",
+        "length": 382.234,
+        "orientation": 0.0,
+        "reason": "different_layer",
+        "recognition_type": "unknown"
+      },
+      {
+        "component": "11dd2af7-d58b-52b1-8456-c80747b8bd71",
+        "detail": "recognition differs: straight_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 49.222,
+        "orientation": 90.0,
+        "reason": "different_recognition_type",
+        "recognition_type": "straight_bar"
+      },
+      {
+        "component": "1209b4d0-227f-5e6e-9457-6190e59cc572",
+        "detail": "recognition differs: symbol vs branch",
+        "layer": "S-RBAR",
+        "length": 47.023,
+        "orientation": 54.0,
+        "reason": "different_recognition_type",
+        "recognition_type": "symbol"
+      },
+      {
+        "component": "12400d61-0de5-500d-a81e-3ea17df34348",
+        "detail": "recognition differs: straight_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 7.382,
+        "orientation": 34.686,
+        "reason": "different_recognition_type",
+        "recognition_type": "straight_bar"
+      },
+      {
+        "component": "1304a4ae-b0ac-5893-a9ff-ac1f5b992bcf",
+        "detail": "recognition differs: unknown vs branch",
+        "layer": "S-RBAR",
+        "length": 848.0,
+        "orientation": 90.0,
+        "reason": "different_recognition_type",
+        "recognition_type": "unknown"
+      },
+      {
+        "component": "1383ea22-939e-527e-b00e-6a660d47a937",
+        "detail": "recognition differs: straight_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 0.473,
+        "orientation": 90.0,
+        "reason": "different_recognition_type",
+        "recognition_type": "straight_bar"
+      },
+      {
+        "component": "1431940b-89ac-5287-b483-70a872496678",
+        "detail": "recognition differs: straight_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 49.222,
+        "orientation": 90.0,
+        "reason": "different_recognition_type",
+        "recognition_type": "straight_bar"
+      },
+      {
+        "component": "14d848e9-0ad2-569a-af5e-9bd454a1827f",
+        "detail": "recognition differs: symbol vs branch",
+        "layer": "S-RBAR",
+        "length": 47.023,
+        "orientation": 54.0,
+        "reason": "different_recognition_type",
+        "recognition_type": "symbol"
+      },
+      {
+        "component": "14ee8c44-96bf-5bfd-95b4-872d7921600e",
+        "detail": "recognition differs: l_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 746.243,
+        "orientation": 90.0,
+        "reason": "different_recognition_type",
+        "recognition_type": "l_bar"
+      },
+      {
+        "component": "14fcf283-4281-5413-b5c2-1474cfb001c3",
+        "detail": "recognition differs: unknown vs branch",
+        "layer": "S-RBAR",
+        "length": 937.842,
+        "orientation": 0.0,
+        "reason": "different_recognition_type",
+        "recognition_type": "unknown"
+      },
+      {
+        "component": "150988b2-644b-5a28-a835-c4ea21b3d82e",
+        "detail": "recognition differs: l_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 5.337,
+        "orientation": 107.398,
+        "reason": "different_recognition_type",
+        "recognition_type": "l_bar"
+      },
+      {
+        "component": "156f37e2-9c9b-53de-9ca6-1c51e07b08c8",
+        "detail": "recognition differs: unknown vs branch",
+        "layer": "S-RBAR",
+        "length": 9.783,
+        "orientation": 54.22,
+        "reason": "different_recognition_type",
+        "recognition_type": "unknown"
+      },
+      {
+        "component": "1610b632-46d7-5c4c-a02c-6ac22934027b",
+        "detail": "recognition differs: unknown vs branch",
+        "layer": "S-RBAR",
+        "length": 848.0,
+        "orientation": 90.0,
+        "reason": "different_recognition_type",
+        "recognition_type": "unknown"
+      },
+      {
+        "component": "168fdcc3-3d64-57d3-a0d6-27df264c29b6",
+        "detail": "recognition differs: symbol vs branch",
+        "layer": "S-RBAR",
+        "length": 47.023,
+        "orientation": 54.0,
+        "reason": "different_recognition_type",
+        "recognition_type": "symbol"
+      },
+      {
+        "component": "16b132c2-253e-5ad4-be64-0d246ffba56c",
+        "detail": "layer differs: A-GENM vs S-RBAR",
+        "layer": "A-GENM",
+        "length": 100.0,
+        "orientation": 90.0,
+        "reason": "different_layer",
+        "recognition_type": "unknown"
+      },
+      {
+        "component": "1737d056-c04f-5a98-9627-047b949b1be7",
+        "detail": "recognition differs: l_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 746.385,
+        "orientation": 90.0,
+        "reason": "different_recognition_type",
+        "recognition_type": "l_bar"
+      },
+      {
+        "component": "177e9c70-797b-5467-af88-40973a69a80e",
+        "detail": "recognition differs: unknown vs branch",
+        "layer": "S-RBAR",
+        "length": 9.783,
+        "orientation": 54.22,
+        "reason": "different_recognition_type",
+        "recognition_type": "unknown"
+      },
+      {
+        "component": "17e420b1-5c36-5373-aca6-69eb9ef27272",
+        "detail": "recognition differs: l_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 5.337,
+        "orientation": 107.398,
+        "reason": "different_recognition_type",
+        "recognition_type": "l_bar"
+      },
+      {
+        "component": "17f1f12c-1054-5b9e-a4f7-971c9e6fad28",
+        "detail": "layer differs: A-GENM vs S-RBAR",
+        "layer": "A-GENM",
+        "length": 118.957,
+        "orientation": 90.0,
+        "reason": "different_layer",
+        "recognition_type": "unknown"
+      },
+      {
+        "component": "188973e6-430f-530e-88d4-f127917af922",
+        "detail": "recognition differs: straight_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 13.022,
+        "orientation": 165.644,
+        "reason": "different_recognition_type",
+        "recognition_type": "straight_bar"
+      },
+      {
+        "component": "18c1891a-f279-519e-9550-5764b09b23ff",
+        "detail": "recognition differs: l_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 746.243,
+        "orientation": 90.0,
+        "reason": "different_recognition_type",
+        "recognition_type": "l_bar"
+      },
+      {
+        "component": "192d019b-d1d3-5281-8e47-184ebd4ef3fb",
+        "detail": "recognition differs: straight_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 81.924,
+        "orientation": 34.686,
+        "reason": "different_recognition_type",
+        "recognition_type": "straight_bar"
+      },
+      {
+        "component": "1935a063-f4f7-5ad1-8124-0076b2d0a8dd",
+        "detail": "recognition differs: straight_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 159.611,
+        "orientation": 34.686,
+        "reason": "different_recognition_type",
+        "recognition_type": "straight_bar"
+      },
+      {
+        "component": "199344fc-0486-542d-99ec-b9eeae32f689",
+        "detail": "recognition differs: unknown vs branch",
+        "layer": "S-RBAR",
+        "length": 9.741,
+        "orientation": 162.193,
+        "reason": "different_recognition_type",
+        "recognition_type": "unknown"
+      },
+      {
+        "component": "1a038595-b518-5052-9120-feefb121e3bf",
+        "detail": "layer differs: G-ANNO-TEXT vs S-RBAR",
+        "layer": "G-ANNO-TEXT",
+        "length": 718.528,
+        "orientation": 0.0,
+        "reason": "different_layer",
+        "recognition_type": "unknown"
+      },
+      {
+        "component": "1a6ffcc9-438e-54e5-8e48-7f92fd00a7c4",
+        "detail": "layer differs: A-FLOR vs S-RBAR",
+        "layer": "A-FLOR",
+        "length": 119.389,
+        "orientation": 34.686,
+        "reason": "different_layer",
+        "recognition_type": "unknown"
+      },
+      {
+        "component": "1b3c25ac-61d6-5da1-84e9-a6b690711f53",
+        "detail": "recognition differs: symbol vs branch",
+        "layer": "S-RBAR",
+        "length": 47.023,
+        "orientation": 126.0,
+        "reason": "different_recognition_type",
+        "recognition_type": "symbol"
+      },
+      {
+        "component": "1bd14294-7078-5d75-92eb-6efd6ef1825f",
+        "detail": "recognition differs: straight_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 165.148,
+        "orientation": 34.686,
+        "reason": "different_recognition_type",
+        "recognition_type": "straight_bar"
+      },
+      {
+        "component": "1bdbffb5-4e3a-53ca-91dd-66f18b7f07ee",
+        "detail": "recognition differs: symbol vs branch",
+        "layer": "S-RBAR",
+        "length": 47.023,
+        "orientation": 162.0,
+        "reason": "different_recognition_type",
+        "recognition_type": "symbol"
+      },
+      {
+        "component": "1c051f35-acdb-5c9f-990c-d8d11d1ddb6a",
+        "detail": "recognition differs: straight_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 223.837,
+        "orientation": 165.644,
+        "reason": "different_recognition_type",
+        "recognition_type": "straight_bar"
+      },
+      {
+        "component": "1ca7d7ef-0c87-52af-ab87-f718f7a527c9",
+        "detail": "recognition differs: unknown vs branch",
+        "layer": "S-RBAR",
+        "length": 9.741,
+        "orientation": 162.193,
+        "reason": "different_recognition_type",
+        "recognition_type": "unknown"
+      },
+      {
+        "component": "1cf194e0-afb6-5605-909d-c29764f7dc61",
+        "detail": "recognition differs: straight_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 861.853,
+        "orientation": 90.0,
+        "reason": "different_recognition_type",
+        "recognition_type": "straight_bar"
+      },
+      {
+        "component": "1d53f060-c6de-5ce0-80b5-64e29c288bd6",
+        "detail": "recognition differs: straight_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 201.12,
+        "orientation": 34.686,
+        "reason": "different_recognition_type",
+        "recognition_type": "straight_bar"
+      },
+      {
+        "component": "1dbda413-28b0-5f13-9ba5-781d259bfffd",
+        "detail": "recognition differs: l_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 32.991,
+        "orientation": 71.067,
+        "reason": "different_recognition_type",
+        "recognition_type": "l_bar"
+      },
+      {
+        "component": "1e21ce84-e321-5610-978b-ecc428f384fb",
+        "detail": "recognition differs: unknown vs branch",
+        "layer": "S-RBAR",
+        "length": 9.783,
+        "orientation": 54.22,
+        "reason": "different_recognition_type",
+        "recognition_type": "unknown"
+      },
+      {
+        "component": "1e4af8d1-9ed5-5126-9a26-9cbb9e01e0fc",
+        "detail": "layer differs: A-GENM vs S-RBAR",
+        "layer": "A-GENM",
+        "length": 140.0,
+        "orientation": 90.0,
+        "reason": "different_layer",
+        "recognition_type": "unknown"
+      },
+      {
+        "component": "1e64c77a-5193-5abc-9526-f029d1325405",
+        "detail": "recognition differs: straight_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 738.293,
+        "orientation": 90.0,
+        "reason": "different_recognition_type",
+        "recognition_type": "straight_bar"
+      },
+      {
+        "component": "1ec1d7f5-4d08-51b1-8162-1a4865cb0d55",
+        "detail": "layer differs: A-FLOR vs S-RBAR",
+        "layer": "A-FLOR",
+        "length": 115.87,
+        "orientation": 2.616,
+        "reason": "different_layer",
+        "recognition_type": "unknown"
+      },
+      {
+        "component": "1ede0faa-f0a7-5f9d-90e8-71c36d918edf",
+        "detail": "layer differs: A-DETL-MBND vs S-RBAR",
+        "layer": "A-DETL-MBND",
+        "length": 2784.081,
+        "orientation": 90.0,
+        "reason": "different_layer",
+        "recognition_type": "unknown"
+      },
+      {
+        "component": "1eee4d10-1ae0-578b-af02-0a382c2bcdc5",
+        "detail": "recognition differs: unknown vs branch",
+        "layer": "S-RBAR",
+        "length": 9.741,
+        "orientation": 162.193,
+        "reason": "different_recognition_type",
+        "recognition_type": "unknown"
+      },
+      {
+        "component": "1f4c1f3c-36c5-5f95-8a13-515ba00899f0",
+        "detail": "recognition differs: straight_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 82.102,
+        "orientation": 34.686,
+        "reason": "different_recognition_type",
+        "recognition_type": "straight_bar"
+      },
+      {
+        "component": "1fac0f2f-0f5c-5f9d-9ed7-ffc2f38b8133",
+        "detail": "recognition differs: l_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 746.385,
+        "orientation": 90.0,
+        "reason": "different_recognition_type",
+        "recognition_type": "l_bar"
+      },
+      {
+        "component": "1fc97069-eff4-52d7-8068-8c6e96af9014",
+        "detail": "layer differs: A-FLOR vs S-RBAR",
+        "layer": "A-FLOR",
+        "length": 145.924,
+        "orientation": 165.644,
+        "reason": "different_layer",
+        "recognition_type": "unknown"
+      },
+      {
+        "component": "204fb6bc-24ae-5ea9-a689-f2576ef02b43",
+        "detail": "recognition differs: straight_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 268.25,
+        "orientation": 34.686,
+        "reason": "different_recognition_type",
+        "recognition_type": "straight_bar"
+      },
+      {
+        "component": "20754cb0-91eb-5104-8595-900102ca5964",
+        "detail": "recognition differs: straight_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 36.206,
+        "orientation": 90.0,
+        "reason": "different_recognition_type",
+        "recognition_type": "straight_bar"
+      },
+      {
+        "component": "20adbe43-2824-5612-a6f4-3ef9ef93a7bb",
+        "detail": "layer differs: A-DETL-MBND vs S-RBAR",
+        "layer": "A-DETL-MBND",
+        "length": 4304.482,
+        "orientation": 90.0,
+        "reason": "different_layer",
+        "recognition_type": "unknown"
+      },
+      {
+        "component": "20dc7eef-2093-50fe-8119-22e898f73a18",
+        "detail": "recognition differs: straight_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 49.222,
+        "orientation": 90.0,
+        "reason": "different_recognition_type",
+        "recognition_type": "straight_bar"
+      },
+      {
+        "component": "21186d14-8cf7-55bb-89f9-0a43335df40c",
+        "detail": "recognition differs: straight_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 267.618,
+        "orientation": 34.686,
+        "reason": "different_recognition_type",
+        "recognition_type": "straight_bar"
+      },
+      {
+        "component": "21a44030-2fa2-5e50-bd64-e5f479931556",
+        "detail": "recognition differs: straight_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 144.406,
+        "orientation": 34.686,
+        "reason": "different_recognition_type",
+        "recognition_type": "straight_bar"
+      },
+      {
+        "component": "21f5db77-bc54-55dc-9c5e-21729ac37e7e",
+        "detail": "recognition differs: unknown vs branch",
+        "layer": "S-RBAR",
+        "length": 847.189,
+        "orientation": 0.0,
+        "reason": "different_recognition_type",
+        "recognition_type": "unknown"
+      },
+      {
+        "component": "22857d68-cf55-5245-b99e-1b5553e1dc8e",
+        "detail": "recognition differs: straight_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 78.633,
+        "orientation": 34.686,
+        "reason": "different_recognition_type",
+        "recognition_type": "straight_bar"
+      },
+      {
+        "component": "22bafc3a-3f6f-5fcf-89ac-2ec9605ff312",
+        "detail": "recognition differs: straight_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 323.155,
+        "orientation": 165.644,
+        "reason": "different_recognition_type",
+        "recognition_type": "straight_bar"
+      },
+      {
+        "component": "22ed8c5e-8fc0-5329-9e75-0f6e52f7ab06",
+        "detail": "recognition differs: straight_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 738.293,
+        "orientation": 90.0,
+        "reason": "different_recognition_type",
+        "recognition_type": "straight_bar"
+      },
+      {
+        "component": "2301f12f-7c28-57f5-9479-350795d47f9a",
+        "detail": "layer differs: A-FLOR vs S-RBAR",
+        "layer": "A-FLOR",
+        "length": 323.817,
+        "orientation": 165.644,
+        "reason": "different_layer",
+        "recognition_type": "unknown"
+      },
+      {
+        "component": "233516d9-0858-5ec9-a37b-3ed48af1e431",
+        "detail": "recognition differs: unknown vs branch",
+        "layer": "S-RBAR",
+        "length": 848.0,
+        "orientation": 90.0,
+        "reason": "different_recognition_type",
+        "recognition_type": "unknown"
+      },
+      {
+        "component": "23c3a9b3-44ba-51d4-84bf-ccf6eab36fc6",
+        "detail": "recognition differs: unknown vs branch",
+        "layer": "S-RBAR",
+        "length": 848.0,
+        "orientation": 90.0,
+        "reason": "different_recognition_type",
+        "recognition_type": "unknown"
+      },
+      {
+        "component": "23eb0468-1201-5909-91a4-cb93e4cb7910",
+        "detail": "recognition differs: straight_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 267.618,
+        "orientation": 34.686,
+        "reason": "different_recognition_type",
+        "recognition_type": "straight_bar"
+      },
+      {
+        "component": "242743ac-acf1-5578-8bde-00350b807159",
+        "detail": "recognition differs: unknown vs branch",
+        "layer": "S-RBAR",
+        "length": 1666.929,
+        "orientation": 90.0,
+        "reason": "different_recognition_type",
+        "recognition_type": "unknown"
+      },
+      {
+        "component": "254445a4-fb86-5d1a-b247-1a44e297a8c5",
+        "detail": "recognition differs: straight_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 738.293,
+        "orientation": 90.0,
+        "reason": "different_recognition_type",
+        "recognition_type": "straight_bar"
+      },
+      {
+        "component": "2559c428-f3e7-526e-996d-fd0fdb83caf0",
+        "detail": "recognition differs: straight_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 94.408,
+        "orientation": 34.686,
+        "reason": "different_recognition_type",
+        "recognition_type": "straight_bar"
+      },
+      {
+        "component": "260d46d8-b7a4-5904-9d39-d967ac0209fa",
+        "detail": "recognition differs: unknown vs branch",
+        "layer": "S-RBAR",
+        "length": 847.189,
+        "orientation": 0.0,
+        "reason": "different_recognition_type",
+        "recognition_type": "unknown"
+      },
+      {
+        "component": "262a413a-7982-564d-89c6-036758f057f8",
+        "detail": "recognition differs: straight_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 267.618,
+        "orientation": 34.686,
+        "reason": "different_recognition_type",
+        "recognition_type": "straight_bar"
+      },
+      {
+        "component": "262d6f30-bd41-5736-bf06-3be14335ab92",
+        "detail": "recognition differs: straight_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 793.513,
+        "orientation": 90.0,
+        "reason": "different_recognition_type",
+        "recognition_type": "straight_bar"
+      },
+      {
+        "component": "26782772-4a45-5502-967b-1727ffc2ee4c",
+        "detail": "layer differs: A-DETL-MBND vs S-RBAR",
+        "layer": "A-DETL-MBND",
+        "length": 1084.482,
+        "orientation": 90.0,
+        "reason": "different_layer",
+        "recognition_type": "unknown"
+      },
+      {
+        "component": "27109bbd-7d40-5c6c-9754-77a8f667d313",
+        "detail": "layer differs: A-DETL-THIN vs S-RBAR",
+        "layer": "A-DETL-THIN",
+        "length": 15314.0,
+        "orientation": 0.0,
+        "reason": "different_layer",
+        "recognition_type": "unknown"
+      },
+      {
+        "component": "283f34b7-0217-5dda-aa2d-ff86058977f6",
+        "detail": "layer differs: A-GENM vs S-RBAR",
+        "layer": "A-GENM",
+        "length": 185.723,
+        "orientation": 90.0,
+        "reason": "different_layer",
+        "recognition_type": "unknown"
+      },
+      {
+        "component": "289c76c4-d2ca-563c-9d76-42ddad51faf4",
+        "detail": "recognition differs: straight_bar vs branch",
+        "layer": "S-RBAR",
+        "length": 105.676,
+        "orientation": 34.686,
+        "reason": "different_recognition_type",
+        "recognition_type": "straight_bar"
+      },
+      {
+        "component": "28ccb275-a68e-5ce4-a6fd-d13502f8ac46",
+        "detail": "layer differs: A-FLOR vs S-RBAR",
+        "layer": "A-FLOR",
+        "length": 380.868,
+        "orientation": 34.686,
+        "reason": "different_layer",
+        "recognition_type": "unknown"
+      },
+      {
+        "component": "28e6e9d8-94d3-57ac-817a-eea338d5217b",
+        "detail": "recognition differs: stirrup vs branch",
+        "layer": "S-RBAR",
+        "length": 46.957,
+        "orientation": 126.553,
+        "reason": "different_recognition_type",
+        "recognition_type": "stirrup"
+      },
+      {
+        "component": "28ecb751-0ca6-52cc-b193-f0f355756566",
+        "detail": "layer differs: A-GENM vs S-RBAR",
+        "layer": "A-GENM",
+        "length": 5.443,
+        "orientation": 90.0,
+        "reason": "different_layer",
+        "recognition_type": "unknown"
+      },
+      {
+        "component": "2915e6c7-3c8a-5cfb-932e-2e8f2e4fd0c5",
+        "detail": "recognition differs: unknown vs branch",
+        "layer": "S-RBAR",
+        "length": 848.0,
+        "orientation": 90.0,
+        "reason": "different_recognition_type",
+        "recognition_type": "unknown"
       },
       {
         "component": "291f1cd5-d95f-55d1-8230-f2975d18819a",
@@ -3267,12 +5506,12 @@
       },
       {
         "component": "2a7bc07c-3f8d-5d13-8f81-b1920ad91485",
-        "detail": "recognition differs: u_bar vs branch",
+        "detail": "recognition differs: unknown vs branch",
         "layer": "S-RBAR",
         "length": 848.0,
         "orientation": 90.0,
         "reason": "different_recognition_type",
-        "recognition_type": "u_bar"
+        "recognition_type": "unknown"
       },
       {
         "component": "2b1c9062-aa2b-5efb-b0ac-3cbc2af97007",
@@ -3294,12 +5533,12 @@
       },
       {
         "component": "2bb96ba9-decb-5ed6-a260-93e99722757e",
-        "detail": "recognition differs: stirrup vs branch",
+        "detail": "recognition differs: symbol vs branch",
         "layer": "S-RBAR",
         "length": 47.023,
         "orientation": 54.0,
         "reason": "different_recognition_type",
-        "recognition_type": "stirrup"
+        "recognition_type": "symbol"
       },
       {
         "component": "2c282e33-7ad8-5c6e-81b8-02c18a4afd17",
@@ -3321,12 +5560,12 @@
       },
       {
         "component": "2c973815-58b5-55ea-ac60-874951a93c8e",
-        "detail": "recognition differs: u_bar vs branch",
+        "detail": "recognition differs: unknown vs branch",
         "layer": "S-RBAR",
         "length": 847.189,
         "orientation": 0.0,
         "reason": "different_recognition_type",
-        "recognition_type": "u_bar"
+        "recognition_type": "unknown"
       },
       {
         "component": "2cf6672d-9c73-5506-90ec-143179e2b70c",
@@ -3335,16 +5574,16 @@
         "length": 28.154,
         "orientation": 90.0,
         "reason": "different_layer",
-        "recognition_type": "straight_bar"
+        "recognition_type": "unknown"
       },
       {
         "component": "2d4695a3-f8ac-5a7d-adda-c687025d1d9d",
-        "detail": "recognition differs: stirrup vs branch",
+        "detail": "recognition differs: symbol vs branch",
         "layer": "S-RBAR",
         "length": 47.023,
-        "orientation": 126.0,
+        "orientation": 54.0,
         "reason": "different_recognition_type",
-        "recognition_type": "stirrup"
+        "recognition_type": "symbol"
       },
       {
         "component": "2d5543ff-a6f8-5fda-a6fb-99f31362bdff",
@@ -3371,16 +5610,16 @@
         "length": 323.057,
         "orientation": 165.644,
         "reason": "different_layer",
-        "recognition_type": "straight_bar"
+        "recognition_type": "unknown"
       },
       {
         "component": "2f3f81c6-2db8-5722-8046-fa357665a604",
-        "detail": "recognition differs: stirrup vs branch",
+        "detail": "recognition differs: symbol vs branch",
         "layer": "S-RBAR",
         "length": 47.023,
         "orientation": 126.0,
         "reason": "different_recognition_type",
-        "recognition_type": "stirrup"
+        "recognition_type": "symbol"
       },
       {
         "component": "2f923580-1872-55aa-a0eb-5dfae7a8aa5e",
@@ -3411,30 +5650,30 @@
       },
       {
         "component": "31fd3c9f-2f73-5ac2-bd27-0fd5f33a24b4",
-        "detail": "recognition differs: stirrup vs branch",
+        "detail": "recognition differs: symbol vs branch",
         "layer": "S-RBAR",
         "length": 47.023,
         "orientation": 54.0,
         "reason": "different_recognition_type",
-        "recognition_type": "stirrup"
+        "recognition_type": "symbol"
       },
       {
         "component": "3294a3b9-2747-55c1-bbd5-22e02cee0ad0",
-        "detail": "recognition differs: u_bar vs branch",
+        "detail": "recognition differs: unknown vs branch",
         "layer": "S-RBAR",
         "length": 848.0,
         "orientation": 90.0,
         "reason": "different_recognition_type",
-        "recognition_type": "u_bar"
+        "recognition_type": "unknown"
       },
       {
         "component": "3298d176-8701-5d7f-9630-ca7e946d5d9f",
-        "detail": "recognition differs: u_bar vs branch",
+        "detail": "recognition differs: unknown vs branch",
         "layer": "S-RBAR",
         "length": 848.0,
         "orientation": 90.0,
         "reason": "different_recognition_type",
-        "recognition_type": "u_bar"
+        "recognition_type": "unknown"
       },
       {
         "component": "33bacfac-69bd-56be-9395-2ac683b3c6d9",
@@ -3443,7 +5682,7 @@
         "length": 16550.0,
         "orientation": 0.0,
         "reason": "different_layer",
-        "recognition_type": "branch"
+        "recognition_type": "unknown"
       },
       {
         "component": "33c13ca4-c577-573a-b013-22ba1a2288f9",
@@ -3461,7 +5700,7 @@
         "length": 424.495,
         "orientation": 165.644,
         "reason": "different_layer",
-        "recognition_type": "straight_bar"
+        "recognition_type": "unknown"
       },
       {
         "component": "344243e8-bdb8-58cd-a017-80c4bad43959",
@@ -3519,12 +5758,12 @@
       },
       {
         "component": "35dc8034-1919-56da-bda6-36e5d13c7f9d",
-        "detail": "recognition differs: u_bar vs branch",
+        "detail": "recognition differs: unknown vs branch",
         "layer": "S-RBAR",
         "length": 848.0,
         "orientation": 90.0,
         "reason": "different_recognition_type",
-        "recognition_type": "u_bar"
+        "recognition_type": "unknown"
       },
       {
         "component": "35f0e826-f7d0-5829-b05f-ee0d9e2aa0b7",
@@ -3533,16 +5772,16 @@
         "length": 424.482,
         "orientation": 165.644,
         "reason": "different_layer",
-        "recognition_type": "straight_bar"
+        "recognition_type": "unknown"
       },
       {
         "component": "366abc2a-4d75-5c30-a683-5cf3fdda2d4c",
-        "detail": "recognition differs: u_bar vs branch",
+        "detail": "recognition differs: unknown vs branch",
         "layer": "S-RBAR",
         "length": 847.189,
         "orientation": 0.0,
         "reason": "different_recognition_type",
-        "recognition_type": "u_bar"
+        "recognition_type": "unknown"
       },
       {
         "component": "36ac5ab0-097c-5772-bb3c-3d77225b8b5d",
@@ -3560,7 +5799,7 @@
         "length": 141.758,
         "orientation": 34.686,
         "reason": "different_layer",
-        "recognition_type": "straight_bar"
+        "recognition_type": "unknown"
       },
       {
         "component": "37787dbf-56d8-5ead-aea1-56a5b2cde01a",
@@ -3605,7 +5844,7 @@
         "length": 18928.036,
         "orientation": 0.0,
         "reason": "different_layer",
-        "recognition_type": "branch"
+        "recognition_type": "unknown"
       },
       {
         "component": "397fac51-2054-5c1c-94de-94f195922e7a",
@@ -3614,7 +5853,7 @@
         "length": 424.474,
         "orientation": 165.644,
         "reason": "different_layer",
-        "recognition_type": "straight_bar"
+        "recognition_type": "unknown"
       },
       {
         "component": "39b2a687-9964-5bb9-b6a9-6788247ba4bd",
@@ -3623,7 +5862,7 @@
         "length": 382.234,
         "orientation": 0.0,
         "reason": "different_layer",
-        "recognition_type": "branch"
+        "recognition_type": "unknown"
       },
       {
         "component": "39efeb9a-f52b-5107-9e26-0714089cbee9",
@@ -3645,12 +5884,12 @@
       },
       {
         "component": "3b103237-31b7-5af3-b094-4969a1d64da8",
-        "detail": "recognition differs: u_bar vs branch",
+        "detail": "recognition differs: unknown vs branch",
         "layer": "S-RBAR",
         "length": 848.0,
         "orientation": 90.0,
         "reason": "different_recognition_type",
-        "recognition_type": "u_bar"
+        "recognition_type": "unknown"
       },
       {
         "component": "3c0f9d8e-0b5e-5147-9fda-e93b5b11691b",
@@ -3663,12 +5902,12 @@
       },
       {
         "component": "3cdfbcf3-2ed4-57dc-8753-fa1f4589e0dd",
-        "detail": "recognition differs: u_bar vs branch",
+        "detail": "recognition differs: unknown vs branch",
         "layer": "S-RBAR",
         "length": 937.842,
         "orientation": 0.0,
         "reason": "different_recognition_type",
-        "recognition_type": "u_bar"
+        "recognition_type": "unknown"
       },
       {
         "component": "3d1d8580-f63b-5c01-b78a-88af6893e447",
@@ -3686,7 +5925,7 @@
         "length": 7824.874,
         "orientation": 0.0,
         "reason": "different_layer",
-        "recognition_type": "branch"
+        "recognition_type": "unknown"
       },
       {
         "component": "3d41065e-b873-5c52-a910-1f138f48355b",
@@ -3708,21 +5947,21 @@
       },
       {
         "component": "3d4f9569-f65f-5771-b5c4-e44f41507214",
-        "detail": "recognition differs: stirrup vs branch",
+        "detail": "recognition differs: symbol vs branch",
         "layer": "S-RBAR",
         "length": 47.023,
         "orientation": 18.0,
         "reason": "different_recognition_type",
-        "recognition_type": "stirrup"
+        "recognition_type": "symbol"
       },
       {
         "component": "3d5b18c8-039e-5065-a2e0-4a6352f9a9dc",
-        "detail": "recognition differs: u_bar vs branch",
+        "detail": "recognition differs: unknown vs branch",
         "layer": "S-RBAR",
         "length": 848.0,
         "orientation": 90.0,
         "reason": "different_recognition_type",
-        "recognition_type": "u_bar"
+        "recognition_type": "unknown"
       },
       {
         "component": "3ef4dc84-afce-5793-959a-c5bb40a7d1f3",
@@ -3735,12 +5974,12 @@
       },
       {
         "component": "402677fa-758e-597a-b680-be6099d89606",
-        "detail": "recognition differs: u_bar vs branch",
+        "detail": "recognition differs: unknown vs branch",
         "layer": "S-RBAR",
         "length": 2156.0,
         "orientation": 90.0,
         "reason": "different_recognition_type",
-        "recognition_type": "u_bar"
+        "recognition_type": "unknown"
       },
       {
         "component": "40635774-7ae9-54f9-b73c-b134c69936df",
@@ -3771,12 +6010,12 @@
       },
       {
         "component": "4112a858-144b-5e4e-93c1-63ab8134e2a7",
-        "detail": "recognition differs: u_bar vs branch",
+        "detail": "recognition differs: unknown vs branch",
         "layer": "S-RBAR",
         "length": 847.189,
         "orientation": 0.0,
         "reason": "different_recognition_type",
-        "recognition_type": "u_bar"
+        "recognition_type": "unknown"
       },
       {
         "component": "4167aed1-2156-5e4e-b5da-ef32e8406b7f",
@@ -3785,7 +6024,7 @@
         "length": 298.934,
         "orientation": 0.0,
         "reason": "different_layer",
-        "recognition_type": "branch"
+        "recognition_type": "unknown"
       },
       {
         "component": "41d1b87c-c273-597d-a4e8-a1a81b162077",
@@ -3807,12 +6046,12 @@
       },
       {
         "component": "42625daa-58af-57cf-ba55-65d0b09f71d4",
-        "detail": "recognition differs: u_bar vs branch",
+        "detail": "recognition differs: unknown vs branch",
         "layer": "S-RBAR",
         "length": 848.0,
         "orientation": 90.0,
         "reason": "different_recognition_type",
-        "recognition_type": "u_bar"
+        "recognition_type": "unknown"
       },
       {
         "component": "42cb3a24-9776-5372-8820-6a0d1bb05507",
@@ -3834,12 +6073,12 @@
       },
       {
         "component": "43e8a93e-cff4-5126-ae97-3fb69ca59a21",
-        "detail": "recognition differs: u_bar vs branch",
+        "detail": "recognition differs: unknown vs branch",
         "layer": "S-RBAR",
         "length": 848.0,
         "orientation": 90.0,
         "reason": "different_recognition_type",
-        "recognition_type": "u_bar"
+        "recognition_type": "unknown"
       },
       {
         "component": "44916d07-cad6-5577-997b-e22df278096a",
@@ -3866,7 +6105,7 @@
         "length": 424.482,
         "orientation": 165.644,
         "reason": "different_layer",
-        "recognition_type": "straight_bar"
+        "recognition_type": "unknown"
       },
       {
         "component": "45e7e094-c778-5eee-9ef7-e7ffbea71c75",
@@ -3888,12 +6127,12 @@
       },
       {
         "component": "465d8daf-91ad-54b7-9e29-c6a9e7b5ede2",
-        "detail": "recognition differs: u_bar vs branch",
+        "detail": "recognition differs: unknown vs branch",
         "layer": "S-RBAR",
         "length": 1656.0,
         "orientation": 90.0,
         "reason": "different_recognition_type",
-        "recognition_type": "u_bar"
+        "recognition_type": "unknown"
       },
       {
         "component": "46b0069d-72aa-5f22-b863-b834b16d0ac4",
@@ -3915,12 +6154,12 @@
       },
       {
         "component": "47abc5dd-270a-51c3-856d-35cef9168f69",
-        "detail": "recognition differs: stirrup vs branch",
+        "detail": "recognition differs: symbol vs branch",
         "layer": "S-RBAR",
         "length": 47.023,
-        "orientation": 162.0,
+        "orientation": 18.0,
         "reason": "different_recognition_type",
-        "recognition_type": "stirrup"
+        "recognition_type": "symbol"
       },
       {
         "component": "486c288d-093f-5ca2-8911-f89c85d14e24",
@@ -3929,7 +6168,7 @@
         "length": 382.234,
         "orientation": 0.0,
         "reason": "different_layer",
-        "recognition_type": "branch"
+        "recognition_type": "unknown"
       },
       {
         "component": "49153d10-c922-52ba-a39a-a04cf6fab4ad",
@@ -3947,7 +6186,7 @@
         "length": 3454.482,
         "orientation": 90.0,
         "reason": "different_layer",
-        "recognition_type": "l_bar"
+        "recognition_type": "unknown"
       },
       {
         "component": "4a53ecbb-d9e9-57ef-a6e4-af683deed577",
@@ -3965,7 +6204,7 @@
         "length": 754.359,
         "orientation": 0.0,
         "reason": "different_layer",
-        "recognition_type": "branch"
+        "recognition_type": "unknown"
       },
       {
         "component": "4bcda6dd-363a-53bc-b798-3695346f42fe",
@@ -3983,7 +6222,7 @@
         "length": 1182.91,
         "orientation": 90.0,
         "reason": "different_layer",
-        "recognition_type": "branch"
+        "recognition_type": "unknown"
       },
       {
         "component": "4ce17e34-0415-5bfa-b109-65f88ceaded6",
@@ -4001,7 +6240,7 @@
         "length": 112.776,
         "orientation": 90.0,
         "reason": "different_layer",
-        "recognition_type": "branch"
+        "recognition_type": "unknown"
       },
       {
         "component": "4d42249c-f9a5-5654-b0e9-abdf69eb0f79",
@@ -4041,12 +6280,12 @@
       },
       {
         "component": "4ed3b791-245c-5788-bead-b43f90b9fac7",
-        "detail": "recognition differs: u_bar vs branch",
+        "detail": "recognition differs: unknown vs branch",
         "layer": "S-RBAR",
         "length": 848.0,
         "orientation": 90.0,
         "reason": "different_recognition_type",
-        "recognition_type": "u_bar"
+        "recognition_type": "unknown"
       },
       {
         "component": "4f349a97-f92a-5137-bd61-ff163c4d145d",
@@ -4055,7 +6294,7 @@
         "length": 5.443,
         "orientation": 90.0,
         "reason": "different_layer",
-        "recognition_type": "straight_bar"
+        "recognition_type": "unknown"
       },
       {
         "component": "4f7279de-8109-5a35-b966-46aaa0fe9ae2",
@@ -4064,7 +6303,7 @@
         "length": 300.0,
         "orientation": 90.0,
         "reason": "different_layer",
-        "recognition_type": "straight_bar"
+        "recognition_type": "dimension"
       },
       {
         "component": "4fddaa95-a08e-5013-880b-3783b6a569d3",
@@ -4082,43 +6321,43 @@
         "length": 100.0,
         "orientation": 90.0,
         "reason": "different_layer",
-        "recognition_type": "branch"
+        "recognition_type": "unknown"
       },
       {
         "component": "526598c1-6f5d-5201-b8c0-ece11ab7a311",
-        "detail": "recognition differs: u_bar vs branch",
+        "detail": "recognition differs: unknown vs branch",
         "layer": "S-RBAR",
         "length": 848.0,
         "orientation": 90.0,
         "reason": "different_recognition_type",
-        "recognition_type": "u_bar"
+        "recognition_type": "unknown"
       },
       {
         "component": "5282f2c2-d48b-5c06-a1b1-9c2ee6aca0a5",
-        "detail": "recognition differs: stirrup vs branch",
+        "detail": "recognition differs: symbol vs branch",
         "layer": "S-RBAR",
         "length": 47.023,
         "orientation": 126.0,
         "reason": "different_recognition_type",
-        "recognition_type": "stirrup"
+        "recognition_type": "symbol"
       },
       {
         "component": "528f7db4-daa1-5de4-9c34-fb0dc8d0c833",
-        "detail": "recognition differs: u_bar vs branch",
+        "detail": "recognition differs: unknown vs branch",
         "layer": "S-RBAR",
         "length": 848.0,
         "orientation": 90.0,
         "reason": "different_recognition_type",
-        "recognition_type": "u_bar"
+        "recognition_type": "unknown"
       },
       {
         "component": "52c7dbee-9d1d-5db5-aad0-a6d47afa8dd5",
-        "detail": "recognition differs: u_bar vs branch",
+        "detail": "recognition differs: unknown vs branch",
         "layer": "S-RBAR",
         "length": 848.0,
         "orientation": 90.0,
         "reason": "different_recognition_type",
-        "recognition_type": "u_bar"
+        "recognition_type": "unknown"
       },
       {
         "component": "52d745b3-a3a2-5edc-878c-048d800eee33",
@@ -4136,7 +6375,7 @@
         "length": 101.486,
         "orientation": 165.644,
         "reason": "different_layer",
-        "recognition_type": "straight_bar"
+        "recognition_type": "unknown"
       },
       {
         "component": "53798b4e-d3a1-5d1c-8c7d-97b6a3ba5ee3",
@@ -4145,7 +6384,7 @@
         "length": 100.0,
         "orientation": 90.0,
         "reason": "different_layer",
-        "recognition_type": "branch"
+        "recognition_type": "unknown"
       },
       {
         "component": "53ab38e4-400f-591b-916c-4be735828bb3",
@@ -4163,7 +6402,7 @@
         "length": 115.948,
         "orientation": 2.616,
         "reason": "different_layer",
-        "recognition_type": "structural_outline"
+        "recognition_type": "unknown"
       },
       {
         "component": "54add3a9-ca4d-5cea-b5c0-5155395ea088",
@@ -4172,7 +6411,7 @@
         "length": 3806.108,
         "orientation": 90.0,
         "reason": "different_layer",
-        "recognition_type": "l_bar"
+        "recognition_type": "unknown"
       },
       {
         "component": "54adfe6f-0417-53ae-a9dd-c2252a64fa54",
@@ -4190,7 +6429,7 @@
         "length": 380.594,
         "orientation": 34.686,
         "reason": "different_layer",
-        "recognition_type": "straight_bar"
+        "recognition_type": "unknown"
       },
       {
         "component": "54e371d7-31b5-5130-ac96-5f1d23039896",
@@ -4271,7 +6510,7 @@
         "length": 119.623,
         "orientation": 34.686,
         "reason": "different_layer",
-        "recognition_type": "straight_bar"
+        "recognition_type": "unknown"
       },
       {
         "component": "57d870af-f68c-51fe-a789-fa2cf1b9f2a5",
@@ -4289,7 +6528,7 @@
         "length": 147.973,
         "orientation": 165.644,
         "reason": "different_layer",
-        "recognition_type": "straight_bar"
+        "recognition_type": "unknown"
       },
       {
         "component": "58adcee6-e5f4-53a6-b93a-f435d823a5de",
@@ -4298,7 +6537,7 @@
         "length": 6606.108,
         "orientation": 0.0,
         "reason": "different_layer",
-        "recognition_type": "l_bar"
+        "recognition_type": "unknown"
       },
       {
         "component": "59189da4-2456-5409-9908-17e12b6c73e1",
@@ -4325,7 +6564,7 @@
         "length": 754.359,
         "orientation": 0.0,
         "reason": "different_layer",
-        "recognition_type": "branch"
+        "recognition_type": "unknown"
       },
       {
         "component": "59aee4f1-8b3c-5395-b93c-92feef981afe",
@@ -4406,7 +6645,7 @@
         "length": 837.6,
         "orientation": 165.644,
         "reason": "different_layer",
-        "recognition_type": "straight_bar"
+        "recognition_type": "unknown"
       },
       {
         "component": "5e007265-ed6c-5fe8-991a-c9ec37ed8fd1",
@@ -4460,7 +6699,7 @@
         "length": 120.31,
         "orientation": 165.644,
         "reason": "different_layer",
-        "recognition_type": "straight_bar"
+        "recognition_type": "unknown"
       },
       {
         "component": "60c8f552-bb61-54ad-a73e-2b7f68668fac",
@@ -4482,21 +6721,21 @@
       },
       {
         "component": "615a24c4-2da4-5f6d-b6f7-988d1b496f81",
-        "detail": "recognition differs: stirrup vs branch",
+        "detail": "recognition differs: symbol vs branch",
         "layer": "S-RBAR",
         "length": 47.023,
-        "orientation": 162.0,
+        "orientation": 18.0,
         "reason": "different_recognition_type",
-        "recognition_type": "stirrup"
+        "recognition_type": "symbol"
       },
       {
         "component": "61b0232f-8385-529e-b1aa-f5ea71ce16c9",
-        "detail": "recognition differs: u_bar vs branch",
+        "detail": "recognition differs: unknown vs branch",
         "layer": "S-RBAR",
         "length": 848.0,
         "orientation": 90.0,
         "reason": "different_recognition_type",
-        "recognition_type": "u_bar"
+        "recognition_type": "unknown"
       },
       {
         "component": "61c80a56-813b-56a4-a04a-e32ec7d21350",
@@ -4509,12 +6748,12 @@
       },
       {
         "component": "624094ce-48f6-5daa-a133-4c82650b26af",
-        "detail": "recognition differs: u_bar vs branch",
+        "detail": "recognition differs: unknown vs branch",
         "layer": "S-RBAR",
         "length": 848.0,
         "orientation": 90.0,
         "reason": "different_recognition_type",
-        "recognition_type": "u_bar"
+        "recognition_type": "unknown"
       },
       {
         "component": "625d1042-ad99-5936-8590-ee7d3ff9bbb7",

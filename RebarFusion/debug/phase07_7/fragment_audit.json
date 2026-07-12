@@ -1,0 +1,1465 @@
+[
+  {
+    "component_uuid": "64fc5fd5-86cd-57c1-9d42-f61bc4018aef",
+    "recognition_label": "straight_bar",
+    "plausibility_decision": "reject",
+    "total_length": 0.473,
+    "edge_count": 1,
+    "cluster_signature": "straight_bar|(0.5,)",
+    "cluster_size": 19,
+    "edges": [
+      {
+        "type": "LINE",
+        "layer": "S-RBAR",
+        "length": 0.473,
+        "source_handle": "20D",
+        "source_block": null
+      }
+    ],
+    "classification": "cad_drafting_symbol"
+  },
+  {
+    "component_uuid": "e1aeb482-8112-5e27-a653-ae2df232aa26",
+    "recognition_label": "straight_bar",
+    "plausibility_decision": "reject",
+    "total_length": 0.473,
+    "edge_count": 1,
+    "cluster_signature": "straight_bar|(0.5,)",
+    "cluster_size": 19,
+    "edges": [
+      {
+        "type": "LINE",
+        "layer": "S-RBAR",
+        "length": 0.473,
+        "source_handle": "21A",
+        "source_block": null
+      }
+    ],
+    "classification": "cad_drafting_symbol"
+  },
+  {
+    "component_uuid": "c5282ce8-d441-55b8-9d8d-f684db52ba1a",
+    "recognition_label": "straight_bar",
+    "plausibility_decision": "reject",
+    "total_length": 0.473,
+    "edge_count": 1,
+    "cluster_signature": "straight_bar|(0.5,)",
+    "cluster_size": 19,
+    "edges": [
+      {
+        "type": "LINE",
+        "layer": "S-RBAR",
+        "length": 0.473,
+        "source_handle": "227",
+        "source_block": null
+      }
+    ],
+    "classification": "cad_drafting_symbol"
+  },
+  {
+    "component_uuid": "fac7ba59-ee67-5064-8585-bffa4e961518",
+    "recognition_label": "straight_bar",
+    "plausibility_decision": "reject",
+    "total_length": 0.473,
+    "edge_count": 1,
+    "cluster_signature": "straight_bar|(0.5,)",
+    "cluster_size": 19,
+    "edges": [
+      {
+        "type": "LINE",
+        "layer": "S-RBAR",
+        "length": 0.473,
+        "source_handle": "234",
+        "source_block": null
+      }
+    ],
+    "classification": "cad_drafting_symbol"
+  },
+  {
+    "component_uuid": "f4b9c3cf-c02f-5e5b-be99-ca942621aa54",
+    "recognition_label": "straight_bar",
+    "plausibility_decision": "reject",
+    "total_length": 0.473,
+    "edge_count": 1,
+    "cluster_signature": "straight_bar|(0.5,)",
+    "cluster_size": 19,
+    "edges": [
+      {
+        "type": "LINE",
+        "layer": "S-RBAR",
+        "length": 0.473,
+        "source_handle": "241",
+        "source_block": null
+      }
+    ],
+    "classification": "cad_drafting_symbol"
+  },
+  {
+    "component_uuid": "c323d028-6907-5519-abc3-2330820e69c4",
+    "recognition_label": "straight_bar",
+    "plausibility_decision": "reject",
+    "total_length": 0.473,
+    "edge_count": 1,
+    "cluster_signature": "straight_bar|(0.5,)",
+    "cluster_size": 19,
+    "edges": [
+      {
+        "type": "LINE",
+        "layer": "S-RBAR",
+        "length": 0.473,
+        "source_handle": "24E",
+        "source_block": null
+      }
+    ],
+    "classification": "cad_drafting_symbol"
+  },
+  {
+    "component_uuid": "3036d933-823c-5f7b-bb74-4ee52e674c4a",
+    "recognition_label": "straight_bar",
+    "plausibility_decision": "reject",
+    "total_length": 0.473,
+    "edge_count": 1,
+    "cluster_signature": "straight_bar|(0.5,)",
+    "cluster_size": 19,
+    "edges": [
+      {
+        "type": "LINE",
+        "layer": "S-RBAR",
+        "length": 0.473,
+        "source_handle": "25B",
+        "source_block": null
+      }
+    ],
+    "classification": "cad_drafting_symbol"
+  },
+  {
+    "component_uuid": "b0492b1c-d683-5b9f-8e49-5659a7663e37",
+    "recognition_label": "straight_bar",
+    "plausibility_decision": "reject",
+    "total_length": 0.473,
+    "edge_count": 1,
+    "cluster_signature": "straight_bar|(0.5,)",
+    "cluster_size": 19,
+    "edges": [
+      {
+        "type": "LINE",
+        "layer": "S-RBAR",
+        "length": 0.473,
+        "source_handle": "268",
+        "source_block": null
+      }
+    ],
+    "classification": "cad_drafting_symbol"
+  },
+  {
+    "component_uuid": "1383ea22-939e-527e-b00e-6a660d47a937",
+    "recognition_label": "straight_bar",
+    "plausibility_decision": "reject",
+    "total_length": 0.473,
+    "edge_count": 1,
+    "cluster_signature": "straight_bar|(0.5,)",
+    "cluster_size": 19,
+    "edges": [
+      {
+        "type": "LINE",
+        "layer": "S-RBAR",
+        "length": 0.473,
+        "source_handle": "275",
+        "source_block": null
+      }
+    ],
+    "classification": "cad_drafting_symbol"
+  },
+  {
+    "component_uuid": "95104dbd-656d-5aae-8905-3be6fcb3c0ad",
+    "recognition_label": "straight_bar",
+    "plausibility_decision": "reject",
+    "total_length": 0.473,
+    "edge_count": 1,
+    "cluster_signature": "straight_bar|(0.5,)",
+    "cluster_size": 19,
+    "edges": [
+      {
+        "type": "LINE",
+        "layer": "S-RBAR",
+        "length": 0.473,
+        "source_handle": "282",
+        "source_block": null
+      }
+    ],
+    "classification": "cad_drafting_symbol"
+  },
+  {
+    "component_uuid": "3ef4dc84-afce-5793-959a-c5bb40a7d1f3",
+    "recognition_label": "straight_bar",
+    "plausibility_decision": "reject",
+    "total_length": 0.473,
+    "edge_count": 1,
+    "cluster_signature": "straight_bar|(0.5,)",
+    "cluster_size": 19,
+    "edges": [
+      {
+        "type": "LINE",
+        "layer": "S-RBAR",
+        "length": 0.473,
+        "source_handle": "28F",
+        "source_block": null
+      }
+    ],
+    "classification": "cad_drafting_symbol"
+  },
+  {
+    "component_uuid": "42144bc3-e63d-50b9-9bee-ffef194b0a25",
+    "recognition_label": "straight_bar",
+    "plausibility_decision": "reject",
+    "total_length": 0.473,
+    "edge_count": 1,
+    "cluster_signature": "straight_bar|(0.5,)",
+    "cluster_size": 19,
+    "edges": [
+      {
+        "type": "LINE",
+        "layer": "S-RBAR",
+        "length": 0.473,
+        "source_handle": "29D",
+        "source_block": null
+      }
+    ],
+    "classification": "cad_drafting_symbol"
+  },
+  {
+    "component_uuid": "b56a9f72-3138-5c6f-ae5d-150c87482a3f",
+    "recognition_label": "straight_bar",
+    "plausibility_decision": "reject",
+    "total_length": 0.473,
+    "edge_count": 1,
+    "cluster_signature": "straight_bar|(0.5,)",
+    "cluster_size": 19,
+    "edges": [
+      {
+        "type": "LINE",
+        "layer": "S-RBAR",
+        "length": 0.473,
+        "source_handle": "2AB",
+        "source_block": null
+      }
+    ],
+    "classification": "cad_drafting_symbol"
+  },
+  {
+    "component_uuid": "bd6272b1-37ef-5668-b9d3-7beac5aa75cd",
+    "recognition_label": "straight_bar",
+    "plausibility_decision": "reject",
+    "total_length": 0.473,
+    "edge_count": 1,
+    "cluster_signature": "straight_bar|(0.5,)",
+    "cluster_size": 19,
+    "edges": [
+      {
+        "type": "LINE",
+        "layer": "S-RBAR",
+        "length": 0.473,
+        "source_handle": "2B8",
+        "source_block": null
+      }
+    ],
+    "classification": "cad_drafting_symbol"
+  },
+  {
+    "component_uuid": "c9485398-4e52-57fb-b141-7cbfae25fcd8",
+    "recognition_label": "straight_bar",
+    "plausibility_decision": "reject",
+    "total_length": 0.473,
+    "edge_count": 1,
+    "cluster_signature": "straight_bar|(0.5,)",
+    "cluster_size": 19,
+    "edges": [
+      {
+        "type": "LINE",
+        "layer": "S-RBAR",
+        "length": 0.473,
+        "source_handle": "2C5",
+        "source_block": null
+      }
+    ],
+    "classification": "cad_drafting_symbol"
+  },
+  {
+    "component_uuid": "d771afdb-e778-5a3f-8d33-470891b623ae",
+    "recognition_label": "straight_bar",
+    "plausibility_decision": "reject",
+    "total_length": 0.473,
+    "edge_count": 1,
+    "cluster_signature": "straight_bar|(0.5,)",
+    "cluster_size": 19,
+    "edges": [
+      {
+        "type": "LINE",
+        "layer": "S-RBAR",
+        "length": 0.473,
+        "source_handle": "2D2",
+        "source_block": null
+      }
+    ],
+    "classification": "cad_drafting_symbol"
+  },
+  {
+    "component_uuid": "9049d772-4e88-5d22-bdf8-24c575743803",
+    "recognition_label": "straight_bar",
+    "plausibility_decision": "reject",
+    "total_length": 0.473,
+    "edge_count": 1,
+    "cluster_signature": "straight_bar|(0.5,)",
+    "cluster_size": 19,
+    "edges": [
+      {
+        "type": "LINE",
+        "layer": "S-RBAR",
+        "length": 0.473,
+        "source_handle": "2DF",
+        "source_block": null
+      }
+    ],
+    "classification": "cad_drafting_symbol"
+  },
+  {
+    "component_uuid": "c894a8e5-ab37-57b5-901c-70d5201d5b85",
+    "recognition_label": "straight_bar",
+    "plausibility_decision": "reject",
+    "total_length": 0.473,
+    "edge_count": 1,
+    "cluster_signature": "straight_bar|(0.5,)",
+    "cluster_size": 19,
+    "edges": [
+      {
+        "type": "LINE",
+        "layer": "S-RBAR",
+        "length": 0.473,
+        "source_handle": "2EC",
+        "source_block": null
+      }
+    ],
+    "classification": "cad_drafting_symbol"
+  },
+  {
+    "component_uuid": "85cdac40-6eae-5397-97a4-65a02e7b1b09",
+    "recognition_label": "straight_bar",
+    "plausibility_decision": "reject",
+    "total_length": 0.473,
+    "edge_count": 1,
+    "cluster_signature": "straight_bar|(0.5,)",
+    "cluster_size": 19,
+    "edges": [
+      {
+        "type": "LINE",
+        "layer": "S-RBAR",
+        "length": 0.473,
+        "source_handle": "2F9",
+        "source_block": null
+      }
+    ],
+    "classification": "cad_drafting_symbol"
+  },
+  {
+    "component_uuid": "d785bd1f-bc2e-5fe0-94ce-6a0a9de7c554",
+    "recognition_label": "straight_bar",
+    "plausibility_decision": "review",
+    "total_length": 23.081,
+    "edge_count": 1,
+    "cluster_signature": "straight_bar|(23.1,)",
+    "cluster_size": 1,
+    "edges": [
+      {
+        "type": "LINE",
+        "layer": "S-RBAR",
+        "length": 23.081,
+        "source_handle": "48E",
+        "source_block": null
+      }
+    ],
+    "classification": "unresolved_singleton"
+  },
+  {
+    "component_uuid": "73404740-20f0-5cac-969b-e07b39e20547",
+    "recognition_label": "straight_bar",
+    "plausibility_decision": "review",
+    "total_length": 23.826,
+    "edge_count": 1,
+    "cluster_signature": "straight_bar|(23.8,)",
+    "cluster_size": 1,
+    "edges": [
+      {
+        "type": "LINE",
+        "layer": "S-RBAR",
+        "length": 23.826,
+        "source_handle": "48F",
+        "source_block": null
+      }
+    ],
+    "classification": "unresolved_singleton"
+  },
+  {
+    "component_uuid": "a2814ab1-8fcb-576e-a973-b4b72abd46cd",
+    "recognition_label": "straight_bar",
+    "plausibility_decision": "review",
+    "total_length": 28.902,
+    "edge_count": 1,
+    "cluster_signature": "straight_bar|(28.9,)",
+    "cluster_size": 1,
+    "edges": [
+      {
+        "type": "LINE",
+        "layer": "S-RBAR",
+        "length": 28.902,
+        "source_handle": "512",
+        "source_block": null
+      }
+    ],
+    "classification": "unresolved_singleton"
+  },
+  {
+    "component_uuid": "835d9813-a1c9-5c09-91b3-173184b35421",
+    "recognition_label": "straight_bar",
+    "plausibility_decision": "review",
+    "total_length": 24.315,
+    "edge_count": 1,
+    "cluster_signature": "straight_bar|(24.3,)",
+    "cluster_size": 2,
+    "edges": [
+      {
+        "type": "LINE",
+        "layer": "S-RBAR",
+        "length": 24.315,
+        "source_handle": "6DF",
+        "source_block": "Rebar Bar - Part 2352736704-431004-3D Ortho"
+      }
+    ],
+    "classification": "unresolved_singleton"
+  },
+  {
+    "component_uuid": "fe5a7b78-5407-502c-8ae8-8464c6aacafc",
+    "recognition_label": "straight_bar",
+    "plausibility_decision": "review",
+    "total_length": 24.315,
+    "edge_count": 1,
+    "cluster_signature": "straight_bar|(24.3,)",
+    "cluster_size": 2,
+    "edges": [
+      {
+        "type": "LINE",
+        "layer": "S-RBAR",
+        "length": 24.315,
+        "source_handle": "6E0",
+        "source_block": "Rebar Bar - Part 2352736704-431004-3D Ortho"
+      }
+    ],
+    "classification": "unresolved_singleton"
+  },
+  {
+    "component_uuid": "b0e7f751-1ae1-5509-a641-87b0b87a1d94",
+    "recognition_label": "straight_bar",
+    "plausibility_decision": "review",
+    "total_length": 29.187,
+    "edge_count": 1,
+    "cluster_signature": "straight_bar|(29.2,)",
+    "cluster_size": 1,
+    "edges": [
+      {
+        "type": "LINE",
+        "layer": "S-RBAR",
+        "length": 29.187,
+        "source_handle": "72D",
+        "source_block": "Rebar Bar - Part 360578841-V5-3D Ortho"
+      }
+    ],
+    "classification": "unresolved_singleton"
+  },
+  {
+    "component_uuid": "8f5704c9-efc3-51d4-a577-e8452a5f4234",
+    "recognition_label": "straight_bar",
+    "plausibility_decision": "reject",
+    "total_length": 1.646,
+    "edge_count": 1,
+    "cluster_signature": "straight_bar|(1.6,)",
+    "cluster_size": 1,
+    "edges": [
+      {
+        "type": "LINE",
+        "layer": "S-RBAR",
+        "length": 1.646,
+        "source_handle": "72E",
+        "source_block": "Rebar Bar - Part 360578841-V5-3D Ortho"
+      }
+    ],
+    "classification": "unresolved_singleton"
+  },
+  {
+    "component_uuid": "aeafd5e6-b25c-5b33-8e6f-55c23042393c",
+    "recognition_label": "straight_bar",
+    "plausibility_decision": "review",
+    "total_length": 27.153,
+    "edge_count": 1,
+    "cluster_signature": "straight_bar|(27.2,)",
+    "cluster_size": 1,
+    "edges": [
+      {
+        "type": "LINE",
+        "layer": "S-RBAR",
+        "length": 27.153,
+        "source_handle": "744",
+        "source_block": "Rebar Bar - Part 766981352-431004-3D Ortho"
+      }
+    ],
+    "classification": "unresolved_singleton"
+  },
+  {
+    "component_uuid": "ebfc6ea8-4cd1-5834-b666-dd89aae1d24e",
+    "recognition_label": "straight_bar",
+    "plausibility_decision": "review",
+    "total_length": 27.504,
+    "edge_count": 1,
+    "cluster_signature": "straight_bar|(27.5,)",
+    "cluster_size": 1,
+    "edges": [
+      {
+        "type": "LINE",
+        "layer": "S-RBAR",
+        "length": 27.504,
+        "source_handle": "747",
+        "source_block": "Rebar Bar - Part 766981352-431004-3D Ortho"
+      }
+    ],
+    "classification": "unresolved_singleton"
+  },
+  {
+    "component_uuid": "41d1b87c-c273-597d-a4e8-a1a81b162077",
+    "recognition_label": "straight_bar",
+    "plausibility_decision": "reject",
+    "total_length": 1.781,
+    "edge_count": 1,
+    "cluster_signature": "straight_bar|(1.8,)",
+    "cluster_size": 1,
+    "edges": [
+      {
+        "type": "LINE",
+        "layer": "S-RBAR",
+        "length": 1.781,
+        "source_handle": "784",
+        "source_block": "Rebar Bar - Part 766981352-V11-3D Ortho"
+      }
+    ],
+    "classification": "unresolved_singleton"
+  },
+  {
+    "component_uuid": "d76ad987-376a-5c22-8e8a-0abd5f7d4e2f",
+    "recognition_label": "straight_bar",
+    "plausibility_decision": "review",
+    "total_length": 12.322,
+    "edge_count": 1,
+    "cluster_signature": "straight_bar|(12.3,)",
+    "cluster_size": 1,
+    "edges": [
+      {
+        "type": "LINE",
+        "layer": "S-RBAR",
+        "length": 12.322,
+        "source_handle": "785",
+        "source_block": "Rebar Bar - Part 766981352-V11-3D Ortho"
+      }
+    ],
+    "classification": "unresolved_singleton"
+  },
+  {
+    "component_uuid": "381eb57b-efb3-5b9c-b917-25d2a1a98be0",
+    "recognition_label": "straight_bar",
+    "plausibility_decision": "reject",
+    "total_length": 7.513,
+    "edge_count": 1,
+    "cluster_signature": "straight_bar|(7.5,)",
+    "cluster_size": 2,
+    "edges": [
+      {
+        "type": "LINE",
+        "layer": "S-RBAR",
+        "length": 7.513,
+        "source_handle": "7F0",
+        "source_block": "Rebar Bar - Part 3635738315-V12-3D Ortho"
+      }
+    ],
+    "classification": "unresolved_singleton"
+  },
+  {
+    "component_uuid": "5a233c38-d9ec-5e89-9da1-9d0458f9c843",
+    "recognition_label": "straight_bar",
+    "plausibility_decision": "review",
+    "total_length": 17.913,
+    "edge_count": 1,
+    "cluster_signature": "straight_bar|(17.9,)",
+    "cluster_size": 1,
+    "edges": [
+      {
+        "type": "LINE",
+        "layer": "S-RBAR",
+        "length": 17.913,
+        "source_handle": "8E6",
+        "source_block": "Rebar Bar - Part 4101040190-431004-3D Ortho"
+      }
+    ],
+    "classification": "unresolved_singleton"
+  },
+  {
+    "component_uuid": "b8327ed6-89ab-5836-949a-e3dcc940fdb1",
+    "recognition_label": "straight_bar",
+    "plausibility_decision": "review",
+    "total_length": 21.889,
+    "edge_count": 1,
+    "cluster_signature": "straight_bar|(21.9,)",
+    "cluster_size": 1,
+    "edges": [
+      {
+        "type": "LINE",
+        "layer": "S-RBAR",
+        "length": 21.889,
+        "source_handle": "8E7",
+        "source_block": "Rebar Bar - Part 4101040190-431004-3D Ortho"
+      }
+    ],
+    "classification": "unresolved_singleton"
+  },
+  {
+    "component_uuid": "4ce17e34-0415-5bfa-b109-65f88ceaded6",
+    "recognition_label": "straight_bar",
+    "plausibility_decision": "reject",
+    "total_length": 5.582,
+    "edge_count": 1,
+    "cluster_signature": "straight_bar|(5.6,)",
+    "cluster_size": 1,
+    "edges": [
+      {
+        "type": "LINE",
+        "layer": "S-RBAR",
+        "length": 5.582,
+        "source_handle": "8EB",
+        "source_block": "Rebar Bar - Part 4101040190-431004-3D Ortho"
+      }
+    ],
+    "classification": "unresolved_singleton"
+  },
+  {
+    "component_uuid": "12400d61-0de5-500d-a81e-3ea17df34348",
+    "recognition_label": "straight_bar",
+    "plausibility_decision": "reject",
+    "total_length": 7.382,
+    "edge_count": 1,
+    "cluster_signature": "straight_bar|(7.4,)",
+    "cluster_size": 1,
+    "edges": [
+      {
+        "type": "LINE",
+        "layer": "S-RBAR",
+        "length": 7.382,
+        "source_handle": "8EC",
+        "source_block": "Rebar Bar - Part 4101040190-431004-3D Ortho"
+      }
+    ],
+    "classification": "unresolved_singleton"
+  },
+  {
+    "component_uuid": "344243e8-bdb8-58cd-a017-80c4bad43959",
+    "recognition_label": "straight_bar",
+    "plausibility_decision": "review",
+    "total_length": 20.721,
+    "edge_count": 1,
+    "cluster_signature": "straight_bar|(20.7,)",
+    "cluster_size": 1,
+    "edges": [
+      {
+        "type": "LINE",
+        "layer": "S-RBAR",
+        "length": 20.721,
+        "source_handle": "8F1",
+        "source_block": "Rebar Bar - Part 4101040190-V16-3D Ortho"
+      }
+    ],
+    "classification": "unresolved_singleton"
+  },
+  {
+    "component_uuid": "40ab1cad-09c3-50cb-9615-199ebac35a3e",
+    "recognition_label": "straight_bar",
+    "plausibility_decision": "review",
+    "total_length": 19.636,
+    "edge_count": 1,
+    "cluster_signature": "straight_bar|(19.6,)",
+    "cluster_size": 1,
+    "edges": [
+      {
+        "type": "LINE",
+        "layer": "S-RBAR",
+        "length": 19.636,
+        "source_handle": "8F4",
+        "source_block": "Rebar Bar - Part 4101040190-V16-3D Ortho"
+      }
+    ],
+    "classification": "unresolved_singleton"
+  },
+  {
+    "component_uuid": "f5e6588d-5b4c-5846-af82-c7cfd0174ed7",
+    "recognition_label": "straight_bar",
+    "plausibility_decision": "review",
+    "total_length": 20.024,
+    "edge_count": 1,
+    "cluster_signature": "straight_bar|(20.0,)",
+    "cluster_size": 1,
+    "edges": [
+      {
+        "type": "LINE",
+        "layer": "S-RBAR",
+        "length": 20.024,
+        "source_handle": "91B",
+        "source_block": "Rebar Bar - Part 1871424790-V19-3D Ortho"
+      }
+    ],
+    "classification": "unresolved_singleton"
+  },
+  {
+    "component_uuid": "78052e85-d8b3-5f66-b916-1b47ae8691d2",
+    "recognition_label": "straight_bar",
+    "plausibility_decision": "reject",
+    "total_length": 7.54,
+    "edge_count": 1,
+    "cluster_signature": "straight_bar|(7.5,)",
+    "cluster_size": 2,
+    "edges": [
+      {
+        "type": "LINE",
+        "layer": "S-RBAR",
+        "length": 7.54,
+        "source_handle": "91C",
+        "source_block": "Rebar Bar - Part 1871424790-V19-3D Ortho"
+      }
+    ],
+    "classification": "unresolved_singleton"
+  },
+  {
+    "component_uuid": "072f0692-e8d5-5600-8c84-b6d7990d154b",
+    "recognition_label": "straight_bar",
+    "plausibility_decision": "review",
+    "total_length": 18.554,
+    "edge_count": 1,
+    "cluster_signature": "straight_bar|(18.6,)",
+    "cluster_size": 1,
+    "edges": [
+      {
+        "type": "LINE",
+        "layer": "S-RBAR",
+        "length": 18.554,
+        "source_handle": "98D",
+        "source_block": "Rebar Bar - Part 1871424790-V24-3D Ortho"
+      }
+    ],
+    "classification": "unresolved_singleton"
+  },
+  {
+    "component_uuid": "2c282e33-7ad8-5c6e-81b8-02c18a4afd17",
+    "recognition_label": "straight_bar",
+    "plausibility_decision": "reject",
+    "total_length": 6.073,
+    "edge_count": 1,
+    "cluster_signature": "straight_bar|(6.1,)",
+    "cluster_size": 1,
+    "edges": [
+      {
+        "type": "LINE",
+        "layer": "S-RBAR",
+        "length": 6.073,
+        "source_handle": "98E",
+        "source_block": "Rebar Bar - Part 1871424790-V24-3D Ortho"
+      }
+    ],
+    "classification": "unresolved_singleton"
+  },
+  {
+    "component_uuid": "62c7a363-917c-5c15-bee6-814fc3552819",
+    "recognition_label": "straight_bar",
+    "plausibility_decision": "review",
+    "total_length": 25.261,
+    "edge_count": 1,
+    "cluster_signature": "straight_bar|(25.3,)",
+    "cluster_size": 1,
+    "edges": [
+      {
+        "type": "LINE",
+        "layer": "S-RBAR",
+        "length": 25.261,
+        "source_handle": "9CB",
+        "source_block": "Rebar Bar - Part 1871424790-V27-3D Ortho"
+      }
+    ],
+    "classification": "unresolved_singleton"
+  },
+  {
+    "component_uuid": "e72e40df-c11a-5845-8a47-d1cac1c2ff16",
+    "recognition_label": "straight_bar",
+    "plausibility_decision": "review",
+    "total_length": 12.777,
+    "edge_count": 1,
+    "cluster_signature": "straight_bar|(12.8,)",
+    "cluster_size": 1,
+    "edges": [
+      {
+        "type": "LINE",
+        "layer": "S-RBAR",
+        "length": 12.777,
+        "source_handle": "9CC",
+        "source_block": "Rebar Bar - Part 1871424790-V27-3D Ortho"
+      }
+    ],
+    "classification": "unresolved_singleton"
+  },
+  {
+    "component_uuid": "2b1c9062-aa2b-5efb-b0ac-3cbc2af97007",
+    "recognition_label": "straight_bar",
+    "plausibility_decision": "review",
+    "total_length": 25.602,
+    "edge_count": 1,
+    "cluster_signature": "straight_bar|(25.6,)",
+    "cluster_size": 1,
+    "edges": [
+      {
+        "type": "LINE",
+        "layer": "S-RBAR",
+        "length": 25.602,
+        "source_handle": "A02",
+        "source_block": "Rebar Bar - Part 1871424790-V29-3D Ortho"
+      }
+    ],
+    "classification": "unresolved_singleton"
+  },
+  {
+    "component_uuid": "9134e0f2-243a-5600-86af-b9f9e73067a0",
+    "recognition_label": "straight_bar",
+    "plausibility_decision": "reject",
+    "total_length": 2.202,
+    "edge_count": 1,
+    "cluster_signature": "straight_bar|(2.2,)",
+    "cluster_size": 1,
+    "edges": [
+      {
+        "type": "LINE",
+        "layer": "S-RBAR",
+        "length": 2.202,
+        "source_handle": "A53",
+        "source_block": "Rebar Bar - Part 1871424790-V32-3D Ortho"
+      }
+    ],
+    "classification": "unresolved_singleton"
+  },
+  {
+    "component_uuid": "74b6a53f-b9de-5834-bc45-97bd00b362d9",
+    "recognition_label": "straight_bar",
+    "plausibility_decision": "reject",
+    "total_length": 7.739,
+    "edge_count": 1,
+    "cluster_signature": "straight_bar|(7.7,)",
+    "cluster_size": 1,
+    "edges": [
+      {
+        "type": "LINE",
+        "layer": "S-RBAR",
+        "length": 7.739,
+        "source_handle": "A56",
+        "source_block": "Rebar Bar - Part 1871424790-V32-3D Ortho"
+      }
+    ],
+    "classification": "unresolved_singleton"
+  },
+  {
+    "component_uuid": "d8a1dcf5-b2c7-5641-ac75-87b384fd5885",
+    "recognition_label": "straight_bar",
+    "plausibility_decision": "reject",
+    "total_length": 4.514,
+    "edge_count": 1,
+    "cluster_signature": "straight_bar|(4.5,)",
+    "cluster_size": 1,
+    "edges": [
+      {
+        "type": "LINE",
+        "layer": "S-RBAR",
+        "length": 4.514,
+        "source_handle": "A6F",
+        "source_block": "Rebar Bar - Part 1871424790-V33-3D Ortho"
+      }
+    ],
+    "classification": "unresolved_singleton"
+  },
+  {
+    "component_uuid": "188973e6-430f-530e-88d4-f127917af922",
+    "recognition_label": "straight_bar",
+    "plausibility_decision": "review",
+    "total_length": 13.022,
+    "edge_count": 1,
+    "cluster_signature": "straight_bar|(13.0,)",
+    "cluster_size": 1,
+    "edges": [
+      {
+        "type": "LINE",
+        "layer": "S-RBAR",
+        "length": 13.022,
+        "source_handle": "B5E",
+        "source_block": "Rebar Bar - Part 1871424790-V43-3D Ortho"
+      }
+    ],
+    "classification": "unresolved_singleton"
+  },
+  {
+    "component_uuid": "6da020eb-e69a-5119-a864-d315069e7e76",
+    "recognition_label": "straight_bar",
+    "plausibility_decision": "review",
+    "total_length": 21.553,
+    "edge_count": 1,
+    "cluster_signature": "straight_bar|(21.6,)",
+    "cluster_size": 1,
+    "edges": [
+      {
+        "type": "LINE",
+        "layer": "S-RBAR",
+        "length": 21.553,
+        "source_handle": "B5F",
+        "source_block": "Rebar Bar - Part 1871424790-V43-3D Ortho"
+      }
+    ],
+    "classification": "unresolved_singleton"
+  },
+  {
+    "component_uuid": "8b179117-12c5-5a0e-8ccf-e80e9a92bd76",
+    "recognition_label": "straight_bar",
+    "plausibility_decision": "reject",
+    "total_length": 7.949,
+    "edge_count": 1,
+    "cluster_signature": "straight_bar|(7.9,)",
+    "cluster_size": 1,
+    "edges": [
+      {
+        "type": "LINE",
+        "layer": "S-RBAR",
+        "length": 7.949,
+        "source_handle": "C1C",
+        "source_block": "Rebar Bar - Part 878712912-V49-3D Ortho"
+      }
+    ],
+    "classification": "unresolved_singleton"
+  },
+  {
+    "component_uuid": "69554021-1785-5600-ab9e-e75bbcbddde9",
+    "recognition_label": "straight_bar",
+    "plausibility_decision": "reject",
+    "total_length": 8.092,
+    "edge_count": 1,
+    "cluster_signature": "straight_bar|(8.1,)",
+    "cluster_size": 1,
+    "edges": [
+      {
+        "type": "LINE",
+        "layer": "S-RBAR",
+        "length": 8.092,
+        "source_handle": "C1D",
+        "source_block": "Rebar Bar - Part 878712912-V49-3D Ortho"
+      }
+    ],
+    "classification": "unresolved_singleton"
+  },
+  {
+    "component_uuid": "2941ec4c-0d9c-5736-b885-9fa1fe617348",
+    "recognition_label": "l_bar",
+    "plausibility_decision": "review",
+    "total_length": 5.337,
+    "edge_count": 2,
+    "cluster_signature": "l_bar|(0.5, 4.9)",
+    "cluster_size": 19,
+    "edges": [
+      {
+        "type": "LINE",
+        "layer": "S-RBAR",
+        "length": 0.478,
+        "source_handle": "20E",
+        "source_block": null
+      },
+      {
+        "type": "ARC",
+        "layer": "S-RBAR",
+        "length": 4.858,
+        "source_handle": "211",
+        "source_block": null
+      }
+    ],
+    "classification": "cad_drafting_symbol"
+  },
+  {
+    "component_uuid": "6ba6d600-5c45-5fa5-8d1a-e8eee2cd0d05",
+    "recognition_label": "l_bar",
+    "plausibility_decision": "review",
+    "total_length": 5.337,
+    "edge_count": 2,
+    "cluster_signature": "l_bar|(0.5, 4.9)",
+    "cluster_size": 19,
+    "edges": [
+      {
+        "type": "LINE",
+        "layer": "S-RBAR",
+        "length": 0.478,
+        "source_handle": "21B",
+        "source_block": null
+      },
+      {
+        "type": "ARC",
+        "layer": "S-RBAR",
+        "length": 4.858,
+        "source_handle": "21E",
+        "source_block": null
+      }
+    ],
+    "classification": "cad_drafting_symbol"
+  },
+  {
+    "component_uuid": "c200c5d0-0d67-543f-9d17-2747b3549317",
+    "recognition_label": "l_bar",
+    "plausibility_decision": "review",
+    "total_length": 5.337,
+    "edge_count": 2,
+    "cluster_signature": "l_bar|(0.5, 4.9)",
+    "cluster_size": 19,
+    "edges": [
+      {
+        "type": "LINE",
+        "layer": "S-RBAR",
+        "length": 0.478,
+        "source_handle": "228",
+        "source_block": null
+      },
+      {
+        "type": "ARC",
+        "layer": "S-RBAR",
+        "length": 4.858,
+        "source_handle": "22B",
+        "source_block": null
+      }
+    ],
+    "classification": "cad_drafting_symbol"
+  },
+  {
+    "component_uuid": "150988b2-644b-5a28-a835-c4ea21b3d82e",
+    "recognition_label": "l_bar",
+    "plausibility_decision": "review",
+    "total_length": 5.337,
+    "edge_count": 2,
+    "cluster_signature": "l_bar|(0.5, 4.9)",
+    "cluster_size": 19,
+    "edges": [
+      {
+        "type": "ARC",
+        "layer": "S-RBAR",
+        "length": 4.858,
+        "source_handle": "238",
+        "source_block": null
+      },
+      {
+        "type": "LINE",
+        "layer": "S-RBAR",
+        "length": 0.478,
+        "source_handle": "235",
+        "source_block": null
+      }
+    ],
+    "classification": "cad_drafting_symbol"
+  },
+  {
+    "component_uuid": "378d1fe4-7cbb-5388-9c63-89bc38a58464",
+    "recognition_label": "l_bar",
+    "plausibility_decision": "review",
+    "total_length": 5.337,
+    "edge_count": 2,
+    "cluster_signature": "l_bar|(0.5, 4.9)",
+    "cluster_size": 19,
+    "edges": [
+      {
+        "type": "LINE",
+        "layer": "S-RBAR",
+        "length": 0.478,
+        "source_handle": "242",
+        "source_block": null
+      },
+      {
+        "type": "ARC",
+        "layer": "S-RBAR",
+        "length": 4.858,
+        "source_handle": "245",
+        "source_block": null
+      }
+    ],
+    "classification": "cad_drafting_symbol"
+  },
+  {
+    "component_uuid": "0cfa7ebe-9e34-5426-b6ef-560cb67bdac8",
+    "recognition_label": "l_bar",
+    "plausibility_decision": "review",
+    "total_length": 5.337,
+    "edge_count": 2,
+    "cluster_signature": "l_bar|(0.5, 4.9)",
+    "cluster_size": 19,
+    "edges": [
+      {
+        "type": "ARC",
+        "layer": "S-RBAR",
+        "length": 4.858,
+        "source_handle": "252",
+        "source_block": null
+      },
+      {
+        "type": "LINE",
+        "layer": "S-RBAR",
+        "length": 0.478,
+        "source_handle": "24F",
+        "source_block": null
+      }
+    ],
+    "classification": "cad_drafting_symbol"
+  },
+  {
+    "component_uuid": "f968d5ab-ee37-5025-b36b-17d438706235",
+    "recognition_label": "l_bar",
+    "plausibility_decision": "review",
+    "total_length": 5.337,
+    "edge_count": 2,
+    "cluster_signature": "l_bar|(0.5, 4.9)",
+    "cluster_size": 19,
+    "edges": [
+      {
+        "type": "LINE",
+        "layer": "S-RBAR",
+        "length": 0.478,
+        "source_handle": "25C",
+        "source_block": null
+      },
+      {
+        "type": "ARC",
+        "layer": "S-RBAR",
+        "length": 4.858,
+        "source_handle": "25F",
+        "source_block": null
+      }
+    ],
+    "classification": "cad_drafting_symbol"
+  },
+  {
+    "component_uuid": "954d7a15-a01a-553a-b805-f2d126c155e3",
+    "recognition_label": "l_bar",
+    "plausibility_decision": "review",
+    "total_length": 5.337,
+    "edge_count": 2,
+    "cluster_signature": "l_bar|(0.5, 4.9)",
+    "cluster_size": 19,
+    "edges": [
+      {
+        "type": "ARC",
+        "layer": "S-RBAR",
+        "length": 4.858,
+        "source_handle": "26C",
+        "source_block": null
+      },
+      {
+        "type": "LINE",
+        "layer": "S-RBAR",
+        "length": 0.478,
+        "source_handle": "269",
+        "source_block": null
+      }
+    ],
+    "classification": "cad_drafting_symbol"
+  },
+  {
+    "component_uuid": "d40a111d-ad3d-5f3c-b430-c78bfc254958",
+    "recognition_label": "l_bar",
+    "plausibility_decision": "review",
+    "total_length": 5.337,
+    "edge_count": 2,
+    "cluster_signature": "l_bar|(0.5, 4.9)",
+    "cluster_size": 19,
+    "edges": [
+      {
+        "type": "LINE",
+        "layer": "S-RBAR",
+        "length": 0.478,
+        "source_handle": "276",
+        "source_block": null
+      },
+      {
+        "type": "ARC",
+        "layer": "S-RBAR",
+        "length": 4.858,
+        "source_handle": "279",
+        "source_block": null
+      }
+    ],
+    "classification": "cad_drafting_symbol"
+  },
+  {
+    "component_uuid": "76e6a9e5-f494-529c-a963-152a8c2af019",
+    "recognition_label": "l_bar",
+    "plausibility_decision": "review",
+    "total_length": 5.337,
+    "edge_count": 2,
+    "cluster_signature": "l_bar|(0.5, 4.9)",
+    "cluster_size": 19,
+    "edges": [
+      {
+        "type": "LINE",
+        "layer": "S-RBAR",
+        "length": 0.478,
+        "source_handle": "283",
+        "source_block": null
+      },
+      {
+        "type": "ARC",
+        "layer": "S-RBAR",
+        "length": 4.858,
+        "source_handle": "286",
+        "source_block": null
+      }
+    ],
+    "classification": "cad_drafting_symbol"
+  },
+  {
+    "component_uuid": "c57f5e4e-88b3-51ba-986c-bfca1a04d33f",
+    "recognition_label": "l_bar",
+    "plausibility_decision": "review",
+    "total_length": 5.337,
+    "edge_count": 2,
+    "cluster_signature": "l_bar|(0.5, 4.9)",
+    "cluster_size": 19,
+    "edges": [
+      {
+        "type": "LINE",
+        "layer": "S-RBAR",
+        "length": 0.478,
+        "source_handle": "290",
+        "source_block": null
+      },
+      {
+        "type": "ARC",
+        "layer": "S-RBAR",
+        "length": 4.858,
+        "source_handle": "293",
+        "source_block": null
+      }
+    ],
+    "classification": "cad_drafting_symbol"
+  },
+  {
+    "component_uuid": "0772948b-d973-5dba-95af-3a6139808308",
+    "recognition_label": "l_bar",
+    "plausibility_decision": "review",
+    "total_length": 5.337,
+    "edge_count": 2,
+    "cluster_signature": "l_bar|(0.5, 4.9)",
+    "cluster_size": 19,
+    "edges": [
+      {
+        "type": "LINE",
+        "layer": "S-RBAR",
+        "length": 0.478,
+        "source_handle": "29E",
+        "source_block": null
+      },
+      {
+        "type": "ARC",
+        "layer": "S-RBAR",
+        "length": 4.858,
+        "source_handle": "2A1",
+        "source_block": null
+      }
+    ],
+    "classification": "cad_drafting_symbol"
+  },
+  {
+    "component_uuid": "17e420b1-5c36-5373-aca6-69eb9ef27272",
+    "recognition_label": "l_bar",
+    "plausibility_decision": "review",
+    "total_length": 5.337,
+    "edge_count": 2,
+    "cluster_signature": "l_bar|(0.5, 4.9)",
+    "cluster_size": 19,
+    "edges": [
+      {
+        "type": "LINE",
+        "layer": "S-RBAR",
+        "length": 0.478,
+        "source_handle": "2AC",
+        "source_block": null
+      },
+      {
+        "type": "ARC",
+        "layer": "S-RBAR",
+        "length": 4.858,
+        "source_handle": "2AF",
+        "source_block": null
+      }
+    ],
+    "classification": "cad_drafting_symbol"
+  },
+  {
+    "component_uuid": "8886ef03-169c-5f4b-8fcb-4d36dc5c4ffe",
+    "recognition_label": "l_bar",
+    "plausibility_decision": "review",
+    "total_length": 5.337,
+    "edge_count": 2,
+    "cluster_signature": "l_bar|(0.5, 4.9)",
+    "cluster_size": 19,
+    "edges": [
+      {
+        "type": "ARC",
+        "layer": "S-RBAR",
+        "length": 4.858,
+        "source_handle": "2BC",
+        "source_block": null
+      },
+      {
+        "type": "LINE",
+        "layer": "S-RBAR",
+        "length": 0.478,
+        "source_handle": "2B9",
+        "source_block": null
+      }
+    ],
+    "classification": "cad_drafting_symbol"
+  },
+  {
+    "component_uuid": "f066c176-74ad-5eb7-b326-215ce2f26919",
+    "recognition_label": "l_bar",
+    "plausibility_decision": "review",
+    "total_length": 5.337,
+    "edge_count": 2,
+    "cluster_signature": "l_bar|(0.5, 4.9)",
+    "cluster_size": 19,
+    "edges": [
+      {
+        "type": "ARC",
+        "layer": "S-RBAR",
+        "length": 4.858,
+        "source_handle": "2C9",
+        "source_block": null
+      },
+      {
+        "type": "LINE",
+        "layer": "S-RBAR",
+        "length": 0.478,
+        "source_handle": "2C6",
+        "source_block": null
+      }
+    ],
+    "classification": "cad_drafting_symbol"
+  },
+  {
+    "component_uuid": "d9a0cb5b-6f68-54a7-bb8e-8c0a74b08612",
+    "recognition_label": "l_bar",
+    "plausibility_decision": "review",
+    "total_length": 5.337,
+    "edge_count": 2,
+    "cluster_signature": "l_bar|(0.5, 4.9)",
+    "cluster_size": 19,
+    "edges": [
+      {
+        "type": "ARC",
+        "layer": "S-RBAR",
+        "length": 4.858,
+        "source_handle": "2D6",
+        "source_block": null
+      },
+      {
+        "type": "LINE",
+        "layer": "S-RBAR",
+        "length": 0.478,
+        "source_handle": "2D3",
+        "source_block": null
+      }
+    ],
+    "classification": "cad_drafting_symbol"
+  },
+  {
+    "component_uuid": "f73dfa40-d183-55b6-977e-6cc4e3a01ac4",
+    "recognition_label": "l_bar",
+    "plausibility_decision": "review",
+    "total_length": 5.337,
+    "edge_count": 2,
+    "cluster_signature": "l_bar|(0.5, 4.9)",
+    "cluster_size": 19,
+    "edges": [
+      {
+        "type": "LINE",
+        "layer": "S-RBAR",
+        "length": 0.478,
+        "source_handle": "2E0",
+        "source_block": null
+      },
+      {
+        "type": "ARC",
+        "layer": "S-RBAR",
+        "length": 4.858,
+        "source_handle": "2E3",
+        "source_block": null
+      }
+    ],
+    "classification": "cad_drafting_symbol"
+  },
+  {
+    "component_uuid": "39efeb9a-f52b-5107-9e26-0714089cbee9",
+    "recognition_label": "l_bar",
+    "plausibility_decision": "review",
+    "total_length": 5.337,
+    "edge_count": 2,
+    "cluster_signature": "l_bar|(0.5, 4.9)",
+    "cluster_size": 19,
+    "edges": [
+      {
+        "type": "LINE",
+        "layer": "S-RBAR",
+        "length": 0.478,
+        "source_handle": "2ED",
+        "source_block": null
+      },
+      {
+        "type": "ARC",
+        "layer": "S-RBAR",
+        "length": 4.858,
+        "source_handle": "2F0",
+        "source_block": null
+      }
+    ],
+    "classification": "cad_drafting_symbol"
+  },
+  {
+    "component_uuid": "7f049da2-8a06-50ad-b520-370144e1feb0",
+    "recognition_label": "l_bar",
+    "plausibility_decision": "review",
+    "total_length": 5.337,
+    "edge_count": 2,
+    "cluster_signature": "l_bar|(0.5, 4.9)",
+    "cluster_size": 19,
+    "edges": [
+      {
+        "type": "ARC",
+        "layer": "S-RBAR",
+        "length": 4.858,
+        "source_handle": "2FD",
+        "source_block": null
+      },
+      {
+        "type": "LINE",
+        "layer": "S-RBAR",
+        "length": 0.478,
+        "source_handle": "2FA",
+        "source_block": null
+      }
+    ],
+    "classification": "cad_drafting_symbol"
+  }
+]

@@ -207,8 +207,11 @@ class TopologyBuilder:
         return metrics, comp_repo
 
     def _stage_6_7_validation(self) -> Dict:
-        validation = {"critical_errors": [], "warnings": []}
-        
+        # Tiered validation: critical (structurally broken graph) and errors
+        # (real data-quality defects) both fail the "ready for next phase" gate;
+        # warnings/info do not.
+        validation = {"critical_errors": [], "errors": [], "warnings": [], "info": []}
+
         for e_id, edge in self.graph.edges.items():
             if edge.start_node_uuid == edge.end_node_uuid:
                 validation["critical_errors"].append(f"Self-loop on edge {e_id}")
@@ -218,20 +221,51 @@ class TopologyBuilder:
                 validation["critical_errors"].append(f"Missing end node {edge.end_node_uuid}")
             if edge.length <= 0.0:
                 validation["warnings"].append(f"Zero-length edge {e_id}")
-                
-        # Duplicate edges check
+
+        # Duplicate edges: two edges connecting the same node pair. This can
+        # legitimately happen (e.g. an annotation line traced over a rebar
+        # line on a different layer), but each occurrence is unresolved
+        # duplicate/overlapping source geometry that Phase 3 dedup did not
+        # catch, so it's an error requiring an explicit decision, not a
+        # silently-ignored warning.
         edge_pairs = set()
         for e_id, edge in self.graph.edges.items():
             pair = tuple(sorted([edge.start_node_uuid, edge.end_node_uuid]))
-            # In structural drawings we might have parallel edges (different layers), so this is a warning
             if pair in edge_pairs:
-                validation["warnings"].append(f"Duplicate topological edge between nodes {pair}")
+                validation["errors"].append(f"Duplicate topological edge between nodes {pair}")
             edge_pairs.add(pair)
-            
-        # Orphan nodes (degree 0)
-        orphans = sum(1 for n in self.graph.nodes.values() if n.incident_edges == 0)
-        if orphans > 0:
-            # We filter out nodes that just had circles connected, which don't produce structural edges
-            validation["warnings"].append(f"{orphans} orphan nodes (degree 0) in graph")
-            
+
+        # Orphan nodes (degree 0). ARC centers and CIRCLE centers are
+        # registered as nodes (for spatial reference) but are never used as
+        # edge endpoints — arcs connect via their start/end angle points, and
+        # circles never produce edges at all (see _stage_6_1_build_edges).
+        # Degree-0 on one of those points is expected, not a topology defect;
+        # degree-0 on any other point (a LINE/POLYLINE endpoint or an ARC
+        # start/end point) is a genuine, unexpected orphan.
+        non_topological_nodes = set()
+        for arc in self.canon_repo.arcs:
+            non_topological_nodes.add(node_uuid(arc.center[0], arc.center[1], 0.0))
+        for circle in self.canon_repo.circles:
+            cz = circle.center[2] if len(circle.center) > 2 else 0.0
+            non_topological_nodes.add(node_uuid(circle.center[0], circle.center[1], cz))
+
+        expected_orphans = 0
+        unexpected_orphans = []
+        for n_id, n in self.graph.nodes.items():
+            if n.incident_edges == 0:
+                if n_id in non_topological_nodes:
+                    expected_orphans += 1
+                else:
+                    unexpected_orphans.append(n_id)
+
+        if expected_orphans:
+            validation["info"].append(
+                f"{expected_orphans} orphan nodes are ARC/CIRCLE center reference points (expected, not a topology defect)"
+            )
+        if unexpected_orphans:
+            validation["errors"].append(
+                f"{len(unexpected_orphans)} unexpected orphan nodes (degree 0, not an arc/circle center): "
+                f"{[str(n) for n in unexpected_orphans[:10]]}"
+            )
+
         return validation

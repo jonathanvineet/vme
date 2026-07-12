@@ -1,104 +1,950 @@
 [
   {
     "raw_text": "N1",
-    "source_uuid": "9d0f5f20-7197-4241-a8d9-d9a3b291049e",
+    "source_uuid": "5cb62d70-beb8-487c-a60e-47c0ff4eb68d",
     "token_type": "TOKEN_MARK",
     "value": "N1"
   },
   {
     "raw_text": "N2",
-    "source_uuid": "9d0f5f20-7197-4241-a8d9-d9a3b291049e",
+    "source_uuid": "5cb62d70-beb8-487c-a60e-47c0ff4eb68d",
     "token_type": "TOKEN_MARK",
     "value": "N2"
   },
   {
+    "raw_text": "5199.999999829772",
+    "source_uuid": "ddb97445-4f56-44a4-9c10-7f121826e910",
+    "token_type": "TOKEN_LENGTH",
+    "value": 5199.999999829772
+  },
+  {
+    "raw_text": "2274.999999938693",
+    "source_uuid": "e952df20-7ba4-47ca-8533-d1ee94ba9d91",
+    "token_type": "TOKEN_LENGTH",
+    "value": 2274.999999938693
+  },
+  {
+    "raw_text": "150.0",
+    "source_uuid": "101ebd11-e1a4-4fd9-ac38-e109bfc53868",
+    "token_type": "TOKEN_LENGTH",
+    "value": 150.0
+  },
+  {
     "raw_text": "N4",
-    "source_uuid": "c195b7ee-07a9-4056-8827-12a009328ad8",
+    "source_uuid": "d47010b5-8412-44ec-8aaa-44f1c56f7d7f",
     "token_type": "TOKEN_MARK",
     "value": "N4"
   },
   {
+    "raw_text": "540.0000000000437",
+    "source_uuid": "22aaab36-a53e-43a4-8aa7-1e659bf96823",
+    "token_type": "TOKEN_LENGTH",
+    "value": 540.0000000000437
+  },
+  {
     "raw_text": "N7",
-    "source_uuid": "8bf427d3-63c6-4312-a4eb-0e02c33c8871",
+    "source_uuid": "9455b338-f28a-403c-b2da-0e3b39898153",
     "token_type": "TOKEN_MARK",
     "value": "N7"
   },
   {
+    "raw_text": "1520.0",
+    "source_uuid": "bc88d7e8-68b1-4b46-bfc1-bb7abedc4239",
+    "token_type": "TOKEN_LENGTH",
+    "value": 1520.0
+  },
+  {
+    "raw_text": "5039.999999829764",
+    "source_uuid": "98a22adb-e48b-489b-9274-9a33fc81196c",
+    "token_type": "TOKEN_LENGTH",
+    "value": 5039.999999829764
+  },
+  {
     "raw_text": "N6",
-    "source_uuid": "d8447507-712b-4954-be0d-97a8c1e3c78e",
+    "source_uuid": "3bbb7b25-df1b-44be-8991-938cbc00c609",
     "token_type": "TOKEN_MARK",
     "value": "N6"
   },
   {
+    "raw_text": "384.9999999995489",
+    "source_uuid": "9aa0c6e4-63e8-4919-96d0-3b1ba410352e",
+    "token_type": "TOKEN_LENGTH",
+    "value": 384.9999999995489
+  },
+  {
+    "raw_text": "229.99999993870733",
+    "source_uuid": "bb5ff2ba-e13c-4f02-a471-03010a0d14d8",
+    "token_type": "TOKEN_LENGTH",
+    "value": 229.99999993870733
+  },
+  {
+    "raw_text": "5082.898933193916",
+    "source_uuid": "f96349c3-ea23-4d51-9e25-cb162ba6f65d",
+    "token_type": "TOKEN_LENGTH",
+    "value": 5082.898933193916
+  },
+  {
+    "raw_text": "T8",
+    "source_uuid": "f96349c3-ea23-4d51-9e25-cb162ba6f65d",
+    "token_type": "TOKEN_DIAMETER",
+    "value": 8.0
+  },
+  {
+    "raw_text": "200mm C/C",
+    "source_uuid": "f96349c3-ea23-4d51-9e25-cb162ba6f65d",
+    "token_type": "TOKEN_SPACING",
+    "value": 200.0
+  },
+  {
+    "raw_text": "57.912383885501185",
+    "source_uuid": "a8ac946f-1408-44f9-acfb-f89268d05600",
+    "token_type": "TOKEN_LENGTH",
+    "value": 57.912383885501185
+  },
+  {
     "raw_text": "N4",
-    "source_uuid": "c518e56a-cef1-422a-8235-30f69530f020",
+    "source_uuid": "03610c15-f003-4c35-bdb7-5a559000cde2",
     "token_type": "TOKEN_MARK",
     "value": "N4"
   },
   {
     "raw_text": "N6",
-    "source_uuid": "79a60de1-28cf-453c-8661-4489d55eeb6a",
+    "source_uuid": "6587bfda-779f-4c7e-b2ad-e5692c99da25",
     "token_type": "TOKEN_MARK",
     "value": "N6"
   },
   {
-    "raw_text": "N7",
-    "source_uuid": "51e4be85-a62e-4c9c-8b83-a89f270c1424",
-    "token_type": "TOKEN_MARK",
-    "value": "N7"
+    "raw_text": "309.9999999995198",
+    "source_uuid": "15161a5d-fbf5-4e86-a7cc-60a4a9b6e86d",
+    "token_type": "TOKEN_LENGTH",
+    "value": 309.9999999995198
   },
   {
-    "raw_text": "N6",
-    "source_uuid": "8db427ab-1829-48e6-9f5a-bb86b9f6607d",
-    "token_type": "TOKEN_MARK",
-    "value": "N6"
+    "raw_text": "229.999999938751",
+    "source_uuid": "0b32a694-8795-4c23-8d03-e9a9e6d70eed",
+    "token_type": "TOKEN_LENGTH",
+    "value": 229.999999938751
+  },
+  {
+    "raw_text": "5199.999999829772",
+    "source_uuid": "34a7cfb3-898c-4178-9289-eb45249671f6",
+    "token_type": "TOKEN_LENGTH",
+    "value": 5199.999999829772
+  },
+  {
+    "raw_text": "419.59434135473566",
+    "source_uuid": "9f5cdd4c-e254-4061-b470-240fb8cba266",
+    "token_type": "TOKEN_LENGTH",
+    "value": 419.59434135473566
+  },
+  {
+    "raw_text": "5199.999999829772",
+    "source_uuid": "987a7b2b-e3fd-437a-be71-0461e78acd5d",
+    "token_type": "TOKEN_LENGTH",
+    "value": 5199.999999829772
   },
   {
     "raw_text": "N1",
-    "source_uuid": "5e4fc71d-f4a1-4e61-8625-9b17c9f6f501",
+    "source_uuid": "7c68cad5-84fc-4774-9793-c239a7ae0da1",
     "token_type": "TOKEN_MARK",
     "value": "N1"
   },
   {
     "raw_text": "N2",
-    "source_uuid": "5e4fc71d-f4a1-4e61-8625-9b17c9f6f501",
+    "source_uuid": "7c68cad5-84fc-4774-9793-c239a7ae0da1",
     "token_type": "TOKEN_MARK",
     "value": "N2"
   },
   {
-    "raw_text": "N7",
-    "source_uuid": "71f6a40b-66bd-412b-8ca9-8cab9b414c6f",
+    "raw_text": "150.0",
+    "source_uuid": "914ff841-f655-465d-83bf-7bcb1d2744f2",
+    "token_type": "TOKEN_LENGTH",
+    "value": 150.0
+  },
+  {
+    "raw_text": "N4",
+    "source_uuid": "730f1d2e-2fbc-4d94-b93c-ba469717fa5b",
     "token_type": "TOKEN_MARK",
-    "value": "N7"
+    "value": "N4"
+  },
+  {
+    "raw_text": "540.0000000000291",
+    "source_uuid": "23f1dfef-c31f-45b1-914b-a4972438279d",
+    "token_type": "TOKEN_LENGTH",
+    "value": 540.0000000000291
   },
   {
     "raw_text": "N7",
-    "source_uuid": "a8a9e52c-0f97-441a-a341-73435d2d6dbd",
+    "source_uuid": "4d4d4d67-c408-4c83-ba5d-cb42dc810889",
     "token_type": "TOKEN_MARK",
     "value": "N7"
   },
   {
     "raw_text": "N6",
-    "source_uuid": "03d3f2da-4ce3-471a-b28f-bada93dc22c3",
+    "source_uuid": "003de559-7f93-44cf-827b-396f8ea67312",
     "token_type": "TOKEN_MARK",
     "value": "N6"
   },
   {
+    "raw_text": "2424.9999999387073",
+    "source_uuid": "3edddb3a-a7b8-4851-bb75-1bfd340a740b",
+    "token_type": "TOKEN_LENGTH",
+    "value": 2424.9999999387073
+  },
+  {
+    "raw_text": "5199.999999829772",
+    "source_uuid": "2071be4d-6c68-4d36-add4-5a8a103050d2",
+    "token_type": "TOKEN_LENGTH",
+    "value": 5199.999999829772
+  },
+  {
+    "raw_text": "419.59434135473566",
+    "source_uuid": "3c99bef8-4d12-47a1-b0c8-0ffe97b439aa",
+    "token_type": "TOKEN_LENGTH",
+    "value": 419.59434135473566
+  },
+  {
     "raw_text": "N1",
-    "source_uuid": "1a6953c7-4dfa-4238-a78a-3cd2aec6f886",
+    "source_uuid": "b207386d-c731-4176-90e6-33ff5f257975",
     "token_type": "TOKEN_MARK",
     "value": "N1"
   },
   {
     "raw_text": "N2",
-    "source_uuid": "1a6953c7-4dfa-4238-a78a-3cd2aec6f886",
+    "source_uuid": "b207386d-c731-4176-90e6-33ff5f257975",
     "token_type": "TOKEN_MARK",
     "value": "N2"
   },
   {
-    "raw_text": "N4",
-    "source_uuid": "d2024c1d-afa9-4e42-b967-eab864a09fd6",
+    "raw_text": "2049.999999999971",
+    "source_uuid": "81abcf19-6ccb-4c8e-8e05-3d200e139e84",
+    "token_type": "TOKEN_LENGTH",
+    "value": 2049.999999999971
+  },
+  {
+    "raw_text": "1749.999999999971",
+    "source_uuid": "cc9a6acf-c12c-4d36-8399-8dcfbadb7588",
+    "token_type": "TOKEN_LENGTH",
+    "value": 1749.999999999971
+  },
+  {
+    "raw_text": "150.0",
+    "source_uuid": "4e50e4a3-7453-4c2c-8c48-af9c48288585",
+    "token_type": "TOKEN_LENGTH",
+    "value": 150.0
+  },
+  {
+    "raw_text": "N7",
+    "source_uuid": "aa964f8c-8d27-496b-9d79-3f971208b8c2",
     "token_type": "TOKEN_MARK",
-    "value": "N4"
+    "value": "N7"
+  },
+  {
+    "raw_text": "1200.0",
+    "source_uuid": "ee9cae5f-748c-40c9-9487-8a2bd3c43da3",
+    "token_type": "TOKEN_LENGTH",
+    "value": 1200.0
+  },
+  {
+    "raw_text": "425.0000000104337",
+    "source_uuid": "892969b3-309b-4177-b0c6-7feca89d31ba",
+    "token_type": "TOKEN_LENGTH",
+    "value": 425.0000000104337
+  },
+  {
+    "raw_text": "1749.999999999971",
+    "source_uuid": "f245fce7-b322-4a0c-a3e1-0e2f09aa9601",
+    "token_type": "TOKEN_LENGTH",
+    "value": 1749.999999999971
+  },
+  {
+    "raw_text": "150.0",
+    "source_uuid": "aca9bb59-97a1-4533-b86c-e3acfbd9d238",
+    "token_type": "TOKEN_LENGTH",
+    "value": 150.0
+  },
+  {
+    "raw_text": "N7",
+    "source_uuid": "d4e05a36-fb10-4bb6-a9ee-b083795f9225",
+    "token_type": "TOKEN_MARK",
+    "value": "N7"
+  },
+  {
+    "raw_text": "2049.999999999971",
+    "source_uuid": "770628ab-ef2b-4d3b-97c7-8dda96f15b50",
+    "token_type": "TOKEN_LENGTH",
+    "value": 2049.999999999971
+  },
+  {
+    "raw_text": "725.0",
+    "source_uuid": "07209b33-be14-4850-a7a8-658c4d910550",
+    "token_type": "TOKEN_LENGTH",
+    "value": 725.0
+  },
+  {
+    "raw_text": "150.0",
+    "source_uuid": "ffc30c43-b532-479f-aa86-62b13d6d05e2",
+    "token_type": "TOKEN_LENGTH",
+    "value": 150.0
+  },
+  {
+    "raw_text": "255.0",
+    "source_uuid": "86022b68-4bd0-419f-a2c1-90a3c77606ae",
+    "token_type": "TOKEN_LENGTH",
+    "value": 255.0
+  },
+  {
+    "raw_text": "219.9696784606058",
+    "source_uuid": "13895162-532b-4316-8395-4e818c35581e",
+    "token_type": "TOKEN_LENGTH",
+    "value": 219.9696784606058
+  },
+  {
+    "raw_text": "49.99999999998545",
+    "source_uuid": "7b0a34bb-fa29-43df-98e7-86db34c59c5d",
+    "token_type": "TOKEN_LENGTH",
+    "value": 49.99999999998545
+  },
+  {
+    "raw_text": "N6",
+    "source_uuid": "6bfb42d4-bbf5-4e8c-adc9-ec5192100dd6",
+    "token_type": "TOKEN_MARK",
+    "value": "N6"
+  },
+  {
+    "raw_text": "499.99999999998545",
+    "source_uuid": "45f0cc01-eb67-42a5-9986-46da8223569e",
+    "token_type": "TOKEN_LENGTH",
+    "value": 499.99999999998545
+  },
+  {
+    "raw_text": "2049.999999999971",
+    "source_uuid": "50ef800b-4dd1-49e3-a32f-38fbff9a89b8",
+    "token_type": "TOKEN_LENGTH",
+    "value": 2049.999999999971
+  },
+  {
+    "raw_text": "420.0",
+    "source_uuid": "023b0b47-db96-48f9-a6f0-8f73e42a06e2",
+    "token_type": "TOKEN_LENGTH",
+    "value": 420.0
+  },
+  {
+    "raw_text": "160.00000000000728",
+    "source_uuid": "9f1ec6d9-7a01-4004-a455-cde9dc73028d",
+    "token_type": "TOKEN_LENGTH",
+    "value": 160.00000000000728
+  },
+  {
+    "raw_text": "2464.9999998910716",
+    "source_uuid": "67869427-e705-4270-8335-15b1116fa0bd",
+    "token_type": "TOKEN_LENGTH",
+    "value": 2464.9999998910716
+  },
+  {
+    "raw_text": "150.0",
+    "source_uuid": "158c0451-268c-41e0-8d3f-4afdc6b32f83",
+    "token_type": "TOKEN_LENGTH",
+    "value": 150.0
+  },
+  {
+    "raw_text": "2049.999999999971",
+    "source_uuid": "03a245c1-ae26-493a-a1cc-c79414dbcf73",
+    "token_type": "TOKEN_LENGTH",
+    "value": 2049.999999999971
+  },
+  {
+    "raw_text": "150.0",
+    "source_uuid": "7dd75a53-c6d8-452b-a68a-83fb03323e89",
+    "token_type": "TOKEN_LENGTH",
+    "value": 150.0
+  },
+  {
+    "raw_text": "1749.999999999971",
+    "source_uuid": "85857986-249b-49c0-b3de-eaf42a8a9561",
+    "token_type": "TOKEN_LENGTH",
+    "value": 1749.999999999971
+  },
+  {
+    "raw_text": "150.0",
+    "source_uuid": "0001ea9f-b659-4b44-8dee-bc2ff8d73718",
+    "token_type": "TOKEN_LENGTH",
+    "value": 150.0
+  },
+  {
+    "raw_text": "874.9999999999818",
+    "source_uuid": "db6c5655-d258-466b-9373-9e06c5fdfc37",
+    "token_type": "TOKEN_LENGTH",
+    "value": 874.9999999999818
+  },
+  {
+    "raw_text": "300.0",
+    "source_uuid": "a1f49847-f057-4bef-b660-d7574dc099fe",
+    "token_type": "TOKEN_LENGTH",
+    "value": 300.0
+  },
+  {
+    "raw_text": "874.9999999999891",
+    "source_uuid": "aaba3012-1c97-469f-a806-cd263a257b3c",
+    "token_type": "TOKEN_LENGTH",
+    "value": 874.9999999999891
+  },
+  {
+    "raw_text": "499.99999999994907",
+    "source_uuid": "36066681-a37a-4a12-86d5-e70250eecce1",
+    "token_type": "TOKEN_LENGTH",
+    "value": 499.99999999994907
+  },
+  {
+    "raw_text": "1520.0",
+    "source_uuid": "726f60cd-efcc-4faa-bad0-068b405a9806",
+    "token_type": "TOKEN_LENGTH",
+    "value": 1520.0
+  },
+  {
+    "raw_text": "1119.999999829779",
+    "source_uuid": "04770bbc-e7e6-4082-b70b-45254c6e61cb",
+    "token_type": "TOKEN_LENGTH",
+    "value": 1119.999999829779
+  },
+  {
+    "raw_text": "79.55963459704799",
+    "source_uuid": "2832e7a5-85a5-4580-b4ef-e10cd1b277d1",
+    "token_type": "TOKEN_LENGTH",
+    "value": 79.55963459704799
+  },
+  {
+    "raw_text": "80.44036540295929",
+    "source_uuid": "3d9923de-156d-4e22-b953-27f7531cdd9c",
+    "token_type": "TOKEN_LENGTH",
+    "value": 80.44036540295929
+  },
+  {
+    "raw_text": "425.0000000104519",
+    "source_uuid": "1c46392a-8a75-4505-856b-a4b30ab5524a",
+    "token_type": "TOKEN_LENGTH",
+    "value": 425.0000000104519
+  },
+  {
+    "raw_text": "1200.0",
+    "source_uuid": "3ebb1556-c90c-4f74-8ca2-6c456c802d83",
+    "token_type": "TOKEN_LENGTH",
+    "value": 1200.0
+  },
+  {
+    "raw_text": "424.999999989519",
+    "source_uuid": "30704455-f0f1-452f-ad7c-6bc67b443b0b",
+    "token_type": "TOKEN_LENGTH",
+    "value": 424.999999989519
+  },
+  {
+    "raw_text": "399.9999999687934",
+    "source_uuid": "6e39bed4-068c-4a02-832a-278b6d3a6cf8",
+    "token_type": "TOKEN_LENGTH",
+    "value": 399.9999999687934
+  },
+  {
+    "raw_text": "500.0",
+    "source_uuid": "bfc778ea-d4d0-408a-b187-ba1de4a7512b",
+    "token_type": "TOKEN_LENGTH",
+    "value": 500.0
+  },
+  {
+    "raw_text": "500.0",
+    "source_uuid": "44894ded-c1ab-44c8-b059-041411d46271",
+    "token_type": "TOKEN_LENGTH",
+    "value": 500.0
+  },
+  {
+    "raw_text": "500.00000003064997",
+    "source_uuid": "4b8cd30d-ee2e-47c7-9439-555738374b61",
+    "token_type": "TOKEN_LENGTH",
+    "value": 500.00000003064997
+  },
+  {
+    "raw_text": "150.0000000005275",
+    "source_uuid": "8fd13e6a-3196-43b0-91e9-3138d4760b2f",
+    "token_type": "TOKEN_LENGTH",
+    "value": 150.0000000005275
+  },
+  {
+    "raw_text": "329.99999995909457",
+    "source_uuid": "9f48c5f3-354c-4950-9a2e-45d72aa8e4ba",
+    "token_type": "TOKEN_LENGTH",
+    "value": 329.99999995909457
+  },
+  {
+    "raw_text": "360.0",
+    "source_uuid": "7fea59d3-d390-48a2-a299-5408c7563481",
+    "token_type": "TOKEN_LENGTH",
+    "value": 360.0
+  },
+  {
+    "raw_text": "499.9999999323045",
+    "source_uuid": "258a8f14-daad-44be-a13d-889aab9958b4",
+    "token_type": "TOKEN_LENGTH",
+    "value": 499.9999999323045
+  },
+  {
+    "raw_text": "360.0",
+    "source_uuid": "630cb511-ae1b-47d9-a028-fab046912cba",
+    "token_type": "TOKEN_LENGTH",
+    "value": 360.0
+  },
+  {
+    "raw_text": "1535.0000000001164",
+    "source_uuid": "6037b27a-5c37-49e1-b443-ad8e618bb2a5",
+    "token_type": "TOKEN_LENGTH",
+    "value": 1535.0000000001164
+  },
+  {
+    "raw_text": "500.0",
+    "source_uuid": "73d79037-83c0-4589-96e8-1cf08d8fc9c9",
+    "token_type": "TOKEN_LENGTH",
+    "value": 500.0
+  },
+  {
+    "raw_text": "500.0",
+    "source_uuid": "7679844e-b9b5-4389-902c-972bbbfeb3c4",
+    "token_type": "TOKEN_LENGTH",
+    "value": 500.0
+  },
+  {
+    "raw_text": "500.0",
+    "source_uuid": "5f2a46c8-c52a-45ee-9724-4ab0d27ccaab",
+    "token_type": "TOKEN_LENGTH",
+    "value": 500.0
+  },
+  {
+    "raw_text": "329.99999995909457",
+    "source_uuid": "7347df3d-9afc-4ae8-b65d-36a828016e0d",
+    "token_type": "TOKEN_LENGTH",
+    "value": 329.99999995909457
+  },
+  {
+    "raw_text": "434.99999999995634",
+    "source_uuid": "e99bb8d3-2443-4ef9-94ea-5669a68dcd28",
+    "token_type": "TOKEN_LENGTH",
+    "value": 434.99999999995634
+  },
+  {
+    "raw_text": "499.9999999323045",
+    "source_uuid": "a293dc32-ed4d-4484-81b2-4ab8b9c7825a",
+    "token_type": "TOKEN_LENGTH",
+    "value": 499.9999999323045
+  },
+  {
+    "raw_text": "499.9999999999636",
+    "source_uuid": "f0bfeed6-3a5d-4727-bc83-cd783428a251",
+    "token_type": "TOKEN_LENGTH",
+    "value": 499.9999999999636
+  },
+  {
+    "raw_text": "500.0",
+    "source_uuid": "19b9f21b-d89b-4d02-8b70-8d0afba9f14c",
+    "token_type": "TOKEN_LENGTH",
+    "value": 500.0
+  },
+  {
+    "raw_text": "434.9999999997599",
+    "source_uuid": "b631a1db-b0db-47e8-8aff-c08490366fb0",
+    "token_type": "TOKEN_LENGTH",
+    "value": 434.9999999997599
+  },
+  {
+    "raw_text": "1149.9999999962893",
+    "source_uuid": "5980161a-9616-4811-a2e3-18fbce59561e",
+    "token_type": "TOKEN_LENGTH",
+    "value": 1149.9999999962893
+  },
+  {
+    "raw_text": "310.00000000413274",
+    "source_uuid": "19869679-7f21-4c4c-8369-cd6a3759dd92",
+    "token_type": "TOKEN_LENGTH",
+    "value": 310.00000000413274
+  },
+  {
+    "raw_text": "500.0",
+    "source_uuid": "c82c3a50-4479-4ca7-811d-64ff17d05642",
+    "token_type": "TOKEN_LENGTH",
+    "value": 500.0
+  },
+  {
+    "raw_text": "270.03032153939057",
+    "source_uuid": "dfe90b19-38e5-4bb6-b842-db795fab373f",
+    "token_type": "TOKEN_LENGTH",
+    "value": 270.03032153939057
+  },
+  {
+    "raw_text": "254.9999999999891",
+    "source_uuid": "78a27a81-6d4b-4c49-916d-30daecb0fce2",
+    "token_type": "TOKEN_LENGTH",
+    "value": 254.9999999999891
+  },
+  {
+    "raw_text": "500.0000000000182",
+    "source_uuid": "6baaf4b7-36e3-44ae-9b9f-a50bd10e3b6e",
+    "token_type": "TOKEN_LENGTH",
+    "value": 500.0000000000182
+  },
+  {
+    "raw_text": "499.9999999999818",
+    "source_uuid": "d742c715-f4da-4773-a4c6-de9c8c1366d5",
+    "token_type": "TOKEN_LENGTH",
+    "value": 499.9999999999818
+  },
+  {
+    "raw_text": "255.0000000000109",
+    "source_uuid": "2cd9e1ba-38db-4f96-87f8-d358a61d4636",
+    "token_type": "TOKEN_LENGTH",
+    "value": 255.0000000000109
+  },
+  {
+    "raw_text": "269.9696784605803",
+    "source_uuid": "9d42cdd6-7784-4e14-a328-2c1ae8e21e30",
+    "token_type": "TOKEN_LENGTH",
+    "value": 269.9696784605803
+  },
+  {
+    "raw_text": "420.0",
+    "source_uuid": "98be9cf7-fb28-48e5-ae0e-d3106f0ee293",
+    "token_type": "TOKEN_LENGTH",
+    "value": 420.0
+  },
+  {
+    "raw_text": "2049.999999999971",
+    "source_uuid": "3fd0bec6-6fd2-4eaf-ae3b-0ab41368a7df",
+    "token_type": "TOKEN_LENGTH",
+    "value": 2049.999999999971
+  },
+  {
+    "raw_text": "420.000000020842",
+    "source_uuid": "e5b0fd28-3da8-4c1c-a385-eb46604ee13e",
+    "token_type": "TOKEN_LENGTH",
+    "value": 420.000000020842
+  },
+  {
+    "raw_text": "59.18868275035493",
+    "source_uuid": "3e68e723-d777-4168-9012-9dcc0a17efb8",
+    "token_type": "TOKEN_LENGTH",
+    "value": 59.18868275035493
+  },
+  {
+    "raw_text": "150.0000000000109",
+    "source_uuid": "2527f886-7918-4411-96d2-c6387c369116",
+    "token_type": "TOKEN_LENGTH",
+    "value": 150.0000000000109
+  },
+  {
+    "raw_text": "1749.99999999996",
+    "source_uuid": "5ce0daf9-837b-49cc-a322-c6e9c907d37b",
+    "token_type": "TOKEN_LENGTH",
+    "value": 1749.99999999996
+  },
+  {
+    "raw_text": "T8",
+    "source_uuid": "5ce0daf9-837b-49cc-a322-c6e9c907d37b",
+    "token_type": "TOKEN_DIAMETER",
+    "value": 8.0
+  },
+  {
+    "raw_text": "200mm C/C",
+    "source_uuid": "5ce0daf9-837b-49cc-a322-c6e9c907d37b",
+    "token_type": "TOKEN_SPACING",
+    "value": 200.0
+  },
+  {
+    "raw_text": "150.0",
+    "source_uuid": "2a67d4d3-6c3e-42ff-9622-ef1e47ec4fd9",
+    "token_type": "TOKEN_LENGTH",
+    "value": 150.0
+  },
+  {
+    "raw_text": "2274.9999999387073",
+    "source_uuid": "2f40920e-c801-48b9-b0e7-8f0b6028ae4c",
+    "token_type": "TOKEN_LENGTH",
+    "value": 2274.9999999387073
+  },
+  {
+    "raw_text": "150.0",
+    "source_uuid": "82951c66-0b70-4956-94e3-535c7b646ac5",
+    "token_type": "TOKEN_LENGTH",
+    "value": 150.0
+  },
+  {
+    "raw_text": "2624.9999998910644",
+    "source_uuid": "e2502819-9376-4bf7-9bae-0fdef8b2f511",
+    "token_type": "TOKEN_LENGTH",
+    "value": 2624.9999998910644
+  },
+  {
+    "raw_text": "125.0",
+    "source_uuid": "7e094ed8-389b-46d5-86d1-b86ad89637b5",
+    "token_type": "TOKEN_LENGTH",
+    "value": 125.0
+  },
+  {
+    "raw_text": "250.0",
+    "source_uuid": "85f89185-985c-436a-aa8d-0372701f296f",
+    "token_type": "TOKEN_LENGTH",
+    "value": 250.0
+  },
+  {
+    "raw_text": "125.0",
+    "source_uuid": "6eefbe3a-2da4-49df-96ba-4ea72dabcf0b",
+    "token_type": "TOKEN_LENGTH",
+    "value": 125.0
+  },
+  {
+    "raw_text": "300.0",
+    "source_uuid": "c42fe8ce-7663-43e6-b488-5cee5ae23e45",
+    "token_type": "TOKEN_LENGTH",
+    "value": 300.0
+  },
+  {
+    "raw_text": "125.0",
+    "source_uuid": "4d3c37a6-d08e-4abe-a0af-d8993f75741f",
+    "token_type": "TOKEN_LENGTH",
+    "value": 125.0
+  },
+  {
+    "raw_text": "5039.999999870095",
+    "source_uuid": "5e8641c8-17d8-4148-93c6-ebba8cd5cbcf",
+    "token_type": "TOKEN_LENGTH",
+    "value": 5039.999999870095
+  },
+  {
+    "raw_text": "159.99999995967664",
+    "source_uuid": "03c884fb-c0bd-44fa-a059-dc0a27bfaf57",
+    "token_type": "TOKEN_LENGTH",
+    "value": 159.99999995967664
+  },
+  {
+    "raw_text": "499.9999999999709",
+    "source_uuid": "f72ace84-1198-4f33-aee6-9c0905c28723",
+    "token_type": "TOKEN_LENGTH",
+    "value": 499.9999999999709
+  },
+  {
+    "raw_text": "1520.0",
+    "source_uuid": "ea0e4de4-d9d8-453c-bde9-0630865248b1",
+    "token_type": "TOKEN_LENGTH",
+    "value": 1520.0
+  },
+  {
+    "raw_text": "1119.9999998297717",
+    "source_uuid": "5cb23126-675f-4eb0-b538-ef5f5746fd0b",
+    "token_type": "TOKEN_LENGTH",
+    "value": 1119.9999998297717
+  },
+  {
+    "raw_text": "1520.0",
+    "source_uuid": "c7955fd3-5252-4f33-ba62-b489093b93ed",
+    "token_type": "TOKEN_LENGTH",
+    "value": 1520.0
+  },
+  {
+    "raw_text": "5039.999999870095",
+    "source_uuid": "fa501372-c16f-4270-af11-637a117d5ecd",
+    "token_type": "TOKEN_LENGTH",
+    "value": 5039.999999870095
+  },
+  {
+    "raw_text": "80.44036536265048",
+    "source_uuid": "05ae68dc-7d60-4bfa-800e-390e0d7e0e6d",
+    "token_type": "TOKEN_LENGTH",
+    "value": 80.44036536265048
+  },
+  {
+    "raw_text": "79.55963459702616",
+    "source_uuid": "317674b9-e87e-42f8-9947-e3acfdd55a05",
+    "token_type": "TOKEN_LENGTH",
+    "value": 79.55963459702616
+  },
+  {
+    "raw_text": "2624.9999998910644",
+    "source_uuid": "cc8d317e-351c-4434-bbb4-66b42d6f9fce",
+    "token_type": "TOKEN_LENGTH",
+    "value": 2624.9999998910644
+  },
+  {
+    "raw_text": "75.0",
+    "source_uuid": "cb68668e-1467-4733-a29a-b4bf7a076749",
+    "token_type": "TOKEN_LENGTH",
+    "value": 75.0
+  },
+  {
+    "raw_text": "75.0",
+    "source_uuid": "f4994296-a030-47b3-b449-85d1b5dfaa5a",
+    "token_type": "TOKEN_LENGTH",
+    "value": 75.0
+  },
+  {
+    "raw_text": "819.9999999999964",
+    "source_uuid": "90d9f3c5-89f8-47a7-bbfc-b6bb90f9d849",
+    "token_type": "TOKEN_LENGTH",
+    "value": 819.9999999999964
+  },
+  {
+    "raw_text": "250.0",
+    "source_uuid": "bd2de52d-d62e-4126-9823-a6398cf73ae8",
+    "token_type": "TOKEN_LENGTH",
+    "value": 250.0
+  },
+  {
+    "raw_text": "125.0",
+    "source_uuid": "7ec17ec2-2cd5-4488-a10c-63e77ddb4b24",
+    "token_type": "TOKEN_LENGTH",
+    "value": 125.0
+  },
+  {
+    "raw_text": "34.00000000000091",
+    "source_uuid": "dfd8cb73-05ef-4664-bba7-b206c91bf2f2",
+    "token_type": "TOKEN_LENGTH",
+    "value": 34.00000000000091
+  },
+  {
+    "raw_text": "340.9999999999991",
+    "source_uuid": "c0545bf1-ee7e-4a18-ab65-8b9b4ef645e4",
+    "token_type": "TOKEN_LENGTH",
+    "value": 340.9999999999991
+  },
+  {
+    "raw_text": "150.0",
+    "source_uuid": "bc246706-8b14-445a-8d97-17823a80c5f7",
+    "token_type": "TOKEN_LENGTH",
+    "value": 150.0
+  },
+  {
+    "raw_text": "424.9999999895372",
+    "source_uuid": "f52cf310-2f0a-4425-afc8-98b587d6d50d",
+    "token_type": "TOKEN_LENGTH",
+    "value": 424.9999999895372
+  },
+  {
+    "raw_text": "150.0",
+    "source_uuid": "70891a6d-3cb4-4d6b-8708-e13704c98757",
+    "token_type": "TOKEN_LENGTH",
+    "value": 150.0
+  },
+  {
+    "raw_text": "125.0",
+    "source_uuid": "381b3508-2688-4d8e-a89a-5a9d1ef9f6f6",
+    "token_type": "TOKEN_LENGTH",
+    "value": 125.0
+  },
+  {
+    "raw_text": "125.0",
+    "source_uuid": "be4f8447-dae2-4d9e-a708-65bef551ea77",
+    "token_type": "TOKEN_LENGTH",
+    "value": 125.0
+  },
+  {
+    "raw_text": "250.0",
+    "source_uuid": "2ec22885-9bb0-4c23-8d34-12576a864898",
+    "token_type": "TOKEN_LENGTH",
+    "value": 250.0
+  },
+  {
+    "raw_text": "375.0",
+    "source_uuid": "01034da2-886a-49dc-9c4b-2629b9b70ada",
+    "token_type": "TOKEN_LENGTH",
+    "value": 375.0
+  },
+  {
+    "raw_text": "820.0000000000023",
+    "source_uuid": "4c66efab-2f25-4fbe-8030-5f6764f3fb5c",
+    "token_type": "TOKEN_LENGTH",
+    "value": 820.0000000000023
+  },
+  {
+    "raw_text": "150.0",
+    "source_uuid": "5d194aa7-7d30-4457-8204-0215e7b9aad7",
+    "token_type": "TOKEN_LENGTH",
+    "value": 150.0
+  },
+  {
+    "raw_text": "724.9999999999709",
+    "source_uuid": "d8c8728b-f6ab-4491-afd7-43a67d964bb6",
+    "token_type": "TOKEN_LENGTH",
+    "value": 724.9999999999709
+  },
+  {
+    "raw_text": "300.0",
+    "source_uuid": "0b40b352-ad5c-4808-b189-b7c8f218273a",
+    "token_type": "TOKEN_LENGTH",
+    "value": 300.0
+  },
+  {
+    "raw_text": "50.0",
+    "source_uuid": "7c347219-fdff-4a86-9ce7-ad197c06cf03",
+    "token_type": "TOKEN_LENGTH",
+    "value": 50.0
+  },
+  {
+    "raw_text": "220.03032153937966",
+    "source_uuid": "811ea5de-40fd-49f1-b04d-725e877eb18b",
+    "token_type": "TOKEN_LENGTH",
+    "value": 220.03032153937966
+  },
+  {
+    "raw_text": "255.0",
+    "source_uuid": "0296c25c-9259-464b-a60b-612855eae855",
+    "token_type": "TOKEN_LENGTH",
+    "value": 255.0
+  },
+  {
+    "raw_text": "500.00000000001455",
+    "source_uuid": "203e2a60-f4ab-4587-8df8-9f90b1484c06",
+    "token_type": "TOKEN_LENGTH",
+    "value": 500.00000000001455
+  },
+  {
+    "raw_text": "125.0",
+    "source_uuid": "072c1fb0-5599-42a5-bda4-0d7df3829b73",
+    "token_type": "TOKEN_LENGTH",
+    "value": 125.0
+  },
+  {
+    "raw_text": "125.0",
+    "source_uuid": "e4bd504d-80ed-4b61-ab38-84bfe78efc99",
+    "token_type": "TOKEN_LENGTH",
+    "value": 125.0
+  },
+  {
+    "raw_text": "250.0",
+    "source_uuid": "1cf80358-4bc8-4646-aa47-dd2a32701f16",
+    "token_type": "TOKEN_LENGTH",
+    "value": 250.0
+  },
+  {
+    "raw_text": "375.0",
+    "source_uuid": "18769532-e6cf-4620-9be1-393c058f2f4c",
+    "token_type": "TOKEN_LENGTH",
+    "value": 375.0
+  },
+  {
+    "raw_text": "819.9999999999941",
+    "source_uuid": "ce9bbbe5-eef8-4e1c-8130-c671e6f38b46",
+    "token_type": "TOKEN_LENGTH",
+    "value": 819.9999999999941
+  },
+  {
+    "raw_text": "34.00000000000182",
+    "source_uuid": "39d759f5-5339-4de3-9afa-e7e4e9207dc0",
+    "token_type": "TOKEN_LENGTH",
+    "value": 34.00000000000182
+  },
+  {
+    "raw_text": "340.9999999999982",
+    "source_uuid": "71844d16-b84f-4d06-8712-54192c10d89e",
+    "token_type": "TOKEN_LENGTH",
+    "value": 340.9999999999982
+  },
+  {
+    "raw_text": "420.00000002083834",
+    "source_uuid": "dd0d2d2d-51ab-4048-b342-552086928f11",
+    "token_type": "TOKEN_LENGTH",
+    "value": 420.00000002083834
   }
 ]

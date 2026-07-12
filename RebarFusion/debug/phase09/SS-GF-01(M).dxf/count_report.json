@@ -1,20 +1,33 @@
 [
   {
-    "Detected Count": 26,
-    "Estimated Count": 26,
+    "Detected Count": 4,
+    "Estimated Count": 5,
     "Expected Count": null,
-    "Family UUID": "77ef0d1e-82b1-5625-b34a-49a5cec76a8d",
-    "Inferred Span": 4887.403,
+    "Family UUID": "21d96a0e-5d0f-5368-9565-1bf7d00efaba",
+    "Inferred Span": 1068.762,
     "Mark": "N4",
+    "Missing Offsets": [
+      591.636,
+      887.454,
+      1183.272
+    ]
+  },
+  {
+    "Detected Count": 1,
+    "Estimated Count": 1,
+    "Expected Count": null,
+    "Family UUID": "837ef1e5-7c9c-5c7f-b45b-a5676aa14ced",
+    "Inferred Span": 0.0,
+    "Mark": "N6",
     "Missing Offsets": []
   },
   {
     "Detected Count": 1,
     "Estimated Count": 1,
     "Expected Count": null,
-    "Family UUID": "9a6b2122-fcfc-57c6-9b4a-fae9d29b7817",
+    "Family UUID": "153a8c83-e9cc-589a-97d4-144f893a2229",
     "Inferred Span": 0.0,
-    "Mark": "N6",
+    "Mark": "N7",
     "Missing Offsets": []
   }
 ]
