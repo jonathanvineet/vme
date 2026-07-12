@@ -24,6 +24,7 @@ from core.full_pipeline import run_pipeline_through_phase9
 from core.fusion.observation_builder import build_observations
 from core.fusion.hypothesis_generator import generate_hypotheses
 from core.fusion.evidence_engine import score_hypotheses
+from core.fusion.identity_resolver import resolve_identities
 
 
 class ObservationEncoder(json.JSONEncoder):
@@ -53,10 +54,13 @@ def main() -> int:
     observations = build_observations(results)
     hypotheses = generate_hypotheses(observations)
     scored = score_hypotheses(hypotheses, observations)
+    decisions, identities = resolve_identities(scored, observations)
 
     _jdump(os.path.join(out_dir, "observations.json"), observations)
     _jdump(os.path.join(out_dir, "hypotheses.json"), hypotheses)
     _jdump(os.path.join(out_dir, "scored_hypotheses.json"), scored)
+    _jdump(os.path.join(out_dir, "decisions.json"), decisions)
+    _jdump(os.path.join(out_dir, "identities.json"), identities)
 
     print(f"Drawings processed: {len(results)}")
     print(f"Observations built: {len(observations)}")
@@ -87,9 +91,21 @@ def main() -> int:
                   f"overall={sc.score.overall}, categories={sc.score.category_scores}, "
                   f"unscored={sc.score.unscored_categories}")
 
+    print(f"\nResolution decisions: {len(decisions)}")
+    for d in decisions:
+        print(f"  {str(d.anchor_observation)[:8]} <-> {str(d.candidate_observation)[:8]}: "
+              f"{d.outcome} (confidence={d.overall_confidence})")
+
+    print(f"\nPhysical identities resolved: {len(identities)}")
+    for identity in identities:
+        print(f"  identity {str(identity.uuid)[:8]}: {len(identity.observations)} observation(s), "
+              f"{len(identity.claims)} claim(s), provenance={len(identity.provenance)} decision(s)")
+
     print(f"\nWrote {out_dir}/observations.json")
     print(f"Wrote {out_dir}/hypotheses.json")
     print(f"Wrote {out_dir}/scored_hypotheses.json")
+    print(f"Wrote {out_dir}/decisions.json")
+    print(f"Wrote {out_dir}/identities.json")
     return 0
 
 

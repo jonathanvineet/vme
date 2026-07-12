@@ -1,0 +1,63 @@
+[
+  {
+    "anchor_observation": "9d8b1242-ac8b-538f-91a7-0afa9b772b24",
+    "candidate_observation": "d46e46c8-79c5-5e5e-af52-ecec0672abee",
+    "hypothesis_uuid": "183c383e-457a-5469-98c7-714b9e23188e",
+    "outcome": "REVIEW",
+    "overall_confidence": 0.75,
+    "promoted": false,
+    "rationale": [
+      {
+        "category": "fact",
+        "confidence": 1.0,
+        "description": "observations disagree on length: 1964.8415753806587 vs 3227.8025739998466",
+        "observation_a": "9d8b1242-ac8b-538f-91a7-0afa9b772b24",
+        "observation_b": "d46e46c8-79c5-5e5e-af52-ecec0672abee",
+        "polarity": "contradicts",
+        "rule": "fact_conflict",
+        "uuid": "a24036e2-4899-59b0-a5c2-af4ca267fed3"
+      },
+      {
+        "category": "fact",
+        "confidence": 1.0,
+        "description": "both observations claim orientation=90.0",
+        "observation_a": "9d8b1242-ac8b-538f-91a7-0afa9b772b24",
+        "observation_b": "d46e46c8-79c5-5e5e-af52-ecec0672abee",
+        "polarity": "supports",
+        "rule": "fact_agreement",
+        "uuid": "9509b97b-da2b-5f16-869e-1ea2c277215a"
+      },
+      {
+        "category": "fact",
+        "confidence": 1.0,
+        "description": "both observations claim quantity=1",
+        "observation_a": "9d8b1242-ac8b-538f-91a7-0afa9b772b24",
+        "observation_b": "d46e46c8-79c5-5e5e-af52-ecec0672abee",
+        "polarity": "supports",
+        "rule": "fact_agreement",
+        "uuid": "9509b97b-da2b-5f16-869e-1ea2c277215a"
+      },
+      {
+        "category": "fact",
+        "confidence": 1.0,
+        "description": "both observations claim shape=branch",
+        "observation_a": "9d8b1242-ac8b-538f-91a7-0afa9b772b24",
+        "observation_b": "d46e46c8-79c5-5e5e-af52-ecec0672abee",
+        "polarity": "supports",
+        "rule": "fact_agreement",
+        "uuid": "9509b97b-da2b-5f16-869e-1ea2c277215a"
+      },
+      {
+        "category": "spatial",
+        "confidence": null,
+        "description": "centroid distance 1882.5mm (corroborating only, never a qualifying signal on its own)",
+        "observation_a": "9d8b1242-ac8b-538f-91a7-0afa9b772b24",
+        "observation_b": "d46e46c8-79c5-5e5e-af52-ecec0672abee",
+        "polarity": "unknown",
+        "rule": "spatial_distance",
+        "uuid": "16a60ab3-3b46-5c02-a1e6-ae9b91966085"
+      }
+    ],
+    "uuid": "43dcd434-66b5-500d-ab98-ea60d0fac4a5"
+  }
+]

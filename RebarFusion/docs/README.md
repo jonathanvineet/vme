@@ -20,7 +20,7 @@
 | 12.1 — Observation Builder | ✅ Frozen (revised) | [audit](audits/phase12/12.1_observation_builder.md) |
 | 12.2 — Hypothesis Generator | ✅ Frozen | [audit](audits/phase12/12.2_hypothesis_generator.md) |
 | 12.3 — Evidence Engine | ✅ Frozen | [audit](audits/phase12/12.3_evidence_engine.md) |
-| 12.4 — Identity Resolver | ⬜ Not started | — |
+| 12.4 — Identity Resolver | ✅ Frozen | [audit](audits/phase12/12.4_identity_resolver.md) |
 
 Overall pipeline architecture and the original Step-1 review: [architecture_review.md](architecture/architecture_review.md).
 

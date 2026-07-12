@@ -301,3 +301,58 @@ class ScoredHypothesis:
     anchor_observation: UUID
     scored_candidates: List[ScoredCandidate] = field(default_factory=list)
     status: str = HYPOTHESIS_PENDING
+
+
+# --- Phase 12.4: Identity Resolver --------------------------------------
+# The only subphase allowed to create a PhysicalIdentity, and the only
+# place ACCEPTED/REJECTED/REVIEW ever get assigned to anything. No
+# geometry, no reconstruction -- Phase 10 still owns HOW a bar is built;
+# this only decides WHICH observations belong to the same one.
+
+@dataclass
+class ResolutionDecision:
+    """The record of HOW the system reached a conclusion about one
+    candidate pair -- kept independent of PhysicalIdentity so that a
+    rejected or under-review decision is never discarded just because it
+    didn't produce an identity. 'Why wasn't N4 merged?' is answered by
+    reading a ResolutionDecision, not by an identity's absence."""
+    uuid: UUID
+    hypothesis_uuid: UUID
+    anchor_observation: UUID
+    candidate_observation: UUID
+    outcome: str                      # ACCEPTED | REJECTED | REVIEW
+    rationale: List[Evidence] = field(default_factory=list)
+    overall_confidence: float = 0.0
+    promoted: bool = False            # True iff outcome == ACCEPTED
+
+
+@dataclass
+class Claim:
+    """Post-resolution edge from one PhysicalObservation to the
+    PhysicalIdentity it was resolved into -- WHAT that observation
+    asserts about the object, copied verbatim from its facts (no new
+    inference happens here). Named and sketched in the research report
+    Addendum 2; this is its first real implementation, in the first
+    subphase where a resolved identity exists to attach to."""
+    uuid: UUID
+    observation_uuid: UUID
+    identity_uuid: UUID
+    facts: List[ObservationFact] = field(default_factory=list)
+    claim_confidence: float = 0.0
+
+
+@dataclass
+class PhysicalIdentity:
+    """Deliberately small. No confidence, no scores, no hypotheses, no
+    evidence -- all of that belongs to the ResolutionDecision(s) that
+    created it (`decision_uuid` for the primary one, `provenance` for
+    every decision -- accepted, rejected, or under review -- that touched
+    any of this identity's observations). A PhysicalIdentity only ever
+    says 'this is one physical object, made of these observations' --
+    nothing about why, and nothing about geometry (Phase 10's job,
+    unchanged, called with this in place of an EngineeringFamily)."""
+    uuid: UUID
+    claims: List[Claim] = field(default_factory=list)
+    observations: List[UUID] = field(default_factory=list)
+    decision_uuid: Optional[UUID] = None
+    provenance: List[UUID] = field(default_factory=list)

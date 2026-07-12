@@ -38,6 +38,10 @@ Bundle version compatibility is genuinely enforced (`BundleVersionMismatch`, ver
 `WorkbenchProject.plausibility` is now populated (Phase 7.6 data reaches the viewer), but no renderer uses it yet to visually distinguish rejected/review-flagged components (e.g. gray color, QA badge). This is new-feature work for Phase 11.2, not a modernization gap — the data exists, nothing consumes it yet.
 → [audits/phase11/11.1_viewer_pipeline_modernization.md](audits/phase11/11.1_viewer_pipeline_modernization.md)
 
+## Phase 12.4 — Zero real PhysicalIdentity objects resolved yet
+Directly downstream of the single-drawing constraint below: the one real candidate pair this project can test against (`N6`<->`N7`, both from `SS-GF-01(M).dxf`) resolves to `REVIEW`, not `ACCEPTED` (a genuine `length` conflict alongside genuine shape/orientation/quantity agreement) — so no real `PhysicalIdentity` has ever been created from real data. The full Observation → Hypothesis → Evidence → Decision → Identity pipeline is implemented, tested, and frozen (12.1-12.4), and proven correct against synthetic fixtures (unanimous-evidence acceptance, transitive clustering through a bridging observation), but has not yet been exercised end-to-end on a real multi-drawing package. That validation is gated on DWG readability, not on more Phase 12 work.
+→ [audits/phase12/12.4_identity_resolver.md](audits/phase12/12.4_identity_resolver.md)
+
 ## Structural
 - **Single-drawing validation only.** Every audit in this trail ran against `SS-GF-01(M).dxf`. The other 12 fixture files in `test_project/` are `.dwg`/`.pdf` with no registered reader (Phase 1), so they never entered the pipeline. All correctness claims generalize from n=1.
 - **Legacy code at repo root** (`extract_rebars.py`, `rebar_detector.py`, `cad_reader.py`, etc.) predates the phased `core/` pipeline and was never audited or reconciled — flagged in the original architecture review, still unresolved.
