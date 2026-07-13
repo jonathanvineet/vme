@@ -22,6 +22,9 @@
 | 12.3 — Evidence Engine | ✅ Frozen | [audit](audits/phase12/12.3_evidence_engine.md) |
 | 12.4 — Identity Resolver | ✅ Frozen | [audit](audits/phase12/12.4_identity_resolver.md) |
 | 13.0 — DWG Ingestion (ODA converter) | ✅ Frozen | [audit](audits/phase13/13.0_dwg_ingestion.md) |
+| 13.1 — Validation Corpus & Benchmark | ✅ Frozen (corpus awaits real labeled projects) | [audit](audits/phase13/13.1_validation_framework.md) |
+
+Engineering-domain assumptions (drawing roles, mark namespaces, view authority): [engineering_assumptions.md](engineering_assumptions.md).
 
 Overall pipeline architecture and the original Step-1 review: [architecture_review.md](architecture/architecture_review.md).
 
