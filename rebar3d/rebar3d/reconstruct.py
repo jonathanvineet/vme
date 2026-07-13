@@ -100,6 +100,8 @@ class SectionInfo:
     # face-protruding bar profiles: (pos along panel axis, z0, z1, dia);
     # z outside [0, thickness] means the bar sticks out of that face
     prot: list[tuple[float, float, float, float]]
+    # in-cut bar layers: (z, dia) of bars drawn along the section's long axis
+    layers: list[tuple[float, float]]
 
 
 def classify_sections(views: list[View], panel_w: float, panel_h: float) -> list[SectionInfo]:
@@ -164,7 +166,22 @@ def classify_sections(views: list[View], panel_w: float, panel_h: float) -> list
                 k += 2
             else:
                 k += 1
-        infos.append(SectionInfo(role, wb, thickness, circles, prot))
+        # bars drawn in the cut plane along the section's long axis reveal a
+        # reinforcement layer's depth directly (e.g. the hooked top bar)
+        layers: list[tuple[float, float]] = []
+        for b in extract_bars(v.ents, min_len=100.0):
+            best_len = 0.0
+            best_z = None
+            for i in range(len(b.points) - 1):
+                (ax, ay), (bx2, by2) = b.points[i], b.points[i + 1]
+                seg_len = math.dist((ax, ay), (bx2, by2))
+                aligned = abs(by2 - ay) < 3 if drawn_x else abs(bx2 - ax) < 3
+                if aligned and seg_len > 0.35 * long_len and seg_len > best_len:
+                    _, z = to_section(ax, ay)
+                    best_len, best_z = seg_len, z
+            if best_z is not None and -30 <= best_z <= thickness + 30:
+                layers.append((best_z, b.diameter))
+        infos.append(SectionInfo(role, wb, thickness, circles, prot, layers))
     return infos
 
 
@@ -248,15 +265,43 @@ def reconstruct_panel(name: str, views: list[View]) -> Panel:
             kind, src = "link", "default"
         bars.append(Bar3D([(cx - x0, cy - y0, z0), (cx - x0, cy - y0, z1)], dia, kind, src))
 
-    # bars that got no section match: snap to the nearest observed z-plane
-    # of the same orientation family instead of floating mid-thickness
+    # Bars with no section match snap to an observed z-plane. Prefer a plane
+    # already used by section-matched bars of the same kind+diameter; failing
+    # that, use layout: in thick elements (slabs) short bars are top steel
+    # over supports, full-span bars belong to the bottom mesh.
     if zs_seen:
         planes = _cluster_planes(zs_seen)
+        # v-mesh bars appear in-cut in "vertical" sections and vice versa
+        rail_layers = {"v-mesh": [], "h-mesh": []}
+        for s in sections:
+            key = "v-mesh" if s.role == "vertical" else "h-mesh"
+            rail_layers[key].extend(s.layers)
+        fam_planes: dict[tuple[str, int], list[float]] = {}
         for bar in bars:
-            if bar.z_source == "default" and bar.kind in ("v-mesh", "h-mesh"):
+            if bar.z_source == "section" and bar.kind in ("v-mesh", "h-mesh"):
+                fam_planes.setdefault((bar.kind, bar.diameter), []).append(bar.points[0][2])
+        for bar in bars:
+            if bar.z_source != "default" or bar.kind not in ("v-mesh", "h-mesh"):
+                continue
+            span = pw if bar.kind == "h-mesh" else ph
+            length = math.dist(bar.points[0][:2], bar.points[-1][:2])
+            short = length < 0.7 * span
+            rails = [z for z, d in rail_layers[bar.kind] if abs(d - bar.diameter) <= 2.5]
+            fam = fam_planes.get((bar.kind, bar.diameter))
+            if rails:
+                z = max(rails) if short else min(rails)
+                src = "layer-rail"
+            elif fam and len(fam) >= 3:
+                z = statistics.median(fam)
+                src = "plane-snap"
+            elif thickness > 250.0:
+                z = max(planes) if short else min(planes)
+                src = "plane-snap"
+            else:
                 z = min(planes, key=lambda p: abs(p - thickness / 2))
-                bar.points = [(x, y, z) for x, y, _ in bar.points]
-                bar.z_source = "plane-snap"
+                src = "plane-snap"
+            bar.points = [(x, y, z) for x, y, _ in bar.points]
+            bar.z_source = src
 
     openings = [[(px - x0, py - y0) for px, py in lp] for lp in loops]
     stats = {
