@@ -2,6 +2,8 @@
 
 **No code was written or modified.** This is the manual reasoning-chain exercise: reconstruct one physical bar exactly as an engineer would, from the actual Apollo drawings, then identify the smallest missing piece preventing the software from reproducing the reasoning. Every coordinate below was read from the real files this session (ezdxf over the DXF / ODA-converted DWG), not recalled.
 
+> **Errata (see `docs/research/apollo_registration_audit.md`)**: §3 below claims SS-GF-01(M) and (R) are "drawn on the same template at the same coordinates," and §4 treats the 11mm T8@200/N7 co-location as near-precise confirmation. A follow-up audit testing the same claim against all 5 available (M)/(R) sheet-pairs in Apollo found this overclaimed: same-labeled section-marker symbols on this exact sheet pair disagree by 62-421mm with no consistent transform, and the sheet type that actually carries schedule data (`M2`) shares *no* coordinate overlap with `(R)` at all (2/2 tested). The shared-frame claim is downgraded to "coincidentally close start point for one view, not a registered world" — kept here unedited, corrected there, per this project's practice of recording a disproven working hypothesis rather than erasing it (cf. Phase 9.1).
+
 ## The bar
 
 **N7** on element SS-GF-01 — the upstand reinforcement reference established in the Phase 12 research (N-code on the Mould sheet, adjacent to real S-RBAR U-bar geometry).
