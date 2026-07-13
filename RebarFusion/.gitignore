@@ -1,0 +1,8 @@
+# ODA File Converter — never commit: 149MB app bundle, and ODA's freeware
+# EULA does not permit redistribution. Obtain it with scripts/setup_oda.sh
+# (see docs/audits/phase13/13.0_dwg_ingestion.md for the pinned version).
+tools/oda/
+
+# Python bytecode
+__pycache__/
+*.pyc
