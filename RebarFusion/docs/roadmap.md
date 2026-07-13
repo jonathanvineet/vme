@@ -38,12 +38,18 @@ CURRENT
 FUTURE (do not start early; each gates on the one before)
 
 Phase 14      Multi-View Geometry Composition
-              ONE physical bar composed from many partial observations by
-              per-aspect authority (plan=XY path, section=Z/cover,
-              detail=hooks, schedule=diameter/quantity). Research done:
-              docs/research/phase14_geometry_composition.md. Implementation
-              gated on corpus geometry.json ground truth (acceptance
-              criterion #7) — the Phase 13.2 data gate still binds.
+              Research reordered: the authority matrix in
+              docs/research/phase14_geometry_composition.md assumed the
+              PATH to each authoritative sheet was already available. It
+              isn't. docs/research/drawing_navigation_model.md establishes
+              that identity/geometry resolution needs a navigation-graph
+              step FIRST (sheet-suffix links, section/detail-marker links,
+              reference-code -> schedule-row links — mandatory,
+              symbolic, non-spatial; see the registration audit for why
+              spatial linking was tried and measured to fail). Composition
+              is downstream of that graph, not a replacement for it.
+              Implementation of either still gated on corpus geometry.json
+              ground truth — the Phase 13.2 data gate still binds.
 
 Phase 15      Engineering Semantics
               Top/bottom reinforcement, curtailment, development length,

@@ -24,7 +24,7 @@
 | 13.0 — DWG Ingestion (ODA converter) | ✅ Frozen | [audit](audits/phase13/13.0_dwg_ingestion.md) |
 | 13.1 — Validation Corpus & Benchmark | ✅ Frozen (corpus awaits real labeled projects) | [audit](audits/phase13/13.1_validation_framework.md) |
 | 13.2 — Engineering Validation Dataset | → **CURRENT** (Apollo drafted, pending engineer verification; target 10-20 projects) | [Apollo audit](audits/phase13/13.2_apollo_ground_truth.md), [corpus guide](../benchmark/corpus/README.md) |
-| 14 — Multi-View Geometry Composition | ✅ Research complete (implementation gated on corpus geometry ground truth) | [research](research/phase14_geometry_composition.md) |
+| 14 — Multi-View Geometry Composition | ✅ Research complete, reordered | [geometry composition](research/phase14_geometry_composition.md), [navigation model](research/drawing_navigation_model.md), [registration audit](research/apollo_registration_audit.md), [N7 trace](research/apollo_n7_trace.md) |
 
 Roadmap / north star: [roadmap.md](roadmap.md). Engineering-domain assumptions: [engineering_assumptions.md](engineering_assumptions.md). Open engineering questions: [validation_questions.md](validation_questions.md). Benchmark milestones: [../benchmark/HISTORY.md](../benchmark/HISTORY.md).
 
