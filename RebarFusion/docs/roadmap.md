@@ -37,7 +37,15 @@ CURRENT
 
 FUTURE (do not start early; each gates on the one before)
 
-Phase 14      Engineering Semantics
+Phase 14      Multi-View Geometry Composition
+              ONE physical bar composed from many partial observations by
+              per-aspect authority (plan=XY path, section=Z/cover,
+              detail=hooks, schedule=diameter/quantity). Research done:
+              docs/research/phase14_geometry_composition.md. Implementation
+              gated on corpus geometry.json ground truth (acceptance
+              criterion #7) — the Phase 13.2 data gate still binds.
+
+Phase 15      Engineering Semantics
               Top/bottom reinforcement, curtailment, development length,
               lap splice, starter/anchor/distribution bars, panel/beam/
               column ownership, termination, continuity, joints, casting
@@ -45,14 +53,14 @@ Phase 14      Engineering Semantics
               Phase 13.2's corpus — every semantic rule must be validated
               against labeled data, not assumed.
 
-Phase 15      Automatic Digital Twin
+Phase 16      Automatic Digital Twin
               Drawings -> ... -> Identity -> Semantics -> Digital Twin.
               Reconstruction consumes resolved, semantically-understood
               identities end to end.
 
-Phase 16      Construction Intelligence
-Phase 17      Design Verification
-Phase 18      Bidirectional BIM
+Phase 17      Construction Intelligence
+Phase 18      Design Verification
+Phase 19      Bidirectional BIM
 ```
 
 ## Standing rules (apply to every future phase)
