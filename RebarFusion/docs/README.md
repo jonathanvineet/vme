@@ -25,7 +25,7 @@
 | 13.1 — Validation Corpus & Benchmark | ✅ Frozen (corpus awaits real labeled projects) | [audit](audits/phase13/13.1_validation_framework.md) |
 | 13.2 — Engineering Validation Dataset | → **CURRENT** (Apollo drafted, pending engineer verification; target 10-20 projects) | [Apollo audit](audits/phase13/13.2_apollo_ground_truth.md), [corpus guide](../benchmark/corpus/README.md) |
 
-Roadmap / north star: [roadmap.md](roadmap.md). Engineering-domain assumptions: [engineering_assumptions.md](engineering_assumptions.md).
+Roadmap / north star: [roadmap.md](roadmap.md). Engineering-domain assumptions: [engineering_assumptions.md](engineering_assumptions.md). Open engineering questions: [validation_questions.md](validation_questions.md). Benchmark milestones: [../benchmark/HISTORY.md](../benchmark/HISTORY.md).
 
 Overall pipeline architecture and the original Step-1 review: [architecture_review.md](architecture/architecture_review.md).
 

@@ -48,4 +48,4 @@ Recorded for reference; the pipeline does not assume these — they came from on
 | # | Assumption | Status |
 |---|---|---|
 | A16 | When sheets disagree, the higher revision block (`Rev/Date/Chkd/Appd`) wins — never file mtime, never "most recent content". | Stated in research report Step 5; revision-block parsing unimplemented (all observed sheets are Rev 0). |
-| A17 | Same-mark families within one sheet may be either the same physical bars in different views (elevation + section on one sheet) or genuinely distinct bar groups sharing a mark. **No current evidence distinguishes these** — see the unverified T16 identity in `known_limitations.md`. | Open question; the benchmark corpus ground truth is the intended resolution mechanism. |
+| A17 | Same-mark families within one sheet may be either the same physical bars in different views (elevation + section on one sheet) or genuinely distinct bar groups sharing a mark. **No current evidence distinguishes these.** | Reclassified as **[[VQ-001]]** in `docs/validation_questions.md` — an engineering ambiguity awaiting an engineer's reading, not a software limitation. Resolution feeds back into this table. |
