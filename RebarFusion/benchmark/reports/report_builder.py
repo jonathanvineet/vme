@@ -59,7 +59,8 @@ def build_summary_md(report: Dict[str, Any]) -> str:
     stats = report["corpus_statistics"]
     lines += ["## Corpus", ""]
     for key in ("projects", "drawings_processed", "observations", "pair_decisions",
-                "accepted_identities", "ground_truth_identities", "ground_truth_bars"):
+                "accepted_identities", "ground_truth_identities", "ground_truth_bars",
+                "engineer_hours"):
         lines.append(f"- **{key}**: {stats[key]}")
     lines.append(f"- **decision outcomes**: {json.dumps(stats['decision_outcomes'], sort_keys=True)}")
     lines.append("")

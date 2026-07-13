@@ -133,6 +133,7 @@ def corpus_statistics(projects: List[BenchmarkProject]) -> Dict[str, Any]:
         "accepted_identities": sum(len(p.identities) for p in projects),
         "ground_truth_identities": sum(len(p.gt_identities) for p in projects),
         "ground_truth_bars": sum(len(p.gt_bars) for p in projects),
+        "engineer_hours": round(sum(float(p.metadata.get("engineer_hours", 0) or 0) for p in projects), 1),
         "drawing_roles": {},
         "decision_outcomes": {},
     }
