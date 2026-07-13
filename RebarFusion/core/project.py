@@ -98,9 +98,14 @@ class DrawingProject:
         self.drawings: Dict[str, Drawing] = {}
         self.manifest: Optional[ProjectManifest] = None
         
-        # Reader registry
+        # Reader registry. DWGReader is not a second parser -- it converts
+        # via ODA File Converter (tools/oda/) and delegates to DXFReader,
+        # and its can_read() returns False when the converter binary is
+        # absent, so environments without it degrade to the previous
+        # "No reader available" behavior instead of erroring.
         from core.readers.dxf_reader import DXFReader
-        self.readers = [DXFReader()]
+        from core.readers.dwg_reader import DWGReader
+        self.readers = [DXFReader(), DWGReader()]
         
     def _get_reader(self, filepath: str):
         for r in self.readers:

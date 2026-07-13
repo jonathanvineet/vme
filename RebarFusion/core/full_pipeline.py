@@ -25,7 +25,6 @@ from dataclasses import dataclass
 from typing import Any, Dict, Iterator, List, Optional
 
 from core.project import DrawingProject
-from core.readers.dxf_reader import DXFReader
 from core.geometry.canonicalizer import canonicalize
 from core.spatial.engine import SpatialQueryEngine
 from core.topology.node_builder import build_nodes
@@ -93,15 +92,28 @@ def run_pipeline_through_phase9(directory: str) -> Iterator[PipelineResult]:
     if not manifest:
         raise FileNotFoundError(f"Failed to load project directory: {directory}")
 
-    reader = DXFReader()
     registry = _new_registry()
 
     for filename, drawing in manifest.drawings.items():
         if drawing.duplicate_of or not drawing.capabilities.geometry:
             continue
 
+        # Same reader dispatch as Phase 1's metadata pass -- a .dwg gets
+        # the DWGReader (ODA conversion + DXFReader), everything else the
+        # DXFReader directly. One geometry-extraction path either way.
+        # canonicalize() re-opens the file with ezdxf itself, so for DWG
+        # input both stages must be handed the same converted-DXF path,
+        # not the original .dwg.
+        reader = project._get_reader(drawing.filepath)
+        if reader is None:
+            continue
+        geometry_path = drawing.filepath
+        if drawing.extension == "dwg":
+            from core.readers.dwg_converter import convert_dwg_to_dxf
+            geometry_path = convert_dwg_to_dxf(drawing.filepath)
+
         phase2 = reader.read_geometry(drawing.filepath, drawing.identity)
-        canon_repo, _ = canonicalize(phase2, drawing.filepath)
+        canon_repo, _ = canonicalize(phase2, geometry_path)
         engine = SpatialQueryEngine.build(canon_repo)
         node_repo, _, _ = build_nodes(canon_repo, engine, filename)
         builder = TopologyBuilder(node_repo, canon_repo)
