@@ -1,0 +1,22 @@
+[
+  {"drawing": "PW-GF-09(R).dwg", "mark": "T8", "group": "UBAR @150", "expected_count": null},
+  {"drawing": "PW-GF-09(R).dwg", "mark": "T8", "group": "Vertical @150", "expected_count": null},
+  {"drawing": "PW-GF-09(R).dwg", "mark": "T8", "group": "Horizontal @150", "expected_count": null},
+  {"drawing": "PW-GF-09(R).dwg", "mark": "T8", "group": "Ties @100", "expected_count": null},
+  {"drawing": "PW-GF-09(R).dwg", "mark": "T8", "group": "Hook @100", "expected_count": null},
+  {"drawing": "PW-GF-09(R).dwg", "mark": "T10", "group": "@150", "expected_count": null},
+  {"drawing": "PW-GF-09(R).dwg", "mark": "T12", "group": "1-T12 / 2-T12 main", "expected_count": null},
+  {"drawing": "PW-GF-09(R).dwg", "mark": "T12", "group": "2-T12 Crack Bar", "expected_count": 2},
+  {"drawing": "PW-GF-09(R).dwg", "mark": "T16", "group": "2-T16 edge (grouping unresolved — A17)", "expected_count": null},
+  {"drawing": "PW-GF-02(R).dwg", "mark": "T8", "group": "UBAR @125", "expected_count": null},
+  {"drawing": "PW-GF-02(R).dwg", "mark": "T8", "group": "UBAR @150", "expected_count": null},
+  {"drawing": "PW-GF-02(R).dwg", "mark": "T8", "group": "UBAR @250", "expected_count": null},
+  {"drawing": "PW-GF-02(R).dwg", "mark": "T8", "group": "@150", "expected_count": null},
+  {"drawing": "PW-GF-02(R).dwg", "mark": "T8", "group": "@250", "expected_count": null},
+  {"drawing": "PW-GF-02(R).dwg", "mark": "T16", "group": "2-T16 CRACK BAR", "expected_count": 2},
+  {"drawing": "SS-GF-01(R).dwg", "mark": "T8", "group": "@150", "expected_count": null},
+  {"drawing": "SS-GF-01(R).dwg", "mark": "T8", "group": "@200", "expected_count": null},
+  {"drawing": "SS-GF-01(R).dwg", "mark": "T10", "group": "@125", "expected_count": null},
+  {"drawing": "SS-GF-01(R).dwg", "mark": "T12", "group": "2-T12", "expected_count": 2},
+  {"drawing": "SS-GF-01(R).dwg", "mark": "T20", "group": "2-T20", "expected_count": 2}
+]

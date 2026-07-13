@@ -2,7 +2,7 @@
 
 Each subdirectory here is one complete engineering drawing package with engineer-authored ground truth. Format: `benchmark/schemas/ground_truth_format.md`.
 
-**Currently empty of real projects.** The framework is validated against `tests/fixtures/benchmark_corpus/demo_project/` (synthetic labels, metric-math testing only — explicitly not engineering ground truth). Meaningful precision/recall numbers require real packages labeled by an engineer.
+**First entry: `Apollo/`** (8 drawings, 18 draft GT identities) — labels are a provenance-tracked DRAFT by an AI assistant, pending engineer verification (`engineer_hours: 0` until then). The framework itself is validated against `tests/fixtures/benchmark_corpus/demo_project/` (synthetic labels, metric-math testing only). Meaningful precision/recall numbers require engineer-verified labels.
 
 ## Onboarding a project
 
