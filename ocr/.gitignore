@@ -1,0 +1,4 @@
+.env
+output.xlsx
+output.csv
+__pycache__/
