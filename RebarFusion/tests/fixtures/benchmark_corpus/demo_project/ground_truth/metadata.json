@@ -1,8 +1,0 @@
-{
-  "project_name": "demo_project (framework fixture)",
-  "source": "SS-GF-01(M).dxf from the Apollo package",
-  "labeled_by": "framework-fixture (synthetic labels for metric-math testing only — NOT engineering ground truth)",
-  "labeled_date": "2026-07-13",
-  "label_confidence": "partial",
-  "notes": "Exists to exercise the benchmark's metric/report code paths deterministically: one resolvable-but-unaccepted identity (N6+N7, held at REVIEW by the pipeline), one selector against a drawing absent from this fixture (unresolvable), and one bars.json entry for reconstruction coverage. Do not treat these labels as an engineer's assertion about the real structure."
-}

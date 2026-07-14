@@ -1,9 +1,0 @@
-{
-  "project_name": "Apollo Girls Hostel Building (Right Wing) — Chittoor, precast wall panels",
-  "source": "VME Precast Products / ES Structural Consultant",
-  "labeled_by": "Claude (AI assistant) — DRAFT labels derived from drawing annotations and visual PDF reading; PENDING VERIFICATION BY A STRUCTURAL ENGINEER",
-  "labeled_date": "2026-07-13",
-  "label_confidence": "partial",
-  "engineer_hours": 0,
-  "notes": "engineer_hours is 0 because no engineer has verified these labels yet — this entry is a prepared draft, not verified ground truth. Every fact carries provenance in its notes field; every unprovable fact is null with a stated reason. See notes.md for methodology, evidence sources, exclusions, and the open A17 question. Metrics computed against this entry measure agreement with a careful draft reading of the drawings, not with engineer-verified truth."
-}

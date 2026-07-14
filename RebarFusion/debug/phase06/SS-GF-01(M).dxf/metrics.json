@@ -1,9 +1,0 @@
-{
-  "total_nodes": 2360,
-  "total_edges": 1755,
-  "average_degree": 1.4872881355932204,
-  "connected_components": 651,
-  "largest_component": 98,
-  "smallest_component": 2,
-  "average_component_size": 3.4915514592933947
-}
