@@ -6,7 +6,7 @@ from dataclasses import dataclass, field
 from .loader import Ent
 
 # Layers that carry real geometry (not annotation) — used to seed clustering.
-GEOM_LAYERS = ("S-RBAR", "A-WALL", "S-BEAM", "S-SLAB", "A-FLOR", "A-DETL")
+GEOM_LAYERS = ("S-RBAR", "A-WALL", "S-BEAM", "S-SLAB", "A-FLOR", "A-DETL", "A-GENM")
 
 
 class _UF:

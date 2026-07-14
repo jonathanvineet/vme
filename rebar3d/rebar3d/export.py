@@ -38,6 +38,16 @@ def panel_to_dict(p: Panel) -> dict:
         ],
         "stats": p.stats,
         "families": p.families,
+        "features": [
+            {
+                "kind": f.kind,
+                "box": [round(v, 1) for v in f.box] if f.box else None,
+                "center": [round(f.center[0], 1), round(f.center[1], 1)] if f.center else None,
+                "r": round(f.radius, 1),
+                "label": f.label,
+            }
+            for f in p.features
+        ],
     }
 
 
@@ -54,12 +64,32 @@ def write_projections(p: Panel, out: Path) -> None:
     ax_front, ax_side, ax_top, ax_off = axes[0][0], axes[0][1], axes[1][0], axes[1][1]
     ax_off.axis("off")
 
+    FEAT_COLORS = {"corbel": "#8a919d", "embed": "#5c6470", "anchor": "#f28e2b", "loop": "#f28e2b"}
+
     def draw(ax, ix, iy, title, box):
         ax.add_patch(mpatches.Rectangle((0, 0), box[0], box[1], fill=False, color="#1f77b4", lw=1.2))
         for b in p.bars:
             xs = [pt[ix] for pt in b.points]
             ys = [pt[iy] for pt in b.points]
             ax.plot(xs, ys, color=DIA_COLORS.get(b.diameter, "#333"), lw=0.7)
+        for f in p.features:
+            if f.kind == "sleeve" and f.center is not None:
+                c3 = (f.center[0], f.center[1], p.thickness / 2)
+                if ix == 0 and iy == 1:
+                    ax.add_patch(mpatches.Circle((c3[0], c3[1]), f.radius, fill=False, color="#2ecc71", lw=1.2))
+                else:
+                    u, v = c3[ix], c3[iy]
+                    half = p.thickness / 2
+                    du = half if ix == 2 else 0
+                    dv = half if iy == 2 else 0
+                    ax.plot([u - du, u + du], [v - dv, v + dv], color="#2ecc71", lw=1.2)
+            elif f.box is not None:
+                x0, y0, z0, x1, y1, z1 = f.box
+                lo = (x0, y0, z0)
+                hi = (x1, y1, z1)
+                ax.add_patch(mpatches.Rectangle(
+                    (lo[ix], lo[iy]), hi[ix] - lo[ix], hi[iy] - lo[iy],
+                    fill=False, color=FEAT_COLORS.get(f.kind, "#999"), lw=1.2))
         if ix == 0 and iy == 1:
             for lp in p.openings:
                 ax.add_patch(mpatches.Polygon(lp, fill=False, color="#17becf", lw=1.0))
@@ -191,6 +221,41 @@ function buildPanel(m) {
     }
   }
 
+  // cast-in features: corbel/embed boxes, lifting anchors, wire loops,
+  // corrugated pipe sleeves (green ringed tubes through the thickness)
+  for (const f of (m.features || [])) {
+    const kg = kindGroups[f.kind] || (kindGroups[f.kind] = new THREE.Group());
+    if (f.kind === "sleeve" && f.center) {
+      const len = m.thickness;
+      const tube = new THREE.Mesh(
+        new THREE.CylinderGeometry(f.r, f.r, len, 16, 1, true),
+        new THREE.MeshStandardMaterial({color:0x2ecc71, transparent:true, opacity:0.4,
+          side:THREE.DoubleSide, roughness:0.6}));
+      tube.position.set(f.center[0], f.center[1], len/2);
+      tube.rotation.x = Math.PI/2;
+      kg.add(tube);
+      const nring = Math.max(3, Math.round(len/30));
+      for (let i = 0; i <= nring; i++) {
+        const ring = new THREE.Mesh(new THREE.TorusGeometry(f.r + 1.5, 1.3, 6, 24),
+          new THREE.MeshStandardMaterial({color:0x2ecc71, roughness:0.6}));
+        ring.position.set(f.center[0], f.center[1], (len * i) / nring);
+        kg.add(ring);
+      }
+    } else if (f.box) {
+      const [x0,y0,z0,x1,y1,z1] = f.box;
+      const col = {corbel:0x9aa3b0, embed:0x7f8a99, anchor:0xf28e2b, loop:0xff9f43}[f.kind] || 0x999999;
+      const geo = new THREE.BoxGeometry(Math.max(x1-x0,2), Math.max(y1-y0,2), Math.max(z1-z0,2));
+      const mesh = new THREE.Mesh(geo, new THREE.MeshStandardMaterial({color:col,
+        transparent: f.kind === "corbel", opacity: f.kind === "corbel" ? 0.35 : 1.0, roughness:0.7}));
+      mesh.position.set((x0+x1)/2, (y0+y1)/2, (z0+z1)/2);
+      kg.add(mesh);
+      const fe = new THREE.LineSegments(new THREE.EdgesGeometry(geo),
+        new THREE.LineBasicMaterial({color:col}));
+      fe.position.copy(mesh.position);
+      kg.add(fe);
+    }
+  }
+
   // bars as cylinders between consecutive points
   barMeshes.length = 0;
   for (const b of m.bars) {
@@ -224,8 +289,9 @@ function buildPanel(m) {
   document.getElementById("legend").innerHTML = dias.map(d =>
     `<span style="margin-right:10px"><span class="sw" style="background:#${(DIA_COLORS[d]||0x999999).toString(16).padStart(6,"0")}"></span>T${d}</span>`).join("");
   const kinds = Object.keys(kindGroups);
+  const countOf = k => m.bars.filter(b=>b.kind===k).length + (m.features||[]).filter(f=>f.kind===k).length;
   document.getElementById("toggles").innerHTML = kinds.map(k =>
-    `<label><input type="checkbox" checked data-kind="${k}"> ${k} <span class="dim">(${m.bars.filter(b=>b.kind===k).length})</span></label>`).join("");
+    `<label><input type="checkbox" checked data-kind="${k}"> ${k} <span class="dim">(${countOf(k)})</span></label>`).join("");
   document.querySelectorAll("#toggles input").forEach(cb =>
     cb.addEventListener("change", () => { kindGroups[cb.dataset.kind].visible = cb.checked; }));
   document.getElementById("families").innerHTML = (m.families || [])

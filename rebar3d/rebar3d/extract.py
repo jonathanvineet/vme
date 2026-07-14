@@ -59,25 +59,26 @@ class _Seg:
         self.t0, self.t1 = min(t0, t1), max(t0, t1)
 
 
-def pair_lines(ents: list[Ent], min_len: float = 30.0) -> list[Bar2D]:
+def pair_lines(ents: list[Ent], min_len: float = 30.0, seg_min: float = 6.0) -> list[Bar2D]:
     """Pair parallel S-RBAR lines separated by a bar diameter into centerlines."""
     segs: list[_Seg] = []
     for e in ents:
         if e.kind == "LINE":
             s = _Seg(e.points[0], e.points[1])
-            if s.len >= min_len:
+            if s.len >= seg_min:
                 segs.append(s)
         elif e.kind == "LWPOLYLINE":
             pts = e.points + ([e.points[0]] if e.closed else [])
             for i in range(len(pts) - 1):
                 s = _Seg(pts[i], pts[i + 1])
-                if s.len >= min_len:
+                if s.len >= seg_min:
                     segs.append(s)
 
     # Bar outlines are trimmed where other bars cross, so one side of a bar
-    # is many collinear fragments. Build "rails" first: all segments sharing
-    # (angle, normal offset), with fragments merged across small gaps. Then
-    # pair rails separated by a bar diameter.
+    # is many collinear fragments — and hidden runs (inside concrete) are
+    # dashed, i.e. many short collinear pieces. Build "rails" first: all
+    # segments sharing (angle, normal offset), with fragments and dashes
+    # merged across small gaps. Then pair rails separated by a bar diameter.
     rails: dict[tuple[int, int], list[_Seg]] = {}
     for s in segs:
         key = (round(s.angle / 0.005), round(s.noff / 1.5))

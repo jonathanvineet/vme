@@ -25,6 +25,9 @@ class Ent:
     end_angle: float = 0.0
     text: str = ""  # mtext/text content
     closed: bool = False
+    ltype: str = ""  # resolved linetype, lowercase ("" = continuous)
+    block: str = ""  # source block name for geometry exploded from an INSERT
+    bref: int = -1  # unique id per INSERT instance (groups exploded geometry)
 
     @property
     def bbox(self) -> tuple[float, float, float, float]:
@@ -65,45 +68,65 @@ def load_entities(dxf_path: Path, explode_inserts: bool = True) -> list[Ent]:
     doc = ezdxf.readfile(str(dxf_path))
     msp = doc.modelspace()
     ents: list[Ent] = []
+    layer_lt = {l.dxf.name: (l.dxf.linetype or "") for l in doc.layers}
+    next_bref = [0]
 
-    def add(e, ox: float = 0.0, oy: float = 0.0) -> None:
+    def ltype_of(e) -> str:
+        lt = getattr(e.dxf, "linetype", "") or ""
+        if lt.upper() in ("BYLAYER", "BYBLOCK", ""):
+            lt = layer_lt.get(e.dxf.layer, "")
+        return "" if lt.lower() == "continuous" else lt.lower()
+
+    def add(e, block: str = "", bref: int = -1) -> None:
         t = e.dxftype()
         layer = e.dxf.layer
+        lt = ltype_of(e)
         if t == "LINE":
             s, d = e.dxf.start, e.dxf.end
-            ents.append(Ent("LINE", layer, points=[(s.x + ox, s.y + oy), (d.x + ox, d.y + oy)]))
+            ents.append(Ent("LINE", layer, points=[(s.x, s.y), (d.x, d.y)],
+                            ltype=lt, block=block, bref=bref))
         elif t == "ARC":
             c = e.dxf.center
             ents.append(
                 Ent(
                     "ARC",
                     layer,
-                    center=(c.x + ox, c.y + oy),
+                    center=(c.x, c.y),
                     radius=e.dxf.radius,
                     start_angle=e.dxf.start_angle,
                     end_angle=e.dxf.end_angle,
+                    ltype=lt, block=block, bref=bref,
                 )
             )
         elif t == "CIRCLE":
             c = e.dxf.center
-            ents.append(Ent("CIRCLE", layer, center=(c.x + ox, c.y + oy), radius=e.dxf.radius))
+            ents.append(Ent("CIRCLE", layer, center=(c.x, c.y), radius=e.dxf.radius,
+                            ltype=lt, block=block, bref=bref))
         elif t == "LWPOLYLINE":
-            pts = [(p[0] + ox, p[1] + oy) for p in e.get_points()]
-            ents.append(Ent("LWPOLYLINE", layer, points=pts, closed=bool(e.closed)))
+            pts = [(p[0], p[1]) for p in e.get_points()]
+            ents.append(Ent("LWPOLYLINE", layer, points=pts, closed=bool(e.closed),
+                            ltype=lt, block=block, bref=bref))
         elif t == "POLYLINE":
             try:
-                pts = [(v.dxf.location.x + ox, v.dxf.location.y + oy) for v in e.vertices]
+                pts = [(v.dxf.location.x, v.dxf.location.y) for v in e.vertices]
             except Exception:
                 return
-            ents.append(Ent("LWPOLYLINE", layer, points=pts, closed=e.is_closed))
+            ents.append(Ent("LWPOLYLINE", layer, points=pts, closed=e.is_closed,
+                            ltype=lt, block=block, bref=bref))
         elif t in ("MTEXT", "TEXT"):
-            ip = e.dxf.insert if t == "MTEXT" else e.dxf.insert
+            ip = e.dxf.insert
             txt = _mtext_plain(e) if t == "MTEXT" else e.dxf.text
-            ents.append(Ent(t, layer, points=[(ip.x + ox, ip.y + oy)], text=txt))
+            ents.append(Ent(t, layer, points=[(ip.x, ip.y)], text=txt,
+                            ltype=lt, block=block, bref=bref))
         elif t == "INSERT" and explode_inserts:
+            # geometry from nested inserts keeps the outermost instance id
+            name = block or e.dxf.name
+            ref = bref if bref >= 0 else next_bref[0]
+            if bref < 0:
+                next_bref[0] += 1
             try:
                 for sub in e.virtual_entities():
-                    add(sub)
+                    add(sub, block=name, bref=ref)
             except Exception:
                 pass
 
