@@ -1,0 +1,596 @@
+<title>__TITLE__</title>
+<style>
+  html, body { margin:0; height:100%; overflow:hidden; background:#15181d; color:#dde1e6;
+    font: 13px/1.45 -apple-system, "Segoe UI", sans-serif; }
+  #c { display:block; width:100%; height:100%; }
+  #panelbar { position:fixed; top:10px; left:10px; display:flex; gap:6px; flex-wrap:wrap; z-index:2; }
+  #panelbar button { background:#262b33; color:#dde1e6; border:1px solid #3a414d; border-radius:6px;
+    padding:5px 12px; cursor:pointer; }
+  #panelbar button.on { background:#3d6fd0; border-color:#3d6fd0; color:#fff; }
+  #hud { position:fixed; left:10px; bottom:10px; background:#1d2129cc; border:1px solid #3a414d;
+    border-radius:8px; padding:10px 12px; max-width:270px; z-index:2; }
+  #hud .sw { display:inline-block; width:11px; height:11px; border-radius:2px; margin-right:6px; vertical-align:-1px; }
+  #hud label { display:block; cursor:pointer; margin:1px 0; }
+  .dim { color:#8a919d; }
+  h1 { font-size:13px; margin:0 0 6px; }
+  #tools { position:fixed; top:10px; right:10px; background:#1d2129cc; border:1px solid #3a414d;
+    border-radius:8px; padding:10px 12px; z-index:3; }
+  #tools input { width:64px; background:#262b33; color:#dde1e6; border:1px solid #3a414d;
+    border-radius:5px; padding:3px 6px; }
+  #tools button { background:#262b33; color:#dde1e6; border:1px solid #3a414d; border-radius:6px;
+    padding:4px 10px; cursor:pointer; margin-left:4px; }
+  #tools button.primary { background:#3d6fd0; border-color:#3d6fd0; color:#fff; }
+  #schedule { position:fixed; right:10px; bottom:10px; background:#1d2129cc; border:1px solid #3a414d;
+    border-radius:8px; padding:10px 12px; z-index:2; max-width:430px; }
+  #schedule h1 { text-align:center; }
+  #schedule table { border-collapse:collapse; font-size:12px; margin:0 auto; }
+  #schedule th, #schedule td { border:1px solid #3a414d; padding:3px 9px; text-align:right; }
+  #schedule th { color:#8a919d; font-weight:600; }
+  #schedule td:first-child { text-align:left; }
+  #schedule tr.total td { font-weight:700; border-top:2px solid #5c6470; }
+  #schedule .delta-up { color:#e15759; }
+  #schedule .delta-down { color:#2ecc71; }
+</style>
+<div id="panelbar"></div>
+<div id="tools">
+  <b>resize</b>
+  <input id="w2" type="number" step="10"> × <input id="h2" type="number" step="10"> mm
+  <button id="applyBtn" class="primary">apply</button><button id="resetBtn">reset</button>
+  <div style="margin-top:7px; text-align:right">
+    <button id="dxfBtn">&#8595; DXF</button><button id="repBtn">&#8595; report</button>
+  </div>
+  <div class="dim" id="dlNote" style="margin-top:4px; text-align:right"></div>
+</div>
+<div id="hud">
+  <h1 id="hd"></h1>
+  <div id="legend"></div>
+  <div id="toggles"></div>
+  <div id="families" style="margin-top:6px"></div>
+  <div id="measure" style="margin-top:6px; color:#7ec8ff"></div>
+  <div class="dim" style="margin-top:6px">drag: orbit · shift-drag: pan · wheel: zoom<br>click a bar, then a second bar: distance</div>
+</div>
+<div id="schedule"></div>
+<canvas id="c"></canvas>
+<script>__THREE_JS__</script>
+<script>
+"use strict";
+const MODELS = __MODELS__;
+const DIA_COLORS = {6:0xb0b0b0,8:0xe15759,10:0xf28e2b,12:0x59a14f,16:0xaf7aa1,20:0x4e79a7,25:0x9c755f,32:0xe377c2};
+const CONCRETE_DENSITY = 2500; // kg/m³, matches the sheet weight schedules
+
+const canvas = document.getElementById("c");
+const renderer = new THREE.WebGLRenderer({canvas, antialias:true});
+renderer.setPixelRatio(window.devicePixelRatio);
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x15181d);
+const camera = new THREE.PerspectiveCamera(45, 2, 1, 100000);
+scene.add(new THREE.AmbientLight(0xffffff, 0.75));
+const dl = new THREE.DirectionalLight(0xffffff, 1.2); dl.position.set(1, 2, 1.5); scene.add(dl);
+const dl2 = new THREE.DirectionalLight(0xffffff, 0.5); dl2.position.set(-1.5, -1, -1); scene.add(dl2);
+
+// ---- minimal orbit control
+let target = new THREE.Vector3(), sph = {r: 6000, th: 0.9, ph: 1.15};
+function applyCam() {
+  camera.position.set(
+    target.x + sph.r * Math.sin(sph.ph) * Math.cos(sph.th),
+    target.y + sph.r * Math.cos(sph.ph),
+    target.z + sph.r * Math.sin(sph.ph) * Math.sin(sph.th));
+  camera.lookAt(target);
+}
+let drag = null;
+canvas.addEventListener("pointerdown", e => { drag = {x:e.clientX, y:e.clientY, pan:e.shiftKey}; canvas.setPointerCapture(e.pointerId); });
+canvas.addEventListener("pointermove", e => {
+  if (!drag) return;
+  const dx = e.clientX - drag.x, dy = e.clientY - drag.y;
+  drag.x = e.clientX; drag.y = e.clientY;
+  if (drag.pan) {
+    const s = sph.r / 900;
+    const right = new THREE.Vector3().subVectors(camera.position, target).cross(camera.up).normalize();
+    target.addScaledVector(right, dx * s);
+    target.addScaledVector(camera.up, dy * s);
+  } else {
+    sph.th += dx * 0.006;
+    sph.ph = Math.min(Math.PI - 0.05, Math.max(0.05, sph.ph - dy * 0.006));
+  }
+  applyCam();
+});
+canvas.addEventListener("pointerup", () => drag = null);
+canvas.addEventListener("wheel", e => { e.preventDefault(); sph.r *= Math.exp(e.deltaY * 0.001); applyCam(); }, {passive:false});
+
+// ---- schedules & weights (unit weight = d²/162 kg/m)
+function barLen(b) {
+  let len = 0;
+  for (let i = 0; i + 1 < b.pts.length; i++) {
+    const a = b.pts[i], c = b.pts[i+1];
+    len += Math.hypot(c[0]-a[0], c[1]-a[1], c[2]-a[2]);
+  }
+  return len;
+}
+function schedOf(m) {
+  const g = {};
+  for (const b of m.bars) {
+    const s = g[b.d] || (g[b.d] = {n:0, len:0});
+    s.n++; s.len += barLen(b);
+  }
+  const rows = []; let excluded = 0;
+  for (const d of Object.keys(g).map(Number).sort((a,b)=>a-b)) {
+    const s = g[d];
+    if (s.n === 1) { excluded++; continue; }  // lone pairing — almost certainly a misdetected bar
+    rows.push({d, n:s.n, len:s.len, w:(s.len/1000)*d*d/162});
+  }
+  return {rows, excluded,
+    totN: rows.reduce((a,r)=>a+r.n,0),
+    totL: rows.reduce((a,r)=>a+r.len,0),
+    totW: rows.reduce((a,r)=>a+r.w,0)};
+}
+function openingsArea(m) {
+  let area = 0;
+  for (const lp of m.openings || []) {
+    let s = 0;
+    for (let i = 0; i < lp.length; i++) {
+      const [x1,y1] = lp[i], [x2,y2] = lp[(i+1)%lp.length];
+      s += x1*y2 - x2*y1;
+    }
+    area += Math.abs(s)/2;
+  }
+  return area;
+}
+function concreteOf(m) {
+  const vol = (m.width*m.height - openingsArea(m)) * m.thickness / 1e9; // m³
+  return {vol, wt: vol * CONCRETE_DENSITY};
+}
+
+// ---- parametric resize: scale outline/features, re-space mesh families
+function resizeModel(m, W2, H2) {
+  const sx = W2/m.width, sy = H2/m.height;
+  const S = p => [p[0]*sx, p[1]*sy, p[2]];
+  const bars = m.bars.map(b => Object.assign({}, b, {pts: b.pts.map(S)}));
+  const out = [];
+  const fam = {};
+  for (const b of bars) {
+    if (b.kind !== "v-mesh" && b.kind !== "h-mesh" && b.kind !== "u-bar") { out.push(b); continue; }
+    const xs = b.pts.map(p=>p[0]), ys = b.pts.map(p=>p[1]), zs = b.pts.map(p=>p[2]);
+    // bars run along their long axis; the family distributes along the other
+    const ax = (Math.max(...ys)-Math.min(...ys)) > (Math.max(...xs)-Math.min(...xs)) ? 0 : 1;
+    // include the run extent in the key: bars in different bands (e.g. top
+    // and bottom notch) can share a position and must stay separate families
+    const rl = ax === 0 ? [Math.min(...ys), Math.max(...ys)] : [Math.min(...xs), Math.max(...xs)];
+    const key = [b.kind, b.d, ax, Math.round(Math.min(...zs)/12), Math.round(Math.max(...zs)/12),
+                 Math.round((rl[0]+rl[1])/2/250), Math.round((rl[1]-rl[0])/250)].join("|");
+    b._pos = b.pts.reduce((a,p)=>a+p[ax],0) / b.pts.length;
+    (fam[key] || (fam[key] = {ax, bars:[]})).bars.push(b);
+  }
+  for (const key in fam) {
+    const {ax, bars: fb} = fam[key];
+    const sAx = ax === 0 ? sx : sy;
+    if (fb.length < 3) { out.push(...fb); continue; }
+    fb.sort((a,b)=>a._pos-b._pos);
+    // keep the ORIGINAL spacing: measure centre-to-centre in the unscaled frame
+    const diffs = [];
+    for (let i = 1; i < fb.length; i++) {
+      const d = (fb[i]._pos - fb[i-1]._pos) / sAx;
+      if (d > 10) diffs.push(d);
+    }
+    if (!diffs.length) { out.push(...fb); continue; }
+    const med = a => { const s = [...a].sort((x,y)=>x-y); return s[Math.floor(s.length/2)]; };
+    const gMed = med(diffs);
+    // split into bands where the gap jumps (openings, or an end zone at a
+    // tighter pitch than the field mesh)
+    const bands = [[fb[0]]];
+    for (let i = 1; i < fb.length; i++) {
+      const d = (fb[i]._pos - fb[i-1]._pos) / sAx;
+      const prev = bands[bands.length-1];
+      const local = prev.length > 1
+        ? (prev[prev.length-1]._pos - prev[0]._pos) / sAx / (prev.length-1) : gMed;
+      if (d > 1.9*local && d > 1.4*gMed || d > 2.6*gMed) bands.push([]);
+      bands[bands.length-1].push(fb[i]);
+    }
+    for (const band of bands) {
+      const p0 = band[0]._pos, p1 = band[band.length-1]._pos;
+      // spacing local to this band, so end zones keep their tighter pitch
+      const bd = [];
+      for (let i = 1; i < band.length; i++) {
+        const d = (band[i]._pos - band[i-1]._pos) / sAx;
+        if (d > 10) bd.push(d);
+      }
+      const spacing = bd.length ? med(bd) : gMed;
+      if (band.length < 3 || p1 - p0 < spacing) { out.push(...band); continue; }
+      // bar count so the real spacing stays ~constant over the scaled band
+      const count = Math.max(2, Math.round((p1-p0)/spacing) + 1);
+      for (let i = 0; i < count; i++) {
+        const pos = p0 + (p1-p0)*i/(count-1);
+        let t = band[0];
+        for (const b of band) if (Math.abs(b._pos-pos) < Math.abs(t._pos-pos)) t = b;
+        const off = pos - t._pos;
+        out.push(Object.assign({}, t, {pts: t.pts.map(p => {
+          const q = p.slice(); q[ax] += off; return q;
+        })}));
+      }
+    }
+  }
+  for (const b of out) delete b._pos;
+  return {
+    name: m.name, width: W2, height: H2, thickness: m.thickness,
+    openings: (m.openings||[]).map(lp => lp.map(p => [p[0]*sx, p[1]*sy])),
+    bars: out,
+    features: (m.features||[]).map(f => Object.assign({}, f, {
+      box: f.box ? [f.box[0]*sx, f.box[1]*sy, f.box[2], f.box[3]*sx, f.box[4]*sy, f.box[5]] : null,
+      center: f.center ? [f.center[0]*sx, f.center[1]*sy] : null,
+    })),
+    families: [], stats: {},
+  };
+}
+
+// ---- build one panel's meshes into a group
+const barMeshes = [];
+function buildModelGroup(m) {
+  const group = new THREE.Group();
+  const kinds = {};
+
+  const conc = new THREE.Mesh(
+    new THREE.BoxGeometry(m.width, m.height, m.thickness),
+    new THREE.MeshStandardMaterial({color:0x8a919d, transparent:true, opacity:0.13, depthWrite:false}));
+  conc.position.set(m.width/2, m.height/2, m.thickness/2);
+  group.add(conc);
+  const eg = new THREE.LineSegments(
+    new THREE.EdgesGeometry(new THREE.BoxGeometry(m.width, m.height, m.thickness)),
+    new THREE.LineBasicMaterial({color:0x5c6470}));
+  eg.position.copy(conc.position);
+  group.add(eg);
+  for (const lp of m.openings || []) {
+    for (const z of [0, m.thickness]) {
+      const pts = lp.map(p => new THREE.Vector3(p[0], p[1], z));
+      pts.push(pts[0].clone());
+      group.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts),
+        new THREE.LineBasicMaterial({color:0x17becf})));
+    }
+  }
+
+  // cast-in features
+  for (const f of (m.features || [])) {
+    const kg = kinds[f.kind] || (kinds[f.kind] = new THREE.Group());
+    if (f.kind === "sleeve" && f.center) {
+      const len = m.thickness;
+      const tube = new THREE.Mesh(
+        new THREE.CylinderGeometry(f.r, f.r, len, 16, 1, true),
+        new THREE.MeshStandardMaterial({color:0x2ecc71, transparent:true, opacity:0.4,
+          side:THREE.DoubleSide, roughness:0.6}));
+      tube.position.set(f.center[0], f.center[1], len/2);
+      tube.rotation.x = Math.PI/2;
+      kg.add(tube);
+      const nring = Math.max(3, Math.round(len/30));
+      for (let i = 0; i <= nring; i++) {
+        const ring = new THREE.Mesh(new THREE.TorusGeometry(f.r + 1.5, 1.3, 6, 24),
+          new THREE.MeshStandardMaterial({color:0x2ecc71, roughness:0.6}));
+        ring.position.set(f.center[0], f.center[1], (len * i) / nring);
+        kg.add(ring);
+      }
+    } else if (f.box) {
+      const [x0,y0,z0,x1,y1,z1] = f.box;
+      const col = {corbel:0x9aa3b0, embed:0x7f8a99, anchor:0xf28e2b, loop:0xff9f43}[f.kind] || 0x999999;
+      const geo = new THREE.BoxGeometry(Math.max(x1-x0,2), Math.max(y1-y0,2), Math.max(z1-z0,2));
+      const mesh = new THREE.Mesh(geo, new THREE.MeshStandardMaterial({color:col,
+        transparent: f.kind === "corbel", opacity: f.kind === "corbel" ? 0.35 : 1.0, roughness:0.7}));
+      mesh.position.set((x0+x1)/2, (y0+y1)/2, (z0+z1)/2);
+      kg.add(mesh);
+      const fe = new THREE.LineSegments(new THREE.EdgesGeometry(geo),
+        new THREE.LineBasicMaterial({color:col}));
+      fe.position.copy(mesh.position);
+      kg.add(fe);
+    }
+  }
+
+  // bars as cylinders between consecutive points
+  for (const b of m.bars) {
+    const color = DIA_COLORS[b.d] || 0x999999;
+    const kg = kinds[b.kind] || (kinds[b.kind] = new THREE.Group());
+    const mat = new THREE.MeshStandardMaterial({color, roughness:0.45, metalness:0.25});
+    for (let i = 0; i + 1 < b.pts.length; i++) {
+      const a = new THREE.Vector3(...b.pts[i]), c = new THREE.Vector3(...b.pts[i+1]);
+      const len = a.distanceTo(c);
+      if (len < 1) continue;
+      const cyl = new THREE.Mesh(new THREE.CylinderGeometry(b.d/2, b.d/2, len, 8, 1), mat);
+      cyl.position.copy(a).lerp(c, 0.5);
+      cyl.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),
+        new THREE.Vector3().subVectors(c, a).normalize());
+      cyl.userData.bar = b; cyl.userData.mat = mat;
+      kg.add(cyl);
+      barMeshes.push(cyl);
+    }
+  }
+  for (const k in kinds) group.add(kinds[k]);
+  return {group, kinds};
+}
+
+// ---- scene composition (single or split original|modified)
+let cur = null, resized = null, group = null;
+const kindSets = {};
+function fmtDims(m) { return `${Math.round(m.width)}×${Math.round(m.height)}×${Math.round(m.thickness)} mm`; }
+
+function schedTable(s, title) {
+  const rows = s.rows.map(r =>
+    `<tr><td>T${r.d}</td><td>${r.n}</td><td>${(r.len/1000).toFixed(1)}</td>` +
+    `<td>${(r.d*r.d/162).toFixed(3)}</td><td>${r.w.toFixed(2)}</td></tr>`).join("");
+  return `<h1>${title}</h1><table>` +
+    `<tr><th>Bar</th><th>Count</th><th>Length (m)</th><th>kg/m</th><th>Weight (kg)</th></tr>` +
+    rows +
+    `<tr class="total"><td>Total</td><td>${s.totN}</td><td>${(s.totL/1000).toFixed(1)}</td><td></td><td>${s.totW.toFixed(2)}</td></tr>` +
+    `</table>`;
+}
+
+function renderSchedule() {
+  const el = document.getElementById("schedule");
+  const sA = schedOf(cur), cA = concreteOf(cur);
+  if (!resized) {
+    el.innerHTML = schedTable(sA, "Bar Schedule") +
+      `<div class="dim" style="margin-top:5px">concrete ${cA.vol.toFixed(2)} m³ · ${cA.wt.toFixed(0)} kg — unit weight = d²/162 kg/m` +
+      (sA.excluded ? `<br>${sA.excluded} lone unmatched pairing(s) excluded` : "") + `</div>`;
+    return;
+  }
+  const sB = schedOf(resized), cB = concreteOf(resized);
+  const dW = sB.totW - sA.totW, dC = cB.wt - cA.wt;
+  const cls = v => v > 0 ? "delta-up" : "delta-down";
+  const sgn = v => (v >= 0 ? "+" : "") + v.toFixed(1);
+  el.innerHTML = schedTable(sB, `Bar Schedule — modified ${Math.round(resized.width)}×${Math.round(resized.height)}`) +
+    `<table style="margin-top:7px">` +
+    `<tr><th></th><th>original</th><th>modified</th><th>&Delta;</th></tr>` +
+    `<tr><td>bars</td><td>${sA.totN}</td><td>${sB.totN}</td><td class="${cls(sB.totN-sA.totN)}">${sgn(sB.totN-sA.totN)}</td></tr>` +
+    `<tr><td>steel (kg)</td><td>${sA.totW.toFixed(1)}</td><td>${sB.totW.toFixed(1)}</td><td class="${cls(dW)}">${sgn(dW)}</td></tr>` +
+    `<tr><td>concrete (kg)</td><td>${cA.wt.toFixed(0)}</td><td>${cB.wt.toFixed(0)}</td><td class="${cls(dC)}">${sgn(dC)}</td></tr>` +
+    `<tr class="total"><td>total (kg)</td><td>${(sA.totW+cA.wt).toFixed(0)}</td><td>${(sB.totW+cB.wt).toFixed(0)}</td>` +
+    `<td class="${cls(dW+dC)}">${sgn(dW+dC)}</td></tr></table>` +
+    `<div class="dim" style="margin-top:5px">unit weight = d²/162 kg/m · concrete ${CONCRETE_DENSITY} kg/m³</div>`;
+}
+
+function buildScene() {
+  if (group) scene.remove(group);
+  group = new THREE.Group();
+  for (const k in kindSets) delete kindSets[k];
+  barMeshes.length = 0;
+
+  const L = buildModelGroup(cur);
+  group.add(L.group);
+  for (const k in L.kinds) (kindSets[k] || (kindSets[k] = [])).push(L.kinds[k]);
+  let span = cur.width;
+  if (resized) {
+    const gap = Math.max(500, cur.width * 0.12);
+    const R = buildModelGroup(resized);
+    R.group.position.x = cur.width + gap;
+    group.add(R.group);
+    for (const k in R.kinds) (kindSets[k] || (kindSets[k] = [])).push(R.kinds[k]);
+    span = cur.width + gap + resized.width;
+  }
+  scene.add(group);
+
+  target.set(span/2, Math.max(cur.height, (resized||cur).height)/2, cur.thickness/2);
+  sph.r = Math.max(span, cur.height) * (resized ? 1.0 : 1.4);
+  applyCam();
+
+  document.getElementById("hd").innerHTML = resized
+    ? `${cur.name} — <span class="dim">left:</span> ${fmtDims(cur)} <span class="dim">right:</span> ${fmtDims(resized)}`
+    : `${cur.name} — ${fmtDims(cur)} · ${cur.bars.length} bars`;
+  const dias = [...new Set([...cur.bars, ...(resized ? resized.bars : [])].map(b => b.d))].sort((a,b)=>a-b);
+  document.getElementById("legend").innerHTML = dias.map(d =>
+    `<span style="margin-right:10px"><span class="sw" style="background:#${(DIA_COLORS[d]||0x999999).toString(16).padStart(6,"0")}"></span>T${d}</span>`).join("");
+  const countOf = k => cur.bars.filter(b=>b.kind===k).length + (cur.features||[]).filter(f=>f.kind===k).length;
+  document.getElementById("toggles").innerHTML = Object.keys(kindSets).map(k =>
+    `<label><input type="checkbox" checked data-kind="${k}"> ${k} <span class="dim">(${countOf(k)})</span></label>`).join("");
+  document.querySelectorAll("#toggles input").forEach(cb =>
+    cb.addEventListener("change", () => kindSets[cb.dataset.kind].forEach(g => g.visible = cb.checked)));
+  document.getElementById("families").innerHTML = resized ? "" : (cur.families || [])
+    .filter(f => f.spacing)
+    .map(f => `<div class="dim">${f.kind === "v-mesh" ? "vert" : "horz"} T${f.d} @ <b style="color:#dde1e6">${f.spacing} mm</b> · ${f.count} bars · z=${f.z}</div>`)
+    .join("");
+  renderSchedule();
+  clearMeasure();
+}
+
+// ---- click-to-measure between two bars
+const raycaster = new THREE.Raycaster();
+let picked = [];
+let measureLine = null;
+function barSegs(b) {
+  const s = [];
+  for (let i = 0; i + 1 < b.pts.length; i++)
+    s.push([new THREE.Vector3(...b.pts[i]), new THREE.Vector3(...b.pts[i+1])]);
+  return s;
+}
+function closestSegSeg(p1, q1, p2, q2) {
+  const d1 = q1.clone().sub(p1), d2 = q2.clone().sub(p2), r = p1.clone().sub(p2);
+  const a = d1.dot(d1), e = d2.dot(d2), f = d2.dot(r);
+  let s, t;
+  const c = d1.dot(r), b = d1.dot(d2), denom = a*e - b*b;
+  s = denom > 1e-9 ? Math.min(1, Math.max(0, (b*f - c*e) / denom)) : 0;
+  t = (b*s + f) / e;
+  if (t < 0) { t = 0; s = Math.min(1, Math.max(0, -c / a)); }
+  else if (t > 1) { t = 1; s = Math.min(1, Math.max(0, (b - c) / a)); }
+  return [p1.clone().addScaledVector(d1, s), p2.clone().addScaledVector(d2, t)];
+}
+function clearMeasure() {
+  for (const p of picked) p.meshes.forEach(mh => mh.userData.mat.emissive && mh.userData.mat.emissive.setHex(0));
+  picked = [];
+  if (measureLine) { scene.remove(measureLine); measureLine = null; }
+  document.getElementById("measure").textContent = "";
+}
+function pickBar(ev) {
+  const r = canvas.getBoundingClientRect();
+  const ndc = new THREE.Vector2(((ev.clientX - r.left) / r.width) * 2 - 1, -((ev.clientY - r.top) / r.height) * 2 + 1);
+  raycaster.setFromCamera(ndc, camera);
+  const hits = raycaster.intersectObjects(barMeshes.filter(mh => mh.parent.visible), false);
+  if (!hits.length) { clearMeasure(); return; }
+  const bar = hits[0].object.userData.bar;
+  if (picked.length === 2) clearMeasure();
+  if (picked.length === 1 && picked[0].bar === bar) return;
+  const meshes = barMeshes.filter(mh => mh.userData.bar === bar);
+  meshes.forEach(mh => mh.userData.mat.emissive.setHex(0x2255ff));
+  picked.push({bar, meshes});
+  if (picked.length === 2) {
+    let best = null, bd = Infinity;
+    for (const s1 of barSegs(picked[0].bar)) for (const s2 of barSegs(picked[1].bar)) {
+      const [pa, pb] = closestSegSeg(s1[0], s1[1], s2[0], s2[1]);
+      const d = pa.distanceTo(pb);
+      if (d < bd) { bd = d; best = [pa, pb]; }
+    }
+    const clear = Math.max(0, bd - picked[0].bar.d/2 - picked[1].bar.d/2);
+    document.getElementById("measure").textContent =
+      `T${picked[0].bar.d} ↔ T${picked[1].bar.d}: ${bd.toFixed(0)} mm c/c (clear ${clear.toFixed(0)} mm)`;
+    measureLine = new THREE.Line(
+      new THREE.BufferGeometry().setFromPoints(best),
+      new THREE.LineBasicMaterial({color: 0x7ec8ff}));
+    scene.add(measureLine);
+  }
+}
+let downAt = null;
+canvas.addEventListener("pointerdown", e => { downAt = [e.clientX, e.clientY]; });
+canvas.addEventListener("pointerup", e => {
+  if (downAt && Math.hypot(e.clientX - downAt[0], e.clientY - downAt[1]) < 5) pickBar(e);
+  downAt = null;
+});
+
+// ---- DXF export (R12, 3D wireframe: centerlines + outline + features)
+function dxfOf(m) {
+  const L = [];
+  const push = (...a) => { for (const v of a) L.push(String(v)); };
+  const f = v => (+v).toFixed(2);
+  push(0,"SECTION",2,"HEADER",9,"$ACADVER",1,"AC1009",0,"ENDSEC");
+  push(0,"SECTION",2,"TABLES",0,"TABLE",2,"LAYER",70,4);
+  for (const [n,c] of [["A-WALL",113],["S-RBAR",171],["A-GENM",13],["S-BEAM",12]])
+    push(0,"LAYER",2,n,70,0,62,c,6,"CONTINUOUS");
+  push(0,"ENDTAB",0,"ENDSEC",0,"SECTION",2,"ENTITIES");
+  const line = (lay,a,b) => push(0,"LINE",8,lay,10,f(a[0]),20,f(a[1]),30,f(a[2]),11,f(b[0]),21,f(b[1]),31,f(b[2]));
+  const boxEdges = (lay,x0,y0,z0,x1,y1,z1) => {
+    const c = [[x0,y0,z0],[x1,y0,z0],[x1,y1,z0],[x0,y1,z0],[x0,y0,z1],[x1,y0,z1],[x1,y1,z1],[x0,y1,z1]];
+    for (const [i,j] of [[0,1],[1,2],[2,3],[3,0],[4,5],[5,6],[6,7],[7,4],[0,4],[1,5],[2,6],[3,7]])
+      line(lay, c[i], c[j]);
+  };
+  boxEdges("A-WALL", 0, 0, 0, m.width, m.height, m.thickness);
+  for (const lp of m.openings || [])
+    for (const z of [0, m.thickness])
+      for (let i = 0; i < lp.length; i++) {
+        const a = lp[i], b = lp[(i+1)%lp.length];
+        line("A-WALL", [a[0],a[1],z], [b[0],b[1],z]);
+      }
+  for (const b of m.bars)
+    for (let i = 0; i + 1 < b.pts.length; i++) line("S-RBAR", b.pts[i], b.pts[i+1]);
+  for (const ft of m.features || []) {
+    if (ft.kind === "sleeve" && ft.center) {
+      for (const z of [0, m.thickness])
+        push(0,"CIRCLE",8,"A-WALL",10,f(ft.center[0]),20,f(ft.center[1]),30,f(z),40,f(ft.r));
+    } else if (ft.box) {
+      const lay = (ft.kind === "corbel" || ft.kind === "embed") ? "S-BEAM" : "A-GENM";
+      boxEdges(lay, ...ft.box);
+    }
+  }
+  push(0,"ENDSEC",0,"EOF");
+  return L.join("\r\n") + "\r\n";
+}
+
+// ---- report export
+function reportOf() {
+  const mA = cur, mB = resized;
+  const sA = schedOf(mA), cA = concreteOf(mA);
+  const sB = mB ? schedOf(mB) : null, cB = mB ? concreteOf(mB) : null;
+  const tbl = (s, m, c) => `
+    <table><tr><th>Bar</th><th>Count</th><th>Length (m)</th><th>kg/m</th><th>Weight (kg)</th></tr>
+    ${s.rows.map(r => `<tr><td>T${r.d}</td><td>${r.n}</td><td>${(r.len/1000).toFixed(1)}</td><td>${(r.d*r.d/162).toFixed(3)}</td><td>${r.w.toFixed(2)}</td></tr>`).join("")}
+    <tr class="tt"><td>Total steel</td><td>${s.totN}</td><td>${(s.totL/1000).toFixed(1)}</td><td></td><td>${s.totW.toFixed(2)}</td></tr>
+    <tr><td colspan=4>Concrete ${c.vol.toFixed(2)} m³ @ ${CONCRETE_DENSITY} kg/m³</td><td>${c.wt.toFixed(0)}</td></tr>
+    <tr class="tt"><td colspan=4>Element weight</td><td>${(s.totW + c.wt).toFixed(0)}</td></tr></table>`;
+  const feats = {};
+  for (const ft of mA.features || []) {
+    const key = ft.label || ft.kind;
+    feats[key] = (feats[key] || 0) + 1;
+  }
+  const featRows = Object.entries(feats).map(([k,n]) => `<tr><td>${k}</td><td>${n}</td></tr>`).join("");
+  const cmp = mB ? `
+    <h2>Comparison</h2>
+    <table><tr><th></th><th>Original</th><th>Modified</th><th>&Delta;</th></tr>
+    <tr><td>Size (mm)</td><td>${Math.round(mA.width)}×${Math.round(mA.height)}×${Math.round(mA.thickness)}</td>
+        <td>${Math.round(mB.width)}×${Math.round(mB.height)}×${Math.round(mB.thickness)}</td><td></td></tr>
+    <tr><td>Bars</td><td>${sA.totN}</td><td>${sB.totN}</td><td>${sB.totN - sA.totN}</td></tr>
+    <tr><td>Steel (kg)</td><td>${sA.totW.toFixed(1)}</td><td>${sB.totW.toFixed(1)}</td><td>${(sB.totW-sA.totW).toFixed(1)}</td></tr>
+    <tr><td>Concrete (kg)</td><td>${cA.wt.toFixed(0)}</td><td>${cB.wt.toFixed(0)}</td><td>${(cB.wt-cA.wt).toFixed(0)}</td></tr>
+    <tr class="tt"><td>Element weight (kg)</td><td>${(sA.totW+cA.wt).toFixed(0)}</td><td>${(sB.totW+cB.wt).toFixed(0)}</td>
+        <td>${(sB.totW+cB.wt-sA.totW-cA.wt).toFixed(0)}</td></tr></table>` : "";
+  return `<!doctype html><html><head><meta charset="utf-8"><title>${mA.name} — rebar report</title>
+<style>body{font:14px/1.5 -apple-system,"Segoe UI",sans-serif;color:#222;max-width:820px;margin:32px auto;padding:0 16px}
+h1{font-size:20px}h2{font-size:15px;margin-top:26px}table{border-collapse:collapse;margin:8px 0}
+th,td{border:1px solid #999;padding:4px 12px;text-align:right;font-size:13px}td:first-child,th:first-child{text-align:left}
+th{background:#eee}tr.tt td{font-weight:700;border-top:2px solid #444}.dim{color:#666;font-size:12px}</style></head><body>
+<h1>${mA.name} — Reinforcement report</h1>
+<div class="dim">Generated ${new Date().toLocaleString()} · unit weight = d²/162 kg/m · reconstructed from shop drawing</div>
+<h2>Bar schedule — original ${Math.round(mA.width)}×${Math.round(mA.height)}×${Math.round(mA.thickness)} mm</h2>
+${tbl(sA, mA, cA)}
+${mB ? `<h2>Bar schedule — modified ${Math.round(mB.width)}×${Math.round(mB.height)}×${Math.round(mB.thickness)} mm</h2>` + tbl(sB, mB, cB) : ""}
+${cmp}
+<h2>Cast-in items (original)</h2>
+<table><tr><th>Type</th><th>Count</th></tr>${featRows || "<tr><td colspan=2>none</td></tr>"}</table>
+${sA.excluded ? `<div class="dim">${sA.excluded} lone unmatched pairing(s) excluded from schedules.</div>` : ""}
+</body></html>`;
+}
+
+function download(name, text, mime) {
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([text], {type: mime}));
+  a.download = name;
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 5000);
+}
+
+// ---- tools
+const w2in = document.getElementById("w2"), h2in = document.getElementById("h2");
+document.getElementById("applyBtn").onclick = () => {
+  const W2 = Math.min(30000, Math.max(300, +w2in.value || cur.width));
+  const H2 = Math.min(30000, Math.max(300, +h2in.value || cur.height));
+  resized = (Math.abs(W2-cur.width) < 1 && Math.abs(H2-cur.height) < 1) ? null : resizeModel(cur, W2, H2);
+  buildScene();
+};
+document.getElementById("resetBtn").onclick = () => {
+  resized = null;
+  w2in.value = Math.round(cur.width); h2in.value = Math.round(cur.height);
+  buildScene();
+};
+document.getElementById("dxfBtn").onclick = () => {
+  const m = resized || cur;
+  download(`${m.name}_${Math.round(m.width)}x${Math.round(m.height)}.dxf`, dxfOf(m), "image/vnd.dxf");
+  document.getElementById("dlNote").textContent = resized ? "exported: modified geometry" : "exported: original geometry";
+};
+document.getElementById("repBtn").onclick = () => {
+  const m = resized || cur;
+  download(`${m.name}_report_${Math.round(m.width)}x${Math.round(m.height)}.html`, reportOf(), "text/html");
+};
+
+// ---- panel switcher
+const bar = document.getElementById("panelbar");
+MODELS.forEach((m, i) => {
+  const b = document.createElement("button");
+  b.textContent = m.name;
+  b.onclick = () => {
+    document.querySelectorAll("#panelbar button").forEach(x => x.classList.remove("on"));
+    b.classList.add("on");
+    cur = m; resized = null;
+    w2in.value = Math.round(m.width); h2in.value = Math.round(m.height);
+    buildScene();
+  };
+  bar.appendChild(b);
+  const want = decodeURIComponent(location.hash.slice(1));
+  if (want ? m.name === want : i === 0) b.onclick();
+});
+// ?w=&h= applies a resize on load (shareable / testable)
+const qp = new URLSearchParams(location.search);
+if (qp.get("w") || qp.get("h")) {
+  w2in.value = qp.get("w") || Math.round(cur.width);
+  h2in.value = qp.get("h") || Math.round(cur.height);
+  document.getElementById("applyBtn").onclick();
+}
+
+function resize() {
+  const w = canvas.clientWidth, h = canvas.clientHeight;
+  renderer.setSize(w, h, false);
+  camera.aspect = w / h;
+  camera.updateProjectionMatrix();
+}
+window.addEventListener("resize", resize);
+resize(); applyCam();
+renderer.setAnimationLoop(() => renderer.render(scene, camera));
+</script>

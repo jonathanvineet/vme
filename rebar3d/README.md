@@ -40,6 +40,23 @@ from its reinforcement DWG drawing.
 8. **Export**: per-panel model JSON, orthographic projection PNGs, and a
    self-contained three.js viewer (`viewer.html`).
 
+## Viewer
+
+- Bar Schedule (bottom right): per diameter — count, length, unit weight
+  (d²/162 kg/m) and total; concrete weight at 2500 kg/m³. Lone unmatched
+  pairings are excluded.
+- **Resize module** (top right): enter a new W×H and apply — a split view
+  shows the original (left) next to the modified panel (right). Mesh
+  families are re-spaced at their drawn pitch (bar counts change with the
+  size; end zones keep their tighter pitch), features/openings scale, and
+  the schedule shows original vs modified steel + concrete weights.
+- **⬇ DXF**: downloads the current (modified if resized) geometry as an
+  R12 DXF — 3D bar centerlines on `S-RBAR`, outline + sleeve circles on
+  `A-WALL`, corbels/embeds on `S-BEAM`, anchors/loops on `A-GENM`.
+- **⬇ report**: standalone HTML report with the geometry, bar schedules
+  (original and modified), weight comparison, and cast-in item counts.
+- `viewer.html?w=3000&h=2930#PW-GF-09` applies a resize on load.
+
 ## Run
 
 ```sh
