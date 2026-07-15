@@ -57,6 +57,31 @@ from its reinforcement DWG drawing.
   (original and modified), weight comparison, and cast-in item counts.
 - `viewer.html?w=3000&h=2930#PW-GF-09` applies a resize on load.
 
+## Camera overlay (aroverlay.py)
+
+Overlays the reconstructed cage on a live camera view of a table/casting
+bed, at a drawing scale (default 1:20):
+
+```sh
+python3 aroverlay.py out/PW-GF-09.json --marker-mm 100        # ArUco mode
+python3 aroverlay.py out/PW-GF-09.json --height 5ft --fov 60  # no marker
+```
+
+It uses the Lenovo webcam by default, opened **by name** through
+ffmpeg/avfoundation (OpenCV's macOS camera indices are unreliable). Pass
+`--camera 0` / `--camera facetime` to use another device.
+
+The scale is picked automatically: once the surface is registered, the
+panel is fitted to ~70% of the view and snapped to a standard drawing
+scale (1:5, 1:10, 1:20 …) — raise the camera and press `a` to re-fit at
+a bigger scale. `--scale 20` forces a fixed one.
+
+With a printed 4x4_50 ArUco marker of known size flat on the surface, the
+marker pose gives the surface plane, the exact mm/px and the camera height
+(shown in the HUD); the model tracks the marker. Without a marker, give the
+stand height and lens FOV and the overlay assumes a straight-down view.
+Drag to move, `r`/`e` rotate, `[` `]` nudge scale, `s` saves a frame.
+
 ## Run
 
 ```sh
