@@ -18,7 +18,7 @@ import re
 import statistics
 from dataclasses import dataclass, field
 
-from .extract import Bar2D, extract_bars, snap_diameter, wall_outline
+from .extract import Bar2D, _Seg, extract_bars, snap_diameter, wall_outline
 from .views import View
 
 AXIS_TOL = math.radians(3)
@@ -541,6 +541,88 @@ def _synthesize_ties(bars: list[Bar3D], elev_ents, thickness: float) -> list[Bar
     return bars + out
 
 
+_LABELLED_SINGLE_RE = re.compile(r"(\d+)\s*-\s*T(\d+)[^\d]*CRACK\s*BAR", re.IGNORECASE)
+
+
+def _synthesize_labelled_singles(bars: list[Bar3D], elev_ents, x0: float, y0: float, thickness: float) -> list[Bar3D]:
+    """Bars drawn as a single annotation-style centerline, not a to-scale
+    double-line outline -- confirmed directly for "N -T{d} ... CRACK BAR"
+    callouts: the geometry near each label is a *single* dashed diagonal
+    line (multiple short collinear segments, no parallel second rail), so
+    pair_lines' gap-width diameter inference structurally cannot see it --
+    there's no gap to measure. Merge same-line dashes into full centerlines
+    (the same idea as pair_lines' own rail merging, applied to unpaired
+    single lines) and take the diameter directly from the label text
+    instead of inferring it from geometry that was never drawn to convey it.
+    """
+    callouts = []
+    for e in elev_ents:
+        if e.kind not in ("TEXT", "MTEXT"):
+            continue
+        m = _LABELLED_SINGLE_RE.search(e.text or "")
+        if m:
+            cx, cy = (e.bbox[0] + e.bbox[2]) / 2, (e.bbox[1] + e.bbox[3]) / 2
+            callouts.append((int(m.group(1)), int(m.group(2)), cx, cy))
+    if not callouts:
+        return bars
+
+    segs = []
+    for e in elev_ents:
+        if e.layer != "S-RBAR" or e.kind != "LINE":
+            continue
+        s = _Seg(e.points[0], e.points[1])
+        if s.len >= 6.0:
+            segs.append(s)
+
+    # diagonal only -- axis-aligned lines are the regular mesh, already
+    # handled by the paired double-line path
+    rails: dict[tuple, list[_Seg]] = {}
+    for s in segs:
+        deg = math.degrees(s.angle)
+        if deg < 20 or deg > 160 or abs(deg - 90) < 20:
+            continue
+        rails.setdefault((round(s.angle / 0.02), round(s.noff / 3)), []).append(s)
+
+    merged: list[tuple[float, float, float, float]] = []
+    for group in rails.values():
+        group.sort(key=lambda s: s.t0)
+        angle = group[0].angle
+        noff = sum(s.noff for s in group) / len(group)
+        cur0, cur1 = group[0].t0, group[0].t1
+        for s in group[1:]:
+            if s.t0 <= cur1 + 60.0:
+                cur1 = max(cur1, s.t1)
+            else:
+                merged.append((angle, noff, cur0, cur1))
+                cur0, cur1 = s.t0, s.t1
+        merged.append((angle, noff, cur0, cur1))
+    merged = [r for r in merged if r[3] - r[2] >= 300.0]  # drop stray short fragments
+
+    used = [False] * len(merged)
+    out: list[Bar3D] = []
+    for count, dia, ccx, ccy in callouts:
+        cand = []
+        for i, (angle, noff, t0, t1) in enumerate(merged):
+            if used[i]:
+                continue
+            ux, uy = math.cos(angle), math.sin(angle)
+            mt = (t0 + t1) / 2
+            mx, my = ux * mt - uy * noff, uy * mt + ux * noff
+            cand.append((math.dist((mx, my), (ccx, ccy)), i))
+        cand.sort()
+        for d, i in cand[:count]:
+            if d > 1200.0:
+                continue
+            used[i] = True
+            angle, noff, t0, t1 = merged[i]
+            ux, uy = math.cos(angle), math.sin(angle)
+            p0 = (ux * t0 - uy * noff - x0, uy * t0 + ux * noff - y0)
+            p1 = (ux * t1 - uy * noff - x0, uy * t1 + ux * noff - y0)
+            z = thickness / 2
+            out.append(Bar3D([(p0[0], p0[1], z), (p1[0], p1[1], z)], dia, "diagonal", "synthesized"))
+    return bars + out
+
+
 def reconstruct_panel(name: str, views: list[View]) -> Panel:
     elev = views[0]
     bbox, loops = wall_outline(elev.ents)
@@ -703,6 +785,7 @@ def reconstruct_panel(name: str, views: list[View]) -> Panel:
 
     bars = _fold_ubars(bars, sections)
     bars = _synthesize_ties(bars, elev.ents, thickness)
+    bars = _synthesize_labelled_singles(bars, elev.ents, x0, y0, thickness)
 
     # ---- cast-in features: sleeves, corbels, embeds, anchors, wire loops
     features: list[Feature] = []
