@@ -361,7 +361,9 @@ def _fold_ubars(bars: list[Bar3D], sections: list[SectionInfo]) -> list[Bar3D]:
     for s in sections:
         kind = "v-mesh" if s.role == "vertical" else "h-mesh"
         for pos, za, zb, sgn, dia in s.ubars:
-            profiles[kind].append((pos, min(za, zb), max(za, zb), sgn, snap_diameter(dia)))
+            sdia = snap_diameter(dia)
+            if sdia is not None:
+                profiles[kind].append((pos, min(za, zb), max(za, zb), sgn, sdia))
     if not profiles["v-mesh"] and not profiles["h-mesh"]:
         return bars
 
@@ -469,6 +471,8 @@ def reconstruct_panel(name: str, views: list[View]) -> Panel:
     zs_seen: list[float] = []
     for b in bars2d:
         dia = snap_diameter(b.diameter)
+        if dia is None:
+            continue
         orient = _orientation(b)
         r = dia / 2
         zs: list[float] = []
@@ -499,6 +503,8 @@ def reconstruct_panel(name: str, views: list[View]) -> Panel:
         if not (x0 - 5 <= cx <= x1 + 5 and y0 - 5 <= cy <= y1 + 5):
             continue
         dia = snap_diameter(2 * e.radius)
+        if dia is None:
+            continue
         best, best_d = None, 60.0
         for pos, pz0, pz1, pdia in profiles:
             if abs(pdia - 2 * e.radius) > 3:

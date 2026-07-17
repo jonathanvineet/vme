@@ -16,8 +16,16 @@ STD_DIAMETERS = (6, 8, 10, 12, 16, 20, 25, 32)
 MIN_DIA, MAX_DIA = 5.0, 34.0
 
 
-def snap_diameter(d: float) -> int:
-    return min(STD_DIAMETERS, key=lambda s: abs(s - d))
+def snap_diameter(d: float, tol: float = 2.0) -> int | None:
+    """Nearest standard bar diameter, or None if d isn't actually one.
+
+    Un-gated nearest-snap used to force every stray gap (crossing dimension
+    witness lines, mis-paired rails, noise) into a real diameter — including
+    ones absent from the drawing's own bar schedule (fabricated T25/T32
+    "bars"). A gap has to land within `tol` of a standard size to count.
+    """
+    best = min(STD_DIAMETERS, key=lambda s: abs(s - d))
+    return best if abs(best - d) <= tol else None
 
 
 @dataclass
