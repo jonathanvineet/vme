@@ -1,0 +1,15 @@
+callout                      expected  found   nearest  status
+6 -T12                              6      0         -  SHORT
+6 -T12                              6      0         -  SHORT
+2 -T16                              2      0         -  SHORT
+2 -T12 -Crack Bar                   2      0         -  SHORT
+1 -T12                              1      1     687mm  OK
+1 -T12                              1      1     753mm  OK
+2 -T16                              2      2     609mm  OK
+2 -T16                              2      2     740mm  OK
+2 -T16                              2      2     758mm  OK
+1 -T12                              1      2     670mm  OVER
+2 -T12 -Crack Bar                   2      6     406mm  OVER
+1 -T12                              1      6     247mm  OVER
+1 -T12                              1      6     291mm  OVER
+2 -T12 -Crack Bar                   2      8     257mm  OVER

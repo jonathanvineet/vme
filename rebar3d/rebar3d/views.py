@@ -54,7 +54,13 @@ def cluster_views(ents: list[Ent], margin: float = 120.0, cell: float = 250.0) -
     Each entity's bbox is inflated by `margin`; entities whose inflated boxes
     share a grid cell are merged. Views come back sorted by rebar count desc.
     """
-    geo = [e for e in ents if e.layer.startswith(GEOM_LAYERS)]
+    # `layer.startswith` is a prefix match, so an annotation/identifier
+    # layer like "S-RBAR-IDEN" (bar-mark text callouts, e.g. "6 -T12")
+    # also matches "S-RBAR" — excluding TEXT/MTEXT explicitly keeps those
+    # labels out of the geometry clustering (where their zero-size bbox,
+    # often hundreds of mm from the real bar lines, orphaned them into
+    # their own singleton view) so they attach as annotation instead.
+    geo = [e for e in ents if e.layer.startswith(GEOM_LAYERS) and e.kind not in ("TEXT", "MTEXT")]
     uf = _UF(len(geo))
     grid: dict[tuple[int, int], int] = {}
     for i, e in enumerate(geo):
@@ -77,15 +83,21 @@ def cluster_views(ents: list[Ent], margin: float = 120.0, cell: float = 250.0) -
 
     views = sorted(groups.values(), key=lambda v: v.count("S-RBAR"), reverse=True)
 
-    # attach annotation entities (text etc.) to the view whose bbox contains them
+    # attach annotation entities (text etc.) to the view whose bbox contains
+    # them. Bar-mark callouts ("6 -T12") commonly sit a few hundred mm from
+    # the geometry they label (leader gap, or drawn above the hatch) — wider
+    # than the tight margin used to separate views from each other, so use
+    # a more generous one here.
+    text_margin = 1000.0
     boxes = [v.bbox for v in views]
     for e in ents:
-        if e.layer.startswith(GEOM_LAYERS):
+        if e.layer.startswith(GEOM_LAYERS) and e.kind not in ("TEXT", "MTEXT"):
             continue
         bx0, by0, bx1, by1 = e.bbox
         cx, cy = (bx0 + bx1) / 2, (by0 + by1) / 2
+        m = text_margin if e.kind in ("TEXT", "MTEXT") else margin
         for v, (x0, y0, x1, y1) in zip(views, boxes):
-            if x0 - margin <= cx <= x1 + margin and y0 - margin <= cy <= y1 + margin:
+            if x0 - m <= cx <= x1 + m and y0 - m <= cy <= y1 + m:
                 v.ents.append(e)
                 break
     return views

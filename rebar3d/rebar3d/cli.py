@@ -11,7 +11,9 @@ import argparse
 import sys
 from pathlib import Path
 
+from .crosscheck import cross_check, format_report, parse_count_callouts
 from .export import write_json, write_projections, write_viewer
+from .extract import extract_bars
 from .loader import dwg_to_dxf, load_entities
 from .reconstruct import reconstruct_panel
 from .views import cluster_views
@@ -37,6 +39,24 @@ def main(argv=None) -> int:
         print(f"{name}: {panel.width:.0f}x{panel.height:.0f}x{panel.thickness:.0f} mm, "
               f"{panel.stats['bars']} bars ({panel.stats['z_from_sections']} with section depth, "
               f"{panel.stats['sections_found']} sections) z-planes={panel.stats['z_planes']}")
+
+        # Cross-check reconstructed bars against the drawing's own "N -T{d}"
+        # count callouts — an independent sanity check against the source
+        # text, separate from (and not fed into) the geometry-only
+        # reconstruction above. SHORT entries are the trustworthy signal
+        # (zero/too-few bars found near a labelled detail); OVER entries
+        # are inflated whenever labels cluster close together and their
+        # search radii overlap, see crosscheck.py.
+        elev = views[0]
+        callouts = parse_count_callouts(elev.ents)
+        if callouts:
+            bars2d = [b for b in extract_bars(elev.ents) if b.length >= 100.0]
+            results = cross_check(callouts, bars2d)
+            report = format_report(results)
+            (args.out / f"{name}_crosscheck.txt").write_text(report + "\n")
+            n_short = sum(1 for r in results if r.found < r.callout.count)
+            print(f"  crosscheck: {len(callouts)} labelled details, {n_short} short "
+                  f"(see {name}_crosscheck.txt)")
 
     write_viewer(panels, args.out / "viewer.html", title="Rebar 3D Reconstruction")
     print(f"viewer: {args.out / 'viewer.html'}")
