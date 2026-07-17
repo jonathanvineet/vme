@@ -226,8 +226,17 @@ def _merge_collinear(bars: list[Bar2D], tol_off: float = 1.5, tol_gap: float = 6
     return merged + other
 
 
-def chain_bars(bars: list[Bar2D], tol: float = 4.0) -> list[Bar2D]:
-    """Join centerline pieces (lines + bend arcs) whose endpoints coincide."""
+def chain_bars(bars: list[Bar2D], tol: float = 4.0, tol_dia: float = 3.0) -> list[Bar2D]:
+    """Join centerline pieces (lines + bend arcs) whose endpoints coincide.
+
+    Endpoint proximity alone isn't enough: in a dense mesh, unrelated bars
+    of *different* diameters routinely terminate at the same corner/edge
+    (e.g. a T20 and a T12 both ending at the same opening edge). Fusing
+    those blends their diameters into a bogus in-between value — sometimes
+    landing on another real standard size — which silently steals length
+    from two real bars and fabricates a third. Only chain fragments whose
+    diameter is already close to the chain's running average.
+    """
     bars = _merge_collinear(bars)
     used = [False] * len(bars)
 
@@ -245,8 +254,9 @@ def chain_bars(bars: list[Bar2D], tol: float = 4.0) -> list[Bar2D]:
         grew = True
         while grew:
             grew = False
+            cur_dia = sum(dias) / max(sum(wlen), 1e-9)
             for j, c in enumerate(bars):
-                if used[j]:
+                if used[j] or abs(c.diameter - cur_dia) > tol_dia:
                     continue
                 c0, c1 = ends(c)
                 if math.dist(pts[-1], c0) <= tol:
