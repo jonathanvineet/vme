@@ -372,13 +372,18 @@ def _fold_ubars(bars: list[Bar3D], sections: list[SectionInfo]) -> list[Bar3D]:
     the pair through the bend — one wrap makes a U, wraps at both ends
     close the pair into a loop.
 
-    A section cut only ever shows ONE sample of a bend (whichever mesh row
-    it happens to be cut through) — real drawings typically have just a
-    couple of U-bars called out at a specific edge zone, not one per row.
-    Each detected profile is consumed by at most one bar pair (nearest
-    match); without that a single real bend gets stamped onto every mesh
-    row that shares its diameter/edge, fabricating a tall stack of closed
-    loops that renders as an impossible-looking coil/spiral.
+    A profile legitimately applies to many rows when a drawing genuinely
+    calls out "a U-bar at every bar" (e.g. "T8 UBAR @125mm") — confirmed
+    directly: what first looked like a fabrication bug (20 closed loops
+    stacked the full height of PW-GF-02 at one edge, rendering as a
+    coil/spiral in the 3D viewer) turned out, on inspecting the actual
+    data, to be 20 *different* real mesh rows at 20 different Y positions
+    all legitimately wrapping the same physical edge — exactly what the
+    pitch callout describes. A prior version of this function capped how
+    many times one profile could be reused to "fix" that, which instead
+    deleted ~85 other equally legitimate wraps across the panel (u_bars
+    stat dropped from 88 to 5). Reverted — a profile is matched against
+    every row whose end position agrees with it, with no reuse limit.
     """
     profiles: dict[str, list[tuple[float, float, float, float, int]]] = {"v-mesh": [], "h-mesh": []}
     for s in sections:
@@ -389,7 +394,6 @@ def _fold_ubars(bars: list[Bar3D], sections: list[SectionInfo]) -> list[Bar3D]:
                 profiles[kind].append((pos, min(za, zb), max(za, zb), sgn, sdia))
     if not profiles["v-mesh"] and not profiles["h-mesh"]:
         return bars
-    profile_used: dict[str, list[bool]] = {k: [False] * len(v) for k, v in profiles.items()}
 
     out: list[Bar3D] = []
     for kind, axis in (("v-mesh", 1), ("h-mesh", 0)):
@@ -424,15 +428,14 @@ def _fold_ubars(bars: list[Bar3D], sections: list[SectionInfo]) -> list[Bar3D]:
                     # find bend profiles at the pair's shared ends
                     zlo, zhi = min(za, zb), max(za, zb)
                     ends = []
-                    used_pf = profile_used[kind]
-                    for pidx, (pos, pza, pzb, sgn, pdia) in enumerate(profiles[kind]):
-                        if used_pf[pidx] or pdia != dia or abs(pza - zlo) > 15 or abs(pzb - zhi) > 15:
+                    for pos, pza, pzb, sgn, pdia in profiles[kind]:
+                        if pdia != dia or abs(pza - zlo) > 15 or abs(pzb - zhi) > 15:
                             continue
                         e_lo, e_hi = (lo_a + lo_b) / 2, (hi_a + hi_b) / 2
                         if sgn < 0 and abs(pos - e_lo) <= 70:
-                            ends.append(("lo", e_lo, sgn, pidx))
+                            ends.append(("lo", e_lo, sgn))
                         elif sgn > 0 and abs(pos - e_hi) <= 70:
-                            ends.append(("hi", e_hi, sgn, pidx))
+                            ends.append(("hi", e_hi, sgn))
                     if ends:
                         mate = (j, ends, zlo, zhi)
                         break
@@ -442,8 +445,6 @@ def _fold_ubars(bars: list[Bar3D], sections: list[SectionInfo]) -> list[Bar3D]:
                     continue
                 j, ends, zlo, zhi = mate
                 used[i] = used[j] = True
-                for _, _, _, pidx in ends:
-                    profile_used[kind][pidx] = True
                 b = col[j]
                 c = (a.points[0][cross] + b.points[0][cross]) / 2
                 lo = min(lo_a, min(p[axis] for p in b.points))
@@ -468,7 +469,7 @@ def _fold_ubars(bars: list[Bar3D], sections: list[SectionInfo]) -> list[Bar3D]:
                            + [pt(hi, zhi), pt(lo, zhi)] + wrap(lo, -1.0, zhi)
                            + [pt(lo, zlo)])
                 else:
-                    end, at, sgn, _ = ends[0]
+                    end, at, sgn = ends[0]
                     far = hi if end == "lo" else lo
                     pts = ([pt(far, zlo), pt(at, zlo)] + wrap(at, sgn, zlo)
                            + [pt(at, zhi), pt(far, zhi)])
