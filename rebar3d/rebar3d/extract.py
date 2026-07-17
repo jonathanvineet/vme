@@ -226,7 +226,7 @@ def _merge_collinear(bars: list[Bar2D], tol_off: float = 1.5, tol_gap: float = 6
     return merged + other
 
 
-def chain_bars(bars: list[Bar2D], tol: float = 4.0, tol_dia: float = 3.0) -> list[Bar2D]:
+def chain_bars(bars: list[Bar2D], tol: float = 4.0, tol_dia: float = 1.9) -> list[Bar2D]:
     """Join centerline pieces (lines + bend arcs) whose endpoints coincide.
 
     Endpoint proximity alone isn't enough: in a dense mesh, unrelated bars
@@ -235,7 +235,12 @@ def chain_bars(bars: list[Bar2D], tol: float = 4.0, tol_dia: float = 3.0) -> lis
     those blends their diameters into a bogus in-between value — sometimes
     landing on another real standard size — which silently steals length
     from two real bars and fabricates a third. Only chain fragments whose
-    diameter is already close to the chain's running average.
+    diameter is close to the *seed* fragment's diameter — gating against a
+    running average instead lets a chain drift diameter one small hop at a
+    time (T8 -> T10 -> T12, each hop under tolerance even though adjacent
+    standard sizes are only 2mm apart) and land far from where it started.
+    tol_dia is kept under that 2mm floor so it can't bridge two distinct
+    standard sizes, while still absorbing real per-bar gap-measurement noise.
     """
     bars = _merge_collinear(bars)
     used = [False] * len(bars)
@@ -249,14 +254,14 @@ def chain_bars(bars: list[Bar2D], tol: float = 4.0, tol_dia: float = 3.0) -> lis
             continue
         used[i] = True
         pts = list(b.points)
+        seed_dia = b.diameter
         dias = [b.diameter * b.length]
         wlen = [b.length]
         grew = True
         while grew:
             grew = False
-            cur_dia = sum(dias) / max(sum(wlen), 1e-9)
             for j, c in enumerate(bars):
-                if used[j] or abs(c.diameter - cur_dia) > tol_dia:
+                if used[j] or abs(c.diameter - seed_dia) > tol_dia:
                     continue
                 c0, c1 = ends(c)
                 if math.dist(pts[-1], c0) <= tol:
