@@ -16,6 +16,7 @@ from .export import write_json, write_projections, write_viewer
 from .extract import extract_bars
 from .loader import dwg_to_dxf, load_entities
 from .reconstruct import reconstruct_panel
+from .schedule import compare_to_bars, extract_schedule, find_schedule_pdf
 from .views import cluster_views
 
 
@@ -57,6 +58,21 @@ def main(argv=None) -> int:
             n_short = sum(1 for r in results if r.found < r.callout.count)
             print(f"  crosscheck: {len(callouts)} labelled details, {n_short} short "
                   f"(see {name}_crosscheck.txt)")
+
+        # The (R) sheet's own printed Summary Schedule, when present, is
+        # ground truth for weight — independent of how well the geometry
+        # reconstruction above manages to match it. Surface it directly
+        # rather than only reporting the reconstruction's (still
+        # incomplete) self-derived total.
+        pdf = find_schedule_pdf(src)
+        if pdf is not None:
+            rows = extract_schedule(pdf)
+            if rows is not None:
+                report = compare_to_bars(rows, panel.bars)
+                (args.out / f"{name}_schedule.txt").write_text(report + "\n")
+                official_tot = sum(r.weight_kg for r in rows)
+                print(f"  official schedule ({pdf.name}): {official_tot:.1f}kg "
+                      f"(see {name}_schedule.txt for reconstructed vs official per diameter)")
 
     write_viewer(panels, args.out / "viewer.html", title="Rebar 3D Reconstruction")
     print(f"viewer: {args.out / 'viewer.html'}")
