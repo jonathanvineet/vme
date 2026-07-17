@@ -132,7 +132,51 @@ def load_entities(dxf_path: Path, explode_inserts: bool = True) -> list[Ent]:
 
     for e in msp:
         add(e)
-    return ents
+    return _dedupe(ents)
+
+
+def _geom_key(e: Ent):
+    """Rounded geometry signature for exact-duplicate detection."""
+    if e.kind == "LINE":
+        p0, p1 = (round(e.points[0][0], 3), round(e.points[0][1], 3)), \
+                 (round(e.points[1][0], 3), round(e.points[1][1], 3))
+        return (e.kind, e.layer, min(p0, p1), max(p0, p1))
+    if e.kind == "CIRCLE":
+        return (e.kind, e.layer, round(e.center[0], 3), round(e.center[1], 3), round(e.radius, 3))
+    if e.kind == "ARC":
+        return (e.kind, e.layer, round(e.center[0], 3), round(e.center[1], 3), round(e.radius, 3),
+                round(e.start_angle, 2), round(e.end_angle, 2))
+    if e.kind == "LWPOLYLINE":
+        pts = tuple((round(x, 3), round(y, 3)) for x, y in e.points)
+        return (e.kind, e.layer, pts, e.closed)
+    return None
+
+
+def _dedupe(ents: list[Ent]) -> list[Ent]:
+    """Drop exact-duplicate geometry entities.
+
+    Confirmed directly in a live drawing (SS-GF-01): two CIRCLE entities at
+    identical center/radius (differing only in float noise past the 6th
+    decimal), both raw modelspace geometry (not from an INSERT block) --
+    a Revit/DXF export artifact, not anything meaningful in the drawing.
+    Left uncaught, each one becomes its own reconstructed bar, silently
+    doubling that bar's counted weight. Scoped to `bref < 0` (raw
+    geometry) only -- entities exploded from a block instance (bref >= 0)
+    keep their own identity even if two separate instances happen to
+    overlap, since that's a legitimate design choice, not export noise.
+    """
+    seen: set = set()
+    out = []
+    for e in ents:
+        if e.bref >= 0:
+            out.append(e)
+            continue
+        key = _geom_key(e)
+        if key is None or key not in seen:
+            if key is not None:
+                seen.add(key)
+            out.append(e)
+    return out
 
 
 def arc_points(ent: Ent, n: int = 16) -> list[tuple[float, float]]:
