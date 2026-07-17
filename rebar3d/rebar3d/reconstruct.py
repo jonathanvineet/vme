@@ -14,6 +14,7 @@ height) does the same for horizontal bars.
 from __future__ import annotations
 
 import math
+import re
 import statistics
 from dataclasses import dataclass, field
 
@@ -480,6 +481,66 @@ def _fold_ubars(bars: list[Bar3D], sections: list[SectionInfo]) -> list[Bar3D]:
     return bars + out
 
 
+_TIE_RE = re.compile(r"T(\d+)\s*Ties?\s*@\s*(\d+)\s*mm", re.IGNORECASE)
+
+
+def _synthesize_ties(bars: list[Bar3D], elev_ents, thickness: float) -> list[Bar3D]:
+    """Boundary-column stirrup ties, drawn too fragmented to pair as bars.
+
+    A tie wraps a tight cluster of main column bars (e.g. "6 -T12") at a
+    dense, explicitly-called-out pitch ("T8 Ties @100mm") -- confirmed
+    directly: the drawing shows this geometry as hundreds of tiny line
+    fragments in the column zone, many under the 6mm segment-length floor
+    pair_lines requires, so essentially none of it survives as a bar.
+    Rather than trying to chain fragments the drawing itself draws too
+    small to reliably pair, use the structural facts that *are* already
+    reliably known -- the column's main bars are correctly reconstructed
+    (confirmed: PW-GF-09's two "6 -T12" columns are v-mesh bars spanning
+    the correct full column height) -- to synthesize the tie loops
+    directly: a closed rectangle wrapping the column's bar envelope, at
+    the callout's pitch, repeated across the column's actual height.
+    """
+    callouts = []
+    for e in elev_ents:
+        if e.kind not in ("TEXT", "MTEXT"):
+            continue
+        m = _TIE_RE.search(e.text or "")
+        if m:
+            callouts.append((int(m.group(1)), int(m.group(2))))
+    if not callouts:
+        return bars
+    dia, pitch = max(set(callouts), key=callouts.count)
+
+    vmesh = [b for b in bars if b.kind == "v-mesh" and b.diameter == dia]
+    if not vmesh:
+        return bars
+    xs = sorted(set(b.points[0][0] for b in vmesh))
+    clusters: list[list[float]] = []
+    for x in xs:
+        if clusters and x - clusters[-1][-1] <= 250.0:
+            clusters[-1].append(x)
+        else:
+            clusters.append([x])
+
+    cover = 30.0
+    out: list[Bar3D] = []
+    for cl in clusters:
+        if len(cl) < 4:  # a handful of scattered bars isn't a column detail
+            continue
+        x_lo, x_hi = min(cl) - cover, max(cl) + cover
+        col_bars = [b for b in vmesh if min(cl) <= b.points[0][0] <= max(cl)]
+        ys = [p[1] for b in col_bars for p in b.points]
+        y_lo, y_hi = min(ys), max(ys)
+        z_lo, z_hi = cover, thickness - cover
+        n = max(round((y_hi - y_lo) / pitch) + 1, 1)
+        for i in range(n):
+            y = y_lo + i * (y_hi - y_lo) / max(n - 1, 1)
+            pts = [(x_lo, y, z_lo), (x_hi, y, z_lo), (x_hi, y, z_hi),
+                   (x_lo, y, z_hi), (x_lo, y, z_lo)]
+            out.append(Bar3D(pts, dia, "tie", "synthesized"))
+    return bars + out
+
+
 def reconstruct_panel(name: str, views: list[View]) -> Panel:
     elev = views[0]
     bbox, loops = wall_outline(elev.ents)
@@ -641,6 +702,7 @@ def reconstruct_panel(name: str, views: list[View]) -> Panel:
             bar.z_source = src
 
     bars = _fold_ubars(bars, sections)
+    bars = _synthesize_ties(bars, elev.ents, thickness)
 
     # ---- cast-in features: sleeves, corbels, embeds, anchors, wire loops
     features: list[Feature] = []
