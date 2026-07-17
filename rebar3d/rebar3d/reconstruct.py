@@ -270,15 +270,30 @@ def _z_lookup(sections: list[SectionInfo], role: str, coord: float, radius: floa
     """All depths at which section circles match `coord` with this radius.
 
     The same bar position usually shows a circle near each face (mesh on
-    both sides); returning every matched depth lets the caller emit one
-    bar per layer instead of collapsing the pair into a single bar.
+    both sides), and occasionally a genuine third/fourth layer (confirmed:
+    one T8 position independently shows 3 real depths from 2 sections
+    each) — returning every matched depth lets the caller emit one bar per
+    layer instead of collapsing them into fewer bars than actually exist.
+
+    The radius match used to allow +-2.5mm, wide enough to also match a
+    *different* diameter's circles as if they were this one — adjacent
+    standard bar radii are as little as 1mm apart (T8=4, T10=5, T12=6).
+    Confirmed directly: a T12 bar was matching 5 depths where 3 independent
+    section cuts agreed exactly on just 2 (46.9mm and 113.1mm) once
+    filtered to its own radius; the other 2 were real depths belonging to
+    a different diameter's own bar at the same position. That's pure
+    contamination, unlike genuine multi-layer bars (still radius-clean at
+    any tolerance) — so this fix removes real cross-diameter bleed without
+    capping how many depths a single diameter can legitimately have.
+    Section circles are drawn at essentially exact radii in this DXF
+    (floating-point noise only), so a tight tolerance costs nothing.
     """
     zs = []
     for s in sections:
         if s.role != role:
             continue
         for c, z, r in s.circles:
-            if abs(r - radius) <= 2.5 and abs(c - coord) <= tol:
+            if abs(r - radius) <= 0.5 and abs(c - coord) <= tol:
                 zs.append(z)
     return _cluster_planes(zs, tol=8.0) if zs else []
 
