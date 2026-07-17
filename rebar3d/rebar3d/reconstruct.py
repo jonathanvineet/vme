@@ -504,6 +504,59 @@ def reconstruct_panel(name: str, views: list[View]) -> Panel:
                 pts = [(px - x0, py - y0, z) for px, py in b.points]
                 bars.append(Bar3D(pts, dia, kind, "section"))
 
+    # Mesh bars the elevation's double-line pairing never independently
+    # found at all — not "missing depth", missing entirely, usually because
+    # a real bar's rails got outcompeted or absorbed during the pairing of
+    # a much denser overlapping mesh nearby. A section cut still shows them
+    # as a plain circle (front+back pair) even though nothing in the
+    # elevation was ever recognised as a candidate bar there. Every prior
+    # use of section data in this function only adds *depth* to a bar the
+    # elevation already found; originate a new bar outright when a
+    # position/diameter shows a genuine front+back circle pair with no
+    # matching elevation bar nearby at all.
+    for role, kind, axis_len in (("horizontal", "v-mesh", ph), ("vertical", "h-mesh", pw)):
+        covered: dict[int, list[float]] = {}
+        for bar in bars:
+            if bar.kind != kind:
+                continue
+            pos = bar.points[0][0] if kind == "v-mesh" else bar.points[0][1]
+            covered.setdefault(bar.diameter, []).append(pos)
+
+        hits: dict[int, list[tuple[float, float, int]]] = {}
+        for si, s in enumerate(sections):
+            if s.role != role:
+                continue
+            for c, z, r in s.circles:
+                dia = snap_diameter(2 * r)
+                if dia is not None:
+                    hits.setdefault(dia, []).append((c, z, si))
+
+        for dia, pts in hits.items():
+            pts.sort()
+            clusters: list[list[tuple[float, float, int]]] = []
+            for c, z, si in pts:
+                if clusters and c - clusters[-1][-1][0] <= 15.0:
+                    clusters[-1].append((c, z, si))
+                else:
+                    clusters.append([(c, z, si)])
+            existing = covered.setdefault(dia, [])
+            for cl in clusters:
+                if len({si for _, _, si in cl}) < 2:
+                    continue  # one section's sample alone is too easy to be noise
+                cpos = sum(c for c, _, _ in cl) / len(cl)
+                if any(abs(cpos - e) <= 40.0 for e in existing):
+                    continue  # an elevation bar already covers this position
+                zs = _cluster_planes([z for _, z, _ in cl], tol=8.0)
+                if len(zs) < 2:
+                    continue  # need an agreeing front+back pair, not one stray circle
+                for z in zs:
+                    n_section_z += 1
+                    zs_seen.append(z)
+                    pts3 = ([(cpos, 0.0, z), (cpos, axis_len, z)] if kind == "v-mesh"
+                            else [(0.0, cpos, z), (axis_len, cpos, z)])
+                    bars.append(Bar3D(pts3, dia, kind, "section-origin"))
+                existing.append(cpos)
+
     # bars drawn as circles in the elevation are perpendicular to the panel
     # face: the N-series projecting bars. Their protrusion profile (how far
     # out of which face) comes from the matching section.
