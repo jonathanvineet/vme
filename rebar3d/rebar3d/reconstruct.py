@@ -356,6 +356,14 @@ def _fold_ubars(bars: list[Bar3D], sections: list[SectionInfo]) -> list[Bar3D]:
     each face. Where a bar pair's common end sits at a bend profile, connect
     the pair through the bend — one wrap makes a U, wraps at both ends
     close the pair into a loop.
+
+    A section cut only ever shows ONE sample of a bend (whichever mesh row
+    it happens to be cut through) — real drawings typically have just a
+    couple of U-bars called out at a specific edge zone, not one per row.
+    Each detected profile is consumed by at most one bar pair (nearest
+    match); without that a single real bend gets stamped onto every mesh
+    row that shares its diameter/edge, fabricating a tall stack of closed
+    loops that renders as an impossible-looking coil/spiral.
     """
     profiles: dict[str, list[tuple[float, float, float, float, int]]] = {"v-mesh": [], "h-mesh": []}
     for s in sections:
@@ -366,6 +374,7 @@ def _fold_ubars(bars: list[Bar3D], sections: list[SectionInfo]) -> list[Bar3D]:
                 profiles[kind].append((pos, min(za, zb), max(za, zb), sgn, sdia))
     if not profiles["v-mesh"] and not profiles["h-mesh"]:
         return bars
+    profile_used: dict[str, list[bool]] = {k: [False] * len(v) for k, v in profiles.items()}
 
     out: list[Bar3D] = []
     for kind, axis in (("v-mesh", 1), ("h-mesh", 0)):
@@ -400,14 +409,15 @@ def _fold_ubars(bars: list[Bar3D], sections: list[SectionInfo]) -> list[Bar3D]:
                     # find bend profiles at the pair's shared ends
                     zlo, zhi = min(za, zb), max(za, zb)
                     ends = []
-                    for pos, pza, pzb, sgn, pdia in profiles[kind]:
-                        if pdia != dia or abs(pza - zlo) > 15 or abs(pzb - zhi) > 15:
+                    used_pf = profile_used[kind]
+                    for pidx, (pos, pza, pzb, sgn, pdia) in enumerate(profiles[kind]):
+                        if used_pf[pidx] or pdia != dia or abs(pza - zlo) > 15 or abs(pzb - zhi) > 15:
                             continue
                         e_lo, e_hi = (lo_a + lo_b) / 2, (hi_a + hi_b) / 2
                         if sgn < 0 and abs(pos - e_lo) <= 70:
-                            ends.append(("lo", e_lo, sgn))
+                            ends.append(("lo", e_lo, sgn, pidx))
                         elif sgn > 0 and abs(pos - e_hi) <= 70:
-                            ends.append(("hi", e_hi, sgn))
+                            ends.append(("hi", e_hi, sgn, pidx))
                     if ends:
                         mate = (j, ends, zlo, zhi)
                         break
@@ -417,6 +427,8 @@ def _fold_ubars(bars: list[Bar3D], sections: list[SectionInfo]) -> list[Bar3D]:
                     continue
                 j, ends, zlo, zhi = mate
                 used[i] = used[j] = True
+                for _, _, _, pidx in ends:
+                    profile_used[kind][pidx] = True
                 b = col[j]
                 c = (a.points[0][cross] + b.points[0][cross]) / 2
                 lo = min(lo_a, min(p[axis] for p in b.points))
@@ -441,7 +453,7 @@ def _fold_ubars(bars: list[Bar3D], sections: list[SectionInfo]) -> list[Bar3D]:
                            + [pt(hi, zhi), pt(lo, zhi)] + wrap(lo, -1.0, zhi)
                            + [pt(lo, zlo)])
                 else:
-                    end, at, sgn = ends[0]
+                    end, at, sgn, _ = ends[0]
                     far = hi if end == "lo" else lo
                     pts = ([pt(far, zlo), pt(at, zlo)] + wrap(at, sgn, zlo)
                            + [pt(at, zhi), pt(far, zhi)])
