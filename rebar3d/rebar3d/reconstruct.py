@@ -485,21 +485,27 @@ def _fold_ubars(bars: list[Bar3D], sections: list[SectionInfo]) -> list[Bar3D]:
 _TIE_RE = re.compile(r"T(\d+)\s*Ties?\s*@\s*(\d+)\s*mm", re.IGNORECASE)
 
 
-def _synthesize_ties(bars: list[Bar3D], elev_ents, thickness: float) -> list[Bar3D]:
+def _synthesize_ties(bars: list[Bar3D], elev_ents, thickness: float,
+                     panel_h: float) -> list[Bar3D]:
     """Boundary-column stirrup ties, drawn too fragmented to pair as bars.
 
-    A tie wraps a tight cluster of main column bars (e.g. "6 -T12") at a
-    dense, explicitly-called-out pitch ("T8 Ties @100mm") -- confirmed
-    directly: the drawing shows this geometry as hundreds of tiny line
-    fragments in the column zone, many under the 6mm segment-length floor
-    pair_lines requires, so essentially none of it survives as a bar.
-    Rather than trying to chain fragments the drawing itself draws too
-    small to reliably pair, use the structural facts that *are* already
-    reliably known -- the column's main bars are correctly reconstructed
-    (confirmed: PW-GF-09's two "6 -T12" columns are v-mesh bars spanning
-    the correct full column height) -- to synthesize the tie loops
-    directly: a closed rectangle wrapping the column's bar envelope, at
-    the callout's pitch, repeated across the column's actual height.
+    Ties are drawn as hundreds of tiny fragments (many under pair_lines'
+    6mm segment floor), so they never survive as paired bars; synthesize
+    them from structural facts instead. The decoded BBS (BBS_RULES.md)
+    pins the design down: the standard tie is a ~200mm-wide core loop
+    wrapping a *pair* of adjacent main bars, at the callout's pitch —
+    PW-GF-09's BBS count (174 = 6 runs x 29) matches 3 main-bar pairs per
+    boundary column x 2 columns, at 100c/c over the clear height.
+
+    Placement lessons from two earlier broken attempts, both now encoded:
+    - main bars are the *larger*-diameter verticals (a tie's own diameter
+      is the panel's smallest/most common — clustering those grabs the
+      general field mesh, not a column);
+    - main bars are routinely SPLIT vertically by side notches/openings
+      (e.g. x=47 exists only at y 30-749 and 2225-2892) — a tie run must
+      follow the intersection of its pair's actual y-intervals, clamped
+      to the panel, never the naive min/max envelope (which drew ties
+      across the notch and outside the panel outline entirely).
     """
     callouts = []
     for e in elev_ents:
@@ -510,35 +516,65 @@ def _synthesize_ties(bars: list[Bar3D], elev_ents, thickness: float) -> list[Bar
             callouts.append((int(m.group(1)), int(m.group(2))))
     if not callouts:
         return bars
-    dia, pitch = max(set(callouts), key=callouts.count)
-
-    vmesh = [b for b in bars if b.kind == "v-mesh" and b.diameter == dia]
-    if not vmesh:
-        return bars
-    xs = sorted(set(b.points[0][0] for b in vmesh))
-    clusters: list[list[float]] = []
-    for x in xs:
-        if clusters and x - clusters[-1][-1] <= 250.0:
-            clusters[-1].append(x)
-        else:
-            clusters.append([x])
-
+    tie_dia, pitch = max(set(callouts), key=callouts.count)
     cover = 30.0
-    out: list[Bar3D] = []
-    for cl in clusters:
-        if len(cl) < 4:  # a handful of scattered bars isn't a column detail
+
+    # main bars: the column longitudinals, >=T12 (T10-and-under at a tight
+    # pitch is field mesh -- PW-GF-09's "T10 @150mm" mesh sits 149mm apart,
+    # inside the 160mm pairing threshold, and got wrongly tie-wrapped when
+    # this only excluded the tie's own diameter). Grouped by x with each
+    # bar's real y-intervals (split bars appear as several entries).
+    main: dict[float, list[tuple[float, float]]] = {}
+    for b in bars:
+        if b.kind != "v-mesh" or b.diameter < 12 or b.diameter <= tie_dia:
             continue
-        x_lo, x_hi = min(cl) - cover, max(cl) + cover
-        col_bars = [b for b in vmesh if min(cl) <= b.points[0][0] <= max(cl)]
-        ys = [p[1] for b in col_bars for p in b.points]
-        y_lo, y_hi = min(ys), max(ys)
-        z_lo, z_hi = cover, thickness - cover
-        n = max(round((y_hi - y_lo) / pitch) + 1, 1)
-        for i in range(n):
-            y = y_lo + i * (y_hi - y_lo) / max(n - 1, 1)
-            pts = [(x_lo, y, z_lo), (x_hi, y, z_lo), (x_hi, y, z_hi),
-                   (x_lo, y, z_hi), (x_lo, y, z_lo)]
-            out.append(Bar3D(pts, dia, "tie", "synthesized"))
+        x = round(b.points[0][0], 0)
+        ys = [p[1] for p in b.points]
+        main.setdefault(x, []).append((min(ys), max(ys)))
+    if not main:
+        return bars
+
+    def merged(iv: list[tuple[float, float]]) -> list[tuple[float, float]]:
+        iv = sorted(iv)
+        out = [list(iv[0])]
+        for a, b2 in iv[1:]:
+            if a <= out[-1][1] + 1:
+                out[-1][1] = max(out[-1][1], b2)
+            else:
+                out.append([a, b2])
+        return [(a, b2) for a, b2 in out]
+
+    def intersect(a: list[tuple[float, float]], b: list[tuple[float, float]]):
+        res = []
+        for a0, a1 in a:
+            for b0, b1 in b:
+                lo, hi = max(a0, b0), min(a1, b1)
+                if hi - lo > 2 * pitch:  # a run needs room for >=2 ties
+                    res.append((lo, hi))
+        return res
+
+    # pair adjacent positions into tie stacks (tie core is ~200mm wide,
+    # so partners sit within ~160mm of each other), greedily left to right
+    xs = sorted(main)
+    out: list[Bar3D] = []
+    i = 0
+    while i < len(xs) - 1:
+        if xs[i + 1] - xs[i] <= 160.0:
+            x_lo, x_hi = xs[i] - cover, xs[i + 1] + cover
+            runs = intersect(merged(main[xs[i]]), merged(main[xs[i + 1]]))
+            z_lo, z_hi = cover, thickness - cover
+            for lo, hi in runs:
+                lo = max(lo, cover)
+                hi = min(hi, panel_h - cover)
+                n = max(int((hi - lo) // pitch) + 1, 1)
+                for k in range(n):
+                    y = lo + k * pitch
+                    pts = [(x_lo, y, z_lo), (x_hi, y, z_lo), (x_hi, y, z_hi),
+                           (x_lo, y, z_hi), (x_lo, y, z_lo)]
+                    out.append(Bar3D(pts, tie_dia, "tie", "synthesized"))
+            i += 2  # both positions consumed by this stack
+        else:
+            i += 1
     return bars + out
 
 
@@ -830,7 +866,7 @@ def reconstruct_panel(name: str, views: list[View]) -> Panel:
             bar.z_source = src
 
     bars = _fold_ubars(bars, sections)
-    bars = _synthesize_ties(bars, elev.ents, thickness)
+    bars = _synthesize_ties(bars, elev.ents, thickness, ph)
     bars = _synthesize_labelled_singles(bars, elev.ents, x0, y0, thickness)
 
     # ---- cast-in features: sleeves, corbels, embeds, anchors, wire loops
