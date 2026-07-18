@@ -219,7 +219,17 @@ def pair_arcs(ents: list[Ent]) -> list[Bar2D]:
 # ---------------------------------------------------------------- chaining
 
 def _merge_collinear(bars: list[Bar2D], tol_off: float = 1.5, tol_gap: float = 60.0) -> list[Bar2D]:
-    """Merge straight centerlines that are collinear and touching/overlapping."""
+    """Merge straight centerlines that are collinear and touching/overlapping.
+
+    The merge gap is diameter-dependent: heavy edge/beam bars (>=16mm) are
+    trimmed by crossing detail bars into fragments separated by ~200mm
+    (confirmed on SS-GF-01's T20 edge beams: 5.14m drawn lines recovered
+    as 0.2-1.4m pieces with three ~200mm holes), and a real discontinuity
+    in such bars is a lap splice — which *overlaps*, never gaps — so
+    bridging up to 250mm is safe there. Light mesh (T8-T12) keeps the
+    tight 60mm: its gaps are often genuinely separate bars across an
+    opening at a couple hundred mm.
+    """
     straight = [b for b in bars if len(b.points) == 2]
     other = [b for b in bars if len(b.points) != 2]
     groups: dict[tuple[int, int, int], list[Bar2D]] = {}
@@ -238,11 +248,12 @@ def _merge_collinear(bars: list[Bar2D], tol_off: float = 1.5, tol_gap: float = 6
             t1 = b.points[1][0] * ux + b.points[1][1] * uy
             ivs.append((min(t0, t1), max(t0, t1), b.diameter))
         ivs.sort()
+        group_gap = 250.0 if key[2] >= 16 else tol_gap
         cur0, cur1, dia = ivs[0]
         dias = [dia]
         out = []
         for t0, t1, d in ivs[1:]:
-            if t0 <= cur1 + tol_gap:
+            if t0 <= cur1 + group_gap:
                 cur1 = max(cur1, t1)
                 dias.append(d)
             else:
