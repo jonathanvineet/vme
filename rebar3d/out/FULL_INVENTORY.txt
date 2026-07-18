@@ -1,0 +1,1421 @@
+# FULL DWG INVENTORY — 11 files from ../DRAWINGS
+
+==============================================================================
+## PW-GF-02(M1).dwg
+==============================================================================
+
+### RAW ENTITY CENSUS  (total 1592 modelspace entities, 49 paper-space text cells)
+  A-DETL-MBND            LINE         x39
+  A-FLOR-OVHD            LINE         x6
+  A-GENM                 LINE         x294
+  A-GENM                 LWPOLYLINE   x126
+  A-GENM-HDLN            LINE         x10
+  A-WALL                 ARC          x184
+  A-WALL                 LINE         x45
+  A-WALL                 LWPOLYLINE   x45
+  A-WALL-HDLN            LINE         x165
+  A-WALL-HDLN            LWPOLYLINE   x18
+  G-ANNO-DIMS            CIRCLE       x2
+  G-ANNO-DIMS            LINE         x14
+  G-ANNO-DIMS            MTEXT        x2
+  G-ANNO-REVC            ARC          x28
+  G-ANNO-REVC-IDEN       LINE         x12
+  G-ANNO-REVC-IDEN       MTEXT        x3
+  G-ANNO-SYMB            ARC          x30
+  G-ANNO-SYMB            LINE         x90
+  G-ANNO-SYMB            MTEXT        x5
+  G-ANNO-TEXT            LINE         x60
+  G-ANNO-TEXT            MTEXT        x22
+  S-BEAM                 LINE         x32
+  S-RBAR                 ARC          x59
+  S-RBAR                 CIRCLE       x19
+  S-RBAR                 LINE         x282
+  drawn linework length by layer (mm):
+    A-DETL-MBND                   69378
+    S-RBAR                        60107
+    A-WALL                        40346
+    A-WALL-HDLN                   37010
+    G-ANNO-SYMB                   20919
+    S-BEAM                        19368
+    A-FLOR-OVHD                   11075
+    G-ANNO-TEXT                   10400
+    A-GENM                         8769
+    G-ANNO-REVC                    6873
+    G-ANNO-DIMS                    4202
+    G-ANNO-REVC-IDEN               3301
+    A-GENM-HDLN                     280
+  block INSERTs:
+    Detail View - M_Section Head - Filled SHOP DWG-600895-Elevation Front x5
+    Detail View - M_Section Tail - Filled Horizontal-14034-Elevation Front x5
+    Family - ___-5356743-Elevation Front               x1
+    Family - ___-5357186-Elevation Front               x1
+    Family - ___-5357887-Elevation Front               x1
+    M_Linear Stiffener-Channel - C100X8-5349016-Elevation Front x2
+    M_Revision Tag - M_Revision Tag-33754-Elevation Front x3
+    RR spread anchor face based - RR-SA-1_4-160-614768-Elevation Front x3
+    RR spread anchor face based - RR-SA-2_5-250-614728-Elevation Front x1
+    RR spread anchor face based - RR-SA-2_5-250-V4-Elevation Front x1
+    Spot Elevations - M_Spot Elevation - Target Filled-10609-Elevation Front x2
+    loopbox down bent - Wire Loop-600440-Elevation Front x6
+    loopbox down bent - Wire Loop-602462-Elevation Front x6
+    loopbox down bent - Wire Loop-V1-Elevation Front   x7
+    loopbox down bent - Wire Loop-V2-Elevation Front   x1
+    loopbox down bent - Wire Loop-V3-Elevation Front   x1
+
+### TEXT / ANNOTATION CENSUS (modelspace)
+  [dimensions (bare numbers)] (10 instances, 7 distinct)
+      2x  1
+      1x  100274
+      1x  103224
+      3x  2
+      1x  3
+      1x  4
+      1x  5
+  [other annotation] (12 instances, 10 distinct)
+      1x  1F SSL
+      1x  BRACING
+      2x  GEOMETRY
+      1x  GF
+      1x  LENGTH
+      1x  LENGTH/OPENING
+      1x  NOTCH
+      1x  OPENING
+    ... 2 more distinct strings
+  [insert marks (Nn)] (10 instances, 6 distinct)
+      1x  N1/N2
+      2x  N10
+      1x  N4/SHEAR KEY
+      2x  N5
+      2x  N6
+      2x  N7
+
+### PAPER-SPACE TABLES (all schedules on the sheet)
+  APOLLO GIRLS HOSTEL BUILDING
+  (RIGHT WING)-CHITTOOR
+  GRADE OF CONCRETE - M40
+  GRADE OF STEEL - Fe550
+  STRIPPING STRENGTH - M20
+  LIFTING,TRANSPORTATION
+  AND ERECTION | - M35
+  COVER:
+  WALL - 30mm
+  ALL DIMENSIONS ARE IN MM
+  LEGENDS:
+  ERECTION MARK -
+  MOULD FACE - | MF
+  2 | 16-05-26 | REVISED AS PER CLOUDED | GRS | PRC
+  1 | 15-05-26 | REVISED AS PER CLOUDED | GRS | PRC
+  0 | 05-05-26 | FOR PRODUCTION | GRS | PRC
+  1 | SECTION | Rev | Date | Description | Chkd | Appd.
+  A | ELEVATION | REVISION SCHEDULE
+  1 : 40
+  1 : 40
+  PW-GF-02-MOULD DRAWING
+  ESP25087 | GMP
+  PW-GF-02
+  PW-GF-02(M1) | 2
+  1 : 40
+
+### RECONSTRUCTION CENSUS  (51 bars)  panel 3760x2930x160mm
+  face-dowel   T8   x19       9.12m    3.60kg
+  shape        T16  x6       12.26m   19.37kg
+  v-mesh       T8   x19       4.17m    1.65kg
+  v-mesh       T16  x7       11.34m   17.92kg
+  RECON TOTAL                      42.54kg
+  features: {'sleeve': 11, 'corbel': 0, 'embed': 2, 'anchor': 5, 'loop': 21}
+
+==============================================================================
+## PW-GF-02(M2).dwg
+==============================================================================
+
+### RAW ENTITY CENSUS  (total 1958 modelspace entities, 95 paper-space text cells)
+  A-DETL-MBND            CIRCLE       x2
+  A-DETL-MBND            LINE         x32
+  A-DETL-THIN            ARC          x5
+  A-DETL-THIN            LINE         x44
+  A-FLOR-OVHD            LINE         x16
+  A-GENM                 ARC          x47
+  A-GENM                 LINE         x715
+  A-GENM                 LWPOLYLINE   x152
+  A-WALL                 ARC          x26
+  A-WALL                 LINE         x214
+  A-WALL                 LWPOLYLINE   x32
+  A-WALL-HDLN            LINE         x181
+  A-WALL-HDLN            LWPOLYLINE   x2
+  G-ANNO-TEXT            LINE         x55
+  G-ANNO-TEXT            MTEXT        x23
+  S-BEAM                 LINE         x32
+  S-BEAM                 LWPOLYLINE   x8
+  S-RBAR                 ARC          x21
+  S-RBAR                 CIRCLE       x13
+  S-RBAR                 LINE         x274
+  S-RBAR                 LWPOLYLINE   x64
+  drawn linework length by layer (mm):
+    A-WALL                        76814
+    S-RBAR                        53135
+    A-DETL-MBND                   25710
+    S-BEAM                        18968
+    A-GENM                        15316
+    A-WALL-HDLN                   13451
+    A-FLOR-OVHD                    9106
+    G-ANNO-TEXT                    9081
+    A-DETL-THIN                    3826
+  block INSERTs:
+    M_Linear Stiffener-Channel - C100X8-5349016-3D Ortho x2
+    RR spread anchor face based - RR-SA-1_4-160-614768-3D Ortho x3
+    RR spread anchor face based - RR-SA-1_4-160-614768-Elevation Right1 x2
+    RR spread anchor face based - RR-SA-1_4-160-614768-Elevation Top1 x1
+    RR spread anchor face based - RR-SA-2_5-250-614728-3D Ortho x2
+    RR spread anchor face based - RR-SA-2_5-250-614728-Elevation Right1 x1
+    RR spread anchor face based - RR-SA-2_5-250-614728-Elevation Top1 x2
+    Rebar Bar - Part 1062869401-431004-3D Ortho        x4
+    Rebar Bar - Part 2995452654-431004-3D Ortho        x2
+    Rebar Bar - Part 3767426986-431004-3D Ortho        x1
+    Rebar Bar - Part 3767426986-V1-3D Ortho            x17
+    Rebar Bar - Part 3767426986-V2-3D Ortho            x1
+    Rebar Bar - Part 3977270317-431004-3D Ortho        x7
+    loopbox down bent - Wire Loop-600440-3D Ortho      x8
+    loopbox down bent - Wire Loop-600440-Elevation Top x1
+    loopbox down bent - Wire Loop-600440-Elevation Top1 x1
+    loopbox down bent - Wire Loop-600440-Elevation Top2 x2
+    loopbox down bent - Wire Loop-602462-3D Ortho      x5
+    loopbox down bent - Wire Loop-602462-Elevation Top x1
+    loopbox down bent - Wire Loop-602462-Elevation Top1 x1
+    loopbox down bent - Wire Loop-602462-Elevation Top2 x1
+    loopbox down bent - Wire Loop-V3-3D Ortho          x1
+    loopbox down bent - Wire Loop-V4-3D Ortho          x1
+    loopbox down bent - Wire Loop-V5-Elevation Top     x1
+    loopbox down bent - Wire Loop-V6-Elevation Top1    x1
+    loopbox down bent - Wire Loop-V7-Elevation Top1    x1
+
+### TEXT / ANNOTATION CENSUS (modelspace)
+  [other annotation] (14 instances, 9 distinct)
+      1x  DETAIL-A
+      1x  DETAIL-B
+      1x  GEOMETRY
+      4x  LENGTH
+      2x  MF
+      2x  NOTCH
+      1x  NOTCH DETAIL-A
+      1x  NOTCH DETAIL-B
+    ... 1 more distinct strings
+  [insert marks (Nn)] (9 instances, 5 distinct)
+      2x  N1/N2
+      2x  N10
+      2x  N4/SHEAR KEY
+      1x  N6
+      2x  N7
+
+### PAPER-SPACE TABLES (all schedules on the sheet)
+  APOLLO GIRLS HOSTEL BUILDING
+  (RIGHT WING)-CHITTOOR
+  GRADE OF CONCRETE - M40
+  GRADE OF STEEL - Fe550
+  STRIPPING STRENGTH - M20
+  SECTION | LIFTING,TRANSPORTATION
+  3 | AND ERECTION | - M35
+  1 : 40 | COVER:
+  WALL - 30mm
+  ALL DIMENSIONS ARE IN MM
+  LEGENDS:
+  ERECTION MARK -
+  MOULD FACE - | MF
+  4 | SECTION
+  1 : 40
+  2 | SECTION
+  1 : 40
+  5 | SECTION
+  1 : 40 | Weight Schedule
+  Volume | Weight | 2 | 16-05-26 | REVISED AS PER CLOUDED | GRS | PRC
+  Dowel Bar Schedule | 1.37 m³ | 3419.86 kg | REVISED AS PER CLOUDED
+  1 | 15-05-26 | GRS | PRC
+  Ref No | Bar Diameter | Count | Insert Schedule | 0 | 05-05-26 | FOR PRODUCTION | GRS | PRC
+  N7 | 16 mm | 13 | Rev | Date | Description | Chkd | Appd.
+  Ref No | Type | Count | REVISION SCHEDULE
+  N1 | RR-SA-2.5-250 | 2
+  Projecting Bar Schedule | N2 | RR-SA-1.4-160 | 3
+  Ref No | Bar Diameter | Count | N4 | 50 DIA SLEEVE | 13 | PW-GF-02-MOULD DRAWING
+  N6 | 8 mm | 19 | N5 | 20 Dia Sleeve | 2
+  6 | 3D VIEW | N10 | Wire Loop | 21 | ESP25087 | GMP
+  PW-GF-02
+  PW-GF-02(M2) | 2
+  As indicated
+
+### RECONSTRUCTION CENSUS  (32 bars)  panel 3760x160x160mm
+  link         T16  x13       1.04m    1.64kg
+  v-mesh       T8   x19       9.50m    3.75kg
+  RECON TOTAL                       5.40kg
+  features: {'sleeve': 0, 'corbel': 0, 'embed': 0, 'anchor': 3, 'loop': 4}
+
+==============================================================================
+## PW-GF-02(R).dwg
+==============================================================================
+
+### RAW ENTITY CENSUS  (total 9634 modelspace entities, 84 paper-space text cells)
+  A-FLOR-OVHD            LINE         x8
+  A-GENM                 LINE         x326
+  A-GENM                 LWPOLYLINE   x127
+  A-WALL                 ARC          x143
+  A-WALL                 LINE         x264
+  A-WALL                 LWPOLYLINE   x18
+  A-WALL-HDLN            LINE         x4
+  G-ANNO-SYMB            ARC          x36
+  G-ANNO-SYMB            LINE         x108
+  G-ANNO-SYMB            MTEXT        x6
+  G-ANNO-TEXT            MTEXT        x4
+  S-BEAM                 LINE         x82
+  S-RBAR                 ARC          x711
+  S-RBAR                 CIRCLE       x513
+  S-RBAR                 LINE         x7030
+  S-RBAR-IDEN            CIRCLE       x22
+  S-RBAR-IDEN            LINE         x170
+  S-RBAR-IDEN            MTEXT        x62
+  drawn linework length by layer (mm):
+    S-RBAR                       596099
+    A-WALL                        71627
+    S-RBAR-IDEN                   42286
+    G-ANNO-SYMB                   31250
+    S-BEAM                        18618
+    A-FLOR-OVHD                   12342
+    A-GENM                         7498
+    A-WALL-HDLN                     408
+  block INSERTs:
+    Detail View - M_Section Head - Filled SHOP DWG-600895-Elevation Front x6
+    Detail View - M_Section Tail - Filled Horizontal-14034-Elevation Front x6
+    M_Linear Stiffener-Channel - C100X8-5344115-Elevation Front x1
+    M_Linear Stiffener-Channel - C100X8-V11-Elevation Front x1
+    RR spread anchor face based - RR-SA-1_4-160-614768-Elevation Front x3
+    RR spread anchor face based - RR-SA-2_5-250-614728-Elevation Front x1
+    RR spread anchor face based - RR-SA-2_5-250-V10-Elevation Front x1
+    loopbox down bent - Wire Loop-600440-Elevation Front x6
+    loopbox down bent - Wire Loop-600440-Elevation Right2 x1
+    loopbox down bent - Wire Loop-602462-Elevation Front x6
+    loopbox down bent - Wire Loop-V1-Elevation Front   x1
+    loopbox down bent - Wire Loop-V12-Elevation Right2 x1
+    loopbox down bent - Wire Loop-V13-Elevation Right2 x1
+    loopbox down bent - Wire Loop-V2-Elevation Front   x1
+    loopbox down bent - Wire Loop-V3-Elevation Front   x1
+    loopbox down bent - Wire Loop-V4-Elevation Front   x1
+    loopbox down bent - Wire Loop-V5-Elevation Front   x1
+    loopbox down bent - Wire Loop-V6-Elevation Front   x1
+    loopbox down bent - Wire Loop-V7-Elevation Front   x1
+    loopbox down bent - Wire Loop-V8-Elevation Front   x1
+    loopbox down bent - Wire Loop-V9-Elevation Front   x1
+
+### TEXT / ANNOTATION CENSUS (modelspace)
+  [dimensions (bare numbers)] (10 instances, 6 distinct)
+      1x  1
+      1x  2
+      1x  3
+      5x  4
+      1x  5
+      1x  6
+  [count callouts (N -Td)] (32 instances, 9 distinct)
+      1x  1 -T12
+      4x  2 -T10
+      5x  2 -T12
+      5x  2 -T16
+      4x  2 -T16 CRACK BAR
+      3x  2 -T20
+      2x  2 -T8
+      4x  3 -T8
+      4x  5 -T12
+  [other annotation] (1 instances, 1 distinct)
+      1x  T12
+  [pitch callouts (Td @p)] (29 instances, 5 distinct)
+     10x  T8 @150 mm
+      5x  T8 @250 mm
+     11x  T8 UBAR @125 mm
+      1x  T8 UBAR @150 mm
+      2x  T8 UBAR @250 mm
+
+### PAPER-SPACE TABLES (all schedules on the sheet)
+  APOLLO GIRLS HOSTEL BUILDING
+  (RIGHT WING)-CHITTOOR
+  GRADE OF CONCRETE - M40
+  GRADE OF STEEL - Fe550
+  STRIPPING STRENGTH - M20
+  LIFTING,TRANSPORTATION
+  AND ERECTION | - M35
+  COVER:
+  WALL - 30mm
+  ALL DIMENSIONS ARE IN MM
+  LEGENDS:
+  ERECTION MARK -
+  MOULD FACE - | MF
+  1 | SECTION(REINF) | SECTION(REINF) | 3 | SECTION(REINF)
+  1 : 50 | 2 | 1 : 50
+  1 : 50
+  A | ELEVATION(REINF)
+  1 : 50
+  4 | SECTION(REINF)
+  6 | SECTION(REINF)
+  1 : 50
+  1 : 50
+  5 | SECTION(REINF)
+  Summary Schedule
+  1 : 50 | ELA | PRC
+  Bar Diameter | Total Bar Length | Weight | 0 | 17-05-26 | FOR PRODUCTION
+  8 mm | 324150 mm | 128.07 kg | Rev | Date | Description | Chkd | Appd.
+  10 mm | 33200 mm | 20.50 kg | REVISION SCHEDULE
+  12 mm | 62400 mm | 55.47 kg
+  NOTE: | 16 mm | 76650 mm | 121.13 kg
+  REINFORCEMENT TYPICAL FOR ; | 20 mm | 17850 mm | 44.08 kg | PW-GF-02-REINF DRAWING
+  NOTE:
+  LENGTH,LIFTING,DEMOULDING,DOWEL TUBE, | PW-GF-02,PW-1F-02, | 514250 mm | 369.24 kg | ESP25087 | GMP
+  DOWEL BAR,PROJECTING BAR,U-BAR | PW-2F-02,PW-3F-02,PW-4F-02, | PW-GF-02
+  REFER FOR INDIVIDUAL MOULD DRAWING | PW-5F-02,PW-6F-02,PW-7F-02 | PW-GF-02(R) | 0
+  1 : 50
+
+### RECONSTRUCTION CENSUS  (352 bars)  panel 3760x2930x160mm
+  diagonal     T16  x7        8.34m   13.18kg
+  face-dowel   T8   x19       9.12m    3.60kg
+  h-mesh       T8   x78      93.05m   36.76kg
+  h-mesh       T10  x6        8.89m    5.49kg
+  h-mesh       T12  x3        5.00m    4.44kg
+  h-mesh       T16  x10      22.81m   36.05kg
+  h-mesh       T20  x4       14.92m   36.84kg
+  h-mesh       T32  x1        0.47m    2.98kg
+  shape        T16  x13      17.47m   27.61kg
+  shape        T20  x1        4.48m   11.05kg
+  u-bar        T8   x99     184.75m   72.99kg
+  v-mesh       T8   x75      48.24m   19.06kg
+  v-mesh       T12  x24      49.27m   43.80kg
+  v-mesh       T16  x8        9.21m   14.55kg
+  v-mesh       T20  x2        0.27m    0.67kg
+  v-mesh       T25  x2        0.81m    3.12kg
+  RECON TOTAL                     332.19kg
+  features: {'sleeve': 10, 'corbel': 0, 'embed': 2, 'anchor': 5, 'loop': 21}
+
+### RECONCILIATION vs SUMMARY SCHEDULE (paper space)
+  T8   len   335.2m vs   324.1m | wt  132.41 vs  128.07kg    +4.34  103%
+  T10  len     8.9m vs    33.2m | wt    5.49 vs   20.50kg   -15.01  27%
+  T12  len    54.3m vs    62.4m | wt   48.24 vs   55.47kg    -7.23  87%
+  T16  len    57.8m vs    76.7m | wt   91.39 vs  121.13kg   -29.74  75%
+  T20  len    19.7m vs    17.9m | wt   48.56 vs   44.08kg    +4.48  110%
+  T25  len     0.8m vs     0.0m | wt    3.12 vs    0.00kg    +3.12  EXTRA
+  T32  len     0.5m vs     0.0m | wt    2.98 vs    0.00kg    +2.98  EXTRA
+
+### RECONCILIATION vs ITEMIZED BBS (PW-GF-02.pdf) — row by row
+  row  1  T8  x10  Horizontal Bar         3.70m each | official   37.00m  matched   37.12m ( 10/10 )  100%  [14.6kg]
+  row  2  T8  x7   Horizontal Bar         1.94m each | official   13.58m  matched   13.58m (  7/7  )  100%  [5.4kg]
+  row  3  T8  x7   Horizontal Bar         1.83m each | official   12.81m  matched   13.58m (  7/7  )  106%  [5.1kg]
+  row  4  T20 x2   Horizontal Bar         4.82m each | official    9.64m  matched    8.18m (  2/2  )   85%  [23.8kg]
+  row  5  T16 x2   Horizontal Bar         4.84m each | official    9.67m  matched    5.19m (  1/2  )   54%  [15.3kg]
+  row  6  T20 x2   Horizontal Bar         3.70m each | official    7.40m  matched    7.52m (  2/2  )  102%  [18.3kg]
+  row  7  T8  x7   Horizontal Bar         0.39m each | official    2.73m  matched    3.36m (  7/7  )  123%  [1.1kg]
+  row  8  T8  x7   Horizontal Bar         0.50m each | official    3.50m  matched    3.36m (  7/7  )   96%  [1.4kg]
+  row  9  T16 x6   Horizontal Bar         3.70m each | official   22.20m  matched   22.24m (  6/6  )  100%  [35.1kg]
+  row 10  T10 x2   Horizontal Bar         3.70m each | official    7.40m  matched    7.52m (  2/2  )  102%  [4.6kg]
+  row 11  T12 x1   Horizontal Bar         3.70m each | official    3.70m  matched    0.00m (  0/1  )    0%  [3.3kg]
+  row 12  T8  x58  Horizontal Bar         0.63m each | official   36.66m  matched   24.58m ( 35/58 )   67%  [14.5kg]
+  row 13  T8  x160 Vertical Bar           0.87m each | official  138.88m  matched   67.46m ( 82/160)   49%  [54.9kg]
+  row 14  T8  x34  Vertical Bar           2.87m each | official   97.58m  matched   84.65m ( 29/34 )   87%  [38.5kg]
+  row 14  T16 x16  Vertical Bar           1.20m each | official   19.20m  matched   18.14m ( 16/16 )   95%  [30.3kg]
+  row 15  T12 x18  Vertical Bar           2.87m each | official   51.66m  matched   31.62m ( 12/18 )   61%  [45.9kg]
+  row 15  T8  x18  Vertical Bar           0.98m each | official   17.71m  matched   19.54m ( 18/18 )  110%  [7.0kg]
+                                                          officials  491.32m  matched  367.64m
+  reconstructed bars matching NO BBS row (extra / mis-shaped):
+    diagonal     T16  x2        3.19m  (5.0kg)
+    h-mesh       T8   x58      43.73m  (17.3kg)
+    h-mesh       T10  x4        1.37m  (0.8kg)
+    h-mesh       T12  x3        5.00m  (4.4kg)
+    h-mesh       T16  x4        0.57m  (0.9kg)
+    h-mesh       T20  x1        3.70m  (9.1kg)
+    h-mesh       T32  x1        0.47m  (3.0kg)
+    shape        T16  x3        0.76m  (1.2kg)
+    u-bar        T8   x2       14.93m  (5.9kg)
+    v-mesh       T8   x38       9.27m  (3.7kg)
+    v-mesh       T12  x12      17.65m  (15.7kg)
+    v-mesh       T16  x7        7.75m  (12.2kg)
+    v-mesh       T20  x2        0.27m  (0.7kg)
+    v-mesh       T25  x2        0.81m  (3.1kg)
+  BBS grand total 319.0kg  (Summary Schedule total 369.2kg — the two official docs disagree)
+
+==============================================================================
+## PW-GF-09(M1).dwg
+==============================================================================
+
+### RAW ENTITY CENSUS  (total 1230 modelspace entities, 39 paper-space text cells)
+  A-DETL-MBND            LINE         x37
+  A-FLOR-OVHD            LINE         x15
+  A-GENM                 LINE         x340
+  A-GENM                 LWPOLYLINE   x96
+  A-GENM-HDLN            LINE         x84
+  A-WALL                 ARC          x128
+  A-WALL                 LINE         x48
+  A-WALL                 LWPOLYLINE   x30
+  A-WALL-HDLN            LINE         x93
+  A-WALL-HDLN            LWPOLYLINE   x12
+  G-ANNO-DIMS            CIRCLE       x2
+  G-ANNO-DIMS            LINE         x14
+  G-ANNO-DIMS            MTEXT        x2
+  G-ANNO-SYMB            ARC          x30
+  G-ANNO-SYMB            LINE         x90
+  G-ANNO-SYMB            MTEXT        x5
+  G-ANNO-TEXT            LINE         x54
+  G-ANNO-TEXT            MTEXT        x21
+  S-BEAM                 LINE         x44
+  S-RBAR                 ARC          x8
+  S-RBAR                 LINE         x77
+  drawn linework length by layer (mm):
+    A-DETL-MBND                   64097
+    S-BEAM                        46988
+    A-WALL                        45978
+    S-RBAR                        32837
+    G-ANNO-SYMB                   20825
+    A-WALL-HDLN                   20703
+    A-FLOR-OVHD                   17629
+    A-GENM                        10029
+    G-ANNO-TEXT                    7327
+    G-ANNO-DIMS                    4272
+    A-GENM-HDLN                    1636
+  block INSERTs:
+    Detail View - M_Section Head - Filled SHOP DWG-600895-Elevation Front x5
+    Detail View - M_Section Tail - Filled Horizontal-14034-Elevation Front x5
+    M_Linear Stiffener-Channel - C100X8-5379209-Elevation Front x2
+    M_Linear Stiffener-Channel - C100X8-V3-Elevation Front x1
+    M_Rectangular Corbel - M_Rectangular Corbel-5377587-Elevation Front x1
+    M_Rectangular Corbel - M_Rectangular Corbel-5377587-Elevation Right x1
+    RR spread anchor face based - RR-SA-2_5-150-614724-Elevation Front x4
+    RR spread anchor face based - RR-SA-4_0-240-614738-Elevation Front x2
+    Spot Elevations - M_Spot Elevation - Target Filled-10609-Elevation Front x2
+    loopbox down bent - Wire Loop-600440-Elevation Front x6
+    loopbox down bent - Wire Loop-V2-Elevation Front   x1
+    loopbox down bent - Wire Loop-V4-Elevation Front   x5
+
+### TEXT / ANNOTATION CENSUS (modelspace)
+  [dimensions (bare numbers)] (7 instances, 7 distinct)
+      1x  1
+      1x  100274
+      1x  103224
+      1x  2
+      1x  3
+      1x  4
+      1x  5
+  [other annotation] (13 instances, 9 distinct)
+      1x  1F SSL
+      2x  CORBEL
+      2x  GEOMETRY
+      1x  GF
+      1x  LENGTH
+      1x  LENGTH/
+      1x  NOTCH
+      2x  OPENING
+    ... 1 more distinct strings
+  [insert marks (Nn)] (8 instances, 6 distinct)
+      1x  N1/N2
+      1x  N10
+      1x  N4/SHEAR KEY
+      2x  N5
+      1x  N7
+      2x  N8
+
+### PAPER-SPACE TABLES (all schedules on the sheet)
+  APOLLO GIRLS HOSTEL BUILDING
+  (RIGHT WING)-CHITTOOR
+  GRADE OF CONCRETE - M40
+  GRADE OF STEEL - Fe550
+  STRIPPING STRENGTH - M20
+  LIFTING,TRANSPORTATION
+  AND ERECTION | - M35
+  COVER:
+  WALL - 30mm
+  ALL DIMENSIONS ARE IN MM
+  LEGENDS:
+  ERECTION MARK -
+  MOULD FACE - | MF
+  1 | SECTION
+  1 : 40
+  0 | 16-05-26 | FOR PRODUCTION | GRS | PRC
+  Rev | Date | Description | Chkd | Appd.
+  ELEVATION | REVISION SCHEDULE
+  A
+  1 : 40
+  PW-GF-09-MOULD DRAWING
+  ESP25087 | GMP
+  PW-GF-09
+  PW-GF-09(M1) | 0
+  1 : 40
+
+### RECONSTRUCTION CENSUS  (15 bars)  panel 4000x2930x160mm
+  shape        T16  x2        7.45m   11.77kg
+  v-mesh       T16  x13       8.64m   13.65kg
+  RECON TOTAL                      25.42kg
+  features: {'sleeve': 10, 'corbel': 1, 'embed': 3, 'anchor': 6, 'loop': 12}
+
+==============================================================================
+## PW-GF-09(M2).dwg
+==============================================================================
+
+### RAW ENTITY CENSUS  (total 1460 modelspace entities, 81 paper-space text cells)
+  A-DETL-MBND            CIRCLE       x2
+  A-DETL-MBND            LINE         x35
+  A-DETL-THIN            ARC          x2
+  A-DETL-THIN            LINE         x30
+  A-FLOR-OVHD            LINE         x14
+  A-GENM                 ARC          x22
+  A-GENM                 LINE         x590
+  A-GENM                 LWPOLYLINE   x134
+  A-WALL                 ARC          x12
+  A-WALL                 LINE         x167
+  A-WALL                 LWPOLYLINE   x26
+  A-WALL-HDLN            LINE         x81
+  A-WALL-HDLN            LWPOLYLINE   x2
+  G-ANNO-TEXT            LINE         x50
+  G-ANNO-TEXT            MTEXT        x20
+  S-BEAM                 LINE         x72
+  S-BEAM                 LWPOLYLINE   x11
+  S-RBAR                 CIRCLE       x15
+  S-RBAR                 LINE         x115
+  S-RBAR                 LWPOLYLINE   x60
+  drawn linework length by layer (mm):
+    S-BEAM                        61680
+    A-WALL                        55326
+    A-DETL-MBND                   28928
+    A-FLOR-OVHD                   21978
+    S-RBAR                        19588
+    A-GENM                        13370
+    A-DETL-THIN                   10036
+    G-ANNO-TEXT                    9085
+    A-WALL-HDLN                    7317
+  block INSERTs:
+    M_Linear Stiffener-Channel - C100X8-5379209-3D Ortho x2
+    M_Linear Stiffener-Channel - C100X8-V7-3D Ortho    x1
+    M_Rectangular Corbel - M_Rectangular Corbel-5377587-3D Ortho x1
+    M_Rectangular Corbel - M_Rectangular Corbel-5377587-Elevation Right1 x1
+    M_Rectangular Corbel - M_Rectangular Corbel-5377587-Elevation Top2 x1
+    RR spread anchor face based - RR-SA-2_5-150-614724-3D Ortho x3
+    RR spread anchor face based - RR-SA-2_5-150-614724-Elevation Right1 x2
+    RR spread anchor face based - RR-SA-2_5-150-V2-3D Ortho x1
+    RR spread anchor face based - RR-SA-4_0-240-614738-3D Ortho x1
+    RR spread anchor face based - RR-SA-4_0-240-614738-Elevation Right1 x1
+    RR spread anchor face based - RR-SA-4_0-240-614738-Elevation Top1 x2
+    RR spread anchor face based - RR-SA-4_0-240-V6-3D Ortho x1
+    Rebar Bar - Part 3920442696-431004-3D Ortho        x9
+    Rebar Bar - Part 3977270317-431004-3D Ortho        x3
+    Rebar Bar - Part 3977270317-V5-3D Ortho            x1
+    Rebar Bar - Part 4256667133-431004-3D Ortho        x2
+    loopbox down bent - Wire Loop-600440-3D Ortho      x1
+    loopbox down bent - Wire Loop-600440-Elevation Top x1
+    loopbox down bent - Wire Loop-600440-Elevation Top1 x1
+    loopbox down bent - Wire Loop-600440-Elevation Top2 x1
+    loopbox down bent - Wire Loop-V1-3D Ortho          x5
+    loopbox down bent - Wire Loop-V10-Elevation Top1   x1
+    loopbox down bent - Wire Loop-V3-3D Ortho          x5
+    loopbox down bent - Wire Loop-V4-3D Ortho          x1
+    loopbox down bent - Wire Loop-V8-Elevation Top     x1
+    loopbox down bent - Wire Loop-V9-Elevation Top2    x1
+
+### TEXT / ANNOTATION CENSUS (modelspace)
+  [other annotation] (12 instances, 8 distinct)
+      1x  CORBEL
+      1x  DETAIL-A
+      1x  GEOMETRY
+      4x  LENGTH
+      2x  MF
+      1x  NOTCH
+      1x  NOTCH DETAIL-A
+      1x  OPENING
+  [insert marks (Nn)] (8 instances, 5 distinct)
+      2x  N1/N2
+      1x  N10
+      2x  N4/SHEAR KEY
+      2x  N7
+      1x  N8
+
+### PAPER-SPACE TABLES (all schedules on the sheet)
+  APOLLO GIRLS HOSTEL BUILDING
+  (RIGHT WING)-CHITTOOR
+  GRADE OF CONCRETE - M40
+  GRADE OF STEEL - Fe550
+  STRIPPING STRENGTH - M20
+  3 | SECTION
+  LIFTING,TRANSPORTATION
+  1 : 40 | AND ERECTION | - M35
+  COVER:
+  WALL - 30mm
+  ALL DIMENSIONS ARE IN MM
+  LEGENDS:
+  ERECTION MARK -
+  MOULD FACE - | MF
+  4 | SECTION
+  1 : 40
+  2 | SECTION
+  1 : 40
+  5 | SECTION
+  1 : 40 | Weight Schedule
+  Volume | Weight
+  1.52 m³ | 3789.17 kg
+  Dowel Bar Schedule | Insert Schedule | 0 | 16-05-26 | FOR PRODUCTION | GRS | PRC
+  Rev | Date | Description | Chkd | Appd.
+  Ref No | Bar Diameter | Count | Ref No | Type | Count | REVISION SCHEDULE
+  N7 | 16 mm | 6 | N1 | RR-SA-4.0-240 | 2
+  N8 | 16 mm | 9 | N2 | RR-SA-2.5-150 | 4
+  N4 | 50 DIA SLEEVE | 6 | PW-GF-09-MOULD DRAWING
+  N5 | 20 Dia Sleeve | 4
+  3D VIEW | N10 | Wire Loop | 12 | ESP25087 | GMP
+  6 | PW-GF-09
+  PW-GF-09(M2) | 0
+  As indicated
+
+### RECONSTRUCTION CENSUS  (15 bars)  panel 3545x3306x160mm
+  v-mesh       T16  x15       6.91m   10.93kg
+  RECON TOTAL                      10.93kg
+  features: {'sleeve': 0, 'corbel': 1, 'embed': 3, 'anchor': 6, 'loop': 12}
+
+==============================================================================
+## PW-GF-09(R).dwg
+==============================================================================
+
+### RAW ENTITY CENSUS  (total 11983 modelspace entities, 75 paper-space text cells)
+  A-FLOR-OVHD            LINE         x14
+  A-GENM                 ARC          x12
+  A-GENM                 LINE         x76
+  A-GENM                 LWPOLYLINE   x10
+  A-WALL                 ARC          x60
+  A-WALL                 LINE         x429
+  A-WALL                 LWPOLYLINE   x12
+  G-ANNO-SYMB            ARC          x24
+  G-ANNO-SYMB            LINE         x72
+  G-ANNO-SYMB            MTEXT        x4
+  S-BEAM                 LINE         x123
+  S-RBAR                 ARC          x2332
+  S-RBAR                 CIRCLE       x234
+  S-RBAR                 LINE         x8364
+  S-RBAR-IDEN            CIRCLE       x17
+  S-RBAR-IDEN            LINE         x144
+  S-RBAR-IDEN            MTEXT        x56
+  drawn linework length by layer (mm):
+    S-RBAR                       611505
+    A-WALL                        53885
+    S-RBAR-IDEN                   28584
+    G-ANNO-SYMB                   16765
+    A-FLOR-OVHD                   15412
+    S-BEAM                        11356
+    A-GENM                         1094
+  block INSERTs:
+    Detail View - M_Section Head - Filled SHOP DWG-600895-Elevation Front x4
+    Detail View - M_Section Tail - Filled Horizontal-14034-Elevation Front x4
+    M_Rectangular Corbel - M_Rectangular Corbel-5472199-Elevation Front x1
+    M_Rectangular Corbel - M_Rectangular Corbel-5472199-Elevation Right x1
+    M_Rectangular Corbel - M_Rectangular Corbel-5472199-Elevation Right1 x1
+    M_Rectangular Corbel - M_Rectangular Corbel-5472199-Elevation Top1 x1
+    loopbox down bent - Wire Loop-600440-Elevation Top x1
+    loopbox down bent - Wire Loop-600440-Elevation Top1 x1
+    loopbox down bent - Wire Loop-V1-Elevation Top     x1
+    loopbox down bent - Wire Loop-V2-Elevation Top1    x1
+
+### TEXT / ANNOTATION CENSUS (modelspace)
+  [dimensions (bare numbers)] (4 instances, 4 distinct)
+      1x  1
+      1x  2
+      1x  3
+      1x  4
+  [count callouts (N -Td)] (31 instances, 5 distinct)
+      9x  1 -T12
+      2x  2 -T12
+      4x  2 -T12 -Crack Bar
+      8x  2 -T16
+      8x  6 -T12
+  [pitch callouts (Td @p)] (25 instances, 6 distinct)
+      2x  T10 @150 mm
+      6x  T8 Hook @100 mm
+      4x  T8 Horizontal @150 mm
+      6x  T8 Ties @100 mm
+      3x  T8 UBAR @150 mm
+      4x  T8 Vertical @150 mm
+
+### PAPER-SPACE TABLES (all schedules on the sheet)
+  APOLLO GIRLS HOSTEL BUILDING
+  (RIGHT WING)-CHITTOOR
+  GRADE OF CONCRETE - M40
+  GRADE OF STEEL - Fe550
+  STRIPPING STRENGTH - M20
+  LIFTING,TRANSPORTATION
+  AND ERECTION | - M35
+  COVER:
+  WALL - 30mm
+  CORBEL - 25mm
+  ALL DIMENSIONS ARE IN MM
+  LEGENDS:
+  ERECTION MARK -
+  MOULD FACE - | MF
+  ELEVATION(REINF) | 1 | SECTION(REINF) | 2 | SECTION(REINF)
+  A | 1 : 40 | 1 : 40
+  1 : 40
+  3 | SECTION(REINF)
+  1 : 40 | Summary Schedule
+  Bar Diameter | Total Bar Length | Weight
+  8 mm | 357475 mm | 141.23 kg
+  10 mm | 56425 mm | 34.83 kg
+  12 mm | 101650 mm | 90.36 kg | 0 | 17-05-26 | FOR PRODUCTION | ELA | PRC
+  16 mm | 67800 mm | 107.15 kg | Rev | Date | Description | Chkd | Appd.
+  583350 mm | 373.57 kg | REVISION SCHEDULE
+  SECTION(REINF) | PW-GF-09-REINF DRAWING
+  4 | NOTE: | NOTE:
+  1 : 40 | REINFORCEMENT TYPICAL FOR ; | LENGTH,LIFTING,DEMOULDING,DOWEL TUBE, | ESP25087 | GRS
+  PW-GF-09,PW-1F-09,PW-2F-09,PW-3F-09, | DOWEL BAR,PROJECTING BAR,U-BAR | PW-GF-09
+  PW-4F-09,PW-5F-09,PW-6F-09,PW-7F-09 | REFER FOR INDIVIDUAL MOULD DRAWING | PW-GF-09(R) | 0
+  1 : 40
+
+### RECONSTRUCTION CENSUS  (456 bars)  panel 4000x2930x160mm
+  diagonal     T12  x6        9.66m    8.58kg
+  h-mesh       T8   x72      35.55m   14.04kg
+  h-mesh       T10  x6       17.47m   10.79kg
+  h-mesh       T12  x4       15.03m   13.36kg
+  h-mesh       T16  x4       15.76m   24.90kg
+  shape        T8   x1        0.38m    0.15kg
+  shape        T16  x4       12.04m   19.03kg
+  tie          T8   x119     62.57m   24.72kg
+  u-bar        T8   x96     153.80m   60.76kg
+  v-mesh       T8   x48      60.61m   23.95kg
+  v-mesh       T10  x42      23.88m   14.74kg
+  v-mesh       T12  x34      66.58m   59.18kg
+  v-mesh       T16  x19      21.23m   33.55kg
+  v-mesh       T20  x1        0.80m    1.98kg
+  RECON TOTAL                     309.73kg
+  features: {'sleeve': 10, 'corbel': 1, 'embed': 0, 'anchor': 0, 'loop': 0}
+
+### RECONCILIATION vs SUMMARY SCHEDULE (paper space)
+  T8   len   312.9m vs   357.5m | wt  123.62 vs  141.23kg   -17.61  88%
+  T10  len    41.4m vs    56.4m | wt   25.53 vs   34.83kg    -9.30  73%
+  T12  len    91.3m vs   101.7m | wt   81.12 vs   90.36kg    -9.24  90%
+  T16  len    49.0m vs    67.8m | wt   77.48 vs  107.15kg   -29.67  72%
+  T20  len     0.8m vs     0.0m | wt    1.98 vs    0.00kg    +1.98  EXTRA
+
+### RECONCILIATION vs ITEMIZED BBS (PW-GF-09.pdf) — row by row
+  row  1  T8  x24  Horizontal Bar         3.94m each | official   94.56m  matched   73.62m ( 18/24 )   78%  [37.4kg]
+  row  2  T8  x20  Horizontal Bar         0.74m each | official   14.80m  matched   14.72m ( 20/20 )   99%  [5.8kg]
+  row  3  T8  x20  Horizontal Bar         0.63m each | official   12.60m  matched   12.80m ( 20/20 )  102%  [5.0kg]
+  row  4  T12 x4   Horizontal Bar         1.89m each | official    7.57m  matched    3.22m (  2/4  )   43%  [6.7kg]
+  row  5  T12 x4   Horizontal Bar         1.78m each | official    7.13m  matched    6.44m (  4/4  )   90%  [6.3kg]
+  row  6  T16 x8   Horizontal Bar         3.94m each | official   31.52m  matched   15.76m (  4/8  )   50%  [49.8kg]
+  row  7  T12 x4   Horizontal Bar         3.94m each | official   15.76m  matched   15.03m (  4/4  )   95%  [14.0kg]
+  row  8  T12 x8   Horizontal Bar         1.20m each | official    9.60m  matched    0.00m (  0/8  )    0%  [8.5kg]
+  row  9  T8  x20  Horizontal Bar         2.87m each | official   57.40m  matched    0.00m (  0/20 )    0%  [22.7kg]
+  row 10  T8  x120 Vertical Bar           0.87m each | official  104.16m  matched   71.81m ( 79/120)   69%  [41.1kg]
+  row 11  T8  x174 Vertical Bar           0.63m each | official  109.97m  matched   58.38m (103/174)   53%  [43.4kg]
+  row 12  T12 x26  Vertical Bar           2.87m each | official   74.62m  matched   51.18m ( 18/26 )   69%  [66.3kg]
+  row 13  T8  x16  Vertical Bar           1.74m each | official   27.84m  matched   27.84m ( 16/16 )  100%  [11.0kg]
+  row 14  T8  x16  Vertical Bar           1.52m each | official   24.32m  matched   26.11m ( 16/16 )  107%  [9.6kg]
+  row 15  T10 x24  Vertical Bar           1.39m each | official   33.36m  matched    0.00m (  0/24 )    0%  [20.6kg]
+  row 16  T12 x2   Vertical Bar           3.58m each | official    7.16m  matched    0.00m (  0/2  )    0%  [6.4kg]
+  row 17  T16 x9   Vertical Bar           1.30m each | official   11.66m  matched    3.73m (  3/9  )   32%  [18.4kg]
+  row 18  T16 x4   Vertical Bar           1.62m each | official    6.48m  matched    6.48m (  4/4  )  100%  [10.2kg]
+  row 19  T15 x2   Vertical Bar           2.70m each | official    5.40m  matched    4.85m (  2/2  )   90%  [7.5kg]
+                                                          officials  655.91m  matched  391.97m
+  reconstructed bars matching NO BBS row (extra / mis-shaped):
+    h-mesh       T8   x32       8.03m  (3.2kg)
+    h-mesh       T10  x6       17.47m  (10.8kg)
+    shape        T8   x1        0.38m  (0.2kg)
+    shape        T16  x3       10.98m  (17.4kg)
+    tie          T8   x38      17.28m  (6.8kg)
+    u-bar        T8   x2        0.71m  (0.3kg)
+    v-mesh       T8   x6        1.23m  (0.5kg)
+    v-mesh       T10  x42      23.88m  (14.7kg)
+    v-mesh       T12  x16      15.40m  (13.7kg)
+    v-mesh       T16  x11       7.23m  (11.4kg)
+    v-mesh       T20  x1        0.80m  (2.0kg)
+  BBS grand total 390.9kg  (Summary Schedule total 373.6kg — the two official docs disagree)
+
+==============================================================================
+## PW-GF-29(M1).dwg
+==============================================================================
+
+### RAW ENTITY CENSUS  (total 706 modelspace entities, 39 paper-space text cells)
+  A-DETL-MBND            CIRCLE       x1
+  A-DETL-MBND            LINE         x38
+  A-GENM                 ARC          x4
+  A-GENM                 LINE         x73
+  A-WALL                 ARC          x144
+  A-WALL                 LINE         x9
+  A-WALL                 LWPOLYLINE   x36
+  A-WALL-HDLN            LINE         x39
+  A-WALL-HDLN            LWPOLYLINE   x14
+  G-ANNO-DIMS            CIRCLE       x2
+  G-ANNO-DIMS            LINE         x14
+  G-ANNO-DIMS            MTEXT        x2
+  G-ANNO-SYMB            ARC          x18
+  G-ANNO-SYMB            LINE         x54
+  G-ANNO-SYMB            MTEXT        x3
+  G-ANNO-TEXT            LINE         x42
+  G-ANNO-TEXT            MTEXT        x17
+  S-BEAM                 LINE         x11
+  S-RBAR                 ARC          x25
+  S-RBAR                 CIRCLE       x9
+  S-RBAR                 LINE         x151
+  drawn linework length by layer (mm):
+    A-DETL-MBND                   50856
+    S-RBAR                        40666
+    A-WALL                        19226
+    A-WALL-HDLN                   14130
+    G-ANNO-SYMB                   12744
+    G-ANNO-TEXT                    9544
+    G-ANNO-DIMS                    4527
+    S-BEAM                         2450
+    A-GENM                         1721
+  block INSERTs:
+    Detail View - M_Section Head - Filled SHOP DWG-600895-Elevation Front x3
+    Detail View - M_Section Tail - Filled Horizontal-14034-Elevation Front x3
+    RR spread anchor face based - RR-SA-1_4-160-614768-Elevation Front x4
+    RR spread anchor face based - RR-SA-1_4-160-614768-Elevation Right x2
+    RR spread anchor face based - RR-SA-2_5-250-614728-Elevation Front x2
+    RR spread anchor face based - RR-SA-2_5-250-614728-Elevation Right x1
+    Spot Elevations - M_Spot Elevation - Target Filled-10609-Elevation Front x2
+
+### TEXT / ANNOTATION CENSUS (modelspace)
+  [dimensions (bare numbers)] (5 instances, 5 distinct)
+      1x  1
+      1x  100224
+      1x  103224
+      1x  2
+      1x  3
+  [other annotation] (7 instances, 5 distinct)
+      1x  1F SSL
+      2x  CORBEL
+      1x  GF SSL
+      2x  LENGTH
+      1x  MF
+  [insert marks (Nn)] (10 instances, 5 distinct)
+      2x  N1/N2
+      2x  N4/SHEAR KEY
+      2x  N6
+      2x  N7
+      2x  N8
+
+### PAPER-SPACE TABLES (all schedules on the sheet)
+  APOLLO GIRLS HOSTEL BUILDING
+  (RIGHT WING)-CHITTOOR
+  GRADE OF CONCRETE - M40
+  GRADE OF STEEL - Fe550
+  STRIPPING STRENGTH - M20
+  LIFTING,TRANSPORTATION
+  AND ERECTION | - M35
+  COVER:
+  WALL - 30mm
+  ALL DIMENSIONS ARE IN MM
+  LEGENDS:
+  ERECTION MARK -
+  MOULD FACE - | MF
+  1 | SECTION
+  1 : 40 | 0 | 07-05-26 | FOR PRODUCTION | GRS | PRC
+  ELEVATION | Rev | Date | Description | Chkd | Appd.
+  A | REVISION SCHEDULE
+  1 : 40
+  PW-GF-29-MOULD DRAWING
+  ESP25087 | GMP
+  PW-GF-29
+  PW-GF-29(M1) | 0
+  1 : 40
+
+### RECONSTRUCTION CENSUS  (26 bars)  panel 2650x2980x160mm
+  face-dowel   T8   x9        3.78m    1.49kg
+  shape        T16  x2        5.33m    8.42kg
+  v-mesh       T8   x8        3.14m    1.24kg
+  v-mesh       T16  x5        7.77m   12.28kg
+  v-mesh       T20  x2        0.86m    2.12kg
+  RECON TOTAL                      25.55kg
+  features: {'sleeve': 6, 'corbel': 0, 'embed': 0, 'anchor': 6, 'loop': 0}
+
+==============================================================================
+## PW-GF-29(M2).dwg
+==============================================================================
+
+### RAW ENTITY CENSUS  (total 537 modelspace entities, 99 paper-space text cells)
+  A-DETL-MBND            CIRCLE       x1
+  A-DETL-MBND            LINE         x19
+  A-GENM                 ARC          x6
+  A-GENM                 LINE         x134
+  A-GENM                 LWPOLYLINE   x24
+  A-WALL                 ARC          x12
+  A-WALL                 LINE         x25
+  A-WALL                 LWPOLYLINE   x42
+  A-WALL-HDLN            LINE         x72
+  G-ANNO-TEXT            LINE         x24
+  G-ANNO-TEXT            MTEXT        x9
+  S-BEAM                 LINE         x26
+  S-RBAR                 CIRCLE       x8
+  S-RBAR                 LINE         x101
+  S-RBAR                 LWPOLYLINE   x34
+  drawn linework length by layer (mm):
+    A-WALL                        29446
+    S-RBAR                        23759
+    A-DETL-MBND                   17529
+    A-WALL-HDLN                    5259
+    G-ANNO-TEXT                    4861
+    S-BEAM                         4260
+    A-GENM                         2655
+  block INSERTs:
+    RR spread anchor face based - RR-SA-1_4-160-614768-3D Ortho x4
+    RR spread anchor face based - RR-SA-1_4-160-614768-Elevation Top x1
+    RR spread anchor face based - RR-SA-1_4-160-V1-Elevation Top x1
+    RR spread anchor face based - RR-SA-2_5-250-614728-3D Ortho x2
+    RR spread anchor face based - RR-SA-2_5-250-614728-Elevation Top x2
+    Rebar Bar - Part 1808199746-431004-3D Ortho        x9
+    Rebar Bar - Part 2669675448-431004-3D Ortho        x1
+    Rebar Bar - Part 3977270317-431004-3D Ortho        x4
+    Rebar Bar - Part 607735188-431004-3D Ortho         x2
+    Rebar Bar - Part 812285986-431004-3D Ortho         x1
+
+### TEXT / ANNOTATION CENSUS (modelspace)
+  [other annotation] (4 instances, 3 distinct)
+      1x  CORBEL
+      2x  LENGTH
+      1x  MF
+  [insert marks (Nn)] (5 instances, 5 distinct)
+      1x  N1/N2
+      1x  N4/SHEAR KEY
+      1x  N6
+      1x  N7
+      1x  N8
+
+### PAPER-SPACE TABLES (all schedules on the sheet)
+  APOLLO GIRLS HOSTEL BUILDING
+  (RIGHT WING)-CHITTOOR
+  Weight Schedule
+  Volume | Weight | GRADE OF CONCRETE - M40
+  1.27 m³ | 3176.66 kg | GRADE OF STEEL - Fe550
+  STRIPPING STRENGTH - M20
+  Insert Schedule
+  2 | SECTION | LIFTING,TRANSPORTATION
+  Ref No | Type | Count | AND ERECTION | - M35
+  1 : 40 | N1 | RR-SA-2.5-250 | 2
+  COVER:
+  N2 | RR-SA-1.4-160 | 4
+  N4 | 50 DIA SLEEVE | 6 | WALL - 30mm
+  ALL DIMENSIONS ARE IN MM
+  Dowel Bar Schedule | LEGENDS:
+  Ref No | Bar Diameter | Count | ERECTION MARK -
+  N7 | 16 mm | 6 | MOULD FACE - | MF
+  N8 | 20 mm | 2
+  Projecting Bar Schedule
+  Ref No | Bar Diameter | Count
+  N6 | 8 mm | 9
+  Typical Schedule For PW-GF-29
+  3 | SECTION
+  Dwg.No | Element.Id | Count
+  1 : 40 | PW-GF-29 | PW-1F-25 | 1
+  PW-GF-29 | PW-1F-29 | 1
+  PW-GF-29 | PW-2F-25 | 1
+  PW-GF-29 | PW-2F-29 | 1
+  PW-GF-29 | PW-GF-25 | 1
+  PW-GF-29 | PW-GF-29 | 1
+  6
+  0 | 07-05-26 | FOR PRODUCTION | GRS | PRC
+  Rev | Date | Description | Chkd | Appd.
+  REVISION SCHEDULE
+  PW-GF-29-MOULD DRAWING
+  4 | 3D VIEW
+  ESP25087 | GMP
+  PW-GF-29
+  PW-GF-29(M2) | 0
+  1 : 40
+
+### RECONSTRUCTION CENSUS  (15 bars)  panel 2650x160x160mm
+  link         T16  x6        0.48m    0.76kg
+  v-mesh       T8   x9        3.78m    1.49kg
+  RECON TOTAL                       2.25kg
+  features: {'sleeve': 0, 'corbel': 0, 'embed': 0, 'anchor': 4, 'loop': 0}
+
+==============================================================================
+## PW-GF-45(R).dwg
+==============================================================================
+
+### RAW ENTITY CENSUS  (total 3962 modelspace entities, 93 paper-space text cells)
+  A-ANNO-SYMB            ARC          x6
+  A-ANNO-SYMB            LINE         x6
+  A-ANNO-SYMB            MTEXT        x2
+  A-DETL-MEDM            LINE         x10
+  A-GENM                 ARC          x6
+  A-GENM                 LINE         x70
+  A-WALL                 ARC          x80
+  A-WALL                 LINE         x50
+  A-WALL                 LWPOLYLINE   x14
+  G-ANNO-SYMB            ARC          x18
+  G-ANNO-SYMB            LINE         x54
+  G-ANNO-SYMB            MTEXT        x3
+  G-ANNO-TEXT            MTEXT        x4
+  S-BEAM                 LINE         x39
+  S-RBAR                 ARC          x414
+  S-RBAR                 CIRCLE       x169
+  S-RBAR                 LINE         x2867
+  S-RBAR-IDEN            CIRCLE       x12
+  S-RBAR-IDEN            LINE         x104
+  S-RBAR-IDEN            MTEXT        x34
+  drawn linework length by layer (mm):
+    S-RBAR                       350595
+    A-WALL                        31552
+    S-RBAR-IDEN                   18187
+    G-ANNO-SYMB                   12397
+    A-ANNO-SYMB                    7702
+    S-BEAM                         4009
+    A-GENM                         1469
+    A-DETL-MEDM                     801
+  block INSERTs:
+    Detail View - M_Callout Head-378964-Elevation Right 1 x1
+    Detail View - M_Section Head - Filled SHOP DWG-600895-Elevation Front 1 x3
+    Detail View - M_Section Tail - Filled Horizontal-14034-Elevation Front 1 x3
+    M_Break Line - M_Break Line-5416970-Detail 1       x1
+    M_Break Line - M_Break Line-5417060-Detail 1       x1
+    RR spread anchor face based - RR-SA-1_4-160-614768-Elevation Front 1 x4
+    RR spread anchor face based - RR-SA-1_4-160-614768-Elevation Top 2 x1
+    RR spread anchor face based - RR-SA-1_4-160-V1-Elevation Top 2 x1
+    RR spread anchor face based - RR-SA-2_5-250-614728-Elevation Front 1 x2
+
+### TEXT / ANNOTATION CENSUS (modelspace)
+  [count callouts (N -Td)] (20 instances, 4 distinct)
+      6x  1 -T20
+      6x  2 -T12 Perimeter Bar
+      4x  2 -T16 Corbel Main Bar
+      4x  3 -T8 TIES
+  [dimensions (bare numbers)] (8 instances, 4 distinct)
+      1x  2
+      1x  3
+      5x  4
+      1x  5
+  [other annotation] (3 instances, 2 distinct)
+      1x  PW-GF-45(R)
+      2x  T12 Perimeter Bar
+  [pitch callouts (Td @p)] (12 instances, 4 distinct)
+      3x  T8 @150 mm
+      3x  T8 @250 mm
+      3x  T8 UBAR @150 mm
+      3x  T8 UBAR @250 mm
+
+### PAPER-SPACE TABLES (all schedules on the sheet)
+  APOLLO GIRLS HOSTEL BUILDING
+  (RIGHT WING)-CHITTOOR
+  GRADE OF CONCRETE - M40
+  GRADE OF STEEL - Fe550
+  STRIPPING STRENGTH - M20
+  LIFTING,TRANSPORTATION
+  AND ERECTION | - M35
+  COVER:
+  WALL - 30mm
+  ALL DIMENSIONS ARE IN MM
+  LEGENDS:
+  ERECTION MARK -
+  MOULD FACE - | MF
+  5 | DETAIL REINF.
+  2 | SECTION(REINF) | 1 : 20
+  1 | ELEVATION(REINF) | 1 : 40
+  1 : 40
+  REBAR | REBAR SHAPE
+  3 | SECTION(REINF) | T10 VERTICAL BAR
+  1 : 40
+  T8 HORIZONTAL BAR
+  Summary Schedule | T12 PERIMETER BAR
+  4 | SECTION(REINF)
+  1 : 40 | Bar Diameter | Total Bar Length | Weight
+  1 | 17-05-26 | TYPICAL ADDED | GRS | PRC
+  8 mm | 228775 mm | 90.39 kg | 0 | 12-05-26 | FOR PRODUCTION | GRS | PRC
+  Rev | Date | Description | Chkd | Appd.
+  NOTE: | 10 mm | 800 mm | 0.49 kg
+  12 mm | 38000 mm | 33.78 kg | REVISION SCHEDULE
+  REINFORCEMENT TYPICAL FOR; | T12 PERIMETER BAR
+  PW-B1-10,PW-GF-10,PW-1F-10,PW-2F-10, | 16 mm | 21575 mm | 34.10 kg
+  PW-B1-17,PW-GF-17,PW-1F-17,PW-2F-17, | 20 mm | 3100 mm | 7.65 kg
+  PW-B1-18,PW-GF-18,PW-1F-18,PW-2F-18, | 292250 mm | 166.41 kg | PW-GF-45-REINF DRAWING
+  NOTE: | PW-B1-25,PW-GF-25,PW-1F-25,PW-2F-25,
+  LENGTH,LIFTING,DEMOULDING,DOWEL TUBE, | PW-B1-29,PW-GF-29,PW-1F-29,PW-2F-29, | ESP25087 | GMP
+  DOWEL BAR,PROJECTING BAR,U-BAR | PW-GF-45,PW-1F-45,PW-2F-45, | PW-GF-45
+  PW-GF-53,PW-1F-53,PW-2F-53 | PW-GF-45(R) | 1
+  REFER FOR INDIVIDUAL MOULD DRAWING | As indicated
+
+### RECONSTRUCTION CENSUS  (176 bars)  panel 2650x2930x160mm
+  face-dowel   T8   x9        4.45m    1.76kg
+  h-mesh       T8   x33      10.82m    4.27kg
+  shape        T12  x2        5.78m    5.14kg
+  shape        T16  x1        1.04m    1.64kg
+  u-bar        T8   x65     192.68m   76.12kg
+  v-mesh       T8   x44      16.23m    6.41kg
+  v-mesh       T12  x8       20.37m   18.11kg
+  v-mesh       T16  x9       12.24m   19.34kg
+  v-mesh       T20  x5        3.20m    7.89kg
+  RECON TOTAL                     140.68kg
+  features: {'sleeve': 7, 'corbel': 0, 'embed': 0, 'anchor': 6, 'loop': 0}
+
+### RECONCILIATION vs SUMMARY SCHEDULE (paper space)
+  T8   len   224.2m vs   228.8m | wt   88.56 vs   90.39kg    -1.83  98%
+  T10  len     0.0m vs     0.8m | wt    0.00 vs    0.49kg    -0.49  0%
+  T12  len    26.2m vs    38.0m | wt   23.25 vs   33.78kg   -10.53  69%
+  T16  len    13.3m vs    21.6m | wt   20.99 vs   34.10kg   -13.11  62%
+  T20  len     3.2m vs     3.1m | wt    7.89 vs    7.65kg    +0.24  103%
+
+==============================================================================
+## SS-GF-01(M).dwg
+==============================================================================
+
+### RAW ENTITY CENSUS  (total 1962 modelspace entities, 77 paper-space text cells)
+  A-DETL-MBND            CIRCLE       x2
+  A-DETL-MBND            LINE         x164
+  A-DETL-THIN            LINE         x4
+  A-FLOR                 ARC          x8
+  A-FLOR                 LINE         x142
+  A-FLOR                 LWPOLYLINE   x9
+  A-FLOR-HDLN            LINE         x2
+  A-FLOR-IDEN            MTEXT        x1
+  A-FLOR-OVHD            LINE         x1
+  A-GENM                 ARC          x10
+  A-GENM                 LINE         x208
+  A-GENM                 LWPOLYLINE   x8
+  G-ANNO-DIMS            CIRCLE       x1
+  G-ANNO-DIMS            LINE         x7
+  G-ANNO-DIMS            MTEXT        x1
+  G-ANNO-SYMB            ARC          x18
+  G-ANNO-SYMB            LINE         x54
+  G-ANNO-SYMB            MTEXT        x3
+  G-ANNO-TEXT            LINE         x72
+  G-ANNO-TEXT            MTEXT        x27
+  S-RBAR                 ARC          x124
+  S-RBAR                 CIRCLE       x35
+  S-RBAR                 LINE         x847
+  S-RBAR                 LWPOLYLINE   x214
+  drawn linework length by layer (mm):
+    S-RBAR                       171605
+    A-FLOR                        93911
+    A-DETL-MBND                   80984
+    G-ANNO-SYMB                   15633
+    G-ANNO-TEXT                   11916
+    A-GENM                         3527
+    G-ANNO-DIMS                    2976
+    A-DETL-THIN                     900
+    A-FLOR-HDLN                     850
+    A-FLOR-OVHD                     292
+  block INSERTs:
+    Detail View - M_Section Head - Filled SHOP DWG-600895-Elevation Top x3
+    Detail View - M_Section Tail - Filled Horizontal-14034-Elevation Top x3
+    RR spread anchor face based - RR-SA-2_5-150-3355620-Elevation Front x4
+    RR spread anchor face based - RR-SA-2_5-150-3355620-Elevation Right2 x2
+    RR spread anchor face based - RR-SA-2_5-150-614724-3D Ortho x3
+    RR spread anchor face based - RR-SA-2_5-150-614724-Elevation Front x4
+    RR spread anchor face based - RR-SA-2_5-150-614724-Elevation Right2 x2
+    RR spread anchor face based - RR-SA-2_5-150-614724-Elevation Top x8
+    RR spread anchor face based - RR-SA-2_5-150-V15-3D Ortho x1
+    Rebar Bar - Part 1070054846-431004-3D Ortho        x1
+    Rebar Bar - Part 1070054846-V8-3D Ortho            x1
+    Rebar Bar - Part 1871424790-431004-3D Ortho        x1
+    Rebar Bar - Part 1871424790-V1-3D Ortho            x23
+    Rebar Bar - Part 1871424790-V17-3D Ortho           x1
+    Rebar Bar - Part 1871424790-V18-3D Ortho           x1
+    Rebar Bar - Part 1871424790-V19-3D Ortho           x1
+    Rebar Bar - Part 1871424790-V2-3D Ortho            x1
+    Rebar Bar - Part 1871424790-V20-3D Ortho           x8
+    Rebar Bar - Part 1871424790-V21-3D Ortho           x1
+    Rebar Bar - Part 1871424790-V22-3D Ortho           x1
+    Rebar Bar - Part 1871424790-V23-3D Ortho           x1
+    Rebar Bar - Part 1871424790-V24-3D Ortho           x1
+    Rebar Bar - Part 1871424790-V25-3D Ortho           x1
+    Rebar Bar - Part 1871424790-V26-3D Ortho           x1
+    Rebar Bar - Part 1871424790-V27-3D Ortho           x1
+    Rebar Bar - Part 1871424790-V28-3D Ortho           x1
+    Rebar Bar - Part 1871424790-V29-3D Ortho           x1
+    Rebar Bar - Part 1871424790-V3-3D Ortho            x1
+    Rebar Bar - Part 1871424790-V30-3D Ortho           x1
+    Rebar Bar - Part 1871424790-V31-3D Ortho           x1
+    Rebar Bar - Part 1871424790-V32-3D Ortho           x1
+    Rebar Bar - Part 1871424790-V33-3D Ortho           x1
+    Rebar Bar - Part 1871424790-V34-3D Ortho           x1
+    Rebar Bar - Part 1871424790-V35-3D Ortho           x1
+    Rebar Bar - Part 1871424790-V36-3D Ortho           x1
+    Rebar Bar - Part 1871424790-V37-3D Ortho           x4
+    Rebar Bar - Part 1871424790-V38-3D Ortho           x1
+    Rebar Bar - Part 1871424790-V39-3D Ortho           x1
+    Rebar Bar - Part 1871424790-V4-3D Ortho            x1
+    Rebar Bar - Part 1871424790-V40-3D Ortho           x1
+    Rebar Bar - Part 1871424790-V41-3D Ortho           x1
+    Rebar Bar - Part 1871424790-V42-3D Ortho           x1
+    Rebar Bar - Part 1871424790-V43-3D Ortho           x1
+    Rebar Bar - Part 2227165887-431004-3D Ortho        x1
+    Rebar Bar - Part 2227165887-V9-3D Ortho            x1
+    Rebar Bar - Part 2352736704-431004-3D Ortho        x1
+    Rebar Bar - Part 3575411732-431004-3D Ortho        x1
+    Rebar Bar - Part 3575411732-V6-3D Ortho            x1
+    Rebar Bar - Part 3575411732-V7-3D Ortho            x1
+    Rebar Bar - Part 360578841-431004-3D Ortho         x1
+    Rebar Bar - Part 360578841-V10-3D Ortho            x1
+    Rebar Bar - Part 360578841-V5-3D Ortho             x1
+    Rebar Bar - Part 3635738315-431004-3D Ortho        x1
+    Rebar Bar - Part 3635738315-V12-3D Ortho           x1
+    Rebar Bar - Part 3660531219-431004-3D Ortho        x3
+    Rebar Bar - Part 3660531219-V13-3D Ortho           x1
+    Rebar Bar - Part 3660531219-V14-3D Ortho           x1
+    Rebar Bar - Part 3681399347-431004-3D Ortho        x1
+    Rebar Bar - Part 3681399347-V44-3D Ortho           x16
+    Rebar Bar - Part 3681399347-V47-3D Ortho           x1
+    Rebar Bar - Part 3681399347-V53-3D Ortho           x1
+    Rebar Bar - Part 4101040190-431004-3D Ortho        x1
+    Rebar Bar - Part 4101040190-V16-3D Ortho           x1
+    Rebar Bar - Part 650701189-431004-3D Ortho         x1
+    Rebar Bar - Part 766981352-431004-3D Ortho         x1
+    Rebar Bar - Part 766981352-V11-3D Ortho            x1
+    Rebar Bar - Part 878712912-431004-3D Ortho         x7
+    Rebar Bar - Part 878712912-V45-3D Ortho            x1
+    Rebar Bar - Part 878712912-V46-3D Ortho            x1
+    Rebar Bar - Part 878712912-V48-3D Ortho            x1
+    Rebar Bar - Part 878712912-V49-3D Ortho            x1
+    Rebar Bar - Part 878712912-V50-3D Ortho            x6
+    Rebar Bar - Part 878712912-V51-3D Ortho            x1
+    Rebar Bar - Part 878712912-V52-3D Ortho            x1
+    Rebar Bar - Part 878712912-V54-3D Ortho            x1
+    Spot Elevations - M_Spot Elevation - Target Filled-10609-Elevation Front x1
+
+### TEXT / ANNOTATION CENSUS (modelspace)
+  [dimensions (bare numbers)] (4 instances, 4 distinct)
+      1x  1
+      1x  100224
+      1x  2
+      1x  3
+  [other annotation] (14 instances, 6 distinct)
+      1x  CIS
+      1x  GF SSL
+      4x  LENGTH
+      2x  RF
+      1x  SS-GF-01
+      5x  UPSTAND
+  [insert marks (Nn)] (14 instances, 4 distinct)
+      3x  N1/N2
+      3x  N4
+      4x  N6
+      4x  N7
+
+### PAPER-SPACE TABLES (all schedules on the sheet)
+  APOLLO GIRLS HOSTEL BUILDING
+  (RIGHT WING)-CHITTOOR
+  GRADE OF CONCRETE - M40
+  GRADE OF STEEL - Fe550
+  RELEASE STRENGTH - M20
+  LIFTING,TRANSPORTATION
+  AND ERECTION | - M35
+  COVER:
+  SOLID SLAB - 30mm
+  2 | SECTION
+  ALL DIMENSIONS ARE IN MM
+  1 : 50
+  LEGENDS:
+  ERECTION MARK -
+  A | TOP PLAN
+  1 : 50
+  3 | SECTION
+  1 : 50
+  0 | 21-05-26 | FOR PRODUCTION | ELA | PRC
+  Rev | Date | Description | Chkd | Appd.
+  SECTION | REVISION SCHEDULE
+  1
+  1 : 50 | Insert Schedule
+  Ref No | Type | Count | 3D VIEW | SS-GF-01-MOULD DRAWING
+  Weight Schedule | Projecting Bar Schedule | Dowel Bar Schedule | 4
+  N1 | RR-SA-2.5-150 | 8 | ESP25087 | GRS
+  Volume | Weight | Ref No | Bar Diameter | Count | Ref No | Bar Diameter | Count | N2 | RR-SA-2.5-150 | 8 | SS-
+  1.93 m³ | 4813.91 kg | N6 | 8 mm | 64 | N7 | 16 mm | 25 | N4 | 50 Dia Sleeve | 4 | SS-GF-01(M) | 0
+  1 : 50
+
+### RECONSTRUCTION CENSUS  (93 bars)  panel 5508x2214x375mm
+  diagonal     T8   x64      16.40m    6.48kg
+  diagonal     T12  x2        0.27m    0.24kg
+  v-mesh       T8   x1        0.18m    0.07kg
+  v-mesh       T16  x26      18.85m   29.79kg
+  RECON TOTAL                      36.58kg
+  features: {'sleeve': 0, 'corbel': 0, 'embed': 0, 'anchor': 4, 'loop': 0}
+
+==============================================================================
+## SS-GF-01(R).dwg
+==============================================================================
+
+### RAW ENTITY CENSUS  (total 7429 modelspace entities, 73 paper-space text cells)
+  A-FLOR                 ARC          x12
+  A-FLOR                 LINE         x250
+  A-GENM                 ARC          x10
+  A-GENM                 LINE         x86
+  G-ANNO-SYMB            ARC          x18
+  G-ANNO-SYMB            LINE         x54
+  G-ANNO-SYMB            MTEXT        x3
+  S-RBAR                 ARC          x781
+  S-RBAR                 CIRCLE       x218
+  S-RBAR                 LINE         x5843
+  S-RBAR-IDEN            CIRCLE       x13
+  S-RBAR-IDEN            LINE         x103
+  S-RBAR-IDEN            MTEXT        x38
+  drawn linework length by layer (mm):
+    S-RBAR                       587664
+    A-FLOR                        50144
+    S-RBAR-IDEN                   20713
+    G-ANNO-SYMB                   12439
+    A-GENM                         1414
+  block INSERTs:
+    Detail View - M_Section Head - Filled SHOP DWG-600895-Elevation Top1 x3
+    Detail View - M_Section Tail - Filled Horizontal-14034-Elevation Top1 x3
+    RR spread anchor face based - RR-SA-2_5-150-3355620-Elevation Right x2
+    RR spread anchor face based - RR-SA-2_5-150-614724-Elevation Right x2
+    RR spread anchor face based - RR-SA-2_5-150-614724-Elevation Top1 x4
+    RR spread anchor face based - RR-SA-2_5-150-V1-Elevation Top1 x3
+
+### TEXT / ANNOTATION CENSUS (modelspace)
+  [dimensions (bare numbers)] (3 instances, 3 distinct)
+      1x  1
+      1x  2
+      1x  3
+  [count callouts (N -Td)] (24 instances, 2 distinct)
+     13x  2 -T12
+     11x  2 -T20
+  [pitch callouts (Td @p)] (14 instances, 3 distinct)
+      3x  T10 @125 mm
+      3x  T8 @150 mm
+      8x  T8 @200 mm
+
+### PAPER-SPACE TABLES (all schedules on the sheet)
+  APOLLO GIRLS HOSTEL BUILDING
+  (RIGHT WING)-CHITTOOR
+  GRADE OF CONCRETE - M40
+  GRADE OF STEEL - Fe550
+  RELEASE STRENGTH - M20
+  LIFTING,TRANSPORTATION
+  AND ERECTION | - M35
+  SECTION(REINF) | COVER:
+  2
+  1 : 30 | SOLID SLAB - 30mm
+  ALL DIMENSIONS ARE IN MM
+  LEGENDS:
+  ERECTION MARK -
+  A | TOP PLAN(REINF)
+  1 : 40
+  3 | SECTION(REINF)
+  1 : 30
+  1 | SECTION(REINF)
+  1 : 40
+  Summary Schedule
+  0 | 21-05-26 | FOR PRODUCTION | ELA | PRC
+  Bar Diameter | Total Bar Length | Weight | Rev | Date | Description | Chkd | Appd.
+  8 mm | 201100 mm | 79.45 kg | REVISION SCHEDULE
+  10 mm | 87000 mm | 53.71 kg
+  12 mm | 38700 mm | 34.40 kg
+  NOTE: | 16 mm | 42700 mm | 67.48 kg | SS-GF-01-REINF DRAWING
+  NOTE: | REINFORCEMENT TYPICAL FOR; | 20 mm | 34800 mm | 85.93 kg
+  LENGTH,LIFTING,DEMOULDING,DOWEL TUBE, | SS-GF-01,SS-GF-06,SS-1F-01,SS-1F-04,SS-1F-07, | 404300 mm | 320.97 kg 
+  DOWEL BAR,PROJECTING BAR,U-BAR | SS-GF-01
+  SS-1F-09,SS-2F-01,SS-2F-04,SS-2F-07,SS-2F-09, | SS-GF-01(R) | 0
+  REFER FOR INDIVIDUAL MOULD DRAWING | SS-3F-01,SS-3F-04,SS-3F-07,SS-3F-09 | As indicated
+
+### RECONSTRUCTION CENSUS  (247 bars)  panel 5200x2050x375mm
+  face-dowel   T16  x25      22.29m   35.22kg
+  h-mesh       T8   x10       5.24m    2.07kg
+  h-mesh       T10  x15      70.94m   43.79kg
+  h-mesh       T12  x4       20.39m   18.13kg
+  h-mesh       T20  x4       15.41m   38.06kg
+  link         T8   x68      20.06m    7.92kg
+  link         T10  x30       8.85m    5.46kg
+  shape        T10  x1        4.94m    3.05kg
+  v-mesh       T8   x60     140.40m   55.47kg
+  v-mesh       T12  x6       11.94m   10.61kg
+  v-mesh       T16  x19      10.91m   17.24kg
+  v-mesh       T20  x5        9.76m   24.09kg
+  RECON TOTAL                     261.11kg
+  features: {'sleeve': 0, 'corbel': 0, 'embed': 0, 'anchor': 7, 'loop': 0}
+
+### RECONCILIATION vs SUMMARY SCHEDULE (paper space)
+  T8   len   165.7m vs   201.1m | wt   65.46 vs   79.45kg   -13.99  82%
+  T10  len    84.7m vs    87.0m | wt   52.30 vs   53.71kg    -1.41  97%
+  T12  len    32.3m vs    38.7m | wt   28.74 vs   34.40kg    -5.66  84%
+  T16  len    33.2m vs    42.7m | wt   52.46 vs   67.48kg   -15.02  78%
+  T20  len    25.2m vs    34.8m | wt   62.15 vs   85.93kg   -23.78  72%
