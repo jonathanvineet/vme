@@ -135,3 +135,56 @@ lines" = fragment merging (§5.2/5.4), "corbel missing" = PW-45 corbel main bars
 "bending in the corners" = detail-view bent bars (§5.5), "double layers" =
 front/back z-face assignment (largely fixed by the radius-tolerance fix),
 "corrgated pipes" = sleeves (detected: 10 on PW-09, listed as features, not bars).
+
+## 7. Session continuation findings (2026-07-19, `rebar3d-weight-fix-continued` branch)
+
+Two fixes shipped and screenshot-verified:
+- **Phantom suppression, generalized**: any v-mesh/h-mesh/diagonal bar at a
+  diameter the panel's own Summary Schedule never lists at all is dropped
+  (`cli.py::drop_unscheduled_phantoms`), gated on schedule availability and
+  skipping synthesized/cast-in bars. Confirmed root cause on PW-02's T25/T32:
+  each phantom sits almost exactly at the midpoint between two real,
+  correctly-paired bars of *different* diameters (T12/T8, T20/T8) — a
+  cross-pairing between one rail of each real bar, not real steel. Net
+  effect: PW-02's naive TOTAL % *drops* 94%→92% because the +6kg of fake
+  steel had been accidentally offsetting a real T16/T10 shortfall — an
+  honest number, not a regression.
+- **Hairpin synthesis now intersects per-run y-intervals** (was column
+  overall min/max) so a v-mesh column split by a side notch gets hairpins
+  at its own internal free ends too, the same pattern `_synthesize_ties`
+  already handles. Small gain (PW-09 T8 +1.4kg) — only 5/19 T8 columns on
+  PW-09 actually have an internal split, so this lever is mostly tapped out
+  there; may matter more on panels with more notches.
+
+Investigated but **not fixed this session** — each needs more evidence
+before a safe synthesis rule can be written (placement-guessing has burned
+this project multiple times; see §5-6 history):
+- **PW-02's T10 −15kg "gap" is a doc-disagreement, not a bug**: PW-02's BBS
+  row 10 wants only 2×T10@3.7m = 4.57kg total; the reconstruction (5.49kg)
+  already *exceeds* the BBS figure. The −15kg only shows up against the
+  Summary Schedule (20.50kg), which is simply a different, larger number for
+  this diameter on this panel — same class of doc-vs-doc conflict already
+  documented for PW-09's T16 (§2). Don't chase this one via geometry.
+- **"T8 Hook @100mm" callout family (PW-09, 6 instances)**: each sits within
+  ~500mm of one of the 6 "T8 Ties @100mm" callouts already driving
+  `_synthesize_ties` (paired up spatially, one Hook label per Tie label per
+  column zone) — almost certainly a companion single-leg hook/cross-tie in
+  the same boundary-column detail, at the same 100mm pitch, not a duplicate
+  label for the same steel. Likely a real, distinct ~20kg of BBS row-11
+  weight, but its shape/placement relative to the tie loop isn't confirmed
+  yet — needs a raw-geometry trace at one of the 6 label positions before
+  synthesizing it (same standard as every prior synthesis pass here).
+- **SS-GF-01's T20/T12 "rail ambiguity" from an earlier audit no longer
+  reproduces at the described y=96/108/117** — current geometry shows T20 and
+  T12 top/bottom edge lines at *different* z-depths (T20 near one face,
+  T12 near the other), which is not actually ambiguous; likely already
+  fixed by an intervening commit. The real remaining SS-GF-01 T20 gap
+  (~9.6m / 23.8kg, suspiciously close to 2 more full-width 5.075m lines)
+  and its 11 "2 -T20" callouts mostly sit **outside the elevation view's
+  own bbox** (only 1 of 11 fell inside; PW-45's corbel/perimeter callouts
+  are the same — only 1 of 12 lands in the elevation) — meaning most of
+  this evidence lives in section/detail views that need per-view coordinate
+  handling `crosscheck.py` doesn't do yet. Next step is building that
+  drawing-wide (not elevation-only) callout-to-geometry search before
+  attempting synthesis, same conclusion for PW-45's corbel-main/perimeter
+  bars (task 4) and PW-09's detail-view T12 (task 5).
