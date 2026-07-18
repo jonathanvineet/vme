@@ -45,6 +45,63 @@ def extract_schedule(pdf_path: Path) -> list[ScheduleRow] | None:
     return rows or None
 
 
+def extract_schedule_dwg(dxf_path: Path) -> list[ScheduleRow] | None:
+    """Read the Summary Schedule directly out of the DWG's paper space.
+
+    The schedule table isn't in modelspace (checking only modelspace led
+    this project to wrongly conclude the DWG carries no schedule text at
+    all) — it's MTEXT in the print layout (paper space), cell by cell.
+    Reconstructing the table = grouping "N mm"/"N kg" cells into rows by
+    Y coordinate. Verified to reproduce the printed PDF table exactly on
+    all four available panels — including PW-GF-45, which has no PDF at
+    all, making this the only source of official totals for such panels.
+    """
+    import ezdxf
+
+    try:
+        doc = ezdxf.readfile(str(dxf_path))
+    except IOError:
+        return None
+    for lname in doc.layout_names():
+        if lname.lower() == "model":
+            continue
+        items = []
+        has_title = False
+        for e in doc.layout(lname):
+            if e.dxftype() != "MTEXT":
+                continue
+            s = e.plain_text().strip()
+            if s == "Summary Schedule":
+                has_title = True
+            items.append((s, e.dxf.insert.x, e.dxf.insert.y))
+        if not has_title:
+            continue
+        cells = [(s, x, y) for s, x, y in items
+                 if re.fullmatch(r"[\d.]+ (?:mm|kg)", s)]
+        # group cells into table rows by Y, then order columns by X
+        rows_by_y: list[list] = []
+        for s, x, y in sorted(cells, key=lambda c: -c[2]):
+            for r in rows_by_y:
+                if abs(r[0] - y) < 3:
+                    r[1].append((x, s))
+                    break
+            else:
+                rows_by_y.append([y, [(x, s)]])
+        out = []
+        for _, cl in rows_by_y:
+            cl.sort()
+            vals = [s for _, s in cl]
+            # a data row is: "<dia> mm", "<length> mm", "<weight> kg";
+            # the totals row has only two cells (length, weight) — skip it
+            if len(vals) == 3 and vals[0].endswith(" mm") and vals[2].endswith(" kg"):
+                dia = float(vals[0][:-3])
+                if dia <= 50:  # sanity: a diameter, not a length
+                    out.append(ScheduleRow(int(dia), float(vals[1][:-3]), float(vals[2][:-3])))
+        if out:
+            return out
+    return None
+
+
 def find_schedule_pdf(dwg_path: Path) -> Path | None:
     """The (R) PDF beside a given (R) DWG, tolerating a stray space before
     the extension seen in this drawing set (e.g. "PW-GF-02(R) .pdf")."""
