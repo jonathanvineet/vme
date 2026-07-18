@@ -17,7 +17,39 @@ from .extract import extract_bars
 from .loader import dwg_to_dxf, load_entities
 from .reconstruct import reconstruct_panel
 from .schedule import compare_to_bars, extract_schedule, extract_schedule_dwg, find_schedule_pdf
+from .reconstruct import Panel
+from .schedule import ScheduleRow
 from .views import cluster_views
+
+
+def drop_unscheduled_phantoms(panel: Panel, rows: list[ScheduleRow]) -> int:
+    """Drop generic-mesh bars at a diameter the panel's own official
+    schedule never lists at all.
+
+    The Summary Schedule is a full material takeoff of every diameter
+    actually drawn on the sheet; a v-mesh/h-mesh/diagonal bar (plain
+    double-line pairing off S-RBAR, not a cast-in item with its own
+    separate schedule and not a text-callout synthesis already anchored
+    to a diameter the drawing states) at a diameter absent from that
+    takeoff is drafting noise -- e.g. two lines an unrelated distance
+    apart happening to fall in [MIN_DIA, MAX_DIA] at a bar-boundary
+    transition -- not real steel. Confirmed on PW-GF-02: phantom T25/T32
+    v-mesh/h-mesh bars sitting exactly between two real, correctly-paired
+    bars of different diameters (T12/T8, T20/T8), i.e. one rail of each
+    real bar cross-paired with a rail of its neighbour.
+    """
+    official_dia = {r.diameter for r in rows}
+    kept, dropped = [], 0
+    for b in panel.bars:
+        if b.kind in ("v-mesh", "h-mesh", "diagonal") and b.z_source != "synthesized" \
+                and b.diameter not in official_dia:
+            dropped += 1
+            continue
+        kept.append(b)
+    panel.bars = kept
+    if dropped:
+        panel.stats["bars"] = len(kept)
+    return dropped
 
 
 def main(argv=None) -> int:
@@ -34,6 +66,24 @@ def main(argv=None) -> int:
         ents = load_entities(dxf)
         views = cluster_views(ents)
         panel = reconstruct_panel(name, views)
+
+        # The sheet's own Summary Schedule is ground truth for which
+        # diameters actually appear in this panel at all — independent of
+        # how well the geometry reconstruction manages to match it.
+        # Primary source: the DWG's own paper-space layout (every panel
+        # carries its schedule there, even ones with no PDF); fallback: a
+        # sibling (R) PDF.
+        rows, src_name = extract_schedule_dwg(dxf), f"{name} DWG paper space"
+        if rows is None:
+            pdf = find_schedule_pdf(src)
+            if pdf is not None:
+                rows, src_name = extract_schedule(pdf), pdf.name
+        if rows is not None:
+            n_dropped = drop_unscheduled_phantoms(panel, rows)
+            if n_dropped:
+                print(f"  dropped {n_dropped} phantom bar(s) at diameters absent "
+                      f"from the official schedule ({src_name})")
+
         panels.append(panel)
         write_json(panel, args.out / f"{name}.json")
         write_projections(panel, args.out / f"{name}_views.png")
@@ -59,16 +109,6 @@ def main(argv=None) -> int:
             print(f"  crosscheck: {len(callouts)} labelled details, {n_short} short "
                   f"(see {name}_crosscheck.txt)")
 
-        # The sheet's own Summary Schedule is ground truth for weight —
-        # independent of how well the geometry reconstruction above
-        # manages to match it. Primary source: the DWG's own paper-space
-        # layout (every panel carries its schedule there, even ones with
-        # no PDF); fallback: a sibling (R) PDF.
-        rows, src_name = extract_schedule_dwg(dxf), f"{name} DWG paper space"
-        if rows is None:
-            pdf = find_schedule_pdf(src)
-            if pdf is not None:
-                rows, src_name = extract_schedule(pdf), pdf.name
         if rows is not None:
             report = compare_to_bars(rows, panel.bars)
             (args.out / f"{name}_schedule.txt").write_text(report + "\n")
