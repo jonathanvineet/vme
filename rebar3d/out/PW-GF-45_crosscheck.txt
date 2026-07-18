@@ -1,4 +1,4 @@
 callout                      expected  found   nearest  status
 2 -T12 Perimeter Bar                2      0         -  SHORT
 1 -T20                              1      0         -  SHORT
-1 -T20                              1      1     573mm  OK
+1 -T20                              1      3     354mm  OVER

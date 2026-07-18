@@ -122,8 +122,30 @@ def pair_lines(ents: list[Ent], min_len: float = 30.0, seg_min: float = 6.0) -> 
     bars: list[Bar2D] = []
     for group in by_angle.values():
         group.sort(key=lambda r: r.noff)
-        used_iv: set[tuple[int, int]] = set()  # (rail idx, iv idx) claims
-        # candidate pairings, longest overlap first, each interval used once
+        # Claims are tracked as parametric *sub-ranges* per interval, not a
+        # whole-interval used flag. With whole-interval claims, a physical
+        # bar whose one rail is fragmented (a crossing bar's trim splits it
+        # into two intervals) while the other rail is continuous lost every
+        # segment after the first: the continuous rail's single interval
+        # could only be claimed once, so the second candidate was skipped
+        # and that part of the bar silently vanished (confirmed on
+        # PW-GF-09 x=3497: full-height rails in the DXF, only the top half
+        # reconstructed). A candidate now consumes only the [lo, hi] range
+        # it actually pairs over, leaving the rest of both intervals free.
+        claimed: dict[tuple[int, int], list[tuple[float, float]]] = {}
+
+        def free_spans(key, lo, hi):
+            spans = [(lo, hi)]
+            for c0, c1 in claimed.get(key, ()):
+                spans = [
+                    piece
+                    for s0, s1 in spans
+                    for piece in (((s0, min(s1, c0)),) if c0 > s0 else ())
+                    + (((max(s0, c1), s1),) if c1 < s1 else ())
+                    if piece[1] - piece[0] > 0
+                ]
+            return spans
+
         cands = []
         for i in range(len(group)):
             for j in range(i + 1, len(group)):
@@ -139,16 +161,24 @@ def pair_lines(ents: list[Ent], min_len: float = 30.0, seg_min: float = 6.0) -> 
                             cands.append((hi - lo, i, ii, j, jj, lo, hi, gap))
         cands.sort(reverse=True)
         for _, i, ii, j, jj, lo, hi, gap in cands:
-            if (i, ii) in used_iv or (j, jj) in used_iv:
-                continue
-            used_iv.add((i, ii))
-            used_iv.add((j, jj))
-            r = group[i]
-            noff = (r.noff + group[j].noff) / 2
-            ux, uy = math.cos(r.angle), math.sin(r.angle)
-            p0 = (ux * lo - uy * noff, uy * lo + ux * noff)
-            p1 = (ux * hi - uy * noff, uy * hi + ux * noff)
-            bars.append(Bar2D([p0, p1], gap))
+            # the pairable range is whatever remains unclaimed on BOTH sides
+            spans_i = free_spans((i, ii), lo, hi)
+            spans_j = free_spans((j, jj), lo, hi)
+            pieces = []
+            for s0, s1 in spans_i:
+                for t0, t1 in spans_j:
+                    p0_, p1_ = max(s0, t0), min(s1, t1)
+                    if p1_ - p0_ >= min_len:
+                        pieces.append((p0_, p1_))
+            for p_lo, p_hi in pieces:
+                claimed.setdefault((i, ii), []).append((p_lo, p_hi))
+                claimed.setdefault((j, jj), []).append((p_lo, p_hi))
+                r = group[i]
+                noff = (r.noff + group[j].noff) / 2
+                ux, uy = math.cos(r.angle), math.sin(r.angle)
+                p0 = (ux * p_lo - uy * noff, uy * p_lo + ux * noff)
+                p1 = (ux * p_hi - uy * noff, uy * p_hi + ux * noff)
+                bars.append(Bar2D([p0, p1], gap))
     return bars
 
 
