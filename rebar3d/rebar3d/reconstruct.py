@@ -510,26 +510,45 @@ def _synthesize_ties(bars: list[Bar3D], elev_ents, thickness: float) -> list[Bar
             callouts.append((int(m.group(1)), int(m.group(2))))
     if not callouts:
         return bars
-    dia, pitch = max(set(callouts), key=callouts.count)
+    tie_dia, pitch = max(set(callouts), key=callouts.count)
 
-    vmesh = [b for b in bars if b.kind == "v-mesh" and b.diameter == dia]
-    if not vmesh:
-        return bars
-    xs = sorted(set(b.points[0][0] for b in vmesh))
-    clusters: list[list[float]] = []
-    for x in xs:
-        if clusters and x - clusters[-1][-1] <= 250.0:
-            clusters[-1].append(x)
-        else:
-            clusters.append([x])
+    # A tie wraps the column's *main longitudinal* bars, which are a
+    # different (larger) diameter than the tie itself -- clustering the
+    # tie's own diameter's v-mesh bars to find "the column" is wrong: a
+    # tie's own diameter is usually the smallest, most common one in the
+    # panel (T8), so its v-mesh bars are the general field mesh, not a
+    # column. Confirmed directly: PW-GF-09's "T8 Ties" clustering on T8
+    # v-mesh grabbed a contiguous stretch of ordinary ~140mm-pitch field
+    # mesh (17 bars spanning 700-3122mm) since its gaps are all well under
+    # the 250mm cluster threshold -- there's no way to tell "column" from
+    # "field mesh" by consecutive gap alone when the field mesh is itself
+    # closely spaced. A genuine column is narrow: look across *every*
+    # diameter for a tight cluster (small total span, few hundred mm),
+    # not just small gaps between neighbours.
+    by_dia: dict[int, list[float]] = {}
+    for b in bars:
+        if b.kind == "v-mesh":
+            by_dia.setdefault(b.diameter, []).append(b.points[0][0])
+
+    col_clusters: list[tuple[int, list[float]]] = []
+    for dia, xs in by_dia.items():
+        xs = sorted(set(xs))
+        clusters: list[list[float]] = []
+        for x in xs:
+            if clusters and x - clusters[-1][-1] <= 250.0:
+                clusters[-1].append(x)
+            else:
+                clusters.append([x])
+        for cl in clusters:
+            if len(cl) >= 4 and max(cl) - min(cl) <= 1200.0:
+                col_clusters.append((dia, cl))
 
     cover = 30.0
     out: list[Bar3D] = []
-    for cl in clusters:
-        if len(cl) < 4:  # a handful of scattered bars isn't a column detail
-            continue
+    for dia, cl in col_clusters:
+        col_bars = [b for b in bars if b.kind == "v-mesh" and b.diameter == dia
+                    and min(cl) <= b.points[0][0] <= max(cl)]
         x_lo, x_hi = min(cl) - cover, max(cl) + cover
-        col_bars = [b for b in vmesh if min(cl) <= b.points[0][0] <= max(cl)]
         ys = [p[1] for b in col_bars for p in b.points]
         y_lo, y_hi = min(ys), max(ys)
         z_lo, z_hi = cover, thickness - cover
@@ -538,7 +557,7 @@ def _synthesize_ties(bars: list[Bar3D], elev_ents, thickness: float) -> list[Bar
             y = y_lo + i * (y_hi - y_lo) / max(n - 1, 1)
             pts = [(x_lo, y, z_lo), (x_hi, y, z_lo), (x_hi, y, z_hi),
                    (x_lo, y, z_hi), (x_lo, y, z_lo)]
-            out.append(Bar3D(pts, dia, "tie", "synthesized"))
+            out.append(Bar3D(pts, tie_dia, "tie", "synthesized"))
     return bars + out
 
 
