@@ -485,7 +485,7 @@ def _fold_ubars(bars: list[Bar3D], sections: list[SectionInfo]) -> list[Bar3D]:
 _TIE_RE = re.compile(r"T(\d+)\s*Ties?\s*@\s*(\d+)\s*mm", re.IGNORECASE)
 
 
-def _synthesize_ties(bars: list[Bar3D], elev_ents, thickness: float,
+def _synthesize_ties(bars: list[Bar3D], all_ents, thickness: float,
                      panel_h: float) -> list[Bar3D]:
     """Boundary-column stirrup ties, drawn too fragmented to pair as bars.
 
@@ -507,8 +507,11 @@ def _synthesize_ties(bars: list[Bar3D], elev_ents, thickness: float,
       to the panel, never the naive min/max envelope (which drew ties
       across the notch and outside the panel outline entirely).
     """
+    # count callout instances across ALL views: labels for tied pairs are
+    # placed in whichever view shows the detail (on PW-GF-09 only 1 of the
+    # 6 sits in the elevation; the BBS count needs all 6)
     callouts = []
-    for e in elev_ents:
+    for e in all_ents:
         if e.kind not in ("TEXT", "MTEXT"):
             continue
         m = _TIE_RE.search(e.text or "")
@@ -553,35 +556,55 @@ def _synthesize_ties(bars: list[Bar3D], elev_ents, thickness: float,
                     res.append((lo, hi))
         return res
 
-    # pair adjacent positions into tie stacks (tie core is ~200mm wide,
-    # so partners sit within ~160mm of each other), greedily left to right
+    # candidate tie stacks = adjacent main-bar pairs within ~160mm (tie
+    # core is ~200mm wide). The number of stacks is the number of "Ties"
+    # callout INSTANCES in the drawing -- the BBS tie count is exactly
+    # instances x (H/pitch + 1) (BBS_RULES.md; 174 = 6 x 29 on PW-GF-09).
+    # Rank candidate pairs by how much tie-able run they actually carry
+    # and claim the best ones exclusively (a bar x can belong to one
+    # stack only). The previous greedy left-to-right pairing of ALL
+    # >=T12 columns fabricated overlapping partial stacks wherever
+    # fragmented verticals clustered (observed: six phantom half-height
+    # stacks on PW-GF-09's right side).
+    n_stacks = callouts.count((tie_dia, pitch))
     xs = sorted(main)
+    pairs = [(xs[i], xs[i + 1]) for i in range(len(xs) - 1)
+             if xs[i + 1] - xs[i] <= 160.0]
+    scored = []
+    for a, b in pairs:
+        runs = intersect(merged(main[a]), merged(main[b]))
+        cov = sum(hi - lo for lo, hi in runs)
+        if cov > 0:
+            scored.append((cov, a, b, runs))
+    scored.sort(key=lambda s: -s[0])
+    claimed: set[float] = set()
     out: list[Bar3D] = []
-    i = 0
-    while i < len(xs) - 1:
-        if xs[i + 1] - xs[i] <= 160.0:
-            x_lo, x_hi = xs[i] - cover, xs[i + 1] + cover
-            runs = intersect(merged(main[xs[i]]), merged(main[xs[i + 1]]))
-            z_lo, z_hi = cover, thickness - cover
-            for lo, hi in runs:
-                lo = max(lo, cover)
-                hi = min(hi, panel_h - cover)
-                n = max(int((hi - lo) // pitch) + 1, 1)
-                for k in range(n):
-                    y = lo + k * pitch
-                    # closed loop + two 80mm hook tails angled into the
-                    # core at the closing corner -- the BBS tie shape's
-                    # 0.08 end segments (0.632m total at T8/t160, vs 0.60
-                    # for the bare rectangle; see BBS_RULES.md)
-                    h = 80.0 / math.sqrt(2)
-                    t1 = (x_lo + h, y, z_lo + h)
-                    t2 = (x_lo + h, y, z_hi - h)
-                    pts = [t1, (x_lo, y, z_lo), (x_hi, y, z_lo), (x_hi, y, z_hi),
-                           (x_lo, y, z_hi), t2]
-                    out.append(Bar3D(pts, tie_dia, "tie", "synthesized"))
-            i += 2  # both positions consumed by this stack
-        else:
-            i += 1
+    taken = 0
+    for cov, a, b, runs in scored:
+        if taken >= n_stacks:
+            break
+        if a in claimed or b in claimed:
+            continue
+        claimed.update((a, b))
+        taken += 1
+        x_lo, x_hi = a - cover, b + cover
+        z_lo, z_hi = cover, thickness - cover
+        for lo, hi in runs:
+            lo = max(lo, cover)
+            hi = min(hi, panel_h - cover)
+            n = max(int((hi - lo) // pitch) + 1, 1)
+            for k in range(n):
+                y = lo + k * pitch
+                # closed loop + two 80mm hook tails angled into the
+                # core at the closing corner -- the BBS tie shape's
+                # 0.08 end segments (0.632m total at T8/t160, vs 0.60
+                # for the bare rectangle; see BBS_RULES.md)
+                h = 80.0 / math.sqrt(2)
+                t1 = (x_lo + h, y, z_lo + h)
+                t2 = (x_lo + h, y, z_hi - h)
+                pts = [t1, (x_lo, y, z_lo), (x_hi, y, z_lo), (x_hi, y, z_hi),
+                       (x_lo, y, z_hi), t2]
+                out.append(Bar3D(pts, tie_dia, "tie", "synthesized"))
     return bars + out
 
 
@@ -646,10 +669,40 @@ def _synthesize_hairpins(bars: list[Bar3D], elev_ents, thickness: float,
     return bars + out
 
 
+def _dedupe_near(bars: list[Bar3D]) -> list[Bar3D]:
+    """Drop near-duplicate bars: same kind+diameter, both endpoints within
+    6mm, length within 5%. Detection and synthesis paths can each emit
+    their own copy of one physical bar (e.g. a dashed centerline split
+    across offset bins yielding 3 coincident crack bars ~4-6mm apart);
+    one physical bar must book its steel exactly once. The tolerance must
+    stay under the tightest real separation in these drawings: mesh-face
+    z-planes sit as little as 9.6mm apart (33.6 vs 43.2 on PW-GF-09) --
+    a 25mm first attempt silently deleted one of each such real pair."""
+    kept: list[Bar3D] = []
+    for b in bars:
+        e0, e1 = b.points[0], b.points[-1]
+        lb = sum(math.dist(p, q) for p, q in zip(b.points, b.points[1:]))
+        dup = False
+        for k in kept:
+            if k.kind != b.kind or k.diameter != b.diameter:
+                continue
+            k0, k1 = k.points[0], k.points[-1]
+            if (math.dist(e0, k0) < 6 and math.dist(e1, k1) < 6) or \
+               (math.dist(e0, k1) < 6 and math.dist(e1, k0) < 6):
+                lk = sum(math.dist(p, q) for p, q in zip(k.points, k.points[1:]))
+                if lk and abs(lb - lk) / lk < 0.05:
+                    dup = True
+                    break
+        if not dup:
+            kept.append(b)
+    return kept
+
+
 _LABELLED_SINGLE_RE = re.compile(r"(\d+)\s*-\s*T(\d+)[^\d]*CRACK\s*BAR", re.IGNORECASE)
 
 
-def _synthesize_labelled_singles(bars: list[Bar3D], elev_ents, x0: float, y0: float, thickness: float) -> list[Bar3D]:
+def _synthesize_labelled_singles(bars: list[Bar3D], elev_ents, x0: float, y0: float,
+                                 thickness: float, all_ents=None) -> list[Bar3D]:
     """Bars drawn as a single annotation-style centerline, not a to-scale
     double-line outline -- confirmed directly for "N -T{d} ... CRACK BAR"
     callouts: the geometry near each label is a *single* dashed diagonal
@@ -668,7 +721,18 @@ def _synthesize_labelled_singles(bars: list[Bar3D], elev_ents, x0: float, y0: fl
         if m:
             cx, cy = (e.bbox[0] + e.bbox[2]) / 2, (e.bbox[1] + e.bbox[3]) / 2
             callouts.append((int(m.group(1)), int(m.group(2)), cx, cy))
-    if not callouts:
+    # fallback count for lines whose own label sits in ANOTHER view (like
+    # tie callouts, crack-bar labels are placed wherever the detail shows;
+    # PW-GF-09 keeps 3 of its 4 in the elevation): the modal (count, dia)
+    # among crack callouts drawing-wide
+    fallback = None
+    if all_ents is not None:
+        alldp = [(int(m.group(1)), int(m.group(2)))
+                 for e in all_ents if e.kind in ("TEXT", "MTEXT")
+                 for m in [_LABELLED_SINGLE_RE.search(e.text or "")] if m]
+        if alldp:
+            fallback = max(set(alldp), key=alldp.count)
+    if not callouts and not fallback:
         return bars
 
     segs = []
@@ -703,28 +767,85 @@ def _synthesize_labelled_singles(bars: list[Bar3D], elev_ents, x0: float, y0: fl
         merged.append((angle, noff, cur0, cur1))
     merged = [r for r in merged if r[3] - r[2] >= 300.0]  # drop stray short fragments
 
-    used = [False] * len(merged)
+    # coalesce near-identical centerlines: the offset-bin key above splits a
+    # dashed line whose rail jitters a few mm across two adjacent noff bins,
+    # yielding 2-3 slightly-offset copies of the SAME drawn line -- each of
+    # which a callout then claimed as a separate bar (observed directly:
+    # PW-GF-09's bottom-left crack bar synthesized 3x a few mm apart while
+    # the actual X-partner line went unclaimed). Some lines are also drawn
+    # as TWO dashed rails a bar-width apart (12mm on PW-GF-09's T12
+    # diagonals) -- those are one physical bar too, so the merge distance
+    # must cover a rail gap (~2 bar widths), not just binning jitter; the
+    # nearest genuinely distinct diagonals sit >500mm apart. Same angle,
+    # offset within 40mm, overlapping parametric range = one line.
+    merged.sort(key=lambda r: (r[0], r[1]))
+    coalesced: list[list[float]] = []
+    for angle, noff, t0, t1 in merged:
+        for c in coalesced:
+            if (abs(c[0] - angle) < 0.02 and abs(c[1] - noff) < 40.0
+                    and t0 <= c[3] + 100 and t1 >= c[2] - 100):
+                c[2], c[3] = min(c[2], t0), max(c[3], t1)
+                break
+        else:
+            coalesced.append([angle, noff, t0, t1])
+    merged = [tuple(c) for c in coalesced]
+
+    # lines: merged centerlines, each annotated with how many bars ALREADY
+    # lie on it -- pair_lines does detect some crack bars itself (one
+    # mid-plane bar per drawn line), and a callout's count is
+    # bars-per-location (front/back face copies of ONE drawn line:
+    # "2 -T12 Crack Bar" points at a single diagonal). Claiming `count`
+    # different LINES per callout was doubly wrong: it left the X-partner
+    # line unclaimed while booking offset-bin duplicates, and it ignored
+    # the already-detected copy so steel got double-booked.
+    lines = []
+    for angle, noff, t0, t1 in merged:
+        ux, uy = math.cos(angle), math.sin(angle)
+        p0 = (ux * t0 - uy * noff - x0, uy * t0 + ux * noff - y0)
+        p1 = (ux * t1 - uy * noff - x0, uy * t1 + ux * noff - y0)
+        mx, my = (ux * (t0 + t1) / 2 - uy * noff, uy * (t0 + t1) / 2 + ux * noff)
+        lines.append({"p0": p0, "p1": p1, "mid_draw": (mx, my),
+                      "have": [], "used": False})
+    for b in bars:
+        if b.kind != "diagonal":
+            continue
+        b0, b1 = b.points[0][:2], b.points[-1][:2]
+        for ln in lines:
+            if (math.dist(b0, ln["p0"]) < 60 and math.dist(b1, ln["p1"]) < 60) or \
+               (math.dist(b0, ln["p1"]) < 60 and math.dist(b1, ln["p0"]) < 60):
+                ln["have"].append(b)
+                break
+
+    # line-centric: each drawn line asks its nearest callout how many bars
+    # it represents. (Callout-centric claiming chain-shifted on PW-GF-09:
+    # leader labels sit between quadrants, so callouts claimed each
+    # other's lines, triple-stacking one and starving another.)
     out: list[Bar3D] = []
-    for count, dia, ccx, ccy in callouts:
-        cand = []
-        for i, (angle, noff, t0, t1) in enumerate(merged):
-            if used[i]:
+    for ln in lines:
+        cand = sorted((math.dist(ln["mid_draw"], (ccx, ccy)), count, dia)
+                      for count, dia, ccx, ccy in callouts)
+        if cand and cand[0][0] <= 1500.0:
+            _, count, dia = cand[0]
+        elif fallback:
+            count, dia = fallback
+        else:
+            continue
+        cover = 30.0
+        face_z = [cover + dia / 2, thickness - cover - dia / 2,
+                  thickness / 2]
+        taken_z = [b.points[0][2] for b in ln["have"]]
+        for b in ln["have"]:  # trust the label's diameter over inference
+            b.diameter = dia
+        need = count - len(ln["have"])
+        for z in face_z:
+            if need <= 0:
+                break
+            if any(abs(z - tz) < 10 for tz in taken_z):
                 continue
-            ux, uy = math.cos(angle), math.sin(angle)
-            mt = (t0 + t1) / 2
-            mx, my = ux * mt - uy * noff, uy * mt + ux * noff
-            cand.append((math.dist((mx, my), (ccx, ccy)), i))
-        cand.sort()
-        for d, i in cand[:count]:
-            if d > 1200.0:
-                continue
-            used[i] = True
-            angle, noff, t0, t1 = merged[i]
-            ux, uy = math.cos(angle), math.sin(angle)
-            p0 = (ux * t0 - uy * noff - x0, uy * t0 + ux * noff - y0)
-            p1 = (ux * t1 - uy * noff - x0, uy * t1 + ux * noff - y0)
-            z = thickness / 2
-            out.append(Bar3D([(p0[0], p0[1], z), (p1[0], p1[1], z)], dia, "diagonal", "synthesized"))
+            out.append(Bar3D([(ln["p0"][0], ln["p0"][1], z),
+                              (ln["p1"][0], ln["p1"][1], z)],
+                             dia, "diagonal", "synthesized"))
+            need -= 1
     return bars + out
 
 
@@ -934,9 +1055,12 @@ def reconstruct_panel(name: str, views: list[View]) -> Panel:
             bar.z_source = src
 
     bars = _fold_ubars(bars, sections)
-    bars = _synthesize_ties(bars, elev.ents, thickness, ph)
+    bars = _synthesize_ties(bars, [e for v in views for e in v.ents],
+                            thickness, ph)
     bars = _synthesize_hairpins(bars, elev.ents, thickness, ph)
-    bars = _synthesize_labelled_singles(bars, elev.ents, x0, y0, thickness)
+    bars = _synthesize_labelled_singles(bars, elev.ents, x0, y0, thickness,
+                                        [e for v in views for e in v.ents])
+    bars = _dedupe_near(bars)
 
     # ---- cast-in features: sleeves, corbels, embeds, anchors, wire loops
     features: list[Feature] = []
