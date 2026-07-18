@@ -56,7 +56,7 @@ if len(known_face_encodings) == 0:
 # ---------------------------------
 # Open webcam
 # ---------------------------------
-video_capture = cv2.VideoCapture(0)
+video_capture = cv2.VideoCapture(1)
 
 if not video_capture.isOpened():
     print("Could not open webcam.")

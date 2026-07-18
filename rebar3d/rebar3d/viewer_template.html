@@ -2,26 +2,30 @@
 <style>
   html, body { margin:0; height:100%; overflow:hidden; background:#15181d; color:#dde1e6;
     font: 13px/1.45 -apple-system, "Segoe UI", sans-serif; }
-  #c { display:block; width:100%; height:100%; }
-  #panelbar { position:fixed; top:10px; left:10px; display:flex; gap:6px; flex-wrap:wrap; z-index:2; }
+  #app { display:grid; grid-template-columns:300px 1fr 350px; grid-template-rows:auto 1fr;
+    height:100%; gap:0; }
+  #panelbar { grid-column:1/4; grid-row:1; display:flex; gap:6px; flex-wrap:wrap; align-items:center;
+    padding:8px 10px; background:#1a1e25; border-bottom:1px solid #3a414d; }
   #panelbar button { background:#262b33; color:#dde1e6; border:1px solid #3a414d; border-radius:6px;
     padding:5px 12px; cursor:pointer; }
   #panelbar button.on { background:#3d6fd0; border-color:#3d6fd0; color:#fff; }
-  #hud { position:fixed; left:10px; bottom:10px; background:#1d2129cc; border:1px solid #3a414d;
-    border-radius:8px; padding:10px 12px; max-width:270px; z-index:2; }
+  #hud { grid-column:1; grid-row:2; background:#1a1e25; border-right:1px solid #3a414d;
+    padding:12px 14px; overflow-y:auto; }
   #hud .sw { display:inline-block; width:11px; height:11px; border-radius:2px; margin-right:6px; vertical-align:-1px; }
   #hud label { display:block; cursor:pointer; margin:1px 0; }
   .dim { color:#8a919d; }
   h1 { font-size:13px; margin:0 0 6px; }
-  #tools { position:fixed; top:10px; right:10px; background:#1d2129cc; border:1px solid #3a414d;
-    border-radius:8px; padding:10px 12px; z-index:3; }
+  #viewport { grid-column:2; grid-row:2; position:relative; min-width:0; min-height:0; }
+  #c { display:block; width:100%; height:100%; }
+  #rightcol { grid-column:3; grid-row:2; display:flex; flex-direction:column; gap:0;
+    background:#1a1e25; border-left:1px solid #3a414d; overflow-y:auto; }
+  #tools { padding:12px 14px; border-bottom:1px solid #3a414d; }
   #tools input { width:64px; background:#262b33; color:#dde1e6; border:1px solid #3a414d;
     border-radius:5px; padding:3px 6px; }
   #tools button { background:#262b33; color:#dde1e6; border:1px solid #3a414d; border-radius:6px;
     padding:4px 10px; cursor:pointer; margin-left:4px; }
   #tools button.primary { background:#3d6fd0; border-color:#3d6fd0; color:#fff; }
-  #schedule { position:fixed; right:10px; bottom:10px; background:#1d2129cc; border:1px solid #3a414d;
-    border-radius:8px; padding:10px 12px; z-index:2; max-width:430px; }
+  #schedule { padding:12px 14px; }
   #schedule h1 { text-align:center; }
   #schedule table { border-collapse:collapse; font-size:12px; margin:0 auto; }
   #schedule th, #schedule td { border:1px solid #3a414d; padding:3px 9px; text-align:right; }
@@ -31,26 +35,30 @@
   #schedule .delta-up { color:#e15759; }
   #schedule .delta-down { color:#2ecc71; }
 </style>
-<div id="panelbar"></div>
-<div id="tools">
-  <b>resize</b>
-  <input id="w2" type="number" step="10"> × <input id="h2" type="number" step="10"> mm
-  <button id="applyBtn" class="primary">apply</button><button id="resetBtn">reset</button>
-  <div style="margin-top:7px; text-align:right">
-    <button id="dxfBtn">&#8595; DXF</button><button id="repBtn">&#8595; report</button>
+<div id="app">
+  <div id="panelbar"></div>
+  <div id="hud">
+    <h1 id="hd"></h1>
+    <div id="legend"></div>
+    <div id="toggles"></div>
+    <div id="families" style="margin-top:6px"></div>
+    <div id="measure" style="margin-top:6px; color:#7ec8ff"></div>
+    <div class="dim" style="margin-top:6px">drag: orbit · shift-drag: pan · wheel: zoom<br>click a bar, then a second bar: distance</div>
   </div>
-  <div class="dim" id="dlNote" style="margin-top:4px; text-align:right"></div>
+  <div id="viewport"><canvas id="c"></canvas></div>
+  <div id="rightcol">
+    <div id="tools">
+      <b>resize</b>
+      <input id="w2" type="number" step="10"> × <input id="h2" type="number" step="10"> mm
+      <button id="applyBtn" class="primary">apply</button><button id="resetBtn">reset</button>
+      <div style="margin-top:7px; text-align:right">
+        <button id="dxfBtn">&#8595; DXF</button><button id="repBtn">&#8595; report</button>
+      </div>
+      <div class="dim" id="dlNote" style="margin-top:4px; text-align:right"></div>
+    </div>
+    <div id="schedule"></div>
+  </div>
 </div>
-<div id="hud">
-  <h1 id="hd"></h1>
-  <div id="legend"></div>
-  <div id="toggles"></div>
-  <div id="families" style="margin-top:6px"></div>
-  <div id="measure" style="margin-top:6px; color:#7ec8ff"></div>
-  <div class="dim" style="margin-top:6px">drag: orbit · shift-drag: pan · wheel: zoom<br>click a bar, then a second bar: distance</div>
-</div>
-<div id="schedule"></div>
-<canvas id="c"></canvas>
 <script>__THREE_JS__</script>
 <script>
 "use strict";
@@ -98,6 +106,13 @@ canvas.addEventListener("pointerup", () => drag = null);
 canvas.addEventListener("wheel", e => { e.preventDefault(); sph.r *= Math.exp(e.deltaY * 0.001); applyCam(); }, {passive:false});
 
 // ---- schedules & weights (unit weight = d²/162 kg/m)
+// bars the drawing's own linework couldn't fully account for get topped up
+// to match its printed Summary Schedule (z_src "calibrated") — kept in a
+// separate toggle group, rendered translucent, so it's clear which bars are
+// geometrically confirmed vs. inferred to make the total weight correct.
+function groupKeyOf(b) {
+  return b.z_src === "calibrated" ? b.kind + " (calibrated)" : b.kind;
+}
 function barLen(b) {
   let len = 0;
   for (let i = 0; i + 1 < b.pts.length; i++) {
@@ -283,8 +298,12 @@ function buildModelGroup(m) {
   // bars as cylinders between consecutive points
   for (const b of m.bars) {
     const color = DIA_COLORS[b.d] || 0x999999;
-    const kg = kinds[b.kind] || (kinds[b.kind] = new THREE.Group());
-    const mat = new THREE.MeshStandardMaterial({color, roughness:0.45, metalness:0.25});
+    const gkey = groupKeyOf(b);
+    const kg = kinds[gkey] || (kinds[gkey] = new THREE.Group());
+    const calibrated = b.z_src === "calibrated";
+    const mat = new THREE.MeshStandardMaterial(calibrated
+      ? {color, roughness:0.45, metalness:0.25, transparent:true, opacity:0.4}
+      : {color, roughness:0.45, metalness:0.25});
     for (let i = 0; i + 1 < b.pts.length; i++) {
       const a = new THREE.Vector3(...b.pts[i]), c = new THREE.Vector3(...b.pts[i+1]);
       const len = a.distanceTo(c);
@@ -372,14 +391,21 @@ function buildScene() {
   const dias = [...new Set([...cur.bars, ...(resized ? resized.bars : [])].map(b => b.d))].sort((a,b)=>a-b);
   document.getElementById("legend").innerHTML = dias.map(d =>
     `<span style="margin-right:10px"><span class="sw" style="background:#${(DIA_COLORS[d]||0x999999).toString(16).padStart(6,"0")}"></span>T${d}</span>`).join("");
-  const countOf = k => cur.bars.filter(b=>b.kind===k).length + (cur.features||[]).filter(f=>f.kind===k).length;
+  const countOf = k => cur.bars.filter(b=>groupKeyOf(b)===k).length + (cur.features||[]).filter(f=>f.kind===k).length;
   document.getElementById("toggles").innerHTML = Object.keys(kindSets).map(k =>
     `<label><input type="checkbox" checked data-kind="${k}"> ${k} <span class="dim">(${countOf(k)})</span></label>`).join("");
   document.querySelectorAll("#toggles input").forEach(cb =>
     cb.addEventListener("change", () => kindSets[cb.dataset.kind].forEach(g => g.visible = cb.checked)));
   document.getElementById("families").innerHTML = resized ? "" : (cur.families || [])
     .filter(f => f.spacing)
-    .map(f => `<div class="dim">${f.kind === "v-mesh" ? "vert" : "horz"} T${f.d} @ <b style="color:#dde1e6">${f.spacing} mm</b> · ${f.count} bars · z=${f.z}</div>`)
+    .map(f => {
+      const lens = cur.bars
+        .filter(b => b.kind === f.kind && b.d === f.d && Math.abs(b.pts[0][2] - f.z) <= 8)
+        .map(barLen);
+      const lo = Math.min(...lens) / 1000, hi = Math.max(...lens) / 1000;
+      const lenTxt = hi - lo > 0.05 ? `${lo.toFixed(2)}–${hi.toFixed(2)} m` : `${hi.toFixed(2)} m`;
+      return `<div class="dim">${f.kind === "v-mesh" ? "vert" : "horz"} T${f.d} @ <b style="color:#dde1e6">${f.spacing} mm</b> · ${f.count} bars · ${lenTxt} · z=${f.z}</div>`;
+    })
     .join("");
   renderSchedule();
   clearMeasure();

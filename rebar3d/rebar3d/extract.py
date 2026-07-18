@@ -273,6 +273,8 @@ def wall_outline(view_ents: list[Ent]) -> tuple[tuple[float, float, float, float
     wall = [e for e in view_ents if e.layer == "A-WALL"]
     if not wall:  # slabs use A-FLOR
         wall = [e for e in view_ents if e.layer.startswith("A-FLOR")]
+    if not wall:  # columns use S-COLS
+        wall = [e for e in view_ents if e.layer.startswith("S-COLS")]
     xs, ys = [], []
     for e in wall:
         x0, y0, x1, y1 = e.bbox
