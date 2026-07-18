@@ -625,7 +625,12 @@ def _synthesize_hairpins(bars: list[Bar3D], elev_ents, thickness: float,
     this project twice): one hairpin per (x, end) of each *double-faced*
     v-mesh vertical of the callout's diameter — both faces ending at the
     same y is exactly the situation a hairpin exists to close — skipped
-    when a geometry-detected u-bar already sits within 120mm.
+    when a geometry-detected u-bar already sits within 120mm. A column's
+    two faces are intersected per contiguous run (not just the column's
+    overall min/max y) so a column split by a side notch — the same
+    real pattern `_synthesize_ties` already accounts for — gets a
+    hairpin at each of its own free ends, not only the panel's outer
+    top/bottom.
     """
     callouts = [(int(m.group(1)), int(m.group(2)))
                 for e in elev_ents if e.kind in ("TEXT", "MTEXT")
@@ -646,26 +651,46 @@ def _synthesize_hairpins(bars: list[Bar3D], elev_ents, thickness: float,
         if b.kind == "u-bar":
             existing.append((b.points[0][0], b.points[0][1]))
 
+    def merge_ivs(ivs: list[tuple[float, float]]) -> list[tuple[float, float]]:
+        ivs = sorted(ivs)
+        out = [list(ivs[0])]
+        for a, b2 in ivs[1:]:
+            if a <= out[-1][1] + 5.0:
+                out[-1][1] = max(out[-1][1], b2)
+            else:
+                out.append([a, b2])
+        return [(a, b2) for a, b2 in out]
+
     web_lo, web_hi = cover, thickness - cover
     out: list[Bar3D] = []
     for x, group in by_x.items():
-        zs = {round(b.points[0][2], 0) for b in group}
-        if len(zs) < 2:
+        by_z: dict[float, list[tuple[float, float]]] = {}
+        for b in group:
+            z = round(b.points[0][2], 0)
+            ys = [p[1] for p in b.points]
+            by_z.setdefault(z, []).append((min(ys), max(ys)))
+        if len(by_z) < 2:
             continue  # hairpins close a two-face pair; single-face has none
-        y0 = min(p[1] for b in group for p in b.points)
-        y1 = max(p[1] for b in group for p in b.points)
-        for y_end, leg_dir in ((y0, 1.0), (y1, -1.0)):
-            if any(abs(ex - x) < 120 and abs(ey - y_end) < 200 for ex, ey in existing):
-                continue
-            if not (0 <= y_end <= panel_h):
-                continue  # a projecting stub's end isn't a panel free edge
-            y_end = min(max(y_end, cover), panel_h - cover)
-            leg = 400.0 * leg_dir
-            if not (0 <= y_end + leg <= panel_h):
-                continue
-            pts = [(x, y_end + leg, web_lo), (x, y_end, web_lo),
-                   (x, y_end, web_hi), (x, y_end + leg, web_hi)]
-            out.append(Bar3D(pts, dia, "u-bar", "synthesized"))
+        zs_sorted = sorted(by_z)
+        common = merge_ivs(by_z[zs_sorted[0]])
+        for z in zs_sorted[1:]:
+            other = merge_ivs(by_z[z])
+            common = [(max(a0, b0), min(a1, b1))
+                      for a0, a1 in common for b0, b1 in other
+                      if min(a1, b1) > max(a0, b0)]
+        for lo, hi in common:
+            for y_end, leg_dir in ((lo, 1.0), (hi, -1.0)):
+                if any(abs(ex - x) < 120 and abs(ey - y_end) < 200 for ex, ey in existing):
+                    continue
+                if not (0 <= y_end <= panel_h):
+                    continue  # a projecting stub's end isn't a panel free edge
+                y_end_c = min(max(y_end, cover), panel_h - cover)
+                leg = 400.0 * leg_dir
+                if not (0 <= y_end_c + leg <= panel_h):
+                    continue
+                pts = [(x, y_end_c + leg, web_lo), (x, y_end_c, web_lo),
+                       (x, y_end_c, web_hi), (x, y_end_c + leg, web_hi)]
+                out.append(Bar3D(pts, dia, "u-bar", "synthesized"))
     return bars + out
 
 
