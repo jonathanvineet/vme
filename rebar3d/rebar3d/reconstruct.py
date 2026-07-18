@@ -30,6 +30,7 @@ class Bar3D:
     diameter: int
     kind: str  # v-mesh | h-mesh | diagonal | shape | u-bar | face-dowel | link
     z_source: str  # section | default
+    pos: float = 0.0  # fixed cross-axis coordinate, set for "section-origin" bars only
 
 
 @dataclass
@@ -713,8 +714,53 @@ def reconstruct_panel(name: str, views: list[View]) -> Panel:
                     zs_seen.append(z)
                     pts3 = ([(cpos, 0.0, z), (cpos, axis_len, z)] if kind == "v-mesh"
                             else [(0.0, cpos, z), (axis_len, cpos, z)])
-                    bars.append(Bar3D(pts3, dia, kind, "section-origin"))
+                    bars.append(Bar3D(pts3, dia, kind, "section-origin", cpos))
                 existing.append(cpos)
+
+    # A diameter can show more originated positions than physically exist
+    # when circles that are real but belong to a *different* category (an
+    # edge dowel, not a field mesh bar -- the drawing's own note says
+    # dowels are "refer individual mould drawing", i.e. out of scope for
+    # this schedule) are geometrically indistinguishable from genuine mesh
+    # circles. Confirmed directly on PW-GF-02: 4 T10 positions all
+    # independently confirmed by 3 separate sections each (equally strong
+    # evidence, no way to rank them against each other on geometry alone)
+    # -- but the drawing's own "2 -T10" callout and the official BBS both
+    # say only 2 physical bars exist. Use the callout as a hard cap: when
+    # one exists and originated positions exceed it, keep the ones
+    # furthest from the panel edges (edge-adjacent circles are the more
+    # likely dowels) and drop the rest.
+    # scan every view, not just the elevation -- this callout is routinely
+    # attached to a section view instead (confirmed: PW-GF-02's "2 -T10"
+    # sits far outside the elevation's own bbox, in a separate section
+    # cluster) since a count callout often labels a detail shown in a
+    # section, not the elevation itself
+    count_callouts: dict[int, int] = {}
+    for v in views:
+        for e in v.ents:
+            if e.kind not in ("TEXT", "MTEXT"):
+                continue
+            m = re.search(r"(\d+)\s*-\s*T(\d+)\b", e.text or "")
+            if m:
+                dia = int(m.group(2))
+                count_callouts[dia] = max(count_callouts.get(dia, 0), int(m.group(1)))
+
+    origins_by_dia: dict[int, list[Bar3D]] = {}
+    for bar in bars:
+        if bar.z_source == "section-origin":
+            origins_by_dia.setdefault(bar.diameter, []).append(bar)
+    for dia, group in origins_by_dia.items():
+        cap = count_callouts.get(dia)
+        if cap is None:
+            continue
+        positions = sorted({b.pos for b in group})
+        if len(positions) * 2 <= cap:
+            continue
+        span = ph if group[0].kind == "v-mesh" else pw
+        keep_n = max(cap // 2, 1)
+        positions.sort(key=lambda p: -min(p, span - p))  # farthest-from-edge first
+        keep = set(positions[:keep_n])
+        bars = [b for b in bars if not (b.z_source == "section-origin" and b.diameter == dia and b.pos not in keep)]
 
     # bars drawn as circles in the elevation are perpendicular to the panel
     # face: the N-series projecting bars. Their protrusion profile (how far
