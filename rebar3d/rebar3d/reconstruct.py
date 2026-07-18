@@ -569,12 +569,80 @@ def _synthesize_ties(bars: list[Bar3D], elev_ents, thickness: float,
                 n = max(int((hi - lo) // pitch) + 1, 1)
                 for k in range(n):
                     y = lo + k * pitch
-                    pts = [(x_lo, y, z_lo), (x_hi, y, z_lo), (x_hi, y, z_hi),
-                           (x_lo, y, z_hi), (x_lo, y, z_lo)]
+                    # closed loop + two 80mm hook tails angled into the
+                    # core at the closing corner -- the BBS tie shape's
+                    # 0.08 end segments (0.632m total at T8/t160, vs 0.60
+                    # for the bare rectangle; see BBS_RULES.md)
+                    h = 80.0 / math.sqrt(2)
+                    t1 = (x_lo + h, y, z_lo + h)
+                    t2 = (x_lo + h, y, z_hi - h)
+                    pts = [t1, (x_lo, y, z_lo), (x_hi, y, z_lo), (x_hi, y, z_hi),
+                           (x_lo, y, z_hi), t2]
                     out.append(Bar3D(pts, tie_dia, "tie", "synthesized"))
             i += 2  # both positions consumed by this stack
         else:
             i += 1
+    return bars + out
+
+
+_UBAR_PITCH_RE = re.compile(r"T(\d+)\s*UBAR\s*@\s*(\d+)\s*mm", re.IGNORECASE)
+
+
+def _synthesize_hairpins(bars: list[Bar3D], elev_ents, thickness: float,
+                         panel_h: float) -> list[Bar3D]:
+    """Edge hairpins (the BBS's 0.4/web/0.4 'UBAR' row) at mesh bar ends.
+
+    A hairpin links the two mesh faces where bars terminate at a free
+    edge (panel edge or notch boundary). The BBS pins the shape exactly:
+    400mm legs + a web of thickness-2*cover (0.868m at T8/t160), at the
+    "T8 UBAR @pitch" callout's pitch — PW-GF-09's BBS row 10 wants 120 of
+    them, far more than the ~40 loops the u-bar geometry folding detects.
+
+    Placement is strictly evidence-anchored (fabricated placement burned
+    this project twice): one hairpin per (x, end) of each *double-faced*
+    v-mesh vertical of the callout's diameter — both faces ending at the
+    same y is exactly the situation a hairpin exists to close — skipped
+    when a geometry-detected u-bar already sits within 120mm.
+    """
+    callouts = [(int(m.group(1)), int(m.group(2)))
+                for e in elev_ents if e.kind in ("TEXT", "MTEXT")
+                for m in [_UBAR_PITCH_RE.search(e.text or "")] if m]
+    if not callouts:
+        return bars
+    dia, _pitch = max(set(callouts), key=callouts.count)
+    cover = 30.0
+
+    # double-faced verticals: same x, a z-plane pair, matching y-intervals
+    by_x: dict[float, list[Bar3D]] = {}
+    for b in bars:
+        if b.kind == "v-mesh" and b.diameter == dia:
+            by_x.setdefault(round(b.points[0][0], 0), []).append(b)
+
+    existing = []  # (x, y) midpoints of detected u-bar bends
+    for b in bars:
+        if b.kind == "u-bar":
+            existing.append((b.points[0][0], b.points[0][1]))
+
+    web_lo, web_hi = cover, thickness - cover
+    out: list[Bar3D] = []
+    for x, group in by_x.items():
+        zs = {round(b.points[0][2], 0) for b in group}
+        if len(zs) < 2:
+            continue  # hairpins close a two-face pair; single-face has none
+        y0 = min(p[1] for b in group for p in b.points)
+        y1 = max(p[1] for b in group for p in b.points)
+        for y_end, leg_dir in ((y0, 1.0), (y1, -1.0)):
+            if any(abs(ex - x) < 120 and abs(ey - y_end) < 200 for ex, ey in existing):
+                continue
+            if not (0 <= y_end <= panel_h):
+                continue  # a projecting stub's end isn't a panel free edge
+            y_end = min(max(y_end, cover), panel_h - cover)
+            leg = 400.0 * leg_dir
+            if not (0 <= y_end + leg <= panel_h):
+                continue
+            pts = [(x, y_end + leg, web_lo), (x, y_end, web_lo),
+                   (x, y_end, web_hi), (x, y_end + leg, web_hi)]
+            out.append(Bar3D(pts, dia, "u-bar", "synthesized"))
     return bars + out
 
 
@@ -867,6 +935,7 @@ def reconstruct_panel(name: str, views: list[View]) -> Panel:
 
     bars = _fold_ubars(bars, sections)
     bars = _synthesize_ties(bars, elev.ents, thickness, ph)
+    bars = _synthesize_hairpins(bars, elev.ents, thickness, ph)
     bars = _synthesize_labelled_singles(bars, elev.ents, x0, y0, thickness)
 
     # ---- cast-in features: sleeves, corbels, embeds, anchors, wire loops
