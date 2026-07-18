@@ -1,1 +1,3 @@
 balenaEtcher-2.1.6-x64.dmg
+__pycache__/
+*.pyc

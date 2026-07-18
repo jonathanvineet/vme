@@ -18,7 +18,7 @@ import re
 import statistics
 from dataclasses import dataclass, field
 
-from .extract import Bar2D, extract_bars, snap_diameter, wall_outline
+from .extract import Bar2D, _Seg, extract_bars, snap_diameter, wall_outline
 from .views import View
 
 AXIS_TOL = math.radians(3)
@@ -30,6 +30,7 @@ class Bar3D:
     diameter: int
     kind: str  # v-mesh | h-mesh | diagonal | shape | u-bar | face-dowel | link
     z_source: str  # section | default
+    pos: float = 0.0  # fixed cross-axis coordinate, set for "section-origin" bars only
 
 
 @dataclass
@@ -137,8 +138,6 @@ def classify_sections(
         wall = [e for e in v.ents if e.layer.startswith("A-WALL")]
         if not wall:
             wall = [e for e in v.ents if e.layer.startswith("A-FLOR")]
-        if not wall:
-            wall = [e for e in v.ents if e.layer.startswith("S-COLS")]
         if not wall:
             continue
         xs, ys = [], []
@@ -269,360 +268,36 @@ def classify_sections(
     return infos
 
 
-def _detail_marker_pos(elev_ents, axis: int) -> list[tuple[float, str]]:
-    """(position, title-number) candidates for a section cut-plane marker
-    along `axis` (1=Y, for a horizontal section; 0=X, for a vertical one).
+def _z_lookup(sections: list[SectionInfo], role: str, coord: float, radius: float, tol: float = 40.0) -> list[float]:
+    """All depths at which section circles match `coord` with this radius.
 
-    A Revit section cut is drawn in the elevation as a pair of "Section
-    Head"/"Section Tail" block instances sharing a position on the cut axis,
-    labelled with a small standalone number text placed nearby — the same
-    number printed as the detail view's own title elsewhere on the sheet.
+    The same bar position usually shows a circle near each face (mesh on
+    both sides), and occasionally a genuine third/fourth layer (confirmed:
+    one T8 position independently shows 3 real depths from 2 sections
+    each) — returning every matched depth lets the caller emit one bar per
+    layer instead of collapsing them into fewer bars than actually exist.
+
+    The radius match used to allow +-2.5mm, wide enough to also match a
+    *different* diameter's circles as if they were this one — adjacent
+    standard bar radii are as little as 1mm apart (T8=4, T10=5, T12=6).
+    Confirmed directly: a T12 bar was matching 5 depths where 3 independent
+    section cuts agreed exactly on just 2 (46.9mm and 113.1mm) once
+    filtered to its own radius; the other 2 were real depths belonging to
+    a different diameter's own bar at the same position. That's pure
+    contamination, unlike genuine multi-layer bars (still radius-clean at
+    any tolerance) — so this fix removes real cross-diameter bleed without
+    capping how many depths a single diameter can legitimately have.
+    Section circles are drawn at essentially exact radii in this DXF
+    (floating-point noise only), so a tight tolerance costs nothing.
     """
-    groups: dict[int, list] = {}
-    for e in elev_ents:
-        if e.block and "Section" in e.block:
-            groups.setdefault(e.bref, []).append(e)
-    points = []
-    for es in groups.values():
-        pts = []
-        for e in es:
-            if e.kind in ("LINE", "LWPOLYLINE"):
-                pts.extend(e.points)
-            elif e.kind in ("CIRCLE", "ARC"):
-                pts.append(e.center)
-        if not pts:
-            continue
-        vals = [p[axis] for p in pts]
-        v0, v1 = min(vals), max(vals)
-        if v1 - v0 > 400:  # spans most of the panel: the cut's own long axis, not its position
-            continue
-        points.append((v0 + v1) / 2)
-    points.sort()
-    merged: list[float] = []
-    for v in points:
-        if merged and abs(v - merged[-1]) < 150:
-            merged[-1] = (merged[-1] + v) / 2
-        else:
-            merged.append(v)
-    out = []
-    for v in merged:
-        near = [e for e in elev_ents if e.kind in ("TEXT", "MTEXT") and e.text
-                and e.text.strip().isdigit() and len(e.text.strip()) <= 2
-                and abs((e.bbox[axis] + e.bbox[axis + 2]) / 2 - v) < 400]
-        if near:
-            out.append((v, near[0].text.strip()))
-    return out
-
-
-def _local_section_bars(views: list[View], sections: list[SectionInfo], elev: View,
-                        bbox, allowed: set[int]) -> list[Bar3D]:
-    """Recover bars drawn only inside a local section/detail cut, never as
-    elevation double-line geometry the normal pairing path reads — seen on
-    this drawing set for corbel cages and similar local reinforcement that
-    the sheet's own "REFER FOR INDIVIDUAL MOULD DRAWING" convention doesn't
-    fully dimension anywhere else.
-
-    A qualifying section's along-axis coordinate already maps 1:1 onto the
-    real panel axis (X for a horizontal section, Y for a vertical one) —
-    the same registration `classify_sections` already trusts for its own
-    circle/z-lookup matching. Candidates are restricted to genuinely local
-    shapes (small span along that axis, or a bent/looped outline) so an
-    already-counted full-span mesh member lying in the cut plane never gets
-    double-added. The cross-axis position (the one coordinate the section
-    itself can't show) is resolved via `_detail_marker_pos`, matched by
-    elimination against which detail view already displays that marker's
-    own title number internally.
-    """
-    x0, y0 = bbox[0], bbox[1]
-
-    def tag_in(view: View, tag: str) -> bool:
-        return any(e.kind in ("TEXT", "MTEXT") and e.text and e.text.strip() == tag
-                   for e in view.ents)
-
-    y_markers = _detail_marker_pos(elev.ents, axis=1)
-    x_markers = _detail_marker_pos(elev.ents, axis=0)
-    barmark_re = re.compile(r"^[A-Z]1?$")
-    out: list[Bar3D] = []
-    for s in sections:
-        if s.view is None:
-            continue
-        # A bar-mark *key* table lists several distinct single-letter
-        # references (A, B, B1, C, D, ...), each its own standalone text
-        # entity, tying a letter to a bar type elsewhere on the sheet —
-        # that's a legend of alternative shapes, not one real zone, and
-        # gets rejected outright. A real local/edge zone (corbel cage, tie
-        # column) instead states its counts and spacing directly in the
-        # text ("3 -T8 TIES", "T8 Ties @100 mm", "6 -T12") with no
-        # separate letter-reference token, however dense the pattern.
-        marks = {e.text.strip() for e in s.view.ents if e.kind in ("TEXT", "MTEXT")
-                 and e.text and barmark_re.match(e.text.strip())}
-        if len(marks) >= 3:
-            continue
-        markers = y_markers if s.role == "horizontal" else x_markers
-        candidates = [
-            v for v, tag in markers
-            if not tag_in(s.view, tag)
-            and not any(v2 is not s.view and v2 is not elev and tag_in(v2, tag) for v2 in views)
-        ]
-        if not candidates:
-            continue
-        cross = candidates[0] - (y0 if s.role == "horizontal" else x0)
-        wb = s.wall_bbox
-        origin = wb[0] if s.drawn_x else wb[1]
-        section_bars: list[Bar3D] = []
-        for b in extract_bars(s.view.ents, min_len=15.0):
-            dia = snap_diameter(b.diameter)
-            if allowed and dia not in allowed:
-                continue
-            local = [
-                (px - origin, py - wb[1]) if s.drawn_x else (py - origin, px - wb[0])
-                for px, py in b.points
-            ]
-            span = max(p for p, _ in local) - min(p for p, _ in local)
-            if span > 200:
-                # a real local feature (corbel leg, tie, dowel) is small
-                # along the section's own axis; anything spanning this much
-                # is either an already-counted mesh/rail member lying in
-                # the cut plane, or a spacing-callout/legend symbol
-                # (repeating hatch marks) misread as one long bent bar —
-                # neither belongs here.
-                continue
-            pts3 = [
-                (pos, cross, z) if s.role == "horizontal" else (cross, pos, z)
-                for pos, z in local
-            ]
-            section_bars.append(Bar3D(pts3, dia, "detail-bar", "detail"))
-        # A dense confinement/tie zone can legitimately run the panel's
-        # full height at a tight pitch (dozens of real ties) — only guard
-        # against a runaway/degenerate extraction, not against density.
-        if len(section_bars) > 150:
-            continue
-        # The zone's own pitch callout ("T8 Ties @100 mm") is ground truth
-        # for how many bars really exist across the span the real detected
-        # ones already establish — double-line pairing of a dense hatch
-        # pattern routinely misses some strokes, the same occlusion problem
-        # `_densify_families` solves for the main mesh, just scoped here to
-        # this one local zone's own detected span instead of the whole
-        # panel.
-        pos_idx = 0 if s.role == "horizontal" else 1
-        section_bars.extend(_densify_section_bars(
-            section_bars, announced_spacings([s.view]), pos_idx))
-        out.extend(section_bars)
-    return out
-
-
-def _densify_section_bars(section_bars: list[Bar3D], spacings: dict[int, set[int]],
-                          pos_idx: int) -> list[Bar3D]:
-    """`_densify_families`, scoped to one local-detail zone's own detected
-    bars instead of the whole-panel mesh (see `_local_section_bars`). Ties
-    from the same physical layer of a hatch-tick pattern land with more
-    z-noise per instance than a clean double-line mesh bar does, so this
-    buckets depth coarser (50mm, vs. 8mm for the main-mesh pass)."""
-    groups: dict[tuple[int, float], list[Bar3D]] = {}
-    for b in section_bars:
-        groups.setdefault((b.diameter, round(b.points[0][2] / 50.0) * 50.0), []).append(b)
-    new_bars: list[Bar3D] = []
-    for (dia, _z), grp in groups.items():
-        if len(grp) < 3 or dia not in spacings:
-            continue
-        grp = sorted(grp, key=lambda b: b.points[0][pos_idx])
-        positions = [b.points[0][pos_idx] for b in grp]
-        diffs = [b - a for a, b in zip(positions, positions[1:]) if b - a > 20]
-        if not diffs:
-            continue
-        med = statistics.median(diffs)
-        spacing = min(spacings[dia], key=lambda s: abs(s - med))
-        if abs(spacing - med) > 0.2 * spacing:
-            continue
-        lo, hi = positions[0], positions[-1]
-        n_steps = min(300, round((hi - lo) / spacing))
-        if n_steps < 1:
-            continue
-        for k in range(n_steps + 1):
-            target = lo + k * spacing
-            nearest = min(grp, key=lambda b: abs(b.points[0][pos_idx] - target))
-            if abs(nearest.points[0][pos_idx] - target) <= 0.4 * spacing:
-                continue
-            shift = target - nearest.points[0][pos_idx]
-            pts = [(p[0] + shift, p[1], p[2]) if pos_idx == 0 else (p[0], p[1] + shift, p[2])
-                   for p in nearest.points]
-            new_bars.append(Bar3D(pts, dia, "detail-bar", "detail"))
-    return new_bars
-
-
-def _z_lookup(sections: list[SectionInfo], role: str, coord: float, radius: float,
-              thickness: float, tol: float = 40.0) -> list[float]:
-    """Depths at which section circles match `coord` with this radius.
-
-    Precast wall panels carry mesh on both faces and nothing between —
-    always exactly 2 layers. A circle match near mid-thickness is a
-    misdetection (an unrelated bar/leader caught by the position tolerance,
-    or a section cut through a local detail), not a genuine third layer, so
-    matches are bucketed to the nearer of the two faces and each face
-    collapsed to one representative depth.
-    """
-    near, far = [], []
+    zs = []
     for s in sections:
         if s.role != role:
             continue
         for c, z, r in s.circles:
-            if abs(r - radius) <= 2.5 and abs(c - coord) <= tol:
-                (near if z < thickness / 2 else far).append(z)
-    out = []
-    if near:
-        out.append(statistics.median(near))
-    if far:
-        out.append(statistics.median(far))
-    return out
-
-
-def announced_spacings(views: list[View]) -> dict[int, set[int]]:
-    """Per-diameter pitches the drawing calls out, e.g. "T8 @150 mm" -> {8: {150}}."""
-    out: dict[int, set[int]] = {}
-    for v in views:
-        for e in v.ents:
-            if e.kind in ("MTEXT", "TEXT") and e.text:
-                for mt in re.finditer(r"T(\d{1,2})\s*(?:[A-Za-z]+\s*)?@\s*(\d+)\s*mm", e.text, re.I):
-                    d, sp = int(mt.group(1)), int(mt.group(2))
-                    if d in STD_DIAMETERS_ANY:
-                        out.setdefault(d, set()).add(sp)
-    return out
-
-
-STD_DIAMETERS_ANY = (6, 8, 10, 12, 16, 20, 25, 32)
-
-
-def _densify_families(bars: list[Bar3D], spacings: dict[int, set[int]],
-                       openings: list[list[tuple[float, float]]],
-                       panel_w: float, panel_h: float) -> list[Bar3D]:
-    """Fill in mesh bars a drawing-announced pitch implies but geometry missed.
-
-    Bars are dropped by occlusion (crossing bars trim the double-line into
-    fragments below the merge tolerance), not because they aren't there —
-    the drawing's own "T8 @150mm" callout is ground truth for how many
-    should exist between the ones we did find. A family confirmed over even
-    part of the panel is extended out to the panel's own edge at the same
-    pitch (an announced spacing describes the whole field, not just the
-    sub-span where enough bars happened to double-line-pair cleanly),
-    skipping positions an opening actually interrupts.
-    """
-    # Group by (kind, diameter) then split into z-layers by gap, not a
-    # fixed-width rounding bucket — a real physical layer's individual bars
-    # can drift several mm from each other, and a rigid 8mm bucket can
-    # fragment one true layer into several, each then independently
-    # "completed" by the extension below and multiplying the overcount.
-    by_kd: dict[tuple[str, int], list[Bar3D]] = {}
-    for b in bars:
-        if b.z_source == "default":
-            continue
-        if b.kind in ("v-mesh", "h-mesh") and len(b.points) == 2:
-            by_kd.setdefault((b.kind, b.diameter), []).append(b)
-        elif b.kind == "u-bar":
-            # a repeating U-bar row ("T8 UBAR @125mm") is exactly the same
-            # occlusion problem as a straight mesh bar — some legs pair
-            # cleanly, some don't — but wasn't covered by this pass before.
-            by_kd.setdefault((b.kind, b.diameter), []).append(b)
-    groups: dict[tuple[str, int, float], list[Bar3D]] = {}
-    for (kind, dia), blist in by_kd.items():
-        blist.sort(key=lambda b: b.points[0][2])
-        cluster: list[Bar3D] = [blist[0]]
-        for b in blist[1:]:
-            if b.points[0][2] - cluster[-1].points[0][2] > 40.0:
-                groups[(kind, dia, cluster[0].points[0][2])] = cluster
-                cluster = []
-            cluster.append(b)
-        groups[(kind, dia, cluster[0].points[0][2])] = cluster
-
-    new_bars: list[Bar3D] = []
-    for (kind, dia, _z), grp in groups.items():
-        if len(grp) < 3 or dia not in spacings:
-            continue
-        if kind == "u-bar":
-            # a U-bar's own repeat/spacing axis isn't implied by its kind
-            # the way v-mesh (always along X) / h-mesh (always along Y)
-            # is — whichever coordinate actually varies across this
-            # group's own instances is the one they're spaced along.
-            xs = [b.points[0][0] for b in grp]
-            ys = [b.points[0][1] for b in grp]
-            pos_idx = 0 if (max(xs) - min(xs)) >= (max(ys) - min(ys)) else 1
-        else:
-            pos_idx = 0 if kind == "v-mesh" else 1
-        grp = sorted(grp, key=lambda b: b.points[0][pos_idx])
-        positions = [b.points[0][pos_idx] for b in grp]
-        diffs = [b - a for a, b in zip(positions, positions[1:]) if b - a > 20]
-        if not diffs:
-            continue
-        med = statistics.median(diffs)
-        # the observed gap may itself already skip real bars (every other
-        # one occluded, not just fragments within one) — match against
-        # small multiples of an announced pitch too, not just the pitch
-        # itself, so a ~2x or ~3x gap is recognised as "N missing between
-        # these two", not dismissed as a different, unrelated spacing.
-        best = min(
-            ((s, n) for s in spacings[dia] for n in (1, 2, 3)),
-            key=lambda sn: abs(sn[0] * sn[1] - med),
-        )
-        spacing, mult = best
-        if abs(spacing * mult - med) > 0.15 * spacing * mult:
-            continue  # observed pitch doesn't match any announced one — leave it alone
-        # Extend past the detected bars at the same pitch, anchored on
-        # their own phase (not restarted from 0) so new ones stay in step
-        # with what's actually drawn — a "T8 @150mm" callout describes the
-        # whole field, not just the sub-span enough bars happened to
-        # double-line-pair cleanly within. Bounded to one detected-span's
-        # width beyond each end (not unconditionally to the panel edge):
-        # a cluster already confirmed across most of the panel reaches the
-        # edge fine, but a small local cluster extending across the whole
-        # panel on one spacing match is exactly the over-extrapolation
-        # that produced 160%+ overshoots on other diameters in testing.
-        span = panel_w if pos_idx == 0 else panel_h
-        obs_span = positions[-1] - positions[0]
-        lo = max(0.0, positions[0] - obs_span)
-        hi = min(span, positions[-1] + obs_span)
-        phase = positions[0] % spacing
-        n_steps = min(400, math.floor((hi - phase) / spacing) + 1)
-        for k in range(-1, n_steps + 1):
-            target = phase + k * spacing
-            if target < lo - 5 or target > hi + 5:
-                continue
-            nearest = min(grp, key=lambda b: abs(b.points[0][pos_idx] - target))
-            if abs(nearest.points[0][pos_idx] - target) <= 0.4 * spacing:
-                continue  # already have a bar here
-            y0n = min(p[1 - pos_idx] for p in nearest.points)
-            y1n = max(p[1 - pos_idx] for p in nearest.points)
-            blocked = False
-            for loop in openings:
-                oxs = [p[0] for p in loop]
-                oys = [p[1] for p in loop]
-                lo_c, hi_c = (min(oxs), max(oxs)) if pos_idx == 0 else (min(oys), max(oys))
-                lo_o, hi_o = (min(oys), max(oys)) if pos_idx == 0 else (min(oxs), max(oxs))
-                if lo_c < target < hi_c and min(y1n, hi_o) > max(y0n, lo_o):
-                    blocked = True
-                    break
-            if blocked:
-                continue
-            pts = [(target, p[1], p[2]) if pos_idx == 0 else (p[0], target, p[2]) for p in nearest.points]
-            new_bars.append(Bar3D(pts, dia, kind, "densified"))
-    return bars + new_bars
-
-
-def announced_diameters(views: list[View]) -> set[int]:
-    """Bar diameters the drawing actually calls out (T8, 2-T16, T10@150…).
-
-    Line pairing occasionally latches onto unrelated parallel linework and
-    invents a bar of some other size; anything not announced in the
-    drawing's own text is a misdetection and gets rejected.
-    """
-    from .extract import STD_DIAMETERS
-    dias: set[int] = set()
-    for v in views:
-        for e in v.ents:
-            if e.kind in ("MTEXT", "TEXT") and e.text:
-                for mt in re.finditer(r"\bT(\d{1,2})\b", e.text):
-                    d = int(mt.group(1))
-                    if d in STD_DIAMETERS:
-                        dias.add(d)
-    return dias
+            if abs(r - radius) <= 0.5 and abs(c - coord) <= tol:
+                zs.append(z)
+    return _cluster_planes(zs, tol=8.0) if zs else []
 
 
 # ---------------------------------------------------------------- features
@@ -689,7 +364,7 @@ def _sleeves(ents, bbox) -> list[tuple[float, float, float]]:
     return sorted(out)
 
 
-def _fold_ubars(bars: list[Bar3D], sections: list[SectionInfo], thickness: float) -> list[Bar3D]:
+def _fold_ubars(bars: list[Bar3D], sections: list[SectionInfo]) -> list[Bar3D]:
     """Join the two depth-copies of edge mesh bars with the drawn U-bends.
 
     A section draws a U-bar wrapping an edge as a bend joining the two mesh
@@ -698,16 +373,27 @@ def _fold_ubars(bars: list[Bar3D], sections: list[SectionInfo], thickness: float
     each face. Where a bar pair's common end sits at a bend profile, connect
     the pair through the bend — one wrap makes a U, wraps at both ends
     close the pair into a loop.
+
+    A profile legitimately applies to many rows when a drawing genuinely
+    calls out "a U-bar at every bar" (e.g. "T8 UBAR @125mm") — confirmed
+    directly: what first looked like a fabrication bug (20 closed loops
+    stacked the full height of PW-GF-02 at one edge, rendering as a
+    coil/spiral in the 3D viewer) turned out, on inspecting the actual
+    data, to be 20 *different* real mesh rows at 20 different Y positions
+    all legitimately wrapping the same physical edge — exactly what the
+    pitch callout describes. A prior version of this function capped how
+    many times one profile could be reused to "fix" that, which instead
+    deleted ~85 other equally legitimate wraps across the panel (u_bars
+    stat dropped from 88 to 5). Reverted — a profile is matched against
+    every row whose end position agrees with it, with no reuse limit.
     """
-    profiles: dict[str, list[tuple[float, float, float, float, float]]] = {"v-mesh": [], "h-mesh": []}
+    profiles: dict[str, list[tuple[float, float, float, float, int]]] = {"v-mesh": [], "h-mesh": []}
     for s in sections:
         kind = "v-mesh" if s.role == "vertical" else "h-mesh"
         for pos, za, zb, sgn, dia in s.ubars:
-            zlo, zhi = min(za, zb), max(za, zb)
-            # a real U-bar wraps the edge between the two faces; bends whose
-            # legs sit on the same side of mid-thickness are misdetections
-            if zlo < thickness / 2 - 8 and zhi > thickness / 2 + 8:
-                profiles[kind].append((pos, zlo, zhi, sgn, dia))
+            sdia = snap_diameter(dia)
+            if sdia is not None:
+                profiles[kind].append((pos, min(za, zb), max(za, zb), sgn, sdia))
     if not profiles["v-mesh"] and not profiles["h-mesh"]:
         return bars
 
@@ -741,20 +427,11 @@ def _fold_ubars(bars: list[Bar3D], sections: list[SectionInfo], thickness: float
                     hi_b = max(p[axis] for p in b.points)
                     if min(hi_a, hi_b) - max(lo_a, lo_b) < 100:
                         continue  # legs must overlap along the axis
-                    # a real U-bar leg is a short local detail (edge tie,
-                    # opening-corner wrap); full-length mesh runs that
-                    # happen to sit at both faces are two separate straight
-                    # bars, not one bent one, however close a stray bend
-                    # profile happens to fall to either of their ends
-                    if hi_a - lo_a > 900 or hi_b - lo_b > 900:
-                        continue
                     # find bend profiles at the pair's shared ends
                     zlo, zhi = min(za, zb), max(za, zb)
-                    if not (zlo < thickness / 2 - 8 < thickness / 2 + 8 < zhi):
-                        continue  # pair must straddle the two faces
                     ends = []
                     for pos, pza, pzb, sgn, pdia in profiles[kind]:
-                        if abs(pdia - dia) > 2.5 or abs(pza - zlo) > 15 or abs(pzb - zhi) > 15:
+                        if pdia != dia or abs(pza - zlo) > 15 or abs(pzb - zhi) > 15:
                             continue
                         e_lo, e_hi = (lo_a + lo_b) / 2, (hi_a + hi_b) / 2
                         if sgn < 0 and abs(pos - e_lo) <= 70:
@@ -805,56 +482,426 @@ def _fold_ubars(bars: list[Bar3D], sections: list[SectionInfo], thickness: float
     return bars + out
 
 
-def reconstruct_panel(name: str, views: list[View], geometry_only: bool = False) -> Panel:
-    """geometry_only: mould (M1/M2) sheets carry no rebar — S-RBAR linework
-    there is dimension witness lines / insert-schedule graphics, not bars.
-    Only outline, thickness, openings and cast-in features are extracted."""
+_TIE_RE = re.compile(r"T(\d+)\s*Ties?\s*@\s*(\d+)\s*mm", re.IGNORECASE)
+
+
+def _synthesize_ties(bars: list[Bar3D], all_ents, thickness: float,
+                     panel_h: float) -> list[Bar3D]:
+    """Boundary-column stirrup ties, drawn too fragmented to pair as bars.
+
+    Ties are drawn as hundreds of tiny fragments (many under pair_lines'
+    6mm segment floor), so they never survive as paired bars; synthesize
+    them from structural facts instead. The decoded BBS (BBS_RULES.md)
+    pins the design down: the standard tie is a ~200mm-wide core loop
+    wrapping a *pair* of adjacent main bars, at the callout's pitch —
+    PW-GF-09's BBS count (174 = 6 runs x 29) matches 3 main-bar pairs per
+    boundary column x 2 columns, at 100c/c over the clear height.
+
+    Placement lessons from two earlier broken attempts, both now encoded:
+    - main bars are the *larger*-diameter verticals (a tie's own diameter
+      is the panel's smallest/most common — clustering those grabs the
+      general field mesh, not a column);
+    - main bars are routinely SPLIT vertically by side notches/openings
+      (e.g. x=47 exists only at y 30-749 and 2225-2892) — a tie run must
+      follow the intersection of its pair's actual y-intervals, clamped
+      to the panel, never the naive min/max envelope (which drew ties
+      across the notch and outside the panel outline entirely).
+    """
+    # count callout instances across ALL views: labels for tied pairs are
+    # placed in whichever view shows the detail (on PW-GF-09 only 1 of the
+    # 6 sits in the elevation; the BBS count needs all 6)
+    callouts = []
+    for e in all_ents:
+        if e.kind not in ("TEXT", "MTEXT"):
+            continue
+        m = _TIE_RE.search(e.text or "")
+        if m:
+            callouts.append((int(m.group(1)), int(m.group(2))))
+    if not callouts:
+        return bars
+    tie_dia, pitch = max(set(callouts), key=callouts.count)
+    cover = 30.0
+
+    # main bars: the column longitudinals, >=T12 (T10-and-under at a tight
+    # pitch is field mesh -- PW-GF-09's "T10 @150mm" mesh sits 149mm apart,
+    # inside the 160mm pairing threshold, and got wrongly tie-wrapped when
+    # this only excluded the tie's own diameter). Grouped by x with each
+    # bar's real y-intervals (split bars appear as several entries).
+    main: dict[float, list[tuple[float, float]]] = {}
+    for b in bars:
+        if b.kind != "v-mesh" or b.diameter < 12 or b.diameter <= tie_dia:
+            continue
+        x = round(b.points[0][0], 0)
+        ys = [p[1] for p in b.points]
+        main.setdefault(x, []).append((min(ys), max(ys)))
+    if not main:
+        return bars
+
+    def merged(iv: list[tuple[float, float]]) -> list[tuple[float, float]]:
+        iv = sorted(iv)
+        out = [list(iv[0])]
+        for a, b2 in iv[1:]:
+            if a <= out[-1][1] + 1:
+                out[-1][1] = max(out[-1][1], b2)
+            else:
+                out.append([a, b2])
+        return [(a, b2) for a, b2 in out]
+
+    def intersect(a: list[tuple[float, float]], b: list[tuple[float, float]]):
+        res = []
+        for a0, a1 in a:
+            for b0, b1 in b:
+                lo, hi = max(a0, b0), min(a1, b1)
+                if hi - lo > 2 * pitch:  # a run needs room for >=2 ties
+                    res.append((lo, hi))
+        return res
+
+    # candidate tie stacks = adjacent main-bar pairs within ~160mm (tie
+    # core is ~200mm wide). The number of stacks is the number of "Ties"
+    # callout INSTANCES in the drawing -- the BBS tie count is exactly
+    # instances x (H/pitch + 1) (BBS_RULES.md; 174 = 6 x 29 on PW-GF-09).
+    # Rank candidate pairs by how much tie-able run they actually carry
+    # and claim the best ones exclusively (a bar x can belong to one
+    # stack only). The previous greedy left-to-right pairing of ALL
+    # >=T12 columns fabricated overlapping partial stacks wherever
+    # fragmented verticals clustered (observed: six phantom half-height
+    # stacks on PW-GF-09's right side).
+    n_stacks = callouts.count((tie_dia, pitch))
+    xs = sorted(main)
+    pairs = [(xs[i], xs[i + 1]) for i in range(len(xs) - 1)
+             if xs[i + 1] - xs[i] <= 160.0]
+    scored = []
+    for a, b in pairs:
+        runs = intersect(merged(main[a]), merged(main[b]))
+        cov = sum(hi - lo for lo, hi in runs)
+        if cov > 0:
+            scored.append((cov, a, b, runs))
+    scored.sort(key=lambda s: -s[0])
+    claimed: set[float] = set()
+    out: list[Bar3D] = []
+    taken = 0
+    for cov, a, b, runs in scored:
+        if taken >= n_stacks:
+            break
+        if a in claimed or b in claimed:
+            continue
+        claimed.update((a, b))
+        taken += 1
+        x_lo, x_hi = a - cover, b + cover
+        z_lo, z_hi = cover, thickness - cover
+        for lo, hi in runs:
+            lo = max(lo, cover)
+            hi = min(hi, panel_h - cover)
+            n = max(int((hi - lo) // pitch) + 1, 1)
+            for k in range(n):
+                y = lo + k * pitch
+                # closed loop + two 80mm hook tails angled into the
+                # core at the closing corner -- the BBS tie shape's
+                # 0.08 end segments (0.632m total at T8/t160, vs 0.60
+                # for the bare rectangle; see BBS_RULES.md)
+                h = 80.0 / math.sqrt(2)
+                t1 = (x_lo + h, y, z_lo + h)
+                t2 = (x_lo + h, y, z_hi - h)
+                pts = [t1, (x_lo, y, z_lo), (x_hi, y, z_lo), (x_hi, y, z_hi),
+                       (x_lo, y, z_hi), t2]
+                out.append(Bar3D(pts, tie_dia, "tie", "synthesized"))
+    return bars + out
+
+
+_UBAR_PITCH_RE = re.compile(r"T(\d+)\s*UBAR\s*@\s*(\d+)\s*mm", re.IGNORECASE)
+
+
+def _synthesize_hairpins(bars: list[Bar3D], elev_ents, thickness: float,
+                         panel_h: float) -> list[Bar3D]:
+    """Edge hairpins (the BBS's 0.4/web/0.4 'UBAR' row) at mesh bar ends.
+
+    A hairpin links the two mesh faces where bars terminate at a free
+    edge (panel edge or notch boundary). The BBS pins the shape exactly:
+    400mm legs + a web of thickness-2*cover (0.868m at T8/t160), at the
+    "T8 UBAR @pitch" callout's pitch — PW-GF-09's BBS row 10 wants 120 of
+    them, far more than the ~40 loops the u-bar geometry folding detects.
+
+    Placement is strictly evidence-anchored (fabricated placement burned
+    this project twice): one hairpin per (x, end) of each *double-faced*
+    v-mesh vertical of the callout's diameter — both faces ending at the
+    same y is exactly the situation a hairpin exists to close — skipped
+    when a geometry-detected u-bar already sits within 120mm. A column's
+    two faces are intersected per contiguous run (not just the column's
+    overall min/max y) so a column split by a side notch — the same
+    real pattern `_synthesize_ties` already accounts for — gets a
+    hairpin at each of its own free ends, not only the panel's outer
+    top/bottom.
+    """
+    callouts = [(int(m.group(1)), int(m.group(2)))
+                for e in elev_ents if e.kind in ("TEXT", "MTEXT")
+                for m in [_UBAR_PITCH_RE.search(e.text or "")] if m]
+    if not callouts:
+        return bars
+    dia, _pitch = max(set(callouts), key=callouts.count)
+    cover = 30.0
+
+    # double-faced verticals: same x, a z-plane pair, matching y-intervals
+    by_x: dict[float, list[Bar3D]] = {}
+    for b in bars:
+        if b.kind == "v-mesh" and b.diameter == dia:
+            by_x.setdefault(round(b.points[0][0], 0), []).append(b)
+
+    existing = []  # (x, y) midpoints of detected u-bar bends
+    for b in bars:
+        if b.kind == "u-bar":
+            existing.append((b.points[0][0], b.points[0][1]))
+
+    def merge_ivs(ivs: list[tuple[float, float]]) -> list[tuple[float, float]]:
+        ivs = sorted(ivs)
+        out = [list(ivs[0])]
+        for a, b2 in ivs[1:]:
+            if a <= out[-1][1] + 5.0:
+                out[-1][1] = max(out[-1][1], b2)
+            else:
+                out.append([a, b2])
+        return [(a, b2) for a, b2 in out]
+
+    web_lo, web_hi = cover, thickness - cover
+    out: list[Bar3D] = []
+    for x, group in by_x.items():
+        by_z: dict[float, list[tuple[float, float]]] = {}
+        for b in group:
+            z = round(b.points[0][2], 0)
+            ys = [p[1] for p in b.points]
+            by_z.setdefault(z, []).append((min(ys), max(ys)))
+        if len(by_z) < 2:
+            continue  # hairpins close a two-face pair; single-face has none
+        zs_sorted = sorted(by_z)
+        common = merge_ivs(by_z[zs_sorted[0]])
+        for z in zs_sorted[1:]:
+            other = merge_ivs(by_z[z])
+            common = [(max(a0, b0), min(a1, b1))
+                      for a0, a1 in common for b0, b1 in other
+                      if min(a1, b1) > max(a0, b0)]
+        for lo, hi in common:
+            for y_end, leg_dir in ((lo, 1.0), (hi, -1.0)):
+                if any(abs(ex - x) < 120 and abs(ey - y_end) < 200 for ex, ey in existing):
+                    continue
+                if not (0 <= y_end <= panel_h):
+                    continue  # a projecting stub's end isn't a panel free edge
+                y_end_c = min(max(y_end, cover), panel_h - cover)
+                leg = 400.0 * leg_dir
+                if not (0 <= y_end_c + leg <= panel_h):
+                    continue
+                pts = [(x, y_end_c + leg, web_lo), (x, y_end_c, web_lo),
+                       (x, y_end_c, web_hi), (x, y_end_c + leg, web_hi)]
+                out.append(Bar3D(pts, dia, "u-bar", "synthesized"))
+    return bars + out
+
+
+def _dedupe_near(bars: list[Bar3D]) -> list[Bar3D]:
+    """Drop near-duplicate bars: same kind+diameter, both endpoints within
+    6mm, length within 5%. Detection and synthesis paths can each emit
+    their own copy of one physical bar (e.g. a dashed centerline split
+    across offset bins yielding 3 coincident crack bars ~4-6mm apart);
+    one physical bar must book its steel exactly once. The tolerance must
+    stay under the tightest real separation in these drawings: mesh-face
+    z-planes sit as little as 9.6mm apart (33.6 vs 43.2 on PW-GF-09) --
+    a 25mm first attempt silently deleted one of each such real pair."""
+    kept: list[Bar3D] = []
+    for b in bars:
+        e0, e1 = b.points[0], b.points[-1]
+        lb = sum(math.dist(p, q) for p, q in zip(b.points, b.points[1:]))
+        dup = False
+        for k in kept:
+            if k.kind != b.kind or k.diameter != b.diameter:
+                continue
+            k0, k1 = k.points[0], k.points[-1]
+            if (math.dist(e0, k0) < 6 and math.dist(e1, k1) < 6) or \
+               (math.dist(e0, k1) < 6 and math.dist(e1, k0) < 6):
+                lk = sum(math.dist(p, q) for p, q in zip(k.points, k.points[1:]))
+                if lk and abs(lb - lk) / lk < 0.05:
+                    dup = True
+                    break
+        if not dup:
+            kept.append(b)
+    return kept
+
+
+_LABELLED_SINGLE_RE = re.compile(r"(\d+)\s*-\s*T(\d+)[^\d]*CRACK\s*BAR", re.IGNORECASE)
+
+
+def _synthesize_labelled_singles(bars: list[Bar3D], elev_ents, x0: float, y0: float,
+                                 thickness: float, all_ents=None) -> list[Bar3D]:
+    """Bars drawn as a single annotation-style centerline, not a to-scale
+    double-line outline -- confirmed directly for "N -T{d} ... CRACK BAR"
+    callouts: the geometry near each label is a *single* dashed diagonal
+    line (multiple short collinear segments, no parallel second rail), so
+    pair_lines' gap-width diameter inference structurally cannot see it --
+    there's no gap to measure. Merge same-line dashes into full centerlines
+    (the same idea as pair_lines' own rail merging, applied to unpaired
+    single lines) and take the diameter directly from the label text
+    instead of inferring it from geometry that was never drawn to convey it.
+    """
+    callouts = []
+    for e in elev_ents:
+        if e.kind not in ("TEXT", "MTEXT"):
+            continue
+        m = _LABELLED_SINGLE_RE.search(e.text or "")
+        if m:
+            cx, cy = (e.bbox[0] + e.bbox[2]) / 2, (e.bbox[1] + e.bbox[3]) / 2
+            callouts.append((int(m.group(1)), int(m.group(2)), cx, cy))
+    # fallback count for lines whose own label sits in ANOTHER view (like
+    # tie callouts, crack-bar labels are placed wherever the detail shows;
+    # PW-GF-09 keeps 3 of its 4 in the elevation): the modal (count, dia)
+    # among crack callouts drawing-wide
+    fallback = None
+    if all_ents is not None:
+        alldp = [(int(m.group(1)), int(m.group(2)))
+                 for e in all_ents if e.kind in ("TEXT", "MTEXT")
+                 for m in [_LABELLED_SINGLE_RE.search(e.text or "")] if m]
+        if alldp:
+            fallback = max(set(alldp), key=alldp.count)
+    if not callouts and not fallback:
+        return bars
+
+    segs = []
+    for e in elev_ents:
+        if e.layer != "S-RBAR" or e.kind != "LINE":
+            continue
+        s = _Seg(e.points[0], e.points[1])
+        if s.len >= 6.0:
+            segs.append(s)
+
+    # diagonal only -- axis-aligned lines are the regular mesh, already
+    # handled by the paired double-line path
+    rails: dict[tuple, list[_Seg]] = {}
+    for s in segs:
+        deg = math.degrees(s.angle)
+        if deg < 20 or deg > 160 or abs(deg - 90) < 20:
+            continue
+        rails.setdefault((round(s.angle / 0.02), round(s.noff / 3)), []).append(s)
+
+    merged: list[tuple[float, float, float, float]] = []
+    for group in rails.values():
+        group.sort(key=lambda s: s.t0)
+        angle = group[0].angle
+        noff = sum(s.noff for s in group) / len(group)
+        cur0, cur1 = group[0].t0, group[0].t1
+        for s in group[1:]:
+            if s.t0 <= cur1 + 60.0:
+                cur1 = max(cur1, s.t1)
+            else:
+                merged.append((angle, noff, cur0, cur1))
+                cur0, cur1 = s.t0, s.t1
+        merged.append((angle, noff, cur0, cur1))
+    merged = [r for r in merged if r[3] - r[2] >= 300.0]  # drop stray short fragments
+
+    # coalesce near-identical centerlines: the offset-bin key above splits a
+    # dashed line whose rail jitters a few mm across two adjacent noff bins,
+    # yielding 2-3 slightly-offset copies of the SAME drawn line -- each of
+    # which a callout then claimed as a separate bar (observed directly:
+    # PW-GF-09's bottom-left crack bar synthesized 3x a few mm apart while
+    # the actual X-partner line went unclaimed). Some lines are also drawn
+    # as TWO dashed rails a bar-width apart (12mm on PW-GF-09's T12
+    # diagonals) -- those are one physical bar too, so the merge distance
+    # must cover a rail gap (~2 bar widths), not just binning jitter; the
+    # nearest genuinely distinct diagonals sit >500mm apart. Same angle,
+    # offset within 40mm, overlapping parametric range = one line.
+    merged.sort(key=lambda r: (r[0], r[1]))
+    coalesced: list[list[float]] = []
+    for angle, noff, t0, t1 in merged:
+        for c in coalesced:
+            if (abs(c[0] - angle) < 0.02 and abs(c[1] - noff) < 40.0
+                    and t0 <= c[3] + 100 and t1 >= c[2] - 100):
+                c[2], c[3] = min(c[2], t0), max(c[3], t1)
+                break
+        else:
+            coalesced.append([angle, noff, t0, t1])
+    merged = [tuple(c) for c in coalesced]
+
+    # lines: merged centerlines, each annotated with how many bars ALREADY
+    # lie on it -- pair_lines does detect some crack bars itself (one
+    # mid-plane bar per drawn line), and a callout's count is
+    # bars-per-location (front/back face copies of ONE drawn line:
+    # "2 -T12 Crack Bar" points at a single diagonal). Claiming `count`
+    # different LINES per callout was doubly wrong: it left the X-partner
+    # line unclaimed while booking offset-bin duplicates, and it ignored
+    # the already-detected copy so steel got double-booked.
+    lines = []
+    for angle, noff, t0, t1 in merged:
+        ux, uy = math.cos(angle), math.sin(angle)
+        p0 = (ux * t0 - uy * noff - x0, uy * t0 + ux * noff - y0)
+        p1 = (ux * t1 - uy * noff - x0, uy * t1 + ux * noff - y0)
+        mx, my = (ux * (t0 + t1) / 2 - uy * noff, uy * (t0 + t1) / 2 + ux * noff)
+        lines.append({"p0": p0, "p1": p1, "mid_draw": (mx, my),
+                      "have": [], "used": False})
+    for b in bars:
+        if b.kind != "diagonal":
+            continue
+        b0, b1 = b.points[0][:2], b.points[-1][:2]
+        for ln in lines:
+            if (math.dist(b0, ln["p0"]) < 60 and math.dist(b1, ln["p1"]) < 60) or \
+               (math.dist(b0, ln["p1"]) < 60 and math.dist(b1, ln["p0"]) < 60):
+                ln["have"].append(b)
+                break
+
+    # line-centric: each drawn line asks its nearest callout how many bars
+    # it represents. (Callout-centric claiming chain-shifted on PW-GF-09:
+    # leader labels sit between quadrants, so callouts claimed each
+    # other's lines, triple-stacking one and starving another.)
+    out: list[Bar3D] = []
+    for ln in lines:
+        cand = sorted((math.dist(ln["mid_draw"], (ccx, ccy)), count, dia)
+                      for count, dia, ccx, ccy in callouts)
+        if cand and cand[0][0] <= 1500.0:
+            _, count, dia = cand[0]
+        elif fallback:
+            count, dia = fallback
+        else:
+            continue
+        cover = 30.0
+        face_z = [cover + dia / 2, thickness - cover - dia / 2,
+                  thickness / 2]
+        taken_z = [b.points[0][2] for b in ln["have"]]
+        for b in ln["have"]:  # trust the label's diameter over inference
+            b.diameter = dia
+        need = count - len(ln["have"])
+        for z in face_z:
+            if need <= 0:
+                break
+            if any(abs(z - tz) < 10 for tz in taken_z):
+                continue
+            out.append(Bar3D([(ln["p0"][0], ln["p0"][1], z),
+                              (ln["p1"][0], ln["p1"][1], z)],
+                             dia, "diagonal", "synthesized"))
+            need -= 1
+    return bars + out
+
+
+def reconstruct_panel(name: str, views: list[View]) -> Panel:
     elev = views[0]
     bbox, loops = wall_outline(elev.ents)
     x0, y0, x1, y1 = bbox
     pw, ph = x1 - x0, y1 - y0
-    openings = [[(px - x0, py - y0) for px, py in lp] for lp in loops]
 
-    # mould sheets carry no rebar sections either — S-RBAR linework there is
-    # dimension witness lines, not bar bends — so skip section classification
-    sections = [] if geometry_only else classify_sections(views, pw, ph, bbox)
+    sections = classify_sections(views, pw, ph, bbox)
     thickness = (
         statistics.median([s.thickness for s in sections]) if sections else 160.0
     )
 
-    bars2d = [] if geometry_only else [b for b in extract_bars(elev.ents) if b.length >= 100.0]
+    bars2d = [b for b in extract_bars(elev.ents) if b.length >= 100.0]
     bars2d = _bridge_projecting(bars2d, bbox)
-
-    # Real bar outlines pair at (near) exactly the drawn diameter; a clean
-    # match to a standard size is trusted outright. Only an ambiguous gap
-    # (roughly halfway between two standard sizes) needs the drawing's own
-    # text as a tie-break — misdetected pairings of unrelated parallel
-    # linework tend to land there rather than on a real diameter.
-    allowed = set() if geometry_only else announced_diameters(views)
-
-    def snap_allowed(gap: float) -> int | None:
-        d = snap_diameter(gap)
-        if abs(d - gap) <= 2.0 or not allowed:
-            return d
-        near = min(allowed, key=lambda a: abs(a - gap))
-        return near if abs(near - gap) <= 2.5 else None
 
     bars: list[Bar3D] = []
     n_section_z = 0
-    n_dropped = 0
     zs_seen: list[float] = []
     for b in bars2d:
-        dia = snap_allowed(b.diameter)
+        dia = snap_diameter(b.diameter)
         if dia is None:
-            n_dropped += 1
             continue
         orient = _orientation(b)
         r = dia / 2
         zs: list[float] = []
         if orient == "v":
-            zs = _z_lookup(sections, "horizontal", b.points[0][0] - x0, r, thickness)
+            zs = _z_lookup(sections, "horizontal", b.points[0][0] - x0, r)
         elif orient == "h":
-            zs = _z_lookup(sections, "vertical", b.points[0][1] - y0, r, thickness)
+            zs = _z_lookup(sections, "vertical", b.points[0][1] - y0, r)
         kind = {"v": "v-mesh", "h": "h-mesh", "diag": "diagonal", "shape": "shape"}[orient]
         if not zs:
             pts = [(px - x0, py - y0, thickness / 2) for px, py in b.points]
@@ -867,21 +914,117 @@ def reconstruct_panel(name: str, views: list[View], geometry_only: bool = False)
                 pts = [(px - x0, py - y0, z) for px, py in b.points]
                 bars.append(Bar3D(pts, dia, kind, "section"))
 
+    # Mesh bars the elevation's double-line pairing never independently
+    # found at all — not "missing depth", missing entirely, usually because
+    # a real bar's rails got outcompeted or absorbed during the pairing of
+    # a much denser overlapping mesh nearby. A section cut still shows them
+    # as a plain circle (front+back pair) even though nothing in the
+    # elevation was ever recognised as a candidate bar there. Every prior
+    # use of section data in this function only adds *depth* to a bar the
+    # elevation already found; originate a new bar outright when a
+    # position/diameter shows a genuine front+back circle pair with no
+    # matching elevation bar nearby at all.
+    for role, kind, axis_len in (("horizontal", "v-mesh", ph), ("vertical", "h-mesh", pw)):
+        covered: dict[int, list[float]] = {}
+        for bar in bars:
+            if bar.kind != kind:
+                continue
+            pos = bar.points[0][0] if kind == "v-mesh" else bar.points[0][1]
+            covered.setdefault(bar.diameter, []).append(pos)
+
+        hits: dict[int, list[tuple[float, float, int]]] = {}
+        for si, s in enumerate(sections):
+            if s.role != role:
+                continue
+            for c, z, r in s.circles:
+                dia = snap_diameter(2 * r)
+                if dia is not None:
+                    hits.setdefault(dia, []).append((c, z, si))
+
+        for dia, pts in hits.items():
+            pts.sort()
+            clusters: list[list[tuple[float, float, int]]] = []
+            for c, z, si in pts:
+                if clusters and c - clusters[-1][-1][0] <= 15.0:
+                    clusters[-1].append((c, z, si))
+                else:
+                    clusters.append([(c, z, si)])
+            existing = covered.setdefault(dia, [])
+            for cl in clusters:
+                if len({si for _, _, si in cl}) < 2:
+                    continue  # one section's sample alone is too easy to be noise
+                cpos = sum(c for c, _, _ in cl) / len(cl)
+                if any(abs(cpos - e) <= 40.0 for e in existing):
+                    continue  # an elevation bar already covers this position
+                zs = _cluster_planes([z for _, z, _ in cl], tol=8.0)
+                if len(zs) < 2:
+                    continue  # need an agreeing front+back pair, not one stray circle
+                for z in zs:
+                    n_section_z += 1
+                    zs_seen.append(z)
+                    pts3 = ([(cpos, 0.0, z), (cpos, axis_len, z)] if kind == "v-mesh"
+                            else [(0.0, cpos, z), (axis_len, cpos, z)])
+                    bars.append(Bar3D(pts3, dia, kind, "section-origin", cpos))
+                existing.append(cpos)
+
+    # A diameter can show more originated positions than physically exist
+    # when circles that are real but belong to a *different* category (an
+    # edge dowel, not a field mesh bar -- the drawing's own note says
+    # dowels are "refer individual mould drawing", i.e. out of scope for
+    # this schedule) are geometrically indistinguishable from genuine mesh
+    # circles. Confirmed directly on PW-GF-02: 4 T10 positions all
+    # independently confirmed by 3 separate sections each (equally strong
+    # evidence, no way to rank them against each other on geometry alone)
+    # -- but the drawing's own "2 -T10" callout and the official BBS both
+    # say only 2 physical bars exist. Use the callout as a hard cap: when
+    # one exists and originated positions exceed it, keep the ones
+    # furthest from the panel edges (edge-adjacent circles are the more
+    # likely dowels) and drop the rest.
+    # scan every view, not just the elevation -- this callout is routinely
+    # attached to a section view instead (confirmed: PW-GF-02's "2 -T10"
+    # sits far outside the elevation's own bbox, in a separate section
+    # cluster) since a count callout often labels a detail shown in a
+    # section, not the elevation itself
+    count_callouts: dict[int, int] = {}
+    for v in views:
+        for e in v.ents:
+            if e.kind not in ("TEXT", "MTEXT"):
+                continue
+            m = re.search(r"(\d+)\s*-\s*T(\d+)\b", e.text or "")
+            if m:
+                dia = int(m.group(2))
+                count_callouts[dia] = max(count_callouts.get(dia, 0), int(m.group(1)))
+
+    origins_by_dia: dict[int, list[Bar3D]] = {}
+    for bar in bars:
+        if bar.z_source == "section-origin":
+            origins_by_dia.setdefault(bar.diameter, []).append(bar)
+    for dia, group in origins_by_dia.items():
+        cap = count_callouts.get(dia)
+        if cap is None:
+            continue
+        positions = sorted({b.pos for b in group})
+        if len(positions) * 2 <= cap:
+            continue
+        span = ph if group[0].kind == "v-mesh" else pw
+        keep_n = max(cap // 2, 1)
+        positions.sort(key=lambda p: -min(p, span - p))  # farthest-from-edge first
+        keep = set(positions[:keep_n])
+        bars = [b for b in bars if not (b.z_source == "section-origin" and b.diameter == dia and b.pos not in keep)]
+
     # bars drawn as circles in the elevation are perpendicular to the panel
     # face: the N-series projecting bars. Their protrusion profile (how far
     # out of which face) comes from the matching section.
     profiles = [p for s in sections for p in s.prot]
-    for e in ([] if geometry_only else elev.ents):
+    for e in elev.ents:
         if e.layer != "S-RBAR" or e.kind != "CIRCLE" or not (2.0 <= e.radius <= 17.0):
             continue
         cx, cy = e.center
         if not (x0 - 5 <= cx <= x1 + 5 and y0 - 5 <= cy <= y1 + 5):
             continue
-        # dowel circles are often drawn at the sleeve's outer size; clamp to
-        # the nearest announced bar diameter
         dia = snap_diameter(2 * e.radius)
-        if allowed and dia not in allowed:
-            dia = min(allowed, key=lambda a: abs(a - 2 * e.radius))
+        if dia is None:
+            continue
         best, best_d = None, 60.0
         for pos, pz0, pz1, pdia in profiles:
             if abs(pdia - 2 * e.radius) > 3:
@@ -936,68 +1079,13 @@ def reconstruct_panel(name: str, views: list[View], geometry_only: bool = False)
             bar.points = [(x, y, z) for x, y, _ in bar.points]
             bar.z_source = src
 
-    n_before_densify = len(bars)
-    spacings = announced_spacings(views)
-    bars = bars if geometry_only else _densify_families(bars, spacings, openings, pw, ph)
-    bars = _fold_ubars(bars, sections, thickness)
-    # a second pass, now that folding has produced the "u-bar" kind a
-    # "T8 UBAR @125mm" callout describes — the first pass ran before any
-    # existed to densify.
-    bars = bars if geometry_only else _densify_families(bars, spacings, openings, pw, ph)
-    n_densified = len(bars) - n_before_densify
-
-    n_local_bars = 0
-    if not geometry_only:
-        local_bars = _local_section_bars(views, sections, elev, bbox, allowed)
-        bars.extend(local_bars)
-        n_local_bars = len(local_bars)
-
-    # A "shape" bar (chain_bars() joining a bend into more than 2 points)
-    # occasionally bridges two genuinely unrelated dashed fragments that
-    # merely happened to line up on the same X or Y — one lone oversized
-    # jump sitting among otherwise-small segments is that signature (a real
-    # bend's segments are all comparable in size). Trim those bogus jumps
-    # off rather than dropping the whole bar, so the real local fragment
-    # that's actually there survives.
-    n_trimmed = 0
-    for bar in bars:
-        if bar.kind != "shape" or len(bar.points) < 3:
-            continue
-        segs = [math.dist(bar.points[i][:2], bar.points[i + 1][:2])
-                for i in range(len(bar.points) - 1)]
-        # compare each end segment against the smallest of the *other*
-        # segments, not a median that a lone huge jump — especially with
-        # only two segments total — would itself skew past detection.
-        while len(segs) >= 2 and segs[0] > 400.0 and segs[0] > 4 * min(segs[1:]):
-            bar.points.pop(0)
-            segs.pop(0)
-            n_trimmed += 1
-        while len(segs) >= 2 and segs[-1] > 400.0 and segs[-1] > 4 * min(segs[:-1]):
-            bar.points.pop()
-            segs.pop()
-            n_trimmed += 1
-
-    # Sanity guard for the two speculative/derived bar kinds only:
-    # chain_bars() occasionally splices unrelated dashed fragments that
-    # merely share an X or Y into one bogus long "shape" bar (seen spanning
-    # well past the panel's own height), and a `_local_section_bars` marker
-    # match can occasionally resolve to the wrong cut position, landing its
-    # whole family outside the panel. Ordinary elevation/section-derived
-    # bars (v-mesh, h-mesh, u-bar, ...) are left alone even when they
-    # extend past a simplistic rectangular bbox — panels with a genuine
-    # overhang or stepped footprint legitimately do that.
-    n_bounds_dropped = 0
-    kept: list[Bar3D] = []
-    margin = 300.0
-    for bar in bars:
-        if bar.kind in ("shape", "detail-bar") and any(
-            not (-margin <= x <= pw + margin and -margin <= y <= ph + margin)
-            for x, y, _ in bar.points
-        ):
-            n_bounds_dropped += 1
-            continue
-        kept.append(bar)
-    bars = kept
+    bars = _fold_ubars(bars, sections)
+    bars = _synthesize_ties(bars, [e for v in views for e in v.ents],
+                            thickness, ph)
+    bars = _synthesize_hairpins(bars, elev.ents, thickness, ph)
+    bars = _synthesize_labelled_singles(bars, elev.ents, x0, y0, thickness,
+                                        [e for v in views for e in v.ents])
+    bars = _dedupe_near(bars)
 
     # ---- cast-in features: sleeves, corbels, embeds, anchors, wire loops
     features: list[Feature] = []
@@ -1041,97 +1129,18 @@ def reconstruct_panel(name: str, views: list[View], geometry_only: bool = False)
             z0, z1 = thickness / 2 - 25, thickness / 2 + 25
             features.append(Feature(kind, box=(ex0, ey0, z0, ex1, ey1, z1), label=label))
 
+    openings = [[(px - x0, py - y0) for px, py in lp] for lp in loops]
     stats = {
         "bars": len(bars),
         "z_from_sections": n_section_z,
         "sections_found": len(sections),
         "z_planes": sorted(round(z, 1) for z in _cluster_planes(zs_seen)) if zs_seen else [],
         "u_bars": sum(1 for b in bars if b.kind == "u-bar"),
-        "dia_announced": sorted(allowed),
-        "bars_rejected": n_dropped,
-        "bars_densified": n_densified,
-        "local_section_bars": n_local_bars,
-        "bars_out_of_bounds": n_bounds_dropped,
-        "shape_jumps_trimmed": n_trimmed,
         "features": {k: sum(1 for f in features if f.kind == k)
                      for k in ("sleeve", "corbel", "embed", "anchor", "loop")},
     }
     return Panel(name, pw, ph, thickness, openings, bars, stats,
                  mesh_families(bars), features)
-
-
-def _bar_len(b: Bar3D) -> float:
-    return sum(math.dist(b.points[i], b.points[i + 1]) for i in range(len(b.points) - 1))
-
-
-def calibrate_to_schedule(panel: Panel, schedule: dict[int, tuple[float, float]]) -> int:
-    """Top up each diameter to the drawing's own printed Summary Schedule length.
-
-    Some bar types (dowels, projecting bars, U-bars — per this drawing set's
-    own general note, "REFER FOR INDIVIDUAL MOULD DRAWING" for their length)
-    aren't fully dimensioned as double-line geometry in the (R) view we
-    reconstruct from, so detection structurally can't reach 100% for them no
-    matter how good the line-pairing is. The schedule total is the shop
-    drawing's own ground truth, so where geometry falls meaningfully short,
-    bars are added — cloned from a real bar of that diameter, nudged apart
-    so they don't overlap — until the modelled length matches. These are
-    flagged z_source="calibrated" (not "section"/"default") so the viewer
-    can render them distinctly and the report can call them out as inferred
-    rather than geometrically confirmed.
-    """
-    # the schedule enumerates every diameter actually in the drawing; a bar
-    # at a diameter absent from it end to end is a misdetected pairing
-    panel.bars[:] = [b for b in panel.bars if b.diameter in schedule]
-
-    by_dia: dict[int, list[Bar3D]] = {}
-    for b in panel.bars:
-        by_dia.setdefault(b.diameter, []).append(b)
-
-    added: list[Bar3D] = []
-    for dia, (target_len, _w) in schedule.items():
-        cur = by_dia.get(dia, [])
-        cur_len = sum(_bar_len(b) for b in cur)
-        if not cur or cur_len >= target_len * 0.98:
-            continue  # nothing to clone from, or already there
-        # Clone from the dominant, repeatable families (mesh/u-bar/etc) —
-        # not one-off local fragments like a single short through-thickness
-        # tie stub. The schedule total represents that diameter's typical
-        # bar; cloning an atypical short fragment at arbitrary positions
-        # (there's no real spacing pattern to place it against) scatters
-        # visually meaningless tick marks that carry weight but no shape.
-        typical = [b for b in cur if b.kind not in ("detail-bar", "shape")
-                   and _bar_len(b) >= 80.0]
-        if typical:
-            cur = typical
-        step = 0
-        while cur_len < target_len * 0.98 and step < 500:
-            template = cur[step % len(cur)]
-            step += 1
-            along_y = template.kind == "h-mesh"
-            span = panel.height if along_y else panel.width
-            base = template.points[0][1 if along_y else 0]
-            # low-discrepancy spread across the middle 90% of the span, so
-            # clones land at varied, plausible positions instead of walking
-            # off the edge of the panel
-            frac = (step * 0.6180339887498949) % 1.0
-            shift = (0.05 * span + frac * 0.9 * span) - base
-            if along_y:
-                pts = [(x, y + shift, z) for x, y, z in template.points]
-            else:
-                pts = [(x + shift, y, z) for x, y, z in template.points]
-            xs = [p[0] for p in pts]
-            ys = [p[1] for p in pts]
-            if min(xs) < -5 or max(xs) > panel.width + 5 or min(ys) < -5 or max(ys) > panel.height + 5:
-                continue  # would spill outside the panel — skip this slot
-            clone = Bar3D(pts, dia, template.kind, "calibrated")
-            added.append(clone)
-            cur_len += _bar_len(clone)
-
-    panel.bars.extend(added)
-    panel.families = mesh_families(panel.bars)
-    panel.stats["bars"] = len(panel.bars)
-    panel.stats["bars_calibrated"] = len(added)
-    return len(added)
 
 
 def _bridge_projecting(bars: list[Bar2D], bbox, tol_pos: float = 6.0) -> list[Bar2D]:

@@ -16,8 +16,16 @@ STD_DIAMETERS = (6, 8, 10, 12, 16, 20, 25, 32)
 MIN_DIA, MAX_DIA = 5.0, 34.0
 
 
-def snap_diameter(d: float) -> int:
-    return min(STD_DIAMETERS, key=lambda s: abs(s - d))
+def snap_diameter(d: float, tol: float = 2.0) -> int | None:
+    """Nearest standard bar diameter, or None if d isn't actually one.
+
+    Un-gated nearest-snap used to force every stray gap (crossing dimension
+    witness lines, mis-paired rails, noise) into a real diameter — including
+    ones absent from the drawing's own bar schedule (fabricated T25/T32
+    "bars"). A gap has to land within `tol` of a standard size to count.
+    """
+    best = min(STD_DIAMETERS, key=lambda s: abs(s - d))
+    return best if abs(best - d) <= tol else None
 
 
 @dataclass
@@ -114,8 +122,30 @@ def pair_lines(ents: list[Ent], min_len: float = 30.0, seg_min: float = 6.0) -> 
     bars: list[Bar2D] = []
     for group in by_angle.values():
         group.sort(key=lambda r: r.noff)
-        used_iv: set[tuple[int, int]] = set()  # (rail idx, iv idx) claims
-        # candidate pairings, longest overlap first, each interval used once
+        # Claims are tracked as parametric *sub-ranges* per interval, not a
+        # whole-interval used flag. With whole-interval claims, a physical
+        # bar whose one rail is fragmented (a crossing bar's trim splits it
+        # into two intervals) while the other rail is continuous lost every
+        # segment after the first: the continuous rail's single interval
+        # could only be claimed once, so the second candidate was skipped
+        # and that part of the bar silently vanished (confirmed on
+        # PW-GF-09 x=3497: full-height rails in the DXF, only the top half
+        # reconstructed). A candidate now consumes only the [lo, hi] range
+        # it actually pairs over, leaving the rest of both intervals free.
+        claimed: dict[tuple[int, int], list[tuple[float, float]]] = {}
+
+        def free_spans(key, lo, hi):
+            spans = [(lo, hi)]
+            for c0, c1 in claimed.get(key, ()):
+                spans = [
+                    piece
+                    for s0, s1 in spans
+                    for piece in (((s0, min(s1, c0)),) if c0 > s0 else ())
+                    + (((max(s0, c1), s1),) if c1 < s1 else ())
+                    if piece[1] - piece[0] > 0
+                ]
+            return spans
+
         cands = []
         for i in range(len(group)):
             for j in range(i + 1, len(group)):
@@ -131,16 +161,24 @@ def pair_lines(ents: list[Ent], min_len: float = 30.0, seg_min: float = 6.0) -> 
                             cands.append((hi - lo, i, ii, j, jj, lo, hi, gap))
         cands.sort(reverse=True)
         for _, i, ii, j, jj, lo, hi, gap in cands:
-            if (i, ii) in used_iv or (j, jj) in used_iv:
-                continue
-            used_iv.add((i, ii))
-            used_iv.add((j, jj))
-            r = group[i]
-            noff = (r.noff + group[j].noff) / 2
-            ux, uy = math.cos(r.angle), math.sin(r.angle)
-            p0 = (ux * lo - uy * noff, uy * lo + ux * noff)
-            p1 = (ux * hi - uy * noff, uy * hi + ux * noff)
-            bars.append(Bar2D([p0, p1], gap))
+            # the pairable range is whatever remains unclaimed on BOTH sides
+            spans_i = free_spans((i, ii), lo, hi)
+            spans_j = free_spans((j, jj), lo, hi)
+            pieces = []
+            for s0, s1 in spans_i:
+                for t0, t1 in spans_j:
+                    p0_, p1_ = max(s0, t0), min(s1, t1)
+                    if p1_ - p0_ >= min_len:
+                        pieces.append((p0_, p1_))
+            for p_lo, p_hi in pieces:
+                claimed.setdefault((i, ii), []).append((p_lo, p_hi))
+                claimed.setdefault((j, jj), []).append((p_lo, p_hi))
+                r = group[i]
+                noff = (r.noff + group[j].noff) / 2
+                ux, uy = math.cos(r.angle), math.sin(r.angle)
+                p0 = (ux * p_lo - uy * noff, uy * p_lo + ux * noff)
+                p1 = (ux * p_hi - uy * noff, uy * p_hi + ux * noff)
+                bars.append(Bar2D([p0, p1], gap))
     return bars
 
 
@@ -181,7 +219,17 @@ def pair_arcs(ents: list[Ent]) -> list[Bar2D]:
 # ---------------------------------------------------------------- chaining
 
 def _merge_collinear(bars: list[Bar2D], tol_off: float = 1.5, tol_gap: float = 60.0) -> list[Bar2D]:
-    """Merge straight centerlines that are collinear and touching/overlapping."""
+    """Merge straight centerlines that are collinear and touching/overlapping.
+
+    The merge gap is diameter-dependent: heavy edge/beam bars (>=16mm) are
+    trimmed by crossing detail bars into fragments separated by ~200mm
+    (confirmed on SS-GF-01's T20 edge beams: 5.14m drawn lines recovered
+    as 0.2-1.4m pieces with three ~200mm holes), and a real discontinuity
+    in such bars is a lap splice — which *overlaps*, never gaps — so
+    bridging up to 250mm is safe there. Light mesh (T8-T12) keeps the
+    tight 60mm: its gaps are often genuinely separate bars across an
+    opening at a couple hundred mm.
+    """
     straight = [b for b in bars if len(b.points) == 2]
     other = [b for b in bars if len(b.points) != 2]
     groups: dict[tuple[int, int, int], list[Bar2D]] = {}
@@ -200,11 +248,12 @@ def _merge_collinear(bars: list[Bar2D], tol_off: float = 1.5, tol_gap: float = 6
             t1 = b.points[1][0] * ux + b.points[1][1] * uy
             ivs.append((min(t0, t1), max(t0, t1), b.diameter))
         ivs.sort()
+        group_gap = 250.0 if key[2] >= 16 else tol_gap
         cur0, cur1, dia = ivs[0]
         dias = [dia]
         out = []
         for t0, t1, d in ivs[1:]:
-            if t0 <= cur1 + tol_gap:
+            if t0 <= cur1 + group_gap:
                 cur1 = max(cur1, t1)
                 dias.append(d)
             else:
@@ -218,8 +267,22 @@ def _merge_collinear(bars: list[Bar2D], tol_off: float = 1.5, tol_gap: float = 6
     return merged + other
 
 
-def chain_bars(bars: list[Bar2D], tol: float = 4.0) -> list[Bar2D]:
-    """Join centerline pieces (lines + bend arcs) whose endpoints coincide."""
+def chain_bars(bars: list[Bar2D], tol: float = 4.0, tol_dia: float = 1.9) -> list[Bar2D]:
+    """Join centerline pieces (lines + bend arcs) whose endpoints coincide.
+
+    Endpoint proximity alone isn't enough: in a dense mesh, unrelated bars
+    of *different* diameters routinely terminate at the same corner/edge
+    (e.g. a T20 and a T12 both ending at the same opening edge). Fusing
+    those blends their diameters into a bogus in-between value — sometimes
+    landing on another real standard size — which silently steals length
+    from two real bars and fabricates a third. Only chain fragments whose
+    diameter is close to the *seed* fragment's diameter — gating against a
+    running average instead lets a chain drift diameter one small hop at a
+    time (T8 -> T10 -> T12, each hop under tolerance even though adjacent
+    standard sizes are only 2mm apart) and land far from where it started.
+    tol_dia is kept under that 2mm floor so it can't bridge two distinct
+    standard sizes, while still absorbing real per-bar gap-measurement noise.
+    """
     bars = _merge_collinear(bars)
     used = [False] * len(bars)
 
@@ -232,13 +295,14 @@ def chain_bars(bars: list[Bar2D], tol: float = 4.0) -> list[Bar2D]:
             continue
         used[i] = True
         pts = list(b.points)
+        seed_dia = b.diameter
         dias = [b.diameter * b.length]
         wlen = [b.length]
         grew = True
         while grew:
             grew = False
             for j, c in enumerate(bars):
-                if used[j]:
+                if used[j] or abs(c.diameter - seed_dia) > tol_dia:
                     continue
                 c0, c1 = ends(c)
                 if math.dist(pts[-1], c0) <= tol:
