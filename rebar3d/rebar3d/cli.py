@@ -65,6 +65,9 @@ def main(argv=None) -> int:
         dxf = dwg_to_dxf(src, args.out / "dxf") if src.suffix.lower() == ".dwg" else src
         ents = load_entities(dxf)
         views = cluster_views(ents)
+        if not views:
+            print(f"{name}: no elevation view found (schedule-only or non-rebar sheet), skipping")
+            continue
         panel = reconstruct_panel(name, views)
 
         # The sheet's own Summary Schedule is ground truth for which
