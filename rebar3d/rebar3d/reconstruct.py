@@ -852,6 +852,71 @@ def _synthesize_hooks(bars: list[Bar3D], views: list[View], thickness: float,
     return bars + out
 
 
+def _synthesize_column_ties(bars: list[Bar3D], panel_w: float, panel_h: float,
+                            thickness: float) -> list[Bar3D]:
+    """Full-cross-section closed tie loops on a column-shaped element.
+
+    A column (tall and narrow -- panel_h at least 4x both panel_w and
+    thickness, unlike a wall panel where width/height are comparable)
+    confines its main verticals with closed stirrup ties wrapping the
+    *whole* cross-section, not a wall's per-boundary-pair core loop. This
+    drawing style (confirmed on PC-GF-01) shows each real tie leg only as
+    a single flat h-mesh line spanning the width at the panel's mid-depth
+    default z -- z_source=="plane-snap" for literally every one of them
+    (75/75 on PC-GF-01), meaning none of them ever got real front/back
+    depth evidence, unlike genuine field mesh which usually does. That's
+    real, evidence-backed position data (not guessed) -- what's missing is
+    only the loop's other 3 sides, which the column's own already-known
+    cross-section (panel_w, thickness) supplies directly, no callout/pitch
+    parsing needed (this drawing's own "-(N) -(T{d})" and zone labels are
+    too ambiguous to safely reconstruct exact zone boundaries from; real
+    position evidence + known real cross-section is the safer bar to
+    clear, same principle as every other synthesis pass in this file).
+
+    Consecutive positions within 20mm are merged into one real tie (a
+    ~16mm-apart sub-pair recurs constantly in the raw data -- confirmed
+    same z, so not a front/back pair -- almost certainly one tie's main
+    leg plus a small hook-closure fragment `chain_bars` didn't join).
+    """
+    if panel_h < 4 * panel_w or panel_h < 4 * thickness:
+        return bars  # not a column-shaped element
+    cover = 40.0
+    x_lo, x_hi = cover, panel_w - cover
+    z_lo, z_hi = cover, thickness - cover
+    if x_hi <= x_lo or z_hi <= z_lo:
+        return bars
+
+    NO_DEPTH_EVIDENCE = ("plane-snap", "default")
+    by_dia: dict[int, list[float]] = {}
+    for b in bars:
+        if b.kind != "h-mesh" or b.z_source not in NO_DEPTH_EVIDENCE:
+            continue
+        span = abs(b.points[-1][0] - b.points[0][0])
+        if span < 0.7 * (panel_w - 2 * cover):
+            continue
+        by_dia.setdefault(b.diameter, []).append(b.points[0][1])
+
+    kept: list[Bar3D] = [b for b in bars if not (
+        b.kind == "h-mesh" and b.z_source in NO_DEPTH_EVIDENCE
+        and b.diameter in by_dia
+        and abs(b.points[-1][0] - b.points[0][0]) >= 0.7 * (panel_w - 2 * cover))]
+    out: list[Bar3D] = []
+    for dia, ys in by_dia.items():
+        ys = sorted(ys)
+        merged = [ys[0]]
+        for y in ys[1:]:
+            if y - merged[-1] > 20.0:
+                merged.append(y)
+        h = 80.0 / math.sqrt(2)
+        for y in merged:
+            t1 = (x_lo + h, y, z_lo + h)
+            t2 = (x_lo + h, y, z_hi - h)
+            pts = [t1, (x_lo, y, z_lo), (x_hi, y, z_lo), (x_hi, y, z_hi),
+                   (x_lo, y, z_hi), t2]
+            out.append(Bar3D(pts, dia, "tie", "synthesized"))
+    return kept + out
+
+
 def _dedupe_near(bars: list[Bar3D]) -> list[Bar3D]:
     """Drop near-duplicate bars: same kind+diameter, both endpoints within
     6mm, length within 5%. Detection and synthesis paths can each emit
@@ -1244,6 +1309,7 @@ def reconstruct_panel(name: str, views: list[View]) -> Panel:
     bars = _synthesize_labelled_singles(bars, elev.ents, x0, y0, thickness,
                                         [e for v in views for e in v.ents])
     bars = _synthesize_hooks(bars, views, thickness, x0, y0)
+    bars = _synthesize_column_ties(bars, pw, ph, thickness)
     bars = _dedupe_near(bars)
 
     # ---- cast-in features: sleeves, corbels, embeds, anchors, wire loops
