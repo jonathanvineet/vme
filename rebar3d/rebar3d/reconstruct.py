@@ -884,6 +884,61 @@ def _synthesize_hooks(bars: list[Bar3D], views: list[View], thickness: float,
     return bars + out
 
 
+def _merge_dowel_legs(bars: list[Bar3D]) -> list[Bar3D]:
+    """Join a face-dowel's protruding leg with its embedded in-plane leg.
+
+    A face-dowel (a circle in the elevation, perpendicular to the panel
+    face) only ever gets a straight z-only run in this pipeline -- its
+    embedded anchor leg, which runs *in-plane* before bending toward the
+    face, is a completely separate double-line bar reconstructed as an
+    ordinary v-mesh/h-mesh entry that happens to end at the same (x, y).
+    Confirmed on PW-01: the BBS's own "E"/"E1" dowel rows are a 2-segment
+    bend (~475mm embedded leg + a ~520-585mm protruding leg); the
+    face-dowel path alone only ever captures the protruding leg, quietly
+    undercounting each dowel's real length by roughly half. Only merges
+    when a same-diameter v-mesh/h-mesh bar's own endpoint lands within
+    30mm of the dowel's (x, y) -- real position evidence, not a guess;
+    left alone otherwise (confirmed only ~28% of dowels have such a
+    candidate at all on PW-01 -- the rest genuinely have no second leg
+    detected anywhere, a different, still-open gap).
+    """
+    dowels = [b for b in bars if b.kind == "face-dowel"]
+    others = [b for b in bars if b.kind != "face-dowel"]
+    claimed: set[int] = set()
+    out: list[Bar3D] = []
+    for dw in dowels:
+        dx, dy, _ = dw.points[0]
+        best: tuple[int, float] | None = None
+        for i, leg in enumerate(others):
+            if i in claimed or leg.kind not in ("v-mesh", "h-mesh") or leg.diameter != dw.diameter:
+                continue
+            d = min(math.dist((p[0], p[1]), (dx, dy)) for p in (leg.points[0], leg.points[-1]))
+            if d < 30.0 and (best is None or d < best[1]):
+                best = (i, d)
+        if best is None:
+            out.append(dw)
+            continue
+        i, _ = best
+        claimed.add(i)
+        leg = others[i]
+        leg_pts = list(leg.points)
+        if math.dist((leg_pts[-1][0], leg_pts[-1][1]), (dx, dy)) > \
+           math.dist((leg_pts[0][0], leg_pts[0][1]), (dx, dy)):
+            leg_pts = leg_pts[::-1]
+        # the leg's own z is only ever a generic mesh-face fallback, not a
+        # real measurement at this specific bar -- re-level it to the
+        # dowel's own z1 (a real detected circle depth) so joining the two
+        # doesn't fabricate an extra "jump" segment's worth of length that
+        # was never actually drawn anywhere.
+        z_far, z_near = dw.points[0][2], dw.points[1][2]
+        leg_pts = [(p[0], p[1], z_near) for p in leg_pts]
+        out.append(Bar3D(leg_pts + [dw.points[0]], dw.diameter, "face-dowel", "section"))
+    for i, leg in enumerate(others):
+        if i not in claimed:
+            out.append(leg)
+    return out
+
+
 def _synthesize_column_ties(bars: list[Bar3D], panel_w: float, panel_h: float,
                             thickness: float) -> list[Bar3D]:
     """Full-cross-section closed tie loops on a column-shaped element.
@@ -1342,6 +1397,7 @@ def reconstruct_panel(name: str, views: list[View]) -> Panel:
                                         [e for v in views for e in v.ents])
     bars = _synthesize_hooks(bars, views, thickness, x0, y0)
     bars = _synthesize_column_ties(bars, pw, ph, thickness)
+    bars = _merge_dowel_legs(bars)
     bars = _dedupe_near(bars)
 
     # ---- cast-in features: sleeves, corbels, embeds, anchors, wire loops
