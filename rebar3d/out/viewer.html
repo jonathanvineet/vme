@@ -52,7 +52,7 @@
       <input id="w2" type="number" step="10"> × <input id="h2" type="number" step="10"> mm
       <button id="applyBtn" class="primary">apply</button><button id="resetBtn">reset</button>
       <div style="margin-top:7px; text-align:right">
-        <button id="dxfBtn">&#8595; DXF</button><button id="repBtn">&#8595; report</button>
+        <button id="dxfBtn">&#8595; DXF</button><button id="repBtn">&#8595; report</button><button id="bbsBtn">&#8595; BBS pdf</button>
       </div>
       <div class="dim" id="dlNote" style="margin-top:4px; text-align:right"></div>
     </div>
@@ -562,6 +562,229 @@ ${sA.excluded ? `<div class="dim">${sA.excluded} lone unmatched pairing(s) exclu
 </body></html>`;
 }
 
+// ---- BBS (bar bending schedule) grouping, matching the official sheet's
+// row layout: bars are grouped by (diameter, rounded segment-length shape)
+// regardless of internal "kind", since that's what the real schedule does --
+// a v-mesh straight bar and a u-bar/tie/diagonal bar all become one of
+// "Horizontal Bar" / "Vertical Bar" / "Diagonal Bar" rows with A-F segment
+// columns, exactly like the printed PW-GF-*.pdf BBS sheets.
+function segLens(pts) {
+  const L = [];
+  for (let i = 0; i + 1 < pts.length; i++) {
+    const a = pts[i], c = pts[i+1];
+    L.push(Math.hypot(c[0]-a[0], c[1]-a[1], c[2]-a[2]));
+  }
+  return L;
+}
+function shapeAxes(pts) {
+  // the two axes with the most spread define the plane a bend is drawn in
+  // (a tie bends in X-Z, a hairpin in Y-Z, a straight mesh bar has none) --
+  // auto-detecting this keeps the mini bend diagram correct regardless of
+  // the bar's kind or orientation.
+  const vars = [0,1,2].map(ax => {
+    const vals = pts.map(p => p[ax]);
+    const mean = vals.reduce((a,b)=>a+b,0) / vals.length;
+    return vals.reduce((a,v)=>a+(v-mean)*(v-mean), 0);
+  });
+  return [0,1,2].sort((a,b) => vars[b]-vars[a]).slice(0,2);
+}
+function distToSeg(p, a, b) {
+  const ab = [b[0]-a[0], b[1]-a[1], b[2]-a[2]];
+  const ap = [p[0]-a[0], p[1]-a[1], p[2]-a[2]];
+  const abLen2 = ab[0]*ab[0]+ab[1]*ab[1]+ab[2]*ab[2];
+  if (abLen2 < 1e-9) return Math.hypot(...ap);
+  const t = (ap[0]*ab[0]+ap[1]*ab[1]+ap[2]*ab[2]) / abLen2;
+  const proj = [a[0]+ab[0]*t, a[1]+ab[1]*t, a[2]+ab[2]*t];
+  return Math.hypot(p[0]-proj[0], p[1]-proj[1], p[2]-proj[2]);
+}
+function rdpSimplify(pts, eps) {
+  // Ramer-Douglas-Peucker: collapse a run of points onto its chord when
+  // every point in the run deviates from that chord by less than eps.
+  // Real bend vertices (tie/hairpin corners, ~90 degrees) deviate far more
+  // than a small hook/fillet radius does, so this cleanly separates "one
+  // more A/B/C segment" from "just how a curved bend got discretized".
+  if (pts.length < 3) return pts.slice();
+  let maxD = -1, idx = -1;
+  for (let i = 1; i < pts.length-1; i++) {
+    const d = distToSeg(pts[i], pts[0], pts[pts.length-1]);
+    if (d > maxD) { maxD = d; idx = i; }
+  }
+  if (maxD > eps) {
+    const left = rdpSimplify(pts.slice(0, idx+1), eps);
+    const right = rdpSimplify(pts.slice(idx), eps);
+    return left.slice(0, -1).concat(right);
+  }
+  return [pts[0], pts[pts.length-1]];
+}
+function simplifyShape(pts) {
+  // fragment-merge joints and small-radius hook/fillet discretization both
+  // show up as many small collinear-ish points -- collapse them to the
+  // real bend vertices a human BBS would draw (25mm: comfortably above any
+  // hook/dash noise, comfortably below every real A/B/C segment we produce).
+  return rdpSimplify(pts, 25.0);
+}
+function bbsOf(m) {
+  const SCHEDULABLE = new Set(["v-mesh","h-mesh","u-bar","tie","diagonal","shape"]);
+  const groups = {};
+  for (const b0 of m.bars) {
+    if (!SCHEDULABLE.has(b0.kind)) continue;
+    const b = Object.assign({}, b0, {pts: simplifyShape(b0.pts)});
+    const segs = segLens(b.pts);
+    if (!segs.length) continue;
+    const xs = b.pts.map(p=>p[0]), ys = b.pts.map(p=>p[1]);
+    const spanX = Math.max(...xs)-Math.min(...xs), spanY = Math.max(...ys)-Math.min(...ys);
+    const vertical = spanY >= spanX;
+    const desc = b.kind === "diagonal" ? "Diagonal Bar" : (vertical ? "Vertical Bar" : "Horizontal Bar");
+    const shapeKey = segs.map(s => Math.round(s/20)*20).join(",");
+    const key = b.d + "|" + shapeKey;
+    const perpAxis = vertical ? 0 : 1;
+    const pos = b.pts.reduce((a,p)=>a+p[perpAxis],0) / b.pts.length;
+    const g = groups[key] || (groups[key] = {d: b.d, segs, desc, pts0: b.pts, bars: []});
+    g.bars.push({pos, calibrated: b.z_src === "calibrated"});
+  }
+  const rows = [];
+  for (const key in groups) {
+    const g = groups[key];
+    const n = g.bars.length;
+    const positions = g.bars.map(x => x.pos).sort((a,b)=>a-b);
+    let spacing = null;
+    if (n >= 3) {
+      const gaps = [];
+      for (let i = 1; i < positions.length; i++) {
+        const d = positions[i] - positions[i-1];
+        if (d > 10) gaps.push(d);
+      }
+      if (gaps.length) {
+        const sorted = gaps.slice().sort((a,b)=>a-b);
+        const med = sorted[Math.floor(sorted.length/2)];
+        if (gaps.every(g2 => Math.abs(g2-med) < Math.max(med*0.25, 15))) spacing = Math.round(med/5)*5;
+      }
+    }
+    const segsM = g.segs.map(s => s/1000);
+    const length = segsM.reduce((a,b)=>a+b, 0);
+    const totLen = length * n;
+    const uw = g.d*g.d/162;
+    const totW = totLen * uw;
+    const nCal = g.bars.filter(x => x.calibrated).length;
+    rows.push({
+      desc: g.desc, segs: segsM, spacing, dia: g.d, nos: n,
+      length, totLen, uw, totW,
+      remarks: nCal ? (nCal === n ? "calibrated" : `${nCal}/${n} calibrated`) : "",
+      pts0: g.pts0,
+    });
+  }
+  rows.sort((a,b) => a.dia - b.dia || b.totW - a.totW);
+  rows.forEach((r,i) => r.sno = i+1);
+  return {rows, totW: rows.reduce((a,r)=>a+r.totW, 0)};
+}
+
+// ---- minimal single-page-capable PDF writer (no external deps: PDF text
+// objects + line-drawing operators are plain ASCII, so a hand-rolled writer
+// avoids vendoring a whole PDF library for one table).
+function escPdf(s) { return String(s).replace(/\\/g,"\\\\").replace(/\(/g,"\\(").replace(/\)/g,"\\)"); }
+function buildPDF(contentStreams, pw, ph) {
+  const N = contentStreams.length;
+  const fontReg = 3, fontBold = 4;
+  const contentIds = contentStreams.map((_,i) => 5+i);
+  const pageIds = contentStreams.map((_,i) => 5+N+i);
+  const objs = {};
+  objs[1] = `<< /Type /Catalog /Pages 2 0 R >>`;
+  objs[2] = `<< /Type /Pages /Kids [${pageIds.map(id=>id+" 0 R").join(" ")}] /Count ${N} >>`;
+  objs[fontReg] = `<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>`;
+  objs[fontBold] = `<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold >>`;
+  contentStreams.forEach((c, i) => {
+    objs[contentIds[i]] = `<< /Length ${c.length} >>\nstream\n${c}\nendstream`;
+    objs[pageIds[i]] = `<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ${pw} ${ph}] ` +
+      `/Resources << /Font << /F1 ${fontReg} 0 R /F2 ${fontBold} 0 R >> >> /Contents ${contentIds[i]} 0 R >>`;
+  });
+  const maxId = Math.max(2, fontReg, fontBold, ...contentIds, ...pageIds);
+  let out = "%PDF-1.4\n";
+  const offsets = new Array(maxId+1).fill(0);
+  for (let id = 1; id <= maxId; id++) {
+    offsets[id] = out.length;
+    out += `${id} 0 obj\n${objs[id]}\nendobj\n`;
+  }
+  const xrefStart = out.length;
+  out += `xref\n0 ${maxId+1}\n0000000000 65535 f \n`;
+  for (let id = 1; id <= maxId; id++) out += String(offsets[id]).padStart(10,"0") + " 00000 n \n";
+  out += `trailer\n<< /Size ${maxId+1} /Root 1 0 R >>\nstartxref\n${xrefStart}\n%%EOF`;
+  return out;
+}
+
+const BBS_COLS = [
+  ["S.No", 22], ["Description", 78], ["Bar Shape", 70], ["Spacing(mm)", 58], ["Dia", 26], ["Nos.", 30],
+  ["A", 31], ["B", 31], ["C", 31], ["D", 31], ["E", 31], ["F", 31],
+  ["Length(m)", 48], ["Tot.Length(m)", 58], ["Unit Wt(Kg/m)", 53], ["Tot.Weight(Kg)", 58], ["Remarks", 48],
+];
+function bbsPdfOf(m) {
+  const {rows, totW} = bbsOf(m);
+  const PW = 792, PH = 612, marginL = 28, marginB = 30, rowH = 24, headH = 22, titleH = 58;
+  const colX = []; { let x = marginL; for (const [,w] of BBS_COLS) { colX.push(x); x += w; } }
+  const tableRight = colX[colX.length-1] + BBS_COLS[BBS_COLS.length-1][1];
+  const rowsPerPage = Math.max(1, Math.floor((PH - titleH - marginB - headH) / rowH));
+  const pageCount = Math.max(1, Math.ceil(rows.length / rowsPerPage));
+  const pages = [];
+  for (let p = 0; p < pageCount; p++) {
+    const pageRows = rows.slice(p*rowsPerPage, (p+1)*rowsPerPage);
+    const isLast = p === pageCount - 1;
+    let s = "";
+    const text = (x,y,size,str,bold) =>
+      { s += `BT /${bold?"F2":"F1"} ${size} Tf 1 0 0 1 ${x.toFixed(2)} ${y.toFixed(2)} Tm (${escPdf(str)}) Tj ET\n`; };
+    const ctext = (ci, y, size, str, bold) => {
+      const w = BBS_COLS[ci][1], cx = colX[ci];
+      const tw = String(str).length * size * 0.5;
+      text(cx + Math.max(2,(w-tw)/2), y, size, str, bold);
+    };
+    const hline = (y, x0, x1) => { s += `${x0.toFixed(2)} ${y.toFixed(2)} m ${x1.toFixed(2)} ${y.toFixed(2)} l S\n`; };
+    const vline = (x, y0, y1) => { s += `${x.toFixed(2)} ${y0.toFixed(2)} m ${x.toFixed(2)} ${y1.toFixed(2)} l S\n`; };
+
+    text(marginL, PH-30, 13, `${m.name} -- Bar Bending Schedule` + (pageCount>1 ? ` (page ${p+1}/${pageCount})` : ""), true);
+    text(marginL, PH-44, 8, `${Math.round(m.width)}x${Math.round(m.height)}x${Math.round(m.thickness)} mm ` +
+      `- generated ${new Date().toLocaleDateString()} - reconstructed from shop drawing (unit wt = d^2/162 kg/m)`, false);
+
+    let y = PH - titleH;
+    const headY = y;
+    for (let ci=0; ci<BBS_COLS.length; ci++) ctext(ci, headY - 14, 6.5, BBS_COLS[ci][0], true);
+    y -= headH;
+    hline(headY+6, marginL, tableRight);
+    hline(y+6, marginL, tableRight);
+
+    for (const r of pageRows) {
+      const cells = [
+        String(r.sno), r.desc, "", r.spacing ? (r.spacing+"c/c") : "-", String(r.dia), String(r.nos),
+        ...Array.from({length:6}, (_,i) => r.segs[i] !== undefined ? r.segs[i].toFixed(2) : "-"),
+        r.length.toFixed(3), r.totLen.toFixed(2), r.uw.toFixed(3), r.totW.toFixed(3), r.remarks,
+      ];
+      for (let ci=0; ci<cells.length; ci++) if (ci !== 1 && ci !== 2) ctext(ci, y-16, 6.5, cells[ci], false);
+      text(colX[1]+3, y-16, 6.5, r.desc, false);
+      // mini bend-shape diagram, traced from the group's own real geometry
+      const bx = colX[2], bw = BBS_COLS[2][1], by = y - rowH + 4, bh = rowH - 8;
+      const pts = r.pts0;
+      if (pts && pts.length > 1) {
+        const [ax0, ax1] = shapeAxes(pts);
+        const us = pts.map(p => p[ax0]), vs = pts.map(p => p[ax1]);
+        const u0=Math.min(...us), u1=Math.max(...us), v0=Math.min(...vs), v1=Math.max(...vs);
+        const du = Math.max(u1-u0, 1), dv = Math.max(v1-v0, 1);
+        const pad = 4, sc = Math.min((bw-2*pad)/du, (bh-2*pad)/dv);
+        const mapped = pts.map(p => [bx + bw/2 - (u0+u1)/2*sc + p[ax0]*sc, by + bh/2 - (v0+v1)/2*sc + p[ax1]*sc]);
+        for (let i=0; i+1<mapped.length; i++)
+          s += `${mapped[i][0].toFixed(2)} ${mapped[i][1].toFixed(2)} m ${mapped[i+1][0].toFixed(2)} ${mapped[i+1][1].toFixed(2)} l S\n`;
+      }
+      y -= rowH;
+      hline(y+rowH, marginL, tableRight);
+    }
+    hline(y, marginL, tableRight);
+    for (let ci=0; ci<=BBS_COLS.length; ci++)
+      vline(ci < BBS_COLS.length ? colX[ci] : tableRight, y, headY+6);
+    if (isLast) {
+      text(colX[1]+3, marginB+4, 8, "Total (Kg)", true);
+      ctext(15, marginB+4, 8, totW.toFixed(3), true);
+    }
+    pages.push(s);
+  }
+  return buildPDF(pages, PW, PH);
+}
+
 function download(name, text, mime) {
   const a = document.createElement("a");
   a.href = URL.createObjectURL(new Blob([text], {type: mime}));
@@ -591,6 +814,11 @@ document.getElementById("dxfBtn").onclick = () => {
 document.getElementById("repBtn").onclick = () => {
   const m = resized || cur;
   download(`${m.name}_report_${Math.round(m.width)}x${Math.round(m.height)}.html`, reportOf(), "text/html");
+};
+document.getElementById("bbsBtn").onclick = () => {
+  const m = resized || cur;
+  download(`${m.name}_BBS_${Math.round(m.width)}x${Math.round(m.height)}.pdf`, bbsPdfOf(m), "application/pdf");
+  document.getElementById("dlNote").textContent = resized ? "BBS exported: modified geometry" : "BBS exported: original geometry";
 };
 
 // ---- panel switcher
