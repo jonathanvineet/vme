@@ -119,8 +119,9 @@ class SectionInfo:
     # face-protruding bar profiles: (pos along panel axis, z0, z1, dia);
     # z outside [0, thickness] means the bar sticks out of that face
     prot: list[tuple[float, float, float, float]]
-    # in-cut bar layers: (z, dia) of bars drawn along the section's long axis
-    layers: list[tuple[float, float]]
+    # in-cut bar layers: (z, dia, pos_lo, pos_hi) of bars drawn along the
+    # section's long axis, with their own real extent along the panel axis
+    layers: list[tuple[float, float, float, float]]
     drawn_x: bool = True  # section long axis drawn along sheet X
     view: "View | None" = None
     # U-bar bend profiles seen in the cut: (pos, z_a, z_b, sgn, dia) — a bar
@@ -243,21 +244,30 @@ def classify_sections(
             else:
                 k += 1
         # bars drawn in the cut plane along the section's long axis reveal a
-        # reinforcement layer's depth directly (e.g. the hooked top bar)
-        layers: list[tuple[float, float]] = []
+        # reinforcement layer's depth directly (e.g. the hooked top bar).
+        # Also keep the layer's own real extent along the panel axis (lo,hi)
+        # -- this is a genuine, correctly-registered (pos, z) measurement of
+        # a real bar (confirmed on PW-01: a full-height T8 layer found this
+        # way matches BBS row D1's exact 3120mm length, at a z-depth no
+        # elevation-side bar occupies) that reconstruct_panel can promote to
+        # a brand new bar when nothing else already accounts for it.
+        layers: list[tuple[float, float, float, float]] = []
         cut_bars = extract_bars(v.ents, min_len=25.0)
         for b in cut_bars:
             best_len = 0.0
             best_z = None
+            best_lo = best_hi = None
             for i in range(len(b.points) - 1):
                 (ax, ay), (bx2, by2) = b.points[i], b.points[i + 1]
                 seg_len = math.dist((ax, ay), (bx2, by2))
                 aligned = abs(by2 - ay) < 3 if drawn_x else abs(bx2 - ax) < 3
                 if aligned and seg_len > 0.35 * long_len and seg_len > best_len:
-                    _, z = to_section(ax, ay)
+                    pos_a, z = to_section(ax, ay)
+                    pos_b, _ = to_section(bx2, by2)
                     best_len, best_z = seg_len, z
+                    best_lo, best_hi = min(pos_a, pos_b), max(pos_a, pos_b)
             if best_z is not None and -30 <= best_z <= thickness + 30:
-                layers.append((best_z, b.diameter))
+                layers.append((best_z, b.diameter, best_lo, best_hi))
 
         # U-bar bend profiles: a bar wrapping an edge between the two mesh
         # faces. Drawn either as a full U (two legs + bend) or — when the
@@ -1277,6 +1287,55 @@ def reconstruct_panel(name: str, views: list[View]) -> Panel:
                     bars.append(Bar3D(pts3, dia, kind, "section-origin", cpos))
                 existing.append(cpos)
 
+    # In-cut "layer" bars: a full, real double-line bar visible edge-on
+    # within a section's own cut plane (not a circle sample), whose depth
+    # (z) no elevation-side bar of the same kind already occupies at all.
+    # Confirmed real on PW-01: a full-height T8 layer's own measured extent
+    # matches BBS row D1's exact 3120mm length, at a z no elevation bar
+    # occupies -- genuinely new steel invisible to elevation-only
+    # extraction, not noise (pair_lines/chain_bars already rejected noise
+    # to produce this bar in the first place, unlike a single stray
+    # circle, so one section's find is trusted alone here).
+    # The section's own axis registration (`lo`/`hi`) only tells us the
+    # panel-axis extent and thickness depth -- never the cross-axis (real
+    # in-plane) position, which a section view structurally can't show.
+    # Placed at the panel's own mid-width/mid-height as a nominal stand-in
+    # since correct *weight* (from the real measured length) is the
+    # priority, not exact visual placement -- same precedent as this
+    # file's column-tie and hook synthesis.
+    for role, kind, axis_len, cross_len in (
+        ("vertical", "v-mesh", ph, pw), ("horizontal", "h-mesh", pw, ph),
+    ):
+        existing_z: dict[int, list[float]] = {}
+        for bar in bars:
+            # only a *real measured* depth counts as "occupied" -- most
+            # bars without their own section match sit at a generic
+            # thickness/2 placeholder (z_source "default") at this point in
+            # the pipeline, which is not evidence of anything real and
+            # must not block a genuine new depth from being added just
+            # because it happens to land near that placeholder.
+            if bar.kind == kind and bar.z_source in ("section", "section-origin"):
+                existing_z.setdefault(bar.diameter, []).append(bar.points[0][2])
+        for s in sections:
+            if s.role != role:
+                continue
+            for z, dia, lo, hi in s.layers:
+                sdia = snap_diameter(dia)
+                if sdia is None:
+                    continue
+                if not (-0.1 * axis_len <= lo and hi <= 1.1 * axis_len):
+                    continue  # section's own axis registration looks unreliable
+                if hi - lo < 0.6 * axis_len:
+                    continue  # too short to trust as a genuine full layer
+                if any(abs(z - ez) <= 15.0 for ez in existing_z.get(sdia, [])):
+                    continue  # an elevation-side bar already occupies this depth
+                cpos = cross_len / 2.0
+                lo_c, hi_c = max(lo, 0.0), min(hi, axis_len)
+                pts = ([(cpos, lo_c, z), (cpos, hi_c, z)] if kind == "v-mesh"
+                       else [(lo_c, cpos, z), (hi_c, cpos, z)])
+                bars.append(Bar3D(pts, sdia, kind, "section-layer-origin"))
+                existing_z.setdefault(sdia, []).append(z)
+
     # A diameter can show more originated positions than physically exist
     # when circles that are real but belong to a *different* category (an
     # edge dowel, not a field mesh bar -- the drawing's own note says
@@ -1372,7 +1431,7 @@ def reconstruct_panel(name: str, views: list[View]) -> Panel:
             span = pw if bar.kind == "h-mesh" else ph
             length = math.dist(bar.points[0][:2], bar.points[-1][:2])
             short = length < 0.7 * span
-            rails = [z for z, d in rail_layers[bar.kind] if abs(d - bar.diameter) <= 2.5]
+            rails = [z for z, d, _lo, _hi in rail_layers[bar.kind] if abs(d - bar.diameter) <= 2.5]
             fam = fam_planes.get((bar.kind, bar.diameter))
             if rails:
                 z = max(rails) if short else min(rails)
