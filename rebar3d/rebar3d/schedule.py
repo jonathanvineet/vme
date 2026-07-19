@@ -35,9 +35,10 @@ def extract_schedule(pdf_path: Path) -> list[ScheduleRow] | None:
 
     reader = pypdf.PdfReader(str(pdf_path))
     text = reader.pages[0].extract_text()
-    idx = text.find("Summary Schedule")
-    if idx < 0:
+    m = re.search(r"summary\s*schedule", text, re.IGNORECASE)
+    if m is None:
         return None
+    idx = m.start()
     rows = [
         ScheduleRow(int(m.group(1)), float(m.group(2)), float(m.group(3)))
         for m in re.finditer(r"(\d+)\s*mm\s+([\d.]+)\s*mm\s+([\d.]+)\s*kg", text[idx:])
@@ -102,12 +103,30 @@ def extract_schedule_dwg(dxf_path: Path) -> list[ScheduleRow] | None:
     return None
 
 
-def find_schedule_pdf(dwg_path: Path) -> Path | None:
-    """The (R) PDF beside a given (R) DWG, tolerating a stray space before
-    the extension seen in this drawing set (e.g. "PW-GF-02(R) .pdf")."""
-    for p in dwg_path.parent.glob(f"{dwg_path.stem}*.pdf"):
-        return p
-    return None
+def find_schedule_pdf(dwg_path: Path) -> list[Path]:
+    """Candidate schedule PDFs beside a given DWG, tolerating a stray space
+    before the extension seen in this drawing set (e.g. "PW-GF-02(R) .pdf")
+    and a DWG renamed with a duplicated element id (e.g.
+    "PW-01-PW-01(R).dwg" whose real element is "PW-01", matching a sibling
+    "PW-01(S).pdf" or "PW-01(R).pdf" that doesn't share the DWG's own stem
+    at all). Callers should try each candidate with `extract_schedule` in
+    order and use the first that actually yields a table -- a same-stem
+    match isn't guaranteed to be the one with the schedule (e.g. the (R)
+    elevation PDF vs. a separate (S) schedule-only PDF).
+    """
+    exact = list(dwg_path.parent.glob(f"{dwg_path.stem}*.pdf"))
+    if exact:
+        return exact
+    dwg_core = re.sub(r"\([^)]*\)\s*$", "", dwg_path.stem).strip()
+    if not dwg_core:
+        return []
+    candidates = []
+    for p in dwg_path.parent.glob("*.pdf"):
+        pdf_core = re.sub(r"\([^)]*\)\s*$", "", p.stem).strip()
+        if pdf_core and dwg_core.startswith(pdf_core):
+            candidates.append(p)
+    candidates.sort(key=lambda p: -len(re.sub(r"\([^)]*\)\s*$", "", p.stem).strip()))
+    return candidates
 
 
 def compare_to_bars(rows: list[ScheduleRow], bars) -> str:

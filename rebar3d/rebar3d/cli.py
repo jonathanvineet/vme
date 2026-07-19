@@ -37,11 +37,24 @@ def drop_unscheduled_phantoms(panel: Panel, rows: list[ScheduleRow]) -> int:
     v-mesh/h-mesh bars sitting exactly between two real, correctly-paired
     bars of different diameters (T12/T8, T20/T8), i.e. one rail of each
     real bar cross-paired with a rail of its neighbour.
+
+    Deliberately excludes "shape" (bent, >2-point) bars: unlike a straight
+    2-point mesh line, a shape survived `chain_bars` joining multiple real
+    double-line segments end to end, which is much stronger evidence of a
+    genuine bar than a straight rail-pairing artifact -- and a real bar can
+    exist with no matching text callout at all (confirmed twice: SS-GF-01's
+    T16 mesh has zero "T16" text anywhere in the DWG; PW-01's T12 bent bars
+    have zero "T12" text either, yet its own official Summary Schedule
+    confirms 8.43kg of real T12 steel). An earlier version of this filter
+    included "shape" and wrongly deleted that real PW-01 T12 steel when
+    running off the text-callout fallback (no official schedule existed
+    for that panel at the time) -- restored once the actual schedule
+    surfaced and proved it was real.
     """
     official_dia = {r.diameter for r in rows}
     kept, dropped = [], 0
     for b in panel.bars:
-        if b.kind in ("v-mesh", "h-mesh", "diagonal", "shape") and b.z_source != "synthesized" \
+        if b.kind in ("v-mesh", "h-mesh", "diagonal") and b.z_source != "synthesized" \
                 and b.diameter not in official_dia:
             dropped += 1
             continue
@@ -78,9 +91,11 @@ def main(argv=None) -> int:
         # sibling (R) PDF.
         rows, src_name = extract_schedule_dwg(dxf), f"{name} DWG paper space"
         if rows is None:
-            pdf = find_schedule_pdf(src)
-            if pdf is not None:
-                rows, src_name = extract_schedule(pdf), pdf.name
+            for pdf in find_schedule_pdf(src):
+                rows = extract_schedule(pdf)
+                if rows is not None:
+                    src_name = pdf.name
+                    break
         if rows is not None:
             n_dropped = drop_unscheduled_phantoms(panel, rows)
             if n_dropped:
