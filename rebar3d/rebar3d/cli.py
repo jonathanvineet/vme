@@ -15,8 +15,11 @@ from .crosscheck import cross_check, format_report, parse_count_callouts, text_c
 from .export import write_json, write_projections, write_viewer
 from .extract import extract_bars
 from .loader import dwg_to_dxf, load_entities
-from .reconstruct import reconstruct_panel
-from .schedule import compare_to_bars, extract_schedule, extract_schedule_dwg, find_schedule_pdf
+from .reconstruct import calibrate_sleeve_wraps, reconstruct_panel
+from .schedule import (
+    compare_to_bars, extract_schedule, extract_schedule_dwg,
+    find_schedule_pdf, parse_itemized_bbs,
+)
 from .reconstruct import Panel
 from .sanity import sanity_check
 from .sanity import format_report as format_sanity_report
@@ -117,6 +120,35 @@ def main(argv=None) -> int:
                 if n_dropped:
                     print(f"  dropped {n_dropped} phantom bar(s) at diameters absent "
                           f"from the sheet's own text callouts (no official schedule found)")
+
+        # Itemized per-mark BBS ("Rebar schedule for X", cell-per-line
+        # layout, e.g. a sibling "(S).pdf") lets us complete sleeve-wrap
+        # brackets that geometry-only pairing only ever captures half of --
+        # anchored at the panel's own already-detected real sleeve
+        # positions, not guessed. Symmetric-U rows only (segments
+        # [0, leg, gap, leg, 0]): the standard "wrap a duct" bracket shape
+        # confirmed against the R-sheet's own "U-BAR DETAIL" callout.
+        for pdf in find_schedule_pdf(src):
+            mark_rows = parse_itemized_bbs(pdf)
+            if mark_rows is None:
+                continue
+            # Only marks with direct visual confirmation (the R-sheet's own
+            # "U-BAR DETAIL" callout explicitly names D4/D5 wrapping the
+            # sleeve) -- the shape alone ("symmetric U", segments
+            # [0, leg, gap, leg, 0]) is NOT a safe filter on its own: H/H1
+            # share the exact same shape topology but are a completely
+            # unrelated detail, and including them by shape match alone
+            # blew T12 out to 202% of schedule in testing.
+            sleeve_marks = [
+                (m.diameter, m.segments[1], m.segments[2], m.qty)
+                for m in mark_rows if m.mark in ("D4", "D5")
+            ]
+            if sleeve_marks:
+                n_cal = calibrate_sleeve_wraps(panel, sleeve_marks)
+                if n_cal:
+                    print(f"  calibrated {n_cal} sleeve-wrap bar(s) from {pdf.name} "
+                          f"(anchored at real detected sleeve positions)")
+            break
 
         panels.append(panel)
         write_json(panel, args.out / f"{name}.json")

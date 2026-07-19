@@ -103,6 +103,55 @@ def extract_schedule_dwg(dxf_path: Path) -> list[ScheduleRow] | None:
     return None
 
 
+@dataclass
+class MarkRow:
+    """One row of a "Rebar schedule for X" itemized table (cell-per-line
+    layout, e.g. DRAWINGS/PW-01(S).pdf) -- distinct from ScheduleRow, which
+    is the coarser per-diameter Summary Schedule."""
+    mark: str
+    diameter: int
+    shape: str
+    segments: list[float]  # A,B,C,D,E in mm, zeros kept (positional)
+    length_mm: float       # one bar
+    total_length_mm: float
+    qty: int
+    weight_kg: float
+
+
+_MARK_ROW_RE = re.compile(
+    r"^(\S+)\n(\d+) mm\n([^\n]+)\n(\d+) mm\n(\d+) mm\n(\d+) mm\n(\d+) mm\n(\d+) mm\n"
+    r"(\d+) mm\n(\d+) mm\n(\d+)\n([\d.]+) kg",
+    re.MULTILINE,
+)
+
+
+def parse_itemized_bbs(pdf_path: Path) -> list[MarkRow] | None:
+    """Parse a "Rebar schedule for X" itemized table (Schedule Mark / Bar
+    Diameter / Shape / A / B / C / D / E / Bar Length / Total Bar Length /
+    Quantity / weight), one value per line -- the cell layout pypdf yields
+    for this drawing set's "(S)" schedule sheets, distinct from both the
+    Summary Schedule (extract_schedule) and the separate itemized-BBS PDFs
+    parse_bbs_pdf handles (which use one-line-per-row instead).
+    """
+    import pypdf
+
+    reader = pypdf.PdfReader(str(pdf_path))
+    text = "\n".join(p.extract_text() for p in reader.pages)
+    idx = text.find("Rebar schedule for")
+    if idx < 0:
+        return None
+    rows = []
+    for m in _MARK_ROW_RE.finditer(text[idx:]):
+        mark, dia, shape, a, b, c, d, e, length, totlen, qty, wt = m.groups()
+        rows.append(MarkRow(
+            mark=mark, diameter=int(dia), shape=shape.strip(),
+            segments=[float(a), float(b), float(c), float(d), float(e)],
+            length_mm=float(length), total_length_mm=float(totlen),
+            qty=int(qty), weight_kg=float(wt),
+        ))
+    return rows or None
+
+
 def find_schedule_pdf(dwg_path: Path) -> list[Path]:
     """Candidate schedule PDFs beside a given DWG, tolerating a stray space
     before the extension seen in this drawing set (e.g. "PW-GF-02(R) .pdf")

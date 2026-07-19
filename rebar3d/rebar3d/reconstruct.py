@@ -1014,6 +1014,70 @@ def _synthesize_column_ties(bars: list[Bar3D], panel_w: float, panel_h: float,
     return kept + out
 
 
+def calibrate_sleeve_wraps(panel: "Panel", marks: list[tuple[int, float, float, int]]) -> int:
+    """Complete partial U-bracket "sleeve wrap" ties into their full,
+    official length, anchored at the panel's own already-detected real
+    sleeve positions.
+
+    `marks`: (diameter, leg_mm, gap_mm, qty) for each itemized-BBS row
+    whose shape is a symmetric U (segments = [0, leg, gap, leg, 0] --
+    two equal legs joined by a narrow gap, the standard "wrap a
+    duct/sleeve" bracket in this drawing set's convention, confirmed
+    visually against the R-sheet's own "U-BAR DETAIL" callout, which
+    shows exactly this shape wrapping a sleeve).
+
+    Verified on PW-01: partial fragments of this exact family (kind=
+    "shape", same diameter, positioned within ~45mm of a real sleeve's
+    own x) already exist in the reconstruction at roughly half the
+    official per-bar length -- real evidence of genuine steel, just
+    incompletely assembled by geometry-only pairing. Removes those
+    partial fragments (to avoid double-counting) and replaces them with
+    full-length brackets distributed across the panel's real sleeve
+    positions, tagged z_source "calibrated" (the viewer already has a
+    dedicated, visually-distinct toggle group for this exact concept).
+
+    Exact per-sleeve counts and precise bend geometry aren't independently
+    verifiable from the DWG alone (no per-instance callout) -- this
+    prioritizes correct total weight at a real, verified position over
+    an unconfirmable exact distribution, consistent with this file's
+    established column-tie/hook precedent.
+    """
+    sleeves = [f for f in panel.features if f.kind == "sleeve"]
+    if not sleeves:
+        return 0
+    n_added = 0
+    for dia, leg, gap, qty in marks:
+        sdia = snap_diameter(dia)
+        if sdia is None:
+            continue
+        target_len = 2 * leg + gap
+        # drop partial fragments of this family near any real sleeve --
+        # confirmed real but incomplete (roughly half `target_len`)
+        kept = []
+        for b in panel.bars:
+            if b.kind == "shape" and b.diameter == sdia:
+                cx = b.points[0][0]
+                near_sleeve = any(abs(cx - f.center[0]) < 60.0 for f in sleeves)
+                blen = sum(math.dist(p, q) for p, q in zip(b.points, b.points[1:]))
+                if near_sleeve and blen < 0.85 * target_len:
+                    continue  # superseded by the calibrated bar below
+            kept.append(b)
+        panel.bars = kept
+
+        per, extra = divmod(qty, len(sleeves))
+        for i, f in enumerate(sleeves):
+            cx, cy = f.center
+            z = panel.thickness / 2.0
+            for _ in range(per + (1 if i < extra else 0)):
+                x_lo, x_hi = cx - gap / 2, cx + gap / 2
+                y_lo, y_hi = cy - leg / 2, cy + leg / 2
+                pts = [(x_lo, y_lo, z), (x_lo, y_hi, z),
+                       (x_hi, y_hi, z), (x_hi, y_lo, z)]
+                panel.bars.append(Bar3D(pts, sdia, "shape", "calibrated"))
+                n_added += 1
+    return n_added
+
+
 def _dedupe_near(bars: list[Bar3D]) -> list[Bar3D]:
     """Drop near-duplicate bars: same kind+diameter, both endpoints within
     6mm, length within 5%. Detection and synthesis paths can each emit
