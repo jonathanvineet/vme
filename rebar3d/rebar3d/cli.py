@@ -18,6 +18,8 @@ from .loader import dwg_to_dxf, load_entities
 from .reconstruct import reconstruct_panel
 from .schedule import compare_to_bars, extract_schedule, extract_schedule_dwg, find_schedule_pdf
 from .reconstruct import Panel
+from .sanity import sanity_check
+from .sanity import format_report as format_sanity_report
 from .schedule import ScheduleRow
 from .views import cluster_views
 
@@ -122,6 +124,27 @@ def main(argv=None) -> int:
         print(f"{name}: {panel.width:.0f}x{panel.height:.0f}x{panel.thickness:.0f} mm, "
               f"{panel.stats['bars']} bars ({panel.stats['z_from_sections']} with section depth, "
               f"{panel.stats['sections_found']} sections) z-planes={panel.stats['z_planes']}")
+
+        # Automated sanity checks -- deterministic, no LLM: concrete rules
+        # (z-bounds, steel-to-concrete ratio, outlier bar lengths, degenerate
+        # dims) that catch an implausible reconstruction automatically
+        # instead of waiting for someone to spot it in the viewer. A flag
+        # here is a lead to go trace, not a verdict.
+        #
+        # Skipped on mould sheets ((M)/(M1)/(M2)): they carry little or no
+        # rebar by design (dims/insert-schedule sheets, real reinforcement
+        # lives on the (R) sheet), so a low steel-to-concrete ratio there is
+        # expected, not suspicious -- the check would be pure noise.
+        is_mould = any(s in src.stem for s in ("(M)", "(M1)", "(M2)"))
+        findings = [] if is_mould else sanity_check(panel)
+        (args.out / f"{name}_sanity.txt").write_text(format_sanity_report(findings) + "\n")
+        errors = [f for f in findings if f.severity == "error"]
+        warns = [f for f in findings if f.severity == "warn"]
+        if findings:
+            print(f"  sanity: {len(errors)} error(s), {len(warns)} warning(s) "
+                  f"(see {name}_sanity.txt)")
+            for f in findings:
+                print(f"    [{f.severity.upper()}] {f.message}")
 
         # Cross-check reconstructed bars against the drawing's own "N -T{d}"
         # count callouts — an independent sanity check against the source
