@@ -23,7 +23,7 @@
     border-radius:6px; padding:9px; cursor:pointer; text-align:center; font-size:12px; }
   #uploadBtn:hover { border-color:#3d6fd0; color:#3d6fd0; }
   #viewport { grid-column:2; grid-row:2; position:relative; min-width:0; min-height:0; }
-  #c { display:block; width:100%; height:100%; }
+  #c { display:block; width:100%; height:100%; touch-action:none; }
   #hint { position:absolute; left:10px; bottom:10px; color:#8a919d; font-size:11px; pointer-events:none;
     background:rgba(21,24,29,.75); padding:6px 9px; border-radius:6px; max-width:360px; }
   #rightcol { grid-column:3; grid-row:2; background:#1a1e25; border-left:1px solid #3a414d;
@@ -106,13 +106,15 @@ function applyCam() {
   camera.lookAt(target);
 }
 let drag = null, downAt = null;
+const MIN_R = 400, MAX_R = 120000;
 canvas.addEventListener("pointerdown", e => {
+  e.preventDefault();
   drag = {x:e.clientX, y:e.clientY, pan:e.shiftKey};
   downAt = [e.clientX, e.clientY];
   canvas.setPointerCapture(e.pointerId);
 });
 canvas.addEventListener("pointermove", e => {
-  if (!drag) return;
+  if (!drag || !(e.buttons & 1)) return; // stray move events after a missed pointerup must not spin the camera
   const dx = e.clientX - drag.x, dy = e.clientY - drag.y;
   drag.x = e.clientX; drag.y = e.clientY;
   if (drag.pan) {
@@ -126,12 +128,19 @@ canvas.addEventListener("pointermove", e => {
   }
   applyCam();
 });
-canvas.addEventListener("pointerup", e => {
+function endDrag(e) {
   drag = null;
   if (downAt && Math.hypot(e.clientX - downAt[0], e.clientY - downAt[1]) < 5) pickClick(e);
   downAt = null;
-});
-canvas.addEventListener("wheel", e => { e.preventDefault(); sph.r *= Math.exp(e.deltaY * 0.001); applyCam(); }, {passive:false});
+}
+canvas.addEventListener("pointerup", endDrag);
+canvas.addEventListener("pointercancel", () => { drag = null; downAt = null; });
+canvas.addEventListener("lostpointercapture", () => { drag = null; downAt = null; });
+canvas.addEventListener("wheel", e => {
+  e.preventDefault();
+  sph.r = Math.min(MAX_R, Math.max(MIN_R, sph.r * Math.exp(e.deltaY * 0.001)));
+  applyCam();
+}, {passive:false});
 
 function ndcOf(ev) {
   const r = canvas.getBoundingClientRect();
@@ -363,6 +372,7 @@ function deleteInstance(inst) {
   scene.remove(inst.group);
   instances = instances.filter(i => i !== inst);
   if (selected === inst) selectInstance(null);
+  if (aligning === inst) setAligning(null);
   updateCount();
 }
 
@@ -412,25 +422,58 @@ function renderSelPane() {
       <button id="rotateBtn">rotate 90&deg;</button>
       <button id="dupBtn">duplicate</button>
     </div>
-    <div><button class="danger" id="delBtn">delete</button></div>
+    <label class="f">align to another panel</label>
+    <div>
+      <button class="primary" id="alignBtn">align to face&hellip;</button>
+    </div>
+    <div class="dim" style="margin-top:4px">then click a face on another placed panel &mdash; this one moves and rotates to sit flush against it. Esc to cancel.</div>
+    <div style="margin-top:10px"><button class="danger" id="delBtn">delete</button></div>
   `;
   document.getElementById("applyResizeBtn").onclick = () =>
     applyResize(i, +document.getElementById("wIn").value, +document.getElementById("hIn").value);
   document.getElementById("resetResizeBtn").onclick = () => applyResize(i, i.baseModel.width, i.baseModel.height);
   document.getElementById("rotateBtn").onclick = () => rotateInstance(i);
   document.getElementById("dupBtn").onclick = () => duplicateInstance(i);
+  document.getElementById("alignBtn").onclick = () => {
+    setAligning(i);
+    showStatus("click a face on another placed panel to align to it (Esc to cancel)", true);
+  };
   document.getElementById("delBtn").onclick = () => deleteInstance(i);
 }
 renderSelPane();
+
+let aligning = null;
+function setAligning(inst) {
+  aligning = inst;
+  canvas.style.cursor = inst ? "crosshair" : "";
+}
 
 function pickClick(ev) {
   const ndc = ndcOf(ev);
   const raycaster = new THREE.Raycaster();
   raycaster.setFromCamera(ndc, camera);
+  if (aligning) {
+    const meshes = instances.filter(i => i !== aligning).map(i => i.pickMesh);
+    const hits = raycaster.intersectObjects(meshes, false);
+    if (hits.length) {
+      const hit = hits[0];
+      const worldNormal = hit.face.normal.clone().transformDirection(hit.object.matrixWorld).normalize();
+      alignInstanceToFace(aligning, hit.object.userData.inst, hit.point, worldNormal);
+      showStatus("aligned", false);
+      selectInstance(aligning);
+    } else {
+      showStatus("align cancelled", false);
+    }
+    setAligning(null);
+    return;
+  }
   const meshes = instances.map(i => i.pickMesh);
   const hits = raycaster.intersectObjects(meshes, false);
   selectInstance(hits.length ? hits[0].object.userData.inst : null);
 }
+window.addEventListener("keydown", e => {
+  if (e.key === "Escape" && aligning) { setAligning(null); showStatus("align cancelled", false); }
+});
 
 // ---------------------------------------------------------------- drag & drop placement
 function roundNormal(n) {
@@ -440,16 +483,17 @@ function roundNormal(n) {
   return {axis: ["x","y","z"][ai], sign: arr[ai] >= 0 ? 1 : -1};
 }
 
-function placeOnFace(sourceInst, file, model, hitPoint, normal) {
+// shared math for "snap these dims flush against sourceInst's picked face"
+function faceAlignTransform(sourceInst, dims, hitPoint, normal) {
   const {axis, sign} = roundNormal(normal);
-  const w = model.width, h = model.height, t = model.thickness;
+  const {w, h, t} = dims;
   let cx, cz, y0, rotY;
   if (axis === "y") {
     rotY = sourceInst.rotY;
     cx = sourceInst.cx; cz = sourceInst.cz;
     y0 = sign > 0 ? sourceInst.y0 + sourceInst.dims.h : sourceInst.y0 - h;
   } else {
-    // orient the new panel's thickness axis to face outward along the picked face's normal
+    // orient the panel's thickness axis to face outward along the picked face's normal
     const nx = axis === "x" ? sign : 0, nz = axis === "z" ? sign : 0;
     rotY = (nx===0 && nz===1) ? 0 : (nx===1 && nz===0) ? 90 : (nx===0 && nz===-1) ? 180 : 270;
     y0 = sourceInst.y0;
@@ -461,7 +505,20 @@ function placeOnFace(sourceInst, file, model, hitPoint, normal) {
       cx = hitPoint.x;
     }
   }
+  return {cx, cz, y0, rotY};
+}
+
+function placeOnFace(sourceInst, file, model, hitPoint, normal) {
+  const {cx, cz, y0, rotY} = faceAlignTransform(
+    sourceInst, {w: model.width, h: model.height, t: model.thickness}, hitPoint, normal);
   return makeInstance(file, model, cx, cz, y0, rotY);
+}
+
+// move an already-placed instance so it snaps flush against another
+// instance's picked face -- same math as placeOnFace, applied in place
+function alignInstanceToFace(inst, sourceInst, hitPoint, normal) {
+  Object.assign(inst, faceAlignTransform(sourceInst, inst.dims, hitPoint, normal));
+  rebuildInstanceGroup(inst);
 }
 
 canvas.addEventListener("dragover", ev => { ev.preventDefault(); ev.dataTransfer.dropEffect = "copy"; });
