@@ -113,6 +113,23 @@ def load_entities(dxf_path: Path, explode_inserts: bool = True) -> list[Ent]:
                 return
             ents.append(Ent("LWPOLYLINE", layer, points=pts, closed=e.is_closed,
                             ltype=lt, block=block, bref=bref))
+        elif t == "ELLIPSE":
+            # Silently dropped before this fix -- confirmed on PW-01: 118
+            # ELLIPSE entities on the S-RBAR layer alone, major axis 20mm
+            # (= 2x T10, a standard hook bend radius) with near-zero ratio
+            # (a degenerate/near-flat ellipse, i.e. effectively an arc drawn
+            # via ELLIPSE rather than ARC -- some Revit exports do this for
+            # certain parametric rebar families). Flatten to a polyline via
+            # ezdxf's own approximation so every existing line-based bar
+            # pairing/chaining path picks it up automatically, same as any
+            # other double-line geometry -- no separate handling needed.
+            try:
+                pts = [(v.x, v.y) for v in e.flattening(distance=1.0)]
+            except Exception:
+                return
+            if len(pts) >= 2:
+                ents.append(Ent("LWPOLYLINE", layer, points=pts, closed=False,
+                                ltype=lt, block=block, bref=bref))
         elif t in ("MTEXT", "TEXT"):
             ip = e.dxf.insert
             txt = _mtext_plain(e) if t == "MTEXT" else e.dxf.text
