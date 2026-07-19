@@ -1,9 +1,8 @@
 callout                      expected  found   nearest  status
 5 -T12                              5      0         -  SHORT
 5 -T12                              5      0         -  SHORT
-5 -T12                              5      0         -  SHORT
-5 -T12                              5      0         -  SHORT
-2 -T20                              2      0         -  SHORT
+5 -T12                              5      2    1276mm  SHORT
+5 -T12                              5      2    1334mm  SHORT
 2 -T10                              2      0         -  SHORT
 2 -T10                              2      0         -  SHORT
 3 -T8                               3      1     552mm  SHORT
@@ -16,17 +15,18 @@ callout                      expected  found   nearest  status
 2 -T16                              2      0         -  SHORT
 2 -T20                              2      0         -  SHORT
 2 -T20                              2      0         -  SHORT
-2 -T16                              2      0         -  SHORT
 2 -T10                              2      1     603mm  SHORT
 1 -T12                              1      0         -  SHORT
 2 -T16                              2      1     568mm  SHORT
+2 -T16                              2      1     825mm  SHORT
 2 -T12                              2      2     754mm  OK
-2 -T16 CRACK BAR                    2      2     527mm  OK
 2 -T8                               2      2     401mm  OK
 2 -T8                               2      2     706mm  OK
-2 -T16                              2      3     737mm  OVER
+2 -T20                              2      3     808mm  OVER
 3 -T8                               3      4     418mm  OVER
 3 -T8                               3      4     202mm  OVER
-3 -T8                               3      5     642mm  OVER
-2 -T16 CRACK BAR                    2      6     238mm  OVER
-2 -T16 CRACK BAR                    2      6     270mm  OVER
+2 -T16                              2      5     737mm  OVER
+2 -T16 CRACK BAR                    2     11     527mm  OVER
+2 -T16 CRACK BAR                    2     13     238mm  OVER
+2 -T16 CRACK BAR                    2     13     270mm  OVER
+3 -T8                               3     32     642mm  OVER

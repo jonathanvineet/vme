@@ -1,9 +1,5 @@
 callout                      expected  found   nearest  status
 2 -T20                              2      0         -  SHORT
-2 -T12                              2      0         -  SHORT
-2 -T20                              2      0         -  SHORT
-2 -T12                              2      0         -  SHORT
-2 -T12                              2      0         -  SHORT
 2 -T20                              2      0         -  SHORT
 2 -T20                              2      0         -  SHORT
 2 -T20                              2      0         -  SHORT
@@ -17,9 +13,13 @@ callout                      expected  found   nearest  status
 2 -T20                              2      0         -  SHORT
 2 -T20                              2      2     558mm  OK
 2 -T20                              2      2     635mm  OK
+2 -T12                              2      2     957mm  OK
 2 -T20                              2      3     616mm  OVER
-2 -T12                              2      3     617mm  OVER
-2 -T12                              2      3     698mm  OVER
 2 -T12                              2      3     725mm  OVER
 2 -T12                              2      3     617mm  OVER
-2 -T20                              2      4     659mm  OVER
+2 -T12                              2      3     857mm  OVER
+2 -T12                              2      3     925mm  OVER
+2 -T20                              2      4     880mm  OVER
+2 -T20                              2      5     659mm  OVER
+2 -T12                              2      5     617mm  OVER
+2 -T12                              2      5     698mm  OVER

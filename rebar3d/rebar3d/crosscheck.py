@@ -82,20 +82,25 @@ class CrossCheckResult:
     nearest_dist: float | None
 
 
-def cross_check(callouts: list[Callout], bars2d: list[Bar2D], radius: float = 800.0) -> list[CrossCheckResult]:
+def cross_check(callouts: list[Callout], bars2d: list[Bar2D], radius: float = 1800.0) -> list[CrossCheckResult]:
     """For each callout, how many reconstructed bars of that diameter sit
     within `radius` of the label. Distinct 2D bar *positions* are counted,
     not the z-expanded 3D bar list, so a front+back mesh pair on a bar the
     reconstruction already found the depth for doesn't double-count.
 
-    `radius` covers the observed leader/label-to-geometry offset (confirmed
-    by direct DXF inspection: 200-800mm in this drawing set) without going
-    so wide that neighbouring callouts' search areas overlap and inflate
-    each other's counts — this is a coarse sanity check, not precise
-    bar-to-label registration. Read SHORT results (found < expected) as
-    trustworthy; OVER results are inherently noisy whenever labels cluster
-    close together, since each one's search radius also picks up bars that
-    really belong to its neighbour's count.
+    `radius` covers the observed leader/label-to-geometry offset. Widened
+    800->1800mm after PW-45 showed 5 of 6 "SHORT" results were false
+    negatives purely from label offset (826-1698mm — the real bar existed,
+    just past the old radius; only 1 of the 6 had genuinely no matching-
+    diameter geometry anywhere in its own view). A SHORT result is only
+    trustworthy evidence of a real gap when nothing of that diameter shows
+    up anywhere nearby at all, so a false SHORT is a much worse failure
+    mode here than a slightly noisier OVER count — this isn't precise
+    bar-to-label registration, it's a coarse sanity check. Read SHORT
+    results as trustworthy; OVER results are inherently noisy whenever
+    labels cluster close together, since each one's search radius also
+    picks up bars that really belong to its neighbour's count (worse now
+    at 1800mm than at 800mm — treat OVER purely as noise, never evidence).
     """
     results = []
     for c in callouts:
