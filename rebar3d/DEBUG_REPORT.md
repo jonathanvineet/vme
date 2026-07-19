@@ -121,6 +121,39 @@ a folded U-loop books as 2 straight bars). Full tables in
 8. **Genuinely absent from the DWG** (PW-09 row 9, 22.7 kg; 4 crack-bar
    callouts with no geometry) — the disk DWG revision simply doesn't draw them.
 
+## 6a. 2026-07-20 continuation: closing out the ranked-lever list
+
+- **SS-GF-01 T20/T12 rail ambiguity — CLOSED, not fixable.** Every remaining
+  SHORT crosscheck callout has zero matching-diameter geometry anywhere in
+  its own view (checked all 4 views' full diameter inventories directly).
+  Genuinely absent from this DWG revision — same class as PW-09 row 9 and
+  the 4 crack-bar callouts with no geometry (§5.8), not an extraction bug.
+- **PW-45 corbel-main + perimeter-bar — CLOSED, was a diagnostic-tool bug,
+  not a reconstruction gap.** 5 of 6 SHORT callouts had a real matching bar
+  826-1698mm from the label — just past the old 800mm crosscheck radius.
+  Widened to 1800mm (fixes false negatives project-wide: PW-GF-09 20→16
+  short, SS-GF-01 16→12 short, as a bonus). Only 1 of 6 was a genuine gap
+  (a Perimeter Bar callout in a view with zero T12 geometry at all).
+- **PW-09 row 12/16 "detail-view bent/hooked T12" — task premise was
+  wrong.** BBS (`inventory.parse_bbs_pdf`) shows both rows are *plain
+  straight verticals*, not bends: row 16 (2 bars @ 3.58m) is already fully
+  captured (found 2 bars at 3575mm, just kinded `h-mesh` instead of
+  `v-mesh` — a label mismatch, not a gap); row 12 (26 bars @ 2.87m = the
+  panel's clear height) is 69% already correct (18/26 found at matching
+  length) — the remainder is the generic long-tail mesh-density
+  under-detection documented throughout this project, not a distinct
+  "detail-view/bent" problem at all.
+- **PW-09 row 15 T10 5-segment shape — still open, no safe evidence
+  found.** No text callout anchors this specific shape anywhere in the
+  DWG (unlike every other successful synthesis in this project). Tried
+  matching by raw fragment length (274mm ≈ segment B=280mm, 19 instances
+  found in a remote detail view) — traced the actual geometry there and
+  it turned out to be part of the *already-handled* T8/T10 tie-detail
+  zone (16/24mm hook arcs, same zone as the Hook-family fix), not row 15's
+  shape at all — a false correlation. Don't retry length-only matching for
+  this row; it needs either a distinguishing callout or a different
+  anchor entirely.
+
 ## 6. Ranked next levers (kg each, per §4)
 
 1. PW-09 hairpin/tie completion incl. "T8 Hook @100" family (~29 kg) + PW-02 hairpins (~27 kg) — same mechanism.
