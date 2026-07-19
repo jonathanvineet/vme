@@ -1,7 +1,11 @@
 #!/usr/bin/env python3
-"""Serve the rebar 3D scene editor: an empty world you drag panels into,
+"""Serve the world editor: an empty 3D world you drag rebar panels into,
 resize/rotate/stack them on each other's faces, upload new DWGs on the fly,
 and save/load named layouts.
+
+Standalone app (this folder + its own scenes/uploads), but the panel
+palette and DWG->3D conversion are backed by the rebar3d pipeline living
+in the sibling ../rebar3d folder.
 
 Usage:
     python3 editor.py                 serve on the first free port from 8842
@@ -17,19 +21,19 @@ import json
 import re
 import socket
 import socketserver
-import subprocess
 import sys
-import tempfile
 import urllib.parse
 import webbrowser
 from pathlib import Path
 
 HERE = Path(__file__).parent
-OUT = HERE / "out"
-SCENES = OUT / "scenes"
-UPLOADS = OUT / "uploads_src"
-TEMPLATE = HERE / "rebar3d" / "editor_template.html"
-THREE_JS = HERE / "rebar3d" / "assets_three.js"
+ROOT = HERE.parent
+REBAR3D = ROOT / "rebar3d"
+MODELS_DIR = REBAR3D / "out"          # panel JSON produced by the rebar3d pipeline
+SCENES = HERE / "scenes"              # this app's own saved layouts
+UPLOADS = HERE / "uploads"            # this app's own staging for uploaded DWG/DXF
+TEMPLATE = HERE / "editor_template.html"
+THREE_JS = HERE / "assets_three.js"
 
 SAFE_NAME = re.compile(r"^[A-Za-z0-9._() \-]+$")
 
@@ -42,7 +46,7 @@ def build_editor_html() -> bytes:
 
 def list_palette() -> list[dict]:
     items = []
-    for p in sorted(OUT.glob("*.json")):
+    for p in sorted(MODELS_DIR.glob("*.json")):
         try:
             d = json.loads(p.read_text())
         except (json.JSONDecodeError, OSError):
@@ -57,37 +61,37 @@ def list_palette() -> list[dict]:
 
 
 def convert_dwg(src: Path) -> dict:
-    """Run the existing DWG->3D pipeline on one uploaded drawing, writing its
-    JSON straight into OUT so it immediately shows up in the palette."""
-    sys.path.insert(0, str(HERE))
+    """Run the rebar3d pipeline on one uploaded drawing, writing its JSON
+    into rebar3d/out so it immediately shows up in the palette."""
+    sys.path.insert(0, str(REBAR3D))
     from rebar3d.cli import main as cli_main
 
     # dwg2dxf refuses to overwrite a stale .dxf from an earlier conversion of
     # a same-named upload ("File not overwritten... use -y") -- clear it first.
-    stale_dxf = OUT / "dxf" / f"{src.stem}.dxf"
+    stale_dxf = MODELS_DIR / "dxf" / f"{src.stem}.dxf"
     stale_dxf.unlink(missing_ok=True)
 
-    before = {p.name for p in OUT.glob("*.json")}
-    rc = cli_main([str(src), "-o", str(OUT)])
+    before = {p.name for p in MODELS_DIR.glob("*.json")}
+    rc = cli_main([str(src), "-o", str(MODELS_DIR)])
     if rc:
         raise RuntimeError("pipeline failed")
-    after = {p.name for p in OUT.glob("*.json")}
+    after = {p.name for p in MODELS_DIR.glob("*.json")}
     new = after - before
     if not new:
         # same stem re-uploaded: it overwrote an existing file rather than
         # creating a new one -- report the one matching this upload's stem
         name = src.stem.replace("(R)", "").strip()
         candidate = f"{name}.json"
-        if (OUT / candidate).exists():
+        if (MODELS_DIR / candidate).exists():
             new = {candidate}
     if not new:
         raise RuntimeError("conversion produced no panel JSON")
     fname = sorted(new)[0]
-    return json.loads((OUT / fname).read_text())
+    return json.loads((MODELS_DIR / fname).read_text())
 
 
 class Handler(http.server.BaseHTTPRequestHandler):
-    server_version = "RebarEditor/1.0"
+    server_version = "WorldEditor/1.0"
 
     def log_message(self, fmt, *a):
         msg = fmt % a if a else fmt
@@ -119,7 +123,7 @@ class Handler(http.server.BaseHTTPRequestHandler):
                 name = urllib.parse.unquote(path[len("/api/model/"):])
                 if not SAFE_NAME.match(name) or "/" in name:
                     return self._send_json({"error": "bad name"}, 400)
-                fp = OUT / name
+                fp = MODELS_DIR / name
                 if not fp.exists():
                     return self._send_json({"error": "not found"}, 404)
                 self._send_bytes(fp.read_bytes(), "application/json")
@@ -190,13 +194,13 @@ def main() -> None:
     ap.add_argument("--no-browser", action="store_true")
     args = ap.parse_args()
 
-    OUT.mkdir(parents=True, exist_ok=True)
+    MODELS_DIR.mkdir(parents=True, exist_ok=True)
     SCENES.mkdir(parents=True, exist_ok=True)
 
     port = args.port or free_port(8842)
     url = f"http://127.0.0.1:{port}/editor.html"
     with socketserver.TCPServer(("127.0.0.1", port), Handler) as httpd:
-        print(f"rebar3d scene editor: {url}   (Ctrl-C to stop)")
+        print(f"world editor: {url}   (Ctrl-C to stop)")
         if not args.no_browser:
             webbrowser.open(url)
         try:
