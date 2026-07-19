@@ -1,0 +1,582 @@
+<title>Rebar 3D — Scene Editor</title>
+<style>
+  html, body { margin:0; height:100%; overflow:hidden; background:#15181d; color:#dde1e6;
+    font: 13px/1.45 -apple-system, "Segoe UI", sans-serif; }
+  #app { display:grid; grid-template-columns:260px 1fr 300px; grid-template-rows:auto 1fr;
+    height:100%; gap:0; }
+  #topbar { grid-column:1/4; grid-row:1; display:flex; gap:10px; align-items:center;
+    padding:8px 12px; background:#1a1e25; border-bottom:1px solid #3a414d; }
+  #topbar h1 { font-size:14px; margin:0; font-weight:600; }
+  #topbar .dim { color:#8a919d; }
+  #palette { grid-column:1; grid-row:2; background:#1a1e25; border-right:1px solid #3a414d;
+    padding:10px; overflow-y:auto; }
+  #palette h2, #rightcol h2 { font-size:11px; text-transform:uppercase; letter-spacing:.04em;
+    color:#8a919d; margin:14px 0 6px; }
+  #palette h2:first-child { margin-top:0; }
+  .pitem { background:#232830; border:1px solid #3a414d; border-radius:6px; padding:7px 9px;
+    margin-bottom:6px; cursor:grab; user-select:none; }
+  .pitem:hover { border-color:#3d6fd0; }
+  .pitem .nm { font-weight:600; }
+  .pitem .dm { color:#8a919d; font-size:11px; }
+  .pitem.uploading { opacity:.5; cursor:wait; }
+  #uploadBtn { display:block; width:100%; background:#262b33; color:#dde1e6; border:1px dashed #4a515c;
+    border-radius:6px; padding:9px; cursor:pointer; text-align:center; font-size:12px; }
+  #uploadBtn:hover { border-color:#3d6fd0; color:#3d6fd0; }
+  #viewport { grid-column:2; grid-row:2; position:relative; min-width:0; min-height:0; }
+  #c { display:block; width:100%; height:100%; }
+  #hint { position:absolute; left:10px; bottom:10px; color:#8a919d; font-size:11px; pointer-events:none;
+    background:rgba(21,24,29,.75); padding:6px 9px; border-radius:6px; max-width:360px; }
+  #rightcol { grid-column:3; grid-row:2; background:#1a1e25; border-left:1px solid #3a414d;
+    padding:12px 14px; overflow-y:auto; }
+  #rightcol input[type=number], #rightcol input[type=text], #rightcol select {
+    width:100%; box-sizing:border-box; background:#262b33; color:#dde1e6; border:1px solid #3a414d;
+    border-radius:5px; padding:5px 7px; margin-top:2px; }
+  #rightcol label.f { display:block; font-size:11px; color:#8a919d; margin-top:8px; }
+  #rightcol button { background:#262b33; color:#dde1e6; border:1px solid #3a414d; border-radius:6px;
+    padding:6px 10px; cursor:pointer; margin:8px 6px 0 0; }
+  #rightcol button.primary { background:#3d6fd0; border-color:#3d6fd0; color:#fff; }
+  #rightcol button.danger { background:#5c2626; border-color:#7a3232; color:#ffb3b3; }
+  #selInfo { font-size:12px; }
+  #selInfo .nm { font-weight:600; font-size:13px; }
+  .row2 { display:flex; gap:6px; }
+  .row2 > div { flex:1; }
+  #emptyMsg { color:#8a919d; font-size:12px; }
+  #status { position:absolute; top:8px; left:50%; transform:translateX(-50%); background:#232830;
+    border:1px solid #3a414d; border-radius:6px; padding:4px 10px; font-size:12px; display:none; }
+</style>
+<div id="app">
+  <div id="topbar">
+    <h1>Rebar 3D — Scene Editor</h1>
+    <span class="dim" id="instCount"></span>
+  </div>
+  <div id="palette">
+    <h2>Panels</h2>
+    <div id="paletteList"></div>
+    <input type="file" id="fileInput" accept=".dwg,.dxf" style="display:none">
+    <div id="uploadBtn">&#8593; upload DWG / DXF</div>
+  </div>
+  <div id="viewport">
+    <canvas id="c"></canvas>
+    <div id="status"></div>
+    <div id="hint">drag a panel from the left into the world · drop it on the ground to place, or on
+      a face of another panel to stack/attach flush against it<br>
+      drag: orbit · shift-drag: pan · wheel: zoom · click: select</div>
+  </div>
+  <div id="rightcol">
+    <div id="selPane"></div>
+    <h2>Scene</h2>
+    <label class="f">name</label>
+    <input type="text" id="sceneName" placeholder="my-layout">
+    <div>
+      <button class="primary" id="saveSceneBtn">save</button>
+      <button id="clearSceneBtn">clear world</button>
+    </div>
+    <label class="f">load saved scene</label>
+    <select id="sceneSelect"><option value="">— pick —</option></select>
+    <div><button id="loadSceneBtn">load</button><button id="refreshScenesBtn">refresh list</button></div>
+  </div>
+</div>
+<script>__THREE_JS__</script>
+<script>
+"use strict";
+const DIA_COLORS = {6:0xb0b0b0,8:0xe15759,10:0xf28e2b,12:0x59a14f,16:0xaf7aa1,20:0x4e79a7,25:0x9c755f,32:0xe377c2};
+
+// ---------------------------------------------------------------- renderer
+const canvas = document.getElementById("c");
+const renderer = new THREE.WebGLRenderer({canvas, antialias:true});
+renderer.setPixelRatio(window.devicePixelRatio);
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x15181d);
+const camera = new THREE.PerspectiveCamera(45, 2, 1, 200000);
+scene.add(new THREE.AmbientLight(0xffffff, 0.8));
+const dl = new THREE.DirectionalLight(0xffffff, 1.1); dl.position.set(1, 2, 1.5); scene.add(dl);
+const dl2 = new THREE.DirectionalLight(0xffffff, 0.45); dl2.position.set(-1.5, -1, -1); scene.add(dl2);
+
+const grid = new THREE.GridHelper(40000, 40, 0x3a414d, 0x262b33);
+scene.add(grid);
+const groundPlane = new THREE.Plane(new THREE.Vector3(0,1,0), 0);
+
+// ---- orbit control
+let target = new THREE.Vector3(0, 800, 0), sph = {r: 9000, th: 0.9, ph: 1.15};
+function applyCam() {
+  camera.position.set(
+    target.x + sph.r * Math.sin(sph.ph) * Math.cos(sph.th),
+    target.y + sph.r * Math.cos(sph.ph),
+    target.z + sph.r * Math.sin(sph.ph) * Math.sin(sph.th));
+  camera.lookAt(target);
+}
+let drag = null, downAt = null;
+canvas.addEventListener("pointerdown", e => {
+  drag = {x:e.clientX, y:e.clientY, pan:e.shiftKey};
+  downAt = [e.clientX, e.clientY];
+  canvas.setPointerCapture(e.pointerId);
+});
+canvas.addEventListener("pointermove", e => {
+  if (!drag) return;
+  const dx = e.clientX - drag.x, dy = e.clientY - drag.y;
+  drag.x = e.clientX; drag.y = e.clientY;
+  if (drag.pan) {
+    const s = sph.r / 900;
+    const right = new THREE.Vector3().subVectors(camera.position, target).cross(camera.up).normalize();
+    target.addScaledVector(right, dx * s);
+    target.addScaledVector(camera.up, dy * s);
+  } else {
+    sph.th += dx * 0.006;
+    sph.ph = Math.min(Math.PI - 0.05, Math.max(0.05, sph.ph - dy * 0.006));
+  }
+  applyCam();
+});
+canvas.addEventListener("pointerup", e => {
+  drag = null;
+  if (downAt && Math.hypot(e.clientX - downAt[0], e.clientY - downAt[1]) < 5) pickClick(e);
+  downAt = null;
+});
+canvas.addEventListener("wheel", e => { e.preventDefault(); sph.r *= Math.exp(e.deltaY * 0.001); applyCam(); }, {passive:false});
+
+function ndcOf(ev) {
+  const r = canvas.getBoundingClientRect();
+  return new THREE.Vector2(((ev.clientX - r.left) / r.width) * 2 - 1, -((ev.clientY - r.top) / r.height) * 2 + 1);
+}
+
+// ---------------------------------------------------------------- model helpers (ported from viewer_template.html)
+function resizeModel(m, W2, H2) {
+  const sx = W2/m.width, sy = H2/m.height;
+  const S = p => [p[0]*sx, p[1]*sy, p[2]];
+  const bars = m.bars.map(b => Object.assign({}, b, {pts: b.pts.map(S)}));
+  const out = [];
+  const fam = {};
+  for (const b of bars) {
+    if (b.kind !== "v-mesh" && b.kind !== "h-mesh" && b.kind !== "u-bar") { out.push(b); continue; }
+    const xs = b.pts.map(p=>p[0]), ys = b.pts.map(p=>p[1]), zs = b.pts.map(p=>p[2]);
+    const ax = (Math.max(...ys)-Math.min(...ys)) > (Math.max(...xs)-Math.min(...xs)) ? 0 : 1;
+    const rl = ax === 0 ? [Math.min(...ys), Math.max(...ys)] : [Math.min(...xs), Math.max(...xs)];
+    const key = [b.kind, b.d, ax, Math.round(Math.min(...zs)/12), Math.round(Math.max(...zs)/12),
+                 Math.round((rl[0]+rl[1])/2/250), Math.round((rl[1]-rl[0])/250)].join("|");
+    b._pos = b.pts.reduce((a,p)=>a+p[ax],0) / b.pts.length;
+    (fam[key] || (fam[key] = {ax, bars:[]})).bars.push(b);
+  }
+  for (const key in fam) {
+    const {ax, bars: fb} = fam[key];
+    const sAx = ax === 0 ? sx : sy;
+    if (fb.length < 3) { out.push(...fb); continue; }
+    fb.sort((a,b)=>a._pos-b._pos);
+    const diffs = [];
+    for (let i = 1; i < fb.length; i++) {
+      const d = (fb[i]._pos - fb[i-1]._pos) / sAx;
+      if (d > 10) diffs.push(d);
+    }
+    if (!diffs.length) { out.push(...fb); continue; }
+    const med = a => { const s = [...a].sort((x,y)=>x-y); return s[Math.floor(s.length/2)]; };
+    const gMed = med(diffs);
+    const bands = [[fb[0]]];
+    for (let i = 1; i < fb.length; i++) {
+      const d = (fb[i]._pos - fb[i-1]._pos) / sAx;
+      const prev = bands[bands.length-1];
+      const local = prev.length > 1
+        ? (prev[prev.length-1]._pos - prev[0]._pos) / sAx / (prev.length-1) : gMed;
+      if (d > 1.9*local && d > 1.4*gMed || d > 2.6*gMed) bands.push([]);
+      bands[bands.length-1].push(fb[i]);
+    }
+    for (const band of bands) {
+      const p0 = band[0]._pos, p1 = band[band.length-1]._pos;
+      const bd = [];
+      for (let i = 1; i < band.length; i++) {
+        const d = (band[i]._pos - band[i-1]._pos) / sAx;
+        if (d > 10) bd.push(d);
+      }
+      const spacing = bd.length ? med(bd) : gMed;
+      if (band.length < 3 || p1 - p0 < spacing) { out.push(...band); continue; }
+      const count = Math.max(2, Math.round((p1-p0)/spacing) + 1);
+      for (let i = 0; i < count; i++) {
+        const pos = p0 + (p1-p0)*i/(count-1);
+        let t = band[0];
+        for (const b of band) if (Math.abs(b._pos-pos) < Math.abs(t._pos-pos)) t = b;
+        const off = pos - t._pos;
+        out.push(Object.assign({}, t, {pts: t.pts.map(p => {
+          const q = p.slice(); q[ax] += off; return q;
+        })}));
+      }
+    }
+  }
+  for (const b of out) delete b._pos;
+  return {
+    name: m.name, width: W2, height: H2, thickness: m.thickness,
+    openings: (m.openings||[]).map(lp => lp.map(p => [p[0]*sx, p[1]*sy])),
+    bars: out,
+    features: (m.features||[]).map(f => Object.assign({}, f, {
+      box: f.box ? [f.box[0]*sx, f.box[1]*sy, f.box[2], f.box[3]*sx, f.box[4]*sy, f.box[5]] : null,
+      center: f.center ? [f.center[0]*sx, f.center[1]*sy] : null,
+    })),
+    families: [], stats: {},
+  };
+}
+
+function buildModelGroup(m) {
+  const group = new THREE.Group();
+  const conc = new THREE.Mesh(
+    new THREE.BoxGeometry(m.width, m.height, m.thickness),
+    new THREE.MeshStandardMaterial({color:0x8a919d, transparent:true, opacity:0.16, depthWrite:false}));
+  conc.position.set(m.width/2, m.height/2, m.thickness/2);
+  group.add(conc);
+  const eg = new THREE.LineSegments(
+    new THREE.EdgesGeometry(new THREE.BoxGeometry(m.width, m.height, m.thickness)),
+    new THREE.LineBasicMaterial({color:0x5c6470}));
+  eg.position.copy(conc.position);
+  group.add(eg);
+  for (const lp of m.openings || []) {
+    for (const z of [0, m.thickness]) {
+      const pts = lp.map(p => new THREE.Vector3(p[0], p[1], z));
+      pts.push(pts[0].clone());
+      group.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts),
+        new THREE.LineBasicMaterial({color:0x17becf})));
+    }
+  }
+  for (const f of (m.features || [])) {
+    if (f.kind === "sleeve" && f.center) {
+      const len = m.thickness;
+      const tube = new THREE.Mesh(
+        new THREE.CylinderGeometry(f.r, f.r, len, 16, 1, true),
+        new THREE.MeshStandardMaterial({color:0x2ecc71, transparent:true, opacity:0.4,
+          side:THREE.DoubleSide, roughness:0.6}));
+      tube.position.set(f.center[0], f.center[1], len/2);
+      tube.rotation.x = Math.PI/2;
+      group.add(tube);
+    } else if (f.box) {
+      const [x0,y0,z0,x1,y1,z1] = f.box;
+      const col = {corbel:0x9aa3b0, embed:0x7f8a99, anchor:0xf28e2b, loop:0xff9f43}[f.kind] || 0x999999;
+      const geo = new THREE.BoxGeometry(Math.max(x1-x0,2), Math.max(y1-y0,2), Math.max(z1-z0,2));
+      const mesh = new THREE.Mesh(geo, new THREE.MeshStandardMaterial({color:col,
+        transparent: f.kind === "corbel", opacity: f.kind === "corbel" ? 0.35 : 1.0, roughness:0.7}));
+      mesh.position.set((x0+x1)/2, (y0+y1)/2, (z0+z1)/2);
+      group.add(mesh);
+    }
+  }
+  for (const b of m.bars) {
+    const color = DIA_COLORS[b.d] || 0x999999;
+    const calibrated = b.z_src === "calibrated";
+    const mat = new THREE.MeshStandardMaterial(calibrated
+      ? {color, roughness:0.45, metalness:0.25, transparent:true, opacity:0.4}
+      : {color, roughness:0.45, metalness:0.25});
+    for (let i = 0; i + 1 < b.pts.length; i++) {
+      const a = new THREE.Vector3(...b.pts[i]), c = new THREE.Vector3(...b.pts[i+1]);
+      const len = a.distanceTo(c);
+      if (len < 1) continue;
+      const cyl = new THREE.Mesh(new THREE.CylinderGeometry(b.d/2, b.d/2, len, 8, 1), mat);
+      cyl.position.copy(a).lerp(c, 0.5);
+      cyl.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),
+        new THREE.Vector3().subVectors(c, a).normalize());
+      group.add(cyl);
+    }
+  }
+  return group;
+}
+
+// ---------------------------------------------------------------- palette / model cache
+const modelCache = {}; // file -> model json
+let PALETTE = [];
+async function loadModel(file) {
+  if (modelCache[file]) return modelCache[file];
+  const r = await fetch(`/api/model/${encodeURIComponent(file)}`);
+  const m = await r.json();
+  modelCache[file] = m;
+  return m;
+}
+async function refreshPalette() {
+  const r = await fetch("/api/palette");
+  PALETTE = await r.json();
+  renderPalette();
+}
+function renderPalette() {
+  const el = document.getElementById("paletteList");
+  el.innerHTML = "";
+  for (const p of PALETTE) {
+    const d = document.createElement("div");
+    d.className = "pitem";
+    d.draggable = true;
+    d.innerHTML = `<div class="nm">${p.name}</div><div class="dm">${Math.round(p.width)}×${Math.round(p.height)}×${Math.round(p.thickness)} mm</div>`;
+    d.addEventListener("dragstart", ev => { ev.dataTransfer.setData("text/plain", p.file); ev.dataTransfer.effectAllowed = "copy"; });
+    el.appendChild(d);
+  }
+}
+
+// ---------------------------------------------------------------- instances
+let instances = [];
+let nextId = 1;
+let selected = null;
+
+function instFootprintHalf(inst, axis) {
+  const swapped = (inst.rotY === 90 || inst.rotY === 270);
+  if (axis === "x") return (swapped ? inst.dims.t : inst.dims.w) / 2;
+  return (swapped ? inst.dims.w : inst.dims.t) / 2; // z
+}
+
+function rebuildInstanceGroup(inst) {
+  if (inst.group) scene.remove(inst.group);
+  const outer = new THREE.Group();
+  const inner = buildModelGroup(inst.currentModel);
+  inner.position.set(-inst.dims.w/2, 0, -inst.dims.t/2);
+  outer.add(inner);
+  const pickMesh = new THREE.Mesh(
+    new THREE.BoxGeometry(inst.dims.w, inst.dims.h, inst.dims.t),
+    new THREE.MeshBasicMaterial({transparent:true, opacity:0.0, depthWrite:false}));
+  pickMesh.position.set(0, inst.dims.h/2, 0);
+  pickMesh.userData.inst = inst;
+  outer.add(pickMesh);
+  const selBox = new THREE.LineSegments(
+    new THREE.EdgesGeometry(new THREE.BoxGeometry(inst.dims.w+20, inst.dims.h+20, inst.dims.t+20)),
+    new THREE.LineBasicMaterial({color:0x3d6fd0}));
+  selBox.position.set(0, inst.dims.h/2, 0);
+  selBox.visible = (selected === inst);
+  outer.add(selBox);
+  outer.position.set(inst.cx, inst.y0, inst.cz);
+  outer.rotation.y = inst.rotY * Math.PI/180;
+  scene.add(outer);
+  inst.group = outer;
+  inst.pickMesh = pickMesh;
+  inst.selBox = selBox;
+}
+
+function makeInstance(file, model, cx, cz, y0, rotY) {
+  const inst = {
+    id: nextId++, file, baseModel: model,
+    currentModel: model,
+    dims: {w: model.width, h: model.height, t: model.thickness},
+    cx, cz, y0, rotY: rotY || 0,
+  };
+  rebuildInstanceGroup(inst);
+  instances.push(inst);
+  updateCount();
+  return inst;
+}
+
+function applyResize(inst, W2, H2) {
+  W2 = Math.min(30000, Math.max(300, W2));
+  H2 = Math.min(30000, Math.max(300, H2));
+  inst.currentModel = (Math.abs(W2-inst.baseModel.width)<1 && Math.abs(H2-inst.baseModel.height)<1)
+    ? inst.baseModel : resizeModel(inst.baseModel, W2, H2);
+  inst.dims = {w: W2, h: H2, t: inst.baseModel.thickness};
+  rebuildInstanceGroup(inst);
+  selectInstance(inst);
+}
+
+function deleteInstance(inst) {
+  scene.remove(inst.group);
+  instances = instances.filter(i => i !== inst);
+  if (selected === inst) selectInstance(null);
+  updateCount();
+}
+
+function rotateInstance(inst) {
+  inst.rotY = (inst.rotY + 90) % 360;
+  rebuildInstanceGroup(inst);
+  selectInstance(inst);
+}
+
+function duplicateInstance(inst) {
+  const gap = Math.max(300, inst.dims.t);
+  const n = makeInstance(inst.file, inst.baseModel, inst.cx + inst.dims.w + gap, inst.cz, inst.y0, inst.rotY);
+  n.currentModel = inst.currentModel;
+  n.dims = Object.assign({}, inst.dims);
+  rebuildInstanceGroup(n);
+  selectInstance(n);
+}
+
+function updateCount() {
+  document.getElementById("instCount").textContent = instances.length ? `${instances.length} placed` : "";
+}
+
+// ---------------------------------------------------------------- selection / right panel
+function selectInstance(inst) {
+  if (selected && selected.selBox) selected.selBox.visible = false;
+  selected = inst;
+  if (selected && selected.selBox) selected.selBox.visible = true;
+  renderSelPane();
+}
+function renderSelPane() {
+  const el = document.getElementById("selPane");
+  if (!selected) { el.innerHTML = `<div id="emptyMsg">click a placed panel to edit it, or drag one in from the left.</div>`; return; }
+  const i = selected;
+  el.innerHTML = `
+    <div id="selInfo">
+      <div class="nm">${i.baseModel.name}</div>
+      <div class="dim">${Math.round(i.dims.w)} × ${Math.round(i.dims.h)} × ${Math.round(i.dims.t)} mm · rot ${i.rotY}&deg;</div>
+    </div>
+    <label class="f">resize (mm, keeps rebar spacing)</label>
+    <div class="row2"><div><input id="wIn" type="number" step="10" value="${Math.round(i.dims.w)}"></div>
+      <div><input id="hIn" type="number" step="10" value="${Math.round(i.dims.h)}"></div></div>
+    <div>
+      <button class="primary" id="applyResizeBtn">apply</button>
+      <button id="resetResizeBtn">reset</button>
+    </div>
+    <div>
+      <button id="rotateBtn">rotate 90&deg;</button>
+      <button id="dupBtn">duplicate</button>
+    </div>
+    <div><button class="danger" id="delBtn">delete</button></div>
+  `;
+  document.getElementById("applyResizeBtn").onclick = () =>
+    applyResize(i, +document.getElementById("wIn").value, +document.getElementById("hIn").value);
+  document.getElementById("resetResizeBtn").onclick = () => applyResize(i, i.baseModel.width, i.baseModel.height);
+  document.getElementById("rotateBtn").onclick = () => rotateInstance(i);
+  document.getElementById("dupBtn").onclick = () => duplicateInstance(i);
+  document.getElementById("delBtn").onclick = () => deleteInstance(i);
+}
+renderSelPane();
+
+function pickClick(ev) {
+  const ndc = ndcOf(ev);
+  const raycaster = new THREE.Raycaster();
+  raycaster.setFromCamera(ndc, camera);
+  const meshes = instances.map(i => i.pickMesh);
+  const hits = raycaster.intersectObjects(meshes, false);
+  selectInstance(hits.length ? hits[0].object.userData.inst : null);
+}
+
+// ---------------------------------------------------------------- drag & drop placement
+function roundNormal(n) {
+  const arr = [n.x, n.y, n.z].map(v => Math.round(v));
+  let ai = 0;
+  for (let i = 1; i < 3; i++) if (Math.abs(arr[i]) > Math.abs(arr[ai])) ai = i;
+  return {axis: ["x","y","z"][ai], sign: arr[ai] >= 0 ? 1 : -1};
+}
+
+function placeOnFace(sourceInst, file, model, hitPoint, normal) {
+  const {axis, sign} = roundNormal(normal);
+  const w = model.width, h = model.height, t = model.thickness;
+  let cx, cz, y0, rotY;
+  if (axis === "y") {
+    rotY = sourceInst.rotY;
+    cx = sourceInst.cx; cz = sourceInst.cz;
+    y0 = sign > 0 ? sourceInst.y0 + sourceInst.dims.h : sourceInst.y0 - h;
+  } else {
+    // orient the new panel's thickness axis to face outward along the picked face's normal
+    const nx = axis === "x" ? sign : 0, nz = axis === "z" ? sign : 0;
+    rotY = (nx===0 && nz===1) ? 0 : (nx===1 && nz===0) ? 90 : (nx===0 && nz===-1) ? 180 : 270;
+    y0 = sourceInst.y0;
+    if (axis === "x") {
+      cx = sourceInst.cx + sign * (instFootprintHalf(sourceInst, "x") + t/2);
+      cz = hitPoint.z;
+    } else {
+      cz = sourceInst.cz + sign * (instFootprintHalf(sourceInst, "z") + t/2);
+      cx = hitPoint.x;
+    }
+  }
+  return makeInstance(file, model, cx, cz, y0, rotY);
+}
+
+canvas.addEventListener("dragover", ev => { ev.preventDefault(); ev.dataTransfer.dropEffect = "copy"; });
+canvas.addEventListener("drop", async ev => {
+  ev.preventDefault();
+  const file = ev.dataTransfer.getData("text/plain");
+  if (!file) return;
+  const model = await loadModel(file);
+  const ndc = ndcOf(ev);
+  const raycaster = new THREE.Raycaster();
+  raycaster.setFromCamera(ndc, camera);
+
+  const meshes = instances.map(i => i.pickMesh);
+  const hits = raycaster.intersectObjects(meshes, false);
+  if (hits.length) {
+    const hit = hits[0];
+    const worldNormal = hit.face.normal.clone().transformDirection(hit.object.matrixWorld).normalize();
+    const inst = placeOnFace(hit.object.userData.inst, file, model, hit.point, worldNormal);
+    selectInstance(inst);
+    return;
+  }
+  const hitPoint = new THREE.Vector3();
+  if (raycaster.ray.intersectPlane(groundPlane, hitPoint)) {
+    const inst = makeInstance(file, model, hitPoint.x, hitPoint.z, 0, 0);
+    selectInstance(inst);
+  }
+});
+
+// ---------------------------------------------------------------- upload
+const fileInput = document.getElementById("fileInput");
+document.getElementById("uploadBtn").addEventListener("click", () => fileInput.click());
+fileInput.addEventListener("change", async () => {
+  const f = fileInput.files[0];
+  if (!f) return;
+  showStatus(`converting ${f.name}…`, true);
+  try {
+    const buf = await f.arrayBuffer();
+    const r = await fetch("/api/upload", {
+      method: "POST",
+      headers: {"X-Filename": encodeURIComponent(f.name), "Content-Type": "application/octet-stream"},
+      body: buf,
+    });
+    const data = await r.json();
+    if (!r.ok || !data.ok) throw new Error(data.error || "conversion failed");
+    await refreshPalette();
+    showStatus(`added "${data.name}" to the palette`, false);
+  } catch (e) {
+    showStatus(`upload failed: ${e.message}`, false, true);
+  } finally {
+    fileInput.value = "";
+  }
+});
+function showStatus(msg, spin, isErr) {
+  const el = document.getElementById("status");
+  el.textContent = msg;
+  el.style.display = "block";
+  el.style.color = isErr ? "#ff8080" : "#dde1e6";
+  if (!spin) setTimeout(() => { if (el.textContent === msg) el.style.display = "none"; }, 3500);
+}
+
+// ---------------------------------------------------------------- scenes
+function serializeScene() {
+  return {
+    version: 1,
+    instances: instances.map(i => ({
+      file: i.file, w: i.dims.w, h: i.dims.h, cx: i.cx, cz: i.cz, y0: i.y0, rotY: i.rotY,
+    })),
+  };
+}
+async function loadScene(data) {
+  for (const inst of instances.slice()) deleteInstance(inst);
+  for (const s of data.instances || []) {
+    const model = await loadModel(s.file);
+    const inst = makeInstance(s.file, model, s.cx, s.cz, s.y0, s.rotY);
+    if (Math.abs(s.w - model.width) > 1 || Math.abs(s.h - model.height) > 1) applyResize(inst, s.w, s.h);
+  }
+  selectInstance(null);
+}
+document.getElementById("saveSceneBtn").onclick = async () => {
+  const name = document.getElementById("sceneName").value.trim();
+  if (!name) { showStatus("give the scene a name first", false, true); return; }
+  const r = await fetch(`/api/scene/${encodeURIComponent(name)}`, {
+    method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(serializeScene()),
+  });
+  showStatus(r.ok ? `saved "${name}"` : "save failed", false, !r.ok);
+  refreshScenes();
+};
+document.getElementById("clearSceneBtn").onclick = () => { for (const i of instances.slice()) deleteInstance(i); };
+document.getElementById("loadSceneBtn").onclick = async () => {
+  const name = document.getElementById("sceneSelect").value;
+  if (!name) return;
+  const r = await fetch(`/api/scene/${encodeURIComponent(name)}`);
+  if (!r.ok) { showStatus("load failed", false, true); return; }
+  await loadScene(await r.json());
+  document.getElementById("sceneName").value = name;
+  showStatus(`loaded "${name}"`, false);
+};
+document.getElementById("refreshScenesBtn").onclick = refreshScenes;
+async function refreshScenes() {
+  const r = await fetch("/api/scenes");
+  const names = await r.json();
+  const sel = document.getElementById("sceneSelect");
+  sel.innerHTML = `<option value="">— pick —</option>` + names.map(n => `<option>${n}</option>`).join("");
+}
+
+// ---------------------------------------------------------------- boot
+function resize() {
+  const w = canvas.clientWidth, h = canvas.clientHeight;
+  renderer.setSize(w, h, false);
+  camera.aspect = w / h;
+  camera.updateProjectionMatrix();
+}
+window.addEventListener("resize", resize);
+resize(); applyCam();
+renderer.setAnimationLoop(() => renderer.render(scene, camera));
+refreshPalette();
+refreshScenes();
+</script>
