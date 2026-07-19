@@ -11,7 +11,7 @@ import argparse
 import sys
 from pathlib import Path
 
-from .crosscheck import cross_check, format_report, parse_count_callouts
+from .crosscheck import cross_check, format_report, parse_count_callouts, text_callout_diameters
 from .export import write_json, write_projections, write_viewer
 from .extract import extract_bars
 from .loader import dwg_to_dxf, load_entities
@@ -41,7 +41,7 @@ def drop_unscheduled_phantoms(panel: Panel, rows: list[ScheduleRow]) -> int:
     official_dia = {r.diameter for r in rows}
     kept, dropped = [], 0
     for b in panel.bars:
-        if b.kind in ("v-mesh", "h-mesh", "diagonal") and b.z_source != "synthesized" \
+        if b.kind in ("v-mesh", "h-mesh", "diagonal", "shape") and b.z_source != "synthesized" \
                 and b.diameter not in official_dia:
             dropped += 1
             continue
@@ -86,6 +86,20 @@ def main(argv=None) -> int:
             if n_dropped:
                 print(f"  dropped {n_dropped} phantom bar(s) at diameters absent "
                       f"from the official schedule ({src_name})")
+        else:
+            # No Summary Schedule anywhere (no paper-space table, no sibling
+            # PDF) -- fall back to every diameter the sheet's own text ever
+            # mentions ("T8 @150 mm", "-(14) -T8", ...) as ground truth.
+            # A diameter that never appears in any callout on the sheet but
+            # shows up as a reconstructed v-mesh/h-mesh bar can only be a
+            # generic-mesh rail mis-pairing artifact.
+            text_dias = text_callout_diameters(ents)
+            if text_dias:
+                fake_rows = [ScheduleRow(d, 0.0, 0.0) for d in text_dias]
+                n_dropped = drop_unscheduled_phantoms(panel, fake_rows)
+                if n_dropped:
+                    print(f"  dropped {n_dropped} phantom bar(s) at diameters absent "
+                          f"from the sheet's own text callouts (no official schedule found)")
 
         panels.append(panel)
         write_json(panel, args.out / f"{name}.json")

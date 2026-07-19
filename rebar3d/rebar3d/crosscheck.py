@@ -23,6 +23,7 @@ from .extract import Bar2D, snap_diameter
 from .loader import Ent
 
 _COUNT_RE = re.compile(r"(\d+)\s*-\s*T(\d+)\b")
+_ANY_DIA_RE = re.compile(r"\bT(\d+)\b")
 
 
 @dataclass
@@ -52,6 +53,25 @@ def parse_count_callouts(ents: list[Ent]) -> list[Callout]:
         cx = (e.bbox[0] + e.bbox[2]) / 2
         cy = (e.bbox[1] + e.bbox[3]) / 2
         out.append(Callout(int(m.group(1)), int(m.group(2)), cx, cy, e.text.strip()))
+    return out
+
+
+def text_callout_diameters(ents: list[Ent]) -> set[int]:
+    """Every bar diameter ("T8", "T20", ...) mentioned anywhere in the
+    sheet's own text/pitch/count callouts.
+
+    Used as a ground-truth diameter set for phantom-bar suppression on
+    panels that carry no Summary Schedule at all (no paper-space table, no
+    sibling PDF) -- e.g. a drawing whose text only ever says "T8" and
+    "T10" has no business reconstructing T12/T16/T20 bars; those diameters
+    can only come from generic-mesh rail mis-pairing.
+    """
+    out: set[int] = set()
+    for e in ents:
+        if e.kind not in ("TEXT", "MTEXT"):
+            continue
+        for m in _ANY_DIA_RE.finditer(e.text or ""):
+            out.add(int(m.group(1)))
     return out
 
 
