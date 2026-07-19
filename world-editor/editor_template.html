@@ -106,21 +106,22 @@ function applyCam() {
   camera.lookAt(target);
 }
 let drag = null, downAt = null, dragMove = false;
-const MIN_R = 400, MAX_R = 120000;
+const MIN_R = 50, MAX_R = 120000;
 canvas.addEventListener("pointerdown", e => {
-  e.preventDefault();
   downAt = [e.clientX, e.clientY];
-  canvas.setPointerCapture(e.pointerId);
-  if (moving) { dragMove = true; updateMove(e); return; }
-  drag = {x:e.clientX, y:e.clientY, pan:e.shiftKey};
+  if (moving) { dragMove = true; updateMove(e); } else { drag = {x:e.clientX, y:e.clientY, pan:e.shiftKey}; }
+  // capture is best-effort (keeps the drag going if the pointer leaves the canvas) --
+  // it must never gate the state above: if it throws, orbit/pan/move must still work
+  try { canvas.setPointerCapture(e.pointerId); } catch (_) {}
 });
 canvas.addEventListener("pointermove", e => {
+  if (aligning) updateFaceHover(e); else if (highlightedFace) hideFaceHighlight();
   if (moving && dragMove) { if (e.buttons & 1) updateMove(e); return; }
   if (!drag || !(e.buttons & 1)) return; // stray move events after a missed pointerup must not spin the camera
   const dx = e.clientX - drag.x, dy = e.clientY - drag.y;
   drag.x = e.clientX; drag.y = e.clientY;
   if (drag.pan) {
-    const s = sph.r / 900;
+    const s = Math.max(sph.r, 1500) / 900; // floor so panning never goes near-dead when zoomed in close
     const right = new THREE.Vector3().subVectors(camera.position, target).cross(camera.up).normalize();
     target.addScaledVector(right, dx * s);
     target.addScaledVector(camera.up, dy * s);
@@ -497,6 +498,7 @@ function setAligning(inst) {
   alignPhase = inst ? "source" : null;
   sourceFaceInfo = null;
   canvas.style.cursor = inst ? "crosshair" : "";
+  if (!inst) hideFaceHighlight();
 }
 
 // ---- move: drag the selected panel freely across the ground plane at its
@@ -526,6 +528,67 @@ function finishMove(commit) {
   setMoving(null);
   renderSelPane();
   showStatus(commit ? "moved" : "move cancelled", false);
+}
+
+// ---- face hover highlight, shown while picking faces to align. Each entry
+// gives the two in-plane axes (u,v) and the outward normal (n) of that local
+// face, as a proper right-handed basis (u x v = n) so PlaneGeometry(dimA,dimB)
+// lands with the correct edge along the correct axis -- getting u/v swapped
+// or mirrored would rotate a non-square face 90 degrees within its own plane.
+const FACE_BASIS = {
+  "x+": {u:[0,0,-1], v:[0,1,0], n:[1,0,0],  dim:i => [i.dims.t, i.dims.h], pos:i => [ i.dims.w/2, i.dims.h/2, 0]},
+  "x-": {u:[0,0,1],  v:[0,1,0], n:[-1,0,0], dim:i => [i.dims.t, i.dims.h], pos:i => [-i.dims.w/2, i.dims.h/2, 0]},
+  "z+": {u:[1,0,0],  v:[0,1,0], n:[0,0,1],  dim:i => [i.dims.w, i.dims.h], pos:i => [0, i.dims.h/2,  i.dims.t/2]},
+  "z-": {u:[-1,0,0], v:[0,1,0], n:[0,0,-1], dim:i => [i.dims.w, i.dims.h], pos:i => [0, i.dims.h/2, -i.dims.t/2]},
+  "y+": {u:[-1,0,0], v:[0,0,1], n:[0,1,0],  dim:i => [i.dims.w, i.dims.t], pos:i => [0, i.dims.h, 0]},
+  "y-": {u:[1,0,0],  v:[0,0,1], n:[0,-1,0], dim:i => [i.dims.w, i.dims.t], pos:i => [0, 0, 0]},
+};
+const faceHighlight = new THREE.Mesh(
+  new THREE.PlaneGeometry(1, 1),
+  new THREE.MeshBasicMaterial({color:0xffd166, transparent:true, opacity:0.4, side:THREE.DoubleSide, depthWrite:false}));
+faceHighlight.visible = false;
+faceHighlight.renderOrder = 10;
+scene.add(faceHighlight);
+let highlightedFace = null; // {inst, key}
+
+function faceKeyFromLocalNormal(localNormal) {
+  const {axis, sign} = roundNormal(localNormal);
+  return axis + (sign > 0 ? "+" : "-");
+}
+function showFaceHighlight(inst, key) {
+  if (highlightedFace && highlightedFace.inst === inst && highlightedFace.key === key) return;
+  const spec = FACE_BASIS[key];
+  const [dimA, dimB] = spec.dim(inst);
+  faceHighlight.geometry.dispose();
+  faceHighlight.geometry = new THREE.PlaneGeometry(dimA, dimB);
+  const m = new THREE.Matrix4().makeBasis(
+    new THREE.Vector3(...spec.u), new THREE.Vector3(...spec.v), new THREE.Vector3(...spec.n));
+  faceHighlight.quaternion.setFromRotationMatrix(m);
+  faceHighlight.position.set(...spec.pos(inst));
+  if (faceHighlight.parent !== inst.group) {
+    if (faceHighlight.parent) faceHighlight.parent.remove(faceHighlight);
+    inst.group.add(faceHighlight);
+  }
+  faceHighlight.visible = true;
+  highlightedFace = {inst, key};
+}
+function hideFaceHighlight() {
+  faceHighlight.visible = false;
+  highlightedFace = null;
+}
+function updateFaceHover(e) {
+  const ndc = ndcOf(e);
+  const raycaster = new THREE.Raycaster();
+  raycaster.setFromCamera(ndc, camera);
+  if (alignPhase === "source") {
+    const hits = raycaster.intersectObject(aligning.pickMesh, false);
+    if (hits.length) return showFaceHighlight(aligning, faceKeyFromLocalNormal(hits[0].face.normal));
+  } else if (alignPhase === "target") {
+    const meshes = instances.filter(i => i !== aligning).map(i => i.pickMesh);
+    const hits = raycaster.intersectObjects(meshes, false);
+    if (hits.length) return showFaceHighlight(hits[0].object.userData.inst, faceKeyFromLocalNormal(hits[0].face.normal));
+  }
+  hideFaceHighlight();
 }
 
 function pickClick(ev) {
