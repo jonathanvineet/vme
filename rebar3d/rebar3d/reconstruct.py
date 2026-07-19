@@ -609,6 +609,7 @@ def _synthesize_ties(bars: list[Bar3D], all_ents, thickness: float,
 
 
 _UBAR_PITCH_RE = re.compile(r"T(\d+)\s*UBAR\s*@\s*(\d+)\s*mm", re.IGNORECASE)
+_HOOK_RE = re.compile(r"T(\d+)\s*Hook\s*@\s*(\d+)\s*mm", re.IGNORECASE)
 
 
 def _synthesize_hairpins(bars: list[Bar3D], elev_ents, thickness: float,
@@ -691,6 +692,163 @@ def _synthesize_hairpins(bars: list[Bar3D], elev_ents, thickness: float,
                 pts = [(x, y_end_c + leg, web_lo), (x, y_end_c, web_lo),
                        (x, y_end_c, web_hi), (x, y_end_c + leg, web_hi)]
                 out.append(Bar3D(pts, dia, "u-bar", "synthesized"))
+    return bars + out
+
+
+def _hook_unit_length(views: list[View], dia: int) -> float | None:
+    """Real drawn length of one "Hook" family unit (bend + legs), measured
+    from whichever view actually draws it to true scale.
+
+    The elevation only marks each instance with a small fixed-size icon --
+    a handful of sub-16mm lines/arcs regardless of the real bar, confirmed
+    directly on PW-GF-09's icon geometry (an 8x14mm cluster next to a
+    100mm-pitch column of them). The real bend geometry lives in a
+    same-named detail/section view elsewhere in the file as genuine
+    concentric arc pairs at gap == dia; `radii[i] > 10.0` excludes the
+    elevation's own icon arcs (radius == dia/2, well under 10mm) so only
+    to-scale geometry is measured. Chained fragments in a detail view
+    routinely span several repeat units end to end (confirmed: a single
+    chain covering 6 hook bends + their connecting rail) -- dividing the
+    view's total matching-diameter shape length by its own arc-pair count
+    gives the per-unit average without needing to split the chain up.
+    """
+    unit_lens = []
+    for v in views:
+        arcs = [e for e in v.ents if e.kind == "ARC" and e.layer == "S-RBAR"]
+        by_center: dict[tuple[float, float], set[float]] = {}
+        for e in arcs:
+            by_center.setdefault((round(e.center[0], 1), round(e.center[1], 1)),
+                                  set()).add(round(e.radius, 1))
+        n_units = 0
+        for radii in by_center.values():
+            radii = sorted(radii)
+            for i in range(len(radii)):
+                for j in range(i + 1, len(radii)):
+                    if abs((radii[j] - radii[i]) - dia) < 1.5 and radii[i] > 10.0:
+                        n_units += 1
+        if n_units < 2:
+            continue
+        bars2d = extract_bars(v.ents, min_len=3.0)
+        tot_len = sum(b.length for b in bars2d
+                      if b.diameter and abs(b.diameter - dia) < 1.9 and len(b.points) > 2)
+        if tot_len > 0:
+            unit_lens.append(tot_len / n_units)
+    return statistics.median(unit_lens) if unit_lens else None
+
+
+def _icon_runs(elev_ents, dia: int, pitch: float) -> list[dict]:
+    """Vertical/horizontal runs of the elevation's small fixed-size family
+    marker (a single ARC/CIRCLE of radius == dia/2, stamped at every real
+    instance's true panel position -- unlike the icon's own sub-8mm
+    construction lines, position needs only the marker circle itself).
+
+    A real family run is periodic at the callout's own pitch and long
+    enough (>=5 members) to rule out coincidental same-radius circles
+    elsewhere on the sheet (arrowheads, weld symbols, dimension origins --
+    confirmed on PW-GF-09: 13 stray same-radius pairs with a >1000mm gap
+    and only 2 members each, cleanly below this floor).
+    """
+    r_target = dia / 2.0
+    centers: set[tuple[float, float]] = set()
+    for e in elev_ents:
+        if e.layer != "S-RBAR" or e.kind not in ("ARC", "CIRCLE"):
+            continue
+        if abs(e.radius - r_target) < 1.0:
+            centers.add((round(e.center[0], 1), round(e.center[1], 1)))
+
+    def cluster_1d(vals: list[float], tol: float) -> list[list[float]]:
+        vals = sorted(vals)
+        out = [[vals[0]]]
+        for v in vals[1:]:
+            if v - out[-1][-1] <= tol:
+                out[-1].append(v)
+            else:
+                out.append([v])
+        return out
+
+    runs: list[dict] = []
+    for axis, group_key, spread_key in (("v", 0, 1), ("h", 1, 0)):
+        by_fixed: dict[float, list[float]] = {}
+        for c in centers:
+            by_fixed.setdefault(c[group_key], []).append(c[spread_key])
+        for fixed, spread in by_fixed.items():
+            for grp in cluster_1d(spread, pitch * 1.4):
+                if len(grp) < 5:
+                    continue
+                gaps = [b - a for a, b in zip(grp, grp[1:])]
+                med_gap = statistics.median(gaps)
+                if med_gap and abs(med_gap - pitch) < 0.3 * pitch:
+                    runs.append({"axis": axis, "coord": fixed,
+                                 "lo": grp[0], "hi": grp[-1], "n": len(grp)})
+
+    # collapse near-duplicate runs (jittered repeats of the same physical
+    # feature at nearly the same location -- confirmed on PW-GF-09: 5
+    # x-values within ~500mm of each other, each independently spanning
+    # the exact same y-range): keep the one with the most members.
+    runs.sort(key=lambda r: -r["n"])
+    kept: list[dict] = []
+    for r in runs:
+        if any(k["axis"] == r["axis"] and abs(k["lo"] - r["lo"]) < 60
+               and abs(k["hi"] - r["hi"]) < 60 and abs(k["coord"] - r["coord"]) < 700
+               for k in kept):
+            continue
+        kept.append(r)
+    return kept
+
+
+def _synthesize_hooks(bars: list[Bar3D], views: list[View], thickness: float,
+                      x0: float, y0: float) -> list[Bar3D]:
+    """Boundary/edge "Hook" family bars, marked in the elevation only as a
+    small fixed-size icon (never drawn to scale there) with their real
+    bent geometry living in a separate, spatially-unrelated detail view.
+
+    Correspondence rule (verified on PW-GF-09 before writing this):
+    position/count/extent come from the elevation's own icon marks --
+    those share the panel's real coordinate frame, so they need no
+    cross-view mapping. Shape/length can't come from the elevation (the
+    icon there is a fixed ~8-16mm glyph regardless of the real bar) --
+    only from a same-named detail view's true concentric arc-pair
+    geometry, measured as a per-unit average length and applied uniformly,
+    since detail-view *coordinates* have no relation to panel space (huge,
+    arbitrary offsets confirmed -- no shared origin or INSERT-block tie)
+    even though the *shape itself* is drawn to true scale there.
+    """
+    callouts = [(int(m.group(1)), int(m.group(2)))
+                for v in views for e in v.ents if e.kind in ("TEXT", "MTEXT")
+                for m in [_HOOK_RE.search(e.text or "")] if m]
+    if not callouts:
+        return bars
+    dia, pitch = max(set(callouts), key=callouts.count)
+
+    unit_len = _hook_unit_length(views, dia)
+    if unit_len is None or unit_len <= 0:
+        return bars  # no view draws this family to scale -- no safe length to use
+
+    cover = 30.0
+    web_lo, web_hi = cover, thickness - cover
+    zc = (web_lo + web_hi) / 2.0
+    half = unit_len / 2.0
+
+    runs = _icon_runs(views[0].ents, dia, pitch)
+    out: list[Bar3D] = []
+    for r in runs:
+        n = max(int(round((r["hi"] - r["lo"]) / pitch)) + 1, 1)
+        for k in range(n):
+            pos = r["lo"] + k * pitch
+            if pos > r["hi"] + 1.0:
+                continue
+            # a straight through-thickness run standing in for the real
+            # bend/leg geometry -- centered on the panel mid-depth and
+            # forced to the measured real unit length (correct weight)
+            # rather than clamped to the cover-to-cover span, since the
+            # true 3D bend direction isn't reconstructable from either
+            # view (same reasoning _synthesize_ties already applies to
+            # its own simplified corner-tail hook ends).
+            if r["axis"] == "v":
+                pts = [(r["coord"] - x0, pos - y0, zc - half), (r["coord"] - x0, pos - y0, zc + half)]
+            else:
+                pts = [(pos - x0, r["coord"] - y0, zc - half), (pos - x0, r["coord"] - y0, zc + half)]
+            out.append(Bar3D(pts, dia, "hook", "synthesized"))
     return bars + out
 
 
@@ -1085,6 +1243,7 @@ def reconstruct_panel(name: str, views: list[View]) -> Panel:
     bars = _synthesize_hairpins(bars, elev.ents, thickness, ph)
     bars = _synthesize_labelled_singles(bars, elev.ents, x0, y0, thickness,
                                         [e for v in views for e in v.ents])
+    bars = _synthesize_hooks(bars, views, thickness, x0, y0)
     bars = _dedupe_near(bars)
 
     # ---- cast-in features: sleeves, corbels, embeds, anchors, wire loops

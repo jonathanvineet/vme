@@ -163,7 +163,7 @@ function resizeModel(m, W2, H2) {
   const out = [];
   const fam = {};
   for (const b of bars) {
-    if (b.kind !== "v-mesh" && b.kind !== "h-mesh" && b.kind !== "u-bar") { out.push(b); continue; }
+    if (b.kind !== "v-mesh" && b.kind !== "h-mesh" && b.kind !== "u-bar" && b.kind !== "hook") { out.push(b); continue; }
     const xs = b.pts.map(p=>p[0]), ys = b.pts.map(p=>p[1]), zs = b.pts.map(p=>p[2]);
     // bars run along their long axis; the family distributes along the other
     const ax = (Math.max(...ys)-Math.min(...ys)) > (Math.max(...xs)-Math.min(...xs)) ? 0 : 1;
@@ -617,7 +617,7 @@ function simplifyShape(pts) {
   return rdpSimplify(pts, 25.0);
 }
 function bbsOf(m) {
-  const SCHEDULABLE = new Set(["v-mesh","h-mesh","u-bar","tie","diagonal","shape"]);
+  const SCHEDULABLE = new Set(["v-mesh","h-mesh","u-bar","tie","diagonal","shape","hook"]);
   const groups = {};
   for (const b0 of m.bars) {
     if (!SCHEDULABLE.has(b0.kind)) continue;

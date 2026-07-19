@@ -214,7 +214,7 @@ def match_bbs_rows(bbs: list[BBSRow], bars: list[dict]) -> list[str]:
     Totals compared per row — this names WHERE steel is missing instead of
     hiding it in a per-diameter aggregate."""
     # bent kinds (ties, loops, dowels) have no meaningful H/V orientation
-    bent = ("tie", "link", "u-bar", "shape", "face-dowel", "diagonal")
+    bent = ("tie", "link", "u-bar", "hook", "shape", "face-dowel", "diagonal")
     remaining = [{"dia": b["d"], "len": poly_len(b["pts"]) / 1000,
                   "orient": ("Other" if b["kind"] in bent
                              else bar_orientation(b["pts"])),

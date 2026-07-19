@@ -165,15 +165,29 @@ this project multiple times; see §5-6 history):
   Summary Schedule (20.50kg), which is simply a different, larger number for
   this diameter on this panel — same class of doc-vs-doc conflict already
   documented for PW-09's T16 (§2). Don't chase this one via geometry.
-- **"T8 Hook @100mm" callout family (PW-09, 6 instances)**: each sits within
-  ~500mm of one of the 6 "T8 Ties @100mm" callouts already driving
-  `_synthesize_ties` (paired up spatially, one Hook label per Tie label per
-  column zone) — almost certainly a companion single-leg hook/cross-tie in
-  the same boundary-column detail, at the same 100mm pitch, not a duplicate
-  label for the same steel. Likely a real, distinct ~20kg of BBS row-11
-  weight, but its shape/placement relative to the tie loop isn't confirmed
-  yet — needs a raw-geometry trace at one of the 6 label positions before
-  synthesizing it (same standard as every prior synthesis pass here).
+- **"T8 Hook @100mm" callout family (PW-09) — now synthesized.** Root cause
+  traced fully before writing any placement code: the elevation marks each
+  real instance only as a tiny fixed-size icon (an 8-16mm arc+line cluster,
+  radius == d/2, regardless of the real bar), arranged in vertical/horizontal
+  runs at the callout's own pitch — confirmed 356 such icons on PW-GF-09,
+  forming 4 real runs (2 full-height boundary columns + 2 shorter runs
+  flanking an opening) after filtering out 13 unrelated same-radius,
+  low-count (n=2) stray circles elsewhere on the sheet. The icon's *shape*
+  is never drawn to scale — the real bend geometry (concentric arc pairs at
+  gap==dia, confirmed radius 16/24 = T8) lives in a spatially-unrelated
+  detail view elsewhere in the file (tens of thousands of mm away, no shared
+  origin, no INSERT block ties them together). Correspondence rule:
+  position/count/extent from the elevation icon runs (same coordinate frame
+  as everything else); shape/length measured as a per-unit average from the
+  detail view's real arc-pair geometry (~116mm/unit for T8, confirmed by two
+  independent methods — manual arc+leg trace and automatic per-view
+  measurement) and applied uniformly, since detail-view *coordinates* can't
+  be trusted but the *shape itself* is drawn true-to-scale. Implemented as
+  `_hook_unit_length` + `_icon_runs` + `_synthesize_hooks` in reconstruct.py.
+  Result: PW-GF-09 T8 89%→96% of official (+9.1kg), TOTAL 84%→86%, with the
+  new "hook" kind wired into the BBS export, resize grouping, and inventory
+  row-matching. No other current drawing has a "Hook" callout family, so
+  this shipped with zero effect elsewhere — confirmed via full-pipeline rerun.
 - **SS-GF-01's T20/T12 "rail ambiguity" from an earlier audit no longer
   reproduces at the described y=96/108/117** — current geometry shows T20 and
   T12 top/bottom edge lines at *different* z-depths (T20 near one face,
