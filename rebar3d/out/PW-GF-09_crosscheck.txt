@@ -1,8 +1,24 @@
 callout                      expected  found   nearest  status
 6 -T12                              6      0         -  SHORT
 6 -T12                              6      0         -  SHORT
+6 -T12                              6      0         -  SHORT
+6 -T12                              6      0         -  SHORT
+6 -T12                              6      0         -  SHORT
+6 -T12                              6      0         -  SHORT
+6 -T12                              6      2     222mm  SHORT
+6 -T12                              6      2     636mm  SHORT
 2 -T16                              2      0         -  SHORT
 2 -T12 -Crack Bar                   2      0         -  SHORT
+2 -T12                              2      0         -  SHORT
+2 -T12                              2      1     736mm  SHORT
+1 -T12                              1      0         -  SHORT
+1 -T12                              1      0         -  SHORT
+2 -T16                              2      1     426mm  SHORT
+2 -T16                              2      1     715mm  SHORT
+1 -T12                              1      0         -  SHORT
+1 -T12                              1      0         -  SHORT
+2 -T16                              2      1     515mm  SHORT
+2 -T16                              2      1     594mm  SHORT
 1 -T12                              1      1     687mm  OK
 1 -T12                              1      1     753mm  OK
 2 -T16                              2      2     609mm  OK

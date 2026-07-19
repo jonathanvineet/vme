@@ -1,4 +1,16 @@
 callout                      expected  found   nearest  status
+3 -T8 TIES                          3      0         -  SHORT
 2 -T12 Perimeter Bar                2      0         -  SHORT
+2 -T16 Corbel Main Bar              2      0         -  SHORT
+2 -T12 Perimeter Bar                2      0         -  SHORT
+2 -T16 Corbel Main Bar              2      0         -  SHORT
 1 -T20                              1      0         -  SHORT
+1 -T20                              1      1     677mm  OK
+3 -T8 TIES                          3      3     506mm  OK
+2 -T16 Corbel Main Bar              2      2     204mm  OK
+1 -T20                              1      1     279mm  OK
+1 -T20                              1      1     678mm  OK
+3 -T8 TIES                          3      3     444mm  OK
+3 -T8 TIES                          3      4     344mm  OVER
 1 -T20                              1      3     354mm  OVER
+1 -T20                              1      3     390mm  OVER

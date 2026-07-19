@@ -115,11 +115,25 @@ def main(argv=None) -> int:
         # (zero/too-few bars found near a labelled detail); OVER entries
         # are inflated whenever labels cluster close together and their
         # search radii overlap, see crosscheck.py.
-        elev = views[0]
-        callouts = parse_count_callouts(elev.ents)
+        #
+        # Drawing-wide, not elevation-only: most count callouts for corbel
+        # main bars, perimeter bars, and edge-beam rail ambiguities sit in
+        # a section/detail view, not the elevation (confirmed on PW-45/
+        # SS-GF-01: only 1 of 12 such callouts fell inside the elevation's
+        # own bbox) — checking only views[0] silently skipped almost every
+        # one of them. Each view is checked against its own local geometry
+        # (never cross-view) since a detail view's coordinates have no
+        # reliable relationship to the elevation's.
+        callouts = []
+        results = []
+        for v in views:
+            v_callouts = parse_count_callouts(v.ents)
+            if not v_callouts:
+                continue
+            v_bars2d = [b for b in extract_bars(v.ents) if b.length >= 100.0]
+            callouts += v_callouts
+            results += cross_check(v_callouts, v_bars2d)
         if callouts:
-            bars2d = [b for b in extract_bars(elev.ents) if b.length >= 100.0]
-            results = cross_check(callouts, bars2d)
             report = format_report(results)
             (args.out / f"{name}_crosscheck.txt").write_text(report + "\n")
             n_short = sum(1 for r in results if r.found < r.callout.count)
