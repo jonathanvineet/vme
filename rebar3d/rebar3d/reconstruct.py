@@ -133,6 +133,36 @@ def classify_sections(
     views: list[View], panel_w: float, panel_h: float,
     elev_bbox: tuple[float, float, float, float] | None = None,
 ) -> list[SectionInfo]:
+    # First pass: every view's own A-WALL/A-FLOR bbox gives a candidate
+    # thickness (its short axis) before any of the expensive per-view work
+    # below. A view whose "wall" bbox actually captures unrelated geometry
+    # alongside the true cut (confirmed on PW-01: a bbox reading 275mm when
+    # the panel is genuinely 125mm thick, from a foundation/dowel detail
+    # sharing the same layer prefix) produces a wildly wrong z downstream --
+    # any bar z_lookup pulls from it lands outside [0, thickness] entirely
+    # (observed z=217mm in a 125mm-thick panel). The lone 0.5x-panel-size
+    # gate below is too loose to catch this (275mm easily passes it). Use
+    # the *median* candidate thickness across every view as a robust
+    # consensus of the real value, and reject any view whose own candidate
+    # deviates from it by more than 30% (a genuine section-to-section
+    # thickness variance in one drawing is not expected to be that large;
+    # only compute the consensus from views close enough to plausibly be
+    # real -- if all candidates already agree there's nothing to filter).
+    candidates = []
+    for v in views[1:]:
+        wall = [e for e in v.ents if e.layer.startswith("A-WALL")]
+        if not wall:
+            wall = [e for e in v.ents if e.layer.startswith("A-FLOR")]
+        if not wall:
+            continue
+        xs = [b for e in wall for b in (e.bbox[0], e.bbox[2])]
+        ys = [b for e in wall for b in (e.bbox[1], e.bbox[3])]
+        w, h = max(xs) - min(xs), max(ys) - min(ys)
+        t = min(w, h)
+        if t <= 0.5 * min(panel_w, panel_h):
+            candidates.append(t)
+    consensus_t = statistics.median(candidates) if candidates else None
+
     infos: list[SectionInfo] = []
     for v in views[1:]:
         wall = [e for e in v.ents if e.layer.startswith("A-WALL")]
@@ -152,6 +182,8 @@ def classify_sections(
         long_len, thickness = max(w, h), min(w, h)
         drawn_x = w >= h  # long axis drawn along sheet X
         if thickness > 0.5 * min(panel_w, panel_h):
+            continue
+        if consensus_t is not None and abs(thickness - consensus_t) > 0.3 * consensus_t:
             continue
         origin_long = wb[0] if drawn_x else wb[1]
         if abs(long_len - panel_w) < 0.08 * panel_w:
