@@ -105,15 +105,17 @@ function applyCam() {
     target.z + sph.r * Math.sin(sph.ph) * Math.sin(sph.th));
   camera.lookAt(target);
 }
-let drag = null, downAt = null;
+let drag = null, downAt = null, dragMove = false;
 const MIN_R = 400, MAX_R = 120000;
 canvas.addEventListener("pointerdown", e => {
   e.preventDefault();
-  drag = {x:e.clientX, y:e.clientY, pan:e.shiftKey};
   downAt = [e.clientX, e.clientY];
   canvas.setPointerCapture(e.pointerId);
+  if (moving) { dragMove = true; updateMove(e); return; }
+  drag = {x:e.clientX, y:e.clientY, pan:e.shiftKey};
 });
 canvas.addEventListener("pointermove", e => {
+  if (moving && dragMove) { if (e.buttons & 1) updateMove(e); return; }
   if (!drag || !(e.buttons & 1)) return; // stray move events after a missed pointerup must not spin the camera
   const dx = e.clientX - drag.x, dy = e.clientY - drag.y;
   drag.x = e.clientX; drag.y = e.clientY;
@@ -130,12 +132,13 @@ canvas.addEventListener("pointermove", e => {
 });
 function endDrag(e) {
   drag = null;
-  if (downAt && Math.hypot(e.clientX - downAt[0], e.clientY - downAt[1]) < 5) pickClick(e);
+  dragMove = false;
+  if (!moving && downAt && Math.hypot(e.clientX - downAt[0], e.clientY - downAt[1]) < 5) pickClick(e);
   downAt = null;
 }
 canvas.addEventListener("pointerup", endDrag);
-canvas.addEventListener("pointercancel", () => { drag = null; downAt = null; });
-canvas.addEventListener("lostpointercapture", () => { drag = null; downAt = null; });
+canvas.addEventListener("pointercancel", () => { drag = null; downAt = null; dragMove = false; });
+canvas.addEventListener("lostpointercapture", () => { drag = null; downAt = null; dragMove = false; });
 canvas.addEventListener("wheel", e => {
   e.preventDefault();
   sph.r = Math.min(MAX_R, Math.max(MIN_R, sph.r * Math.exp(e.deltaY * 0.001)));
@@ -333,7 +336,7 @@ function rebuildInstanceGroup(inst) {
   outer.add(pickMesh);
   const selBox = new THREE.LineSegments(
     new THREE.EdgesGeometry(new THREE.BoxGeometry(inst.dims.w+20, inst.dims.h+20, inst.dims.t+20)),
-    new THREE.LineBasicMaterial({color:0x3d6fd0}));
+    new THREE.LineBasicMaterial({color: inst.locked ? 0x8a919d : 0x3d6fd0}));
   selBox.position.set(0, inst.dims.h/2, 0);
   selBox.visible = (selected === inst);
   outer.add(selBox);
@@ -345,12 +348,12 @@ function rebuildInstanceGroup(inst) {
   inst.selBox = selBox;
 }
 
-function makeInstance(file, model, cx, cz, y0, rotY) {
+function makeInstance(file, model, cx, cz, y0, rotY, locked) {
   const inst = {
     id: nextId++, file, baseModel: model,
     currentModel: model,
     dims: {w: model.width, h: model.height, t: model.thickness},
-    cx, cz, y0, rotY: rotY || 0,
+    cx, cz, y0, rotY: rotY || 0, locked: !!locked,
   };
   rebuildInstanceGroup(inst);
   instances.push(inst);
@@ -369,11 +372,23 @@ function applyResize(inst, W2, H2) {
 }
 
 function deleteInstance(inst) {
+  if (inst.locked) return;
   scene.remove(inst.group);
   instances = instances.filter(i => i !== inst);
   if (selected === inst) selectInstance(null);
   if (aligning === inst) setAligning(null);
+  if (moving === inst) setMoving(null);
   updateCount();
+}
+
+function setLocked(inst, val) {
+  inst.locked = val;
+  if (inst.selBox) inst.selBox.material.color.setHex(val ? 0x8a919d : 0x3d6fd0);
+  if (val) {
+    if (aligning === inst) setAligning(null);
+    if (moving === inst) setMoving(null);
+  }
+  renderSelPane();
 }
 
 function rotateInstance(inst) {
@@ -406,11 +421,34 @@ function renderSelPane() {
   const el = document.getElementById("selPane");
   if (!selected) { el.innerHTML = `<div id="emptyMsg">click a placed panel to edit it, or drag one in from the left.</div>`; return; }
   const i = selected;
-  el.innerHTML = `
+  const info = `
     <div id="selInfo">
-      <div class="nm">${i.baseModel.name}</div>
+      <div class="nm">${i.baseModel.name}${i.locked ? " &#128274;" : ""}</div>
       <div class="dim">${Math.round(i.dims.w)} × ${Math.round(i.dims.h)} × ${Math.round(i.dims.t)} mm · rot ${i.rotY}&deg;</div>
-    </div>
+    </div>`;
+
+  if (i.locked) {
+    el.innerHTML = info + `
+      <div class="dim" style="margin-top:8px">locked &mdash; resize/rotate/move/align/delete are disabled until unlocked.</div>
+      <div><button class="primary" id="unlockBtn">unlock</button></div>
+      <div><button id="dupBtn">duplicate</button></div>
+    `;
+    document.getElementById("unlockBtn").onclick = () => setLocked(i, false);
+    document.getElementById("dupBtn").onclick = () => duplicateInstance(i);
+    return;
+  }
+
+  if (moving === i) {
+    el.innerHTML = info + `
+      <div class="dim" style="margin-top:8px">drag anywhere on the ground to reposition.</div>
+      <div><button class="primary" id="moveDoneBtn">done (Enter)</button><button id="moveCancelBtn">cancel (Esc)</button></div>
+    `;
+    document.getElementById("moveDoneBtn").onclick = () => finishMove(true);
+    document.getElementById("moveCancelBtn").onclick = () => finishMove(false);
+    return;
+  }
+
+  el.innerHTML = info + `
     <label class="f">resize (mm, keeps rebar spacing)</label>
     <div class="row2"><div><input id="wIn" type="number" step="10" value="${Math.round(i.dims.w)}"></div>
       <div><input id="hIn" type="number" step="10" value="${Math.round(i.dims.h)}"></div></div>
@@ -422,57 +460,119 @@ function renderSelPane() {
       <button id="rotateBtn">rotate 90&deg;</button>
       <button id="dupBtn">duplicate</button>
     </div>
+    <label class="f">move</label>
+    <div><button id="moveBtn">move&hellip;</button></div>
     <label class="f">align to another panel</label>
     <div>
-      <button class="primary" id="alignBtn">align to face&hellip;</button>
+      <button class="primary" id="alignBtn">align faces&hellip;</button>
     </div>
-    <div class="dim" style="margin-top:4px">then click a face on another placed panel &mdash; this one moves and rotates to sit flush against it. Esc to cancel.</div>
-    <div style="margin-top:10px"><button class="danger" id="delBtn">delete</button></div>
+    <div class="dim" style="margin-top:4px">click a face on THIS panel, then a face on another &mdash; the two meet flush. Esc to cancel.</div>
+    <div style="margin-top:10px"><button id="lockBtn">lock</button><button class="danger" id="delBtn">delete</button></div>
   `;
   document.getElementById("applyResizeBtn").onclick = () =>
     applyResize(i, +document.getElementById("wIn").value, +document.getElementById("hIn").value);
   document.getElementById("resetResizeBtn").onclick = () => applyResize(i, i.baseModel.width, i.baseModel.height);
   document.getElementById("rotateBtn").onclick = () => rotateInstance(i);
   document.getElementById("dupBtn").onclick = () => duplicateInstance(i);
+  document.getElementById("moveBtn").onclick = () => {
+    setMoving(i);
+    renderSelPane();
+    showStatus("drag on the ground to move this panel (Enter to keep, Esc to cancel)", true);
+  };
   document.getElementById("alignBtn").onclick = () => {
     setAligning(i);
-    showStatus("click a face on another placed panel to align to it (Esc to cancel)", true);
+    showStatus("click a face on THIS panel to choose which side touches the other (Esc to cancel)", true);
   };
+  document.getElementById("lockBtn").onclick = () => setLocked(i, true);
   document.getElementById("delBtn").onclick = () => deleteInstance(i);
 }
 renderSelPane();
 
-let aligning = null;
+// ---- align: two clicks -- first picks WHICH face of the selected panel
+// should make contact, second picks the face on another panel it meets
+let aligning = null, alignPhase = null, sourceFaceInfo = null;
 function setAligning(inst) {
+  if (inst && moving) setMoving(null);
   aligning = inst;
+  alignPhase = inst ? "source" : null;
+  sourceFaceInfo = null;
   canvas.style.cursor = inst ? "crosshair" : "";
+}
+
+// ---- move: drag the selected panel freely across the ground plane at its
+// current height
+let moving = null, moveOrigin = null;
+function setMoving(inst) {
+  if (inst && aligning) setAligning(null);
+  moving = inst;
+  moveOrigin = inst ? {cx: inst.cx, cz: inst.cz} : null;
+  canvas.style.cursor = inst ? "move" : "";
+}
+function updateMove(e) {
+  const ndc = ndcOf(e);
+  const raycaster = new THREE.Raycaster();
+  raycaster.setFromCamera(ndc, camera);
+  const plane = new THREE.Plane(new THREE.Vector3(0, 1, 0), -moving.y0);
+  const hit = new THREE.Vector3();
+  if (raycaster.ray.intersectPlane(plane, hit)) {
+    moving.cx = hit.x; moving.cz = hit.z;
+    moving.group.position.set(moving.cx, moving.y0, moving.cz); // cheap: no geometry rebuild while dragging
+  }
+}
+function finishMove(commit) {
+  if (!moving) return;
+  const inst = moving;
+  if (!commit) { inst.cx = moveOrigin.cx; inst.cz = moveOrigin.cz; inst.group.position.set(inst.cx, inst.y0, inst.cz); }
+  setMoving(null);
+  renderSelPane();
+  showStatus(commit ? "moved" : "move cancelled", false);
 }
 
 function pickClick(ev) {
   const ndc = ndcOf(ev);
   const raycaster = new THREE.Raycaster();
   raycaster.setFromCamera(ndc, camera);
-  if (aligning) {
+
+  if (aligning && alignPhase === "source") {
+    const hits = raycaster.intersectObject(aligning.pickMesh, false);
+    if (hits.length) {
+      const hit = hits[0];
+      const worldNormal = hit.face.normal.clone().transformDirection(hit.object.matrixWorld).normalize();
+      sourceFaceInfo = {normal: worldNormal, rotYAtPick: aligning.rotY};
+      alignPhase = "target";
+      showStatus("now click a face on another panel to align that face against (Esc to cancel)", true);
+    } else {
+      showStatus("align cancelled", false);
+      setAligning(null);
+    }
+    return;
+  }
+  if (aligning && alignPhase === "target") {
     const meshes = instances.filter(i => i !== aligning).map(i => i.pickMesh);
     const hits = raycaster.intersectObjects(meshes, false);
     if (hits.length) {
       const hit = hits[0];
       const worldNormal = hit.face.normal.clone().transformDirection(hit.object.matrixWorld).normalize();
-      alignInstanceToFace(aligning, hit.object.userData.inst, hit.point, worldNormal);
-      showStatus("aligned", false);
-      selectInstance(aligning);
+      const ok = alignInstanceFaceToFace(aligning, sourceFaceInfo, hit.object.userData.inst, hit.point, worldNormal);
+      if (ok) { showStatus("aligned", false); selectInstance(aligning); }
     } else {
       showStatus("align cancelled", false);
     }
     setAligning(null);
     return;
   }
+
   const meshes = instances.map(i => i.pickMesh);
   const hits = raycaster.intersectObjects(meshes, false);
   selectInstance(hits.length ? hits[0].object.userData.inst : null);
 }
 window.addEventListener("keydown", e => {
-  if (e.key === "Escape" && aligning) { setAligning(null); showStatus("align cancelled", false); }
+  if (e.key === "Escape") {
+    if (aligning) { setAligning(null); showStatus("align cancelled", false); }
+    else if (moving) finishMove(false);
+  } else if (e.key === "Enter" && moving) {
+    finishMove(true);
+  }
 });
 
 // ---------------------------------------------------------------- drag & drop placement
@@ -514,11 +614,52 @@ function placeOnFace(sourceInst, file, model, hitPoint, normal) {
   return makeInstance(file, model, cx, cz, y0, rotY);
 }
 
-// move an already-placed instance so it snaps flush against another
-// instance's picked face -- same math as placeOnFace, applied in place
-function alignInstanceToFace(inst, sourceInst, hitPoint, normal) {
-  Object.assign(inst, faceAlignTransform(sourceInst, inst.dims, hitPoint, normal));
+// 0/90/180/270 matching the rotY convention used above (+Z=0, +X=90, -Z=180, -X=270);
+// null for a vertical (top/bottom) normal, which no Y-rotation can produce.
+function angleOfHoriz(v) {
+  const {axis, sign} = roundNormal(v);
+  if (axis === "x") return sign > 0 ? 90 : 270;
+  if (axis === "z") return sign > 0 ? 0 : 180;
+  return null;
+}
+
+// face-to-face align: `inst`'s face picked at sourceFace (world normal +
+// inst.rotY at pick time) is repositioned/rotated to meet targetInst's face
+// at hitPoint/targetNormal exactly, the two faces flush against each other.
+function alignInstanceFaceToFace(inst, sourceFace, targetInst, hitPoint, targetNormal) {
+  const src = sourceFace.normal;
+  const desired = targetNormal.clone().negate(); // inst's face must end up pointing opposite the target's
+  const srcVertical = Math.abs(src.y) > 0.5, desiredVertical = Math.abs(desired.y) > 0.5;
+
+  if (srcVertical !== desiredVertical) {
+    showStatus("can't align a top/bottom face to a side face", false, true);
+    return false;
+  }
+
+  if (srcVertical) {
+    // top<->bottom stacking: no Y-rotation changes which way a Y face points
+    const {sign: tSign} = roundNormal(targetNormal);
+    const contactY = targetInst.y0 + (tSign > 0 ? targetInst.dims.h : 0);
+    inst.rotY = sourceFace.rotYAtPick;
+    inst.y0 = src.y > 0 ? contactY - inst.dims.h : contactY;
+    inst.cx = hitPoint.x; inst.cz = hitPoint.z;
+  } else {
+    // which local face (0/90/180/270 from local +Z) was picked, independent of any rotation since
+    const diff = ((angleOfHoriz(src) - sourceFace.rotYAtPick) % 360 + 360) % 360;
+    const desiredAngle = angleOfHoriz(desired);
+    inst.rotY = ((desiredAngle - diff) % 360 + 360) % 360;
+    const localHalf = (diff % 180 === 0) ? inst.dims.t / 2 : inst.dims.w / 2;
+
+    const {axis: tAxis, sign: tSign} = roundNormal(targetNormal);
+    const targetHalf = instFootprintHalf(targetInst, tAxis);
+    const contactPos = (tAxis === "x" ? targetInst.cx : targetInst.cz) + tSign * targetHalf;
+    const centerAlongAxis = contactPos + tSign * localHalf;
+    if (tAxis === "x") { inst.cx = centerAlongAxis; inst.cz = hitPoint.z; }
+    else { inst.cz = centerAlongAxis; inst.cx = hitPoint.x; }
+    inst.y0 = targetInst.y0;
+  }
   rebuildInstanceGroup(inst);
+  return true;
 }
 
 canvas.addEventListener("dragover", ev => { ev.preventDefault(); ev.dataTransfer.dropEffect = "copy"; });
@@ -584,17 +725,21 @@ function serializeScene() {
   return {
     version: 1,
     instances: instances.map(i => ({
-      file: i.file, w: i.dims.w, h: i.dims.h, cx: i.cx, cz: i.cz, y0: i.y0, rotY: i.rotY,
+      file: i.file, w: i.dims.w, h: i.dims.h, cx: i.cx, cz: i.cz, y0: i.y0, rotY: i.rotY, locked: !!i.locked,
     })),
   };
 }
 async function loadScene(data) {
-  for (const inst of instances.slice()) deleteInstance(inst);
+  // full replace, including locked panels -- "load" starts the named layout fresh
+  for (const inst of instances) scene.remove(inst.group);
+  instances = [];
+  setAligning(null); setMoving(null);
   for (const s of data.instances || []) {
     const model = await loadModel(s.file);
-    const inst = makeInstance(s.file, model, s.cx, s.cz, s.y0, s.rotY);
+    const inst = makeInstance(s.file, model, s.cx, s.cz, s.y0, s.rotY, s.locked);
     if (Math.abs(s.w - model.width) > 1 || Math.abs(s.h - model.height) > 1) applyResize(inst, s.w, s.h);
   }
+  updateCount();
   selectInstance(null);
 }
 document.getElementById("saveSceneBtn").onclick = async () => {
@@ -606,7 +751,11 @@ document.getElementById("saveSceneBtn").onclick = async () => {
   showStatus(r.ok ? `saved "${name}"` : "save failed", false, !r.ok);
   refreshScenes();
 };
-document.getElementById("clearSceneBtn").onclick = () => { for (const i of instances.slice()) deleteInstance(i); };
+document.getElementById("clearSceneBtn").onclick = () => {
+  const locked = instances.filter(i => i.locked).length;
+  for (const i of instances.slice()) deleteInstance(i);
+  if (locked) showStatus(`cleared (${locked} locked panel${locked>1?"s":""} kept)`, false);
+};
 document.getElementById("loadSceneBtn").onclick = async () => {
   const name = document.getElementById("sceneSelect").value;
   if (!name) return;
