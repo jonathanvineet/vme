@@ -617,7 +617,7 @@ function simplifyShape(pts) {
   return rdpSimplify(pts, 25.0);
 }
 function bbsOf(m) {
-  const SCHEDULABLE = new Set(["v-mesh","h-mesh","u-bar","tie","diagonal","shape","hook"]);
+  const SCHEDULABLE = new Set(["v-mesh","h-mesh","u-bar","tie","diagonal","shape","hook","face-dowel","link"]);
   const groups = {};
   for (const b0 of m.bars) {
     if (!SCHEDULABLE.has(b0.kind)) continue;
