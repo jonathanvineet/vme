@@ -1,0 +1,7 @@
+callout                      expected  found   nearest  status
+-(9)-T8@100 mm                      9      4     255mm  SHORT
+-(9)-T8@100 mm                      9      4     259mm  SHORT
+-(9)-T8@100 mm                      9      4     296mm  SHORT
+-(9)-T8@100 mm                      9      4     942mm  SHORT
+-(9)-T8@100 mm                      9      4     265mm  SHORT
+-(9)-T8@100 mm                      9      4     262mm  SHORT

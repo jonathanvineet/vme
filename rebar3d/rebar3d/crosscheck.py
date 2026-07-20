@@ -22,7 +22,7 @@ from dataclasses import dataclass
 from .extract import Bar2D, snap_diameter
 from .loader import Ent
 
-_COUNT_RE = re.compile(r"(\d+)\s*-\s*T(\d+)\b")
+_COUNT_RE = re.compile(r"\(?(\d+)\)?\s*-\s*T(\d+)\b")
 _ANY_DIA_RE = re.compile(r"\bT(\d+)\b")
 
 

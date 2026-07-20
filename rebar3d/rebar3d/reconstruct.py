@@ -232,6 +232,35 @@ def classify_sections(
                     lo, hi = min(z0, z1), max(z0, z1)
                     if lo < -60 or hi > thickness + 60:
                         raw_prot.append((p0, lo, hi))
+        # KNOWN BUG, not yet safely fixable (2026-07, PW-01): a spurious
+        # ~520mm line on the S-RBAR layer in "Section 1" (likely a
+        # dimension/leader line misplaced on the rebar layer, not real
+        # geometry -- its far endpoint at x=10375.1 sits ~500mm outside
+        # this section's own 125mm-thick wall band) gets misread as a
+        # protruding-dowel profile, corrupting 48 downstream circle-to-
+        # dowel z matches (a visible "broom" of bars fanning to one wrong
+        # point in the viewer). Two targeted fixes were tried and BOTH
+        # reverted after cross-checking against the real weight totals:
+        # (1) reject raw_prot magnitude beyond a plausible cap -- doesn't
+        # discriminate, this project has genuine ~520-585mm dowel
+        # protrusions elsewhere (E1's real official leg); (2) reject
+        # raw_prot entries sharing an identical far endpoint with another
+        # entry -- also wrong, real same-type dowels legitimately share an
+        # identical design embedment depth, so this killed the majority of
+        # genuine E/E1 matches (T10 dropped 92%->49% of official schedule
+        # when tried); (3) require a same-section corroborating circle of
+        # matching diameter near a prot candidate's own pos -- also
+        # reverted, same T10 92%->49% collapse: real E/E1 z-matches
+        # evidently don't rely on a circle drawn in this same section
+        # view, so requiring one kills them too. (The T8-diameter half of
+        # this specific bug IS fixed, separately and safely, by
+        # `drop_unscheduled_dowels()` below using the schedule directly
+        # rather than more geometry heuristics -- T10 has real M_17A dowel
+        # marks so that schedule-based fix correctly leaves it alone.) No
+        # safe geometric discriminator found yet for the T10 half. Left
+        # unfixed -- weight-neutral (wrong z/kind only, not wrong length)
+        # -- rather than trade a small cosmetic bug for a large real
+        # accuracy regression, four times over now.
         # pair the two outline lines of each protruding bar into a centerline
         prot = []
         raw_prot.sort()
@@ -652,6 +681,7 @@ def _synthesize_ties(bars: list[Bar3D], all_ents, thickness: float,
 
 _UBAR_PITCH_RE = re.compile(r"T(\d+)\s*UBAR\s*@\s*(\d+)\s*mm", re.IGNORECASE)
 _HOOK_RE = re.compile(r"T(\d+)\s*Hook\s*@\s*(\d+)\s*mm", re.IGNORECASE)
+_PLAIN_PITCH_RE = re.compile(r"T(\d+)\s*@\s*(\d+)\s*mm", re.IGNORECASE)
 
 
 def _synthesize_hairpins(bars: list[Bar3D], elev_ents, thickness: float,
@@ -894,7 +924,187 @@ def _synthesize_hooks(bars: list[Bar3D], views: list[View], thickness: float,
     return bars + out
 
 
-def _merge_dowel_legs(bars: list[Bar3D]) -> list[Bar3D]:
+def _synthesize_edge_caps(bars: list[Bar3D], views: list[View], thickness: float,
+                          panel_h: float, x0: float, y0: float) -> list[Bar3D]:
+    """Top/bottom-edge cap bars marked only by the same small fixed-size
+    icon as the "Hook" family (see `_synthesize_hooks`), but at a drawing
+    that never uses the "T{d} Hook @{p}mm" wording -- PW-01's own text
+    only ever says a plain "T8 @150 mm" / "T8 @200 mm" mesh-pitch callout.
+
+    A plain pitch callout is normally NOT a safe count signal on its own
+    (see `parse_count_callouts`'s docstring) -- it's ambiguous whether it
+    means "the field mesh has this spacing" or "there's a separate capping
+    family at this spacing". Disambiguated here with two independent geometry
+    checks before trusting it as the latter: (1) the icon run must sit
+    exactly at the panel's own top or bottom edge (within cover distance),
+    and (2) at least half its stamped positions must coincide with the real
+    end of an already-reconstructed vertical mesh bar of the same diameter
+    at that same edge -- i.e. this really is "one extra bar per existing
+    vertical, right where it terminates", not a stray same-radius circle
+    elsewhere on the sheet or (confirmed separately on PW-01, NOT
+    synthesized) an in-field bar's own end-icon at a *side* edge, which
+    would double-count a bar `pair_lines` already found directly.
+
+    Verified on PW-01: 17 icon instances at y=panel_h (matches schedule
+    mark "B", -(17)-T8", exactly, both count and position), all 17
+    coinciding with real v-mesh top endpoints; a second candidate run at
+    the left/right edges was correctly rejected by check (2) -- those
+    coincide with h-mesh bars' own *straight-run* endpoints (already
+    counted, schedule mark "C"), not with anything uncounted.
+    """
+    elev_ents = views[0].ents
+    callouts = {(int(m.group(1)), int(m.group(2)))
+                for e in elev_ents if e.kind in ("TEXT", "MTEXT")
+                for m in [_PLAIN_PITCH_RE.search(e.text or "")] if m}
+    if not callouts:
+        return bars
+    cover = 30.0
+    out: list[Bar3D] = []
+    for dia, pitch in callouts:
+        edge_ends = []
+        for b in bars:
+            if b.kind != "v-mesh" or round(b.diameter) != dia:
+                continue
+            ys = [p[1] for p in b.points]
+            x = b.points[0][0]
+            if max(ys) >= panel_h - 60:
+                edge_ends.append((x, panel_h))
+            if min(ys) <= 60:
+                edge_ends.append((x, 0.0))
+        if len(edge_ends) < 5:
+            continue
+        for r in _icon_runs(elev_ents, dia, pitch):
+            if r["axis"] != "h":
+                continue
+            local_y = r["coord"] - y0
+            if not (local_y >= panel_h - 60 or local_y <= 60):
+                continue
+            positions = []
+            k = 0
+            while True:
+                pos = r["lo"] + k * pitch
+                if pos > r["hi"] + 1.0:
+                    break
+                positions.append(pos - x0)
+                k += 1
+            hits = sum(1 for lx in positions
+                       if any(abs(lx - ex) < 80 and abs(local_y - ey) < 80
+                              for ex, ey in edge_ends))
+            if hits < 0.5 * len(positions):
+                continue
+            unit_len = _hook_unit_length(views, dia)
+            if not unit_len or unit_len <= 0:
+                continue
+            # Unlike the through-thickness Hook family (small unit_len vs a
+            # thick panel), this cap's measured unit_len (806mm on PW-01) is
+            # far larger than a typical wall thickness -- it can't be a
+            # z-only run without blowing outside the panel (caught directly
+            # by the sanity checker's z-bounds guard on the first attempt).
+            # It folds back in-plane from the edge instead: represented as a
+            # straight run along y, inward from the edge, at mid-thickness --
+            # correct weight/length, simplified (unknown) bend shape, same
+            # trade-off `_synthesize_ties`' hook tails already make.
+            zc = thickness / 2.0
+            y_dir = -1.0 if local_y >= panel_h - 60 else 1.0
+            y_far = local_y + y_dir * unit_len
+            y_far = min(max(y_far, 0.0), panel_h)
+            for lx in positions:
+                pts = [(lx, local_y, zc), (lx, y_far, zc)]
+                out.append(Bar3D(pts, dia, "hook", "synthesized"))
+    return bars + out
+
+
+def _merged_rail_runs(ents, axis: str, fixed: float, tol: float = 20.0,
+                      gap_close: float = 25.0) -> list[tuple[float, float, float]]:
+    """Collinear-fragment-merged rail runs near a fixed x (axis='v') or y
+    (axis='h') coordinate, from raw S-RBAR LINE entities.
+
+    Groups near-parallel line fragments into (rail-coordinate, lo, hi) runs,
+    closing gaps up to `gap_close`mm (real bars are routinely drawn as many
+    small dashes/fragments where they cross other bars -- same reasoning as
+    the loader's own hidden-run merging elsewhere in this project).
+    """
+    cols: dict[float, list[tuple[float, float]]] = {}
+    for e in ents:
+        if e.layer != "S-RBAR" or e.kind != "LINE":
+            continue
+        bx0, by0, bx1, by1 = e.bbox
+        w, h = bx1 - bx0, by1 - by0
+        if axis == "v":
+            if w > 3 or h < 3:
+                continue
+            c, lo, hi = (bx0 + bx1) / 2, by0, by1
+        else:
+            if h > 3 or w < 3:
+                continue
+            c, lo, hi = (by0 + by1) / 2, bx0, bx1
+        if abs(c - fixed) > tol:
+            continue
+        cols.setdefault(round(c, 1), []).append((lo, hi))
+    runs: list[tuple[float, float, float]] = []
+    for c, ivs in cols.items():
+        ivs = sorted(ivs)
+        merged = [list(ivs[0])]
+        for a, b in ivs[1:]:
+            if a <= merged[-1][1] + gap_close:
+                merged[-1][1] = max(merged[-1][1], b)
+            else:
+                merged.append([a, b])
+        for lo, hi in merged:
+            runs.append((c, lo, hi))
+    return runs
+
+
+def _raw_dowel_leg(elev_ents, dia: float, ex: float, ey: float
+                   ) -> tuple[str, float, float] | None:
+    """A real double-line rail run near a face-dowel's (x, y) that
+    `pair_lines` never turned into its own Bar2D -- confirmed directly on
+    PW-01: a genuine ~470mm double-line pair at gap==diameter sits right
+    at several unmatched dowels' own position (drafting clutter nearby --
+    5 distinct near-duplicate rail x's within 20mm -- likely confuses
+    `pair_lines`' own candidate selection there; a fix at that level risks
+    the many documented regressions elsewhere in this project, so this
+    works around it locally and conservatively instead, anchored to a
+    position we already trust (the dowel's own real circle)).
+
+    Tries both orientations (embedded leg can run either in-plane
+    direction). Requires two rails at gap==dia (+/-2mm, confirming it's
+    really this diameter's bar and not an unrelated line), overlapping for
+    >=80% of the shorter one's span (confirms a real parallel pair, not
+    two unrelated collinear-by-coincidence fragments), with the near end
+    within 80mm of the dowel and a total length of 100-1500mm (excludes
+    both noise fragments and accidentally grabbing an unrelated long bar).
+    """
+    for axis, fixed_c, along_c in (("v", ex, ey), ("h", ey, ex)):
+        runs = _merged_rail_runs(elev_ents, axis, fixed_c)
+        cs = sorted(set(r[0] for r in runs))
+        best = None
+        for i in range(len(cs)):
+            for j in range(i + 1, len(cs)):
+                if abs((cs[j] - cs[i]) - dia) > 2.0:
+                    continue
+                for c1, lo1, hi1 in [r for r in runs if r[0] == cs[i]]:
+                    for c2, lo2, hi2 in [r for r in runs if r[0] == cs[j]]:
+                        lo, hi = max(lo1, lo2), min(hi1, hi2)
+                        if hi <= lo:
+                            continue
+                        shorter = min(hi1 - lo1, hi2 - lo2)
+                        if (hi - lo) < 0.8 * shorter or (hi - lo) < 100 or (hi - lo) > 1500:
+                            continue
+                        near_d = min(abs(lo - along_c), abs(hi - along_c))
+                        if near_d > 80:
+                            continue
+                        if best is None or near_d < best[0]:
+                            best = (near_d, lo, hi)
+        if best is not None:
+            _, lo, hi = best
+            near, far = (lo, hi) if abs(lo - along_c) < abs(hi - along_c) else (hi, lo)
+            return axis, near, far
+    return None
+
+
+def _merge_dowel_legs(bars: list[Bar3D], elev_ents=None, x0: float = 0.0,
+                      y0: float = 0.0) -> list[Bar3D]:
     """Join a face-dowel's protruding leg with its embedded in-plane leg.
 
     A face-dowel (a circle in the elevation, perpendicular to the panel
@@ -905,12 +1115,13 @@ def _merge_dowel_legs(bars: list[Bar3D]) -> list[Bar3D]:
     Confirmed on PW-01: the BBS's own "E"/"E1" dowel rows are a 2-segment
     bend (~475mm embedded leg + a ~520-585mm protruding leg); the
     face-dowel path alone only ever captures the protruding leg, quietly
-    undercounting each dowel's real length by roughly half. Only merges
-    when a same-diameter v-mesh/h-mesh bar's own endpoint lands within
-    30mm of the dowel's (x, y) -- real position evidence, not a guess;
-    left alone otherwise (confirmed only ~28% of dowels have such a
-    candidate at all on PW-01 -- the rest genuinely have no second leg
-    detected anywhere, a different, still-open gap).
+    undercounting each dowel's real length by roughly half. First tries
+    the already-reconstructed v-mesh/h-mesh bars (real position evidence,
+    endpoint within 30mm); confirmed only ~28% of dowels have such a
+    candidate at all. For the rest, falls back to `_raw_dowel_leg` --
+    searching the raw drawing geometry directly instead of giving up,
+    since the embedded leg often genuinely IS drawn but never survived
+    `pair_lines`' own candidate selection in dense/cluttered areas.
     """
     dowels = [b for b in bars if b.kind == "face-dowel"]
     others = [b for b in bars if b.kind != "face-dowel"]
@@ -925,7 +1136,19 @@ def _merge_dowel_legs(bars: list[Bar3D]) -> list[Bar3D]:
             d = min(math.dist((p[0], p[1]), (dx, dy)) for p in (leg.points[0], leg.points[-1]))
             if d < 30.0 and (best is None or d < best[1]):
                 best = (i, d)
+        z_far, z_near = dw.points[0][2], dw.points[1][2]
         if best is None:
+            if elev_ents is not None:
+                raw = _raw_dowel_leg(elev_ents, dw.diameter, dx + x0, dy + y0)
+                if raw is not None:
+                    axis, near, far = raw
+                    if axis == "v":
+                        leg_pts = [(dx, far - y0, z_near), (dx, near - y0, z_near)]
+                    else:
+                        leg_pts = [(far - x0, dy, z_near), (near - x0, dy, z_near)]
+                    out.append(Bar3D(leg_pts + [dw.points[0]], dw.diameter,
+                                     "face-dowel", "section"))
+                    continue
             out.append(dw)
             continue
         i, _ = best
@@ -940,7 +1163,6 @@ def _merge_dowel_legs(bars: list[Bar3D]) -> list[Bar3D]:
         # dowel's own z1 (a real detected circle depth) so joining the two
         # doesn't fabricate an extra "jump" segment's worth of length that
         # was never actually drawn anywhere.
-        z_far, z_near = dw.points[0][2], dw.points[1][2]
         leg_pts = [(p[0], p[1], z_near) for p in leg_pts]
         out.append(Bar3D(leg_pts + [dw.points[0]], dw.diameter, "face-dowel", "section"))
     for i, leg in enumerate(others):
@@ -1076,6 +1298,101 @@ def calibrate_sleeve_wraps(panel: "Panel", marks: list[tuple[int, float, float, 
                 panel.bars.append(Bar3D(pts, sdia, "shape", "calibrated"))
                 n_added += 1
     return n_added
+
+
+def calibrate_edge_caps(panel: "Panel", marks: list[tuple[int, int, float]]) -> int:
+    """Correct a "hook"-kind edge-cap family's per-bar LENGTH using the
+    itemized BBS's own stated length, when the count `_synthesize_edge_caps`
+    already derived from real icon-marker geometry exactly matches one
+    schedule mark's quantity.
+
+    `marks`: (diameter, qty, length_mm) for every itemized-BBS row.
+
+    Position/count for this family are already trustworthy (real icon
+    positions at the panel's own top/bottom edge, independently verified
+    against the schedule's own count -- see `_synthesize_edge_caps`).
+    Length is not: it comes from `_hook_unit_length`, which measures a
+    view's *total* same-diameter shape length divided by its arc-pair
+    count -- fine for the original Hook family (one clean shape per view)
+    but silently wrong here, confirmed directly on PW-01's mark B (17x
+    T8, official 1008mm): the two views feeding the measurement each mix
+    B's real shape together with unrelated bars (C's long straight run,
+    D1's full-height vertical) sharing the same view, so "total length /
+    arc-pairs" landed on a number (806mm) that isn't really either
+    shape's own per-unit length -- it just averaged two wrong numbers
+    into something that happened to look plausible. An exact count match
+    to one specific schedule mark is strong enough evidence to trust that
+    mark's own stated length instead (same standard already established
+    for `calibrate_sleeve_wraps`): rescales each hook bar along its
+    already-correct direction, from its already-correct anchor end, to
+    the schedule's real length -- position and orientation untouched.
+    """
+    n_fixed = 0
+    for dia, qty, length_mm in marks:
+        sdia = snap_diameter(dia)
+        if sdia is None or qty <= 0:
+            continue
+        group = [b for b in panel.bars if b.kind == "hook" and b.diameter == sdia]
+        if len(group) != qty:
+            continue
+        for b in group:
+            p0, p1 = b.points[0], b.points[-1]
+            cur_len = math.dist(p0, p1)
+            if cur_len < 1.0:
+                continue
+            scale = length_mm / cur_len
+            b.points = [p0, tuple(p0[k] + (p1[k] - p0[k]) * scale for k in range(3))]
+            n_fixed += 1
+    return n_fixed
+
+
+def drop_unscheduled_dowels(panel: "Panel", mark_rows: list) -> int:
+    """Drop face-dowel bars at a diameter with no real dowel-shaped mark in
+    the itemized BBS -- a real, general, schedule-grounded fix for the
+    "circle wrongly promoted to a dowel" class of bug (see the long
+    unresolved-bug comment in `reconstruct_panel`'s circle-promotion loop:
+    two geometry-only fix attempts there were tried and reverted after
+    regressing real E/E1 dowels).
+
+    Deliberately face-dowel only, NOT "link" -- link bars are a distinct
+    real feature (a vertical stirrup/tie leg inside the depth, see the
+    circle-promotion loop's own else-branch) with no schedule-mark
+    correspondence at all, so this same test doesn't apply to them; a
+    first version of this function scoped both kinds and wrongly deleted
+    36 genuine T8 link bars that have every right to exist without an
+    M_17A mark.
+
+    Confirmed concretely on PW-01: two T8 circles got promoted into
+    face-dowel bars with a garbage z (-500mm on a 113mm panel, from a
+    misclassified drafting line) -- but PW-01's own itemized schedule
+    proves T8 should have ZERO dowel-shaped bars at all (its 5 marks
+    A/B/C/D/D1 are all mesh/bracket shapes; only T10's E/E1 use the
+    dowel-bend shape "M_17A"). This doesn't require diagnosing the
+    geometry bug itself -- it only needs to know a diameter has no
+    business having any dowel, which the schedule already states
+    directly. T10 keeps its real face-dowel bars untouched (E/E1 do
+    have M_17A rows) -- this is diameter-scoped, not blanket kind removal,
+    so it can't repeat the earlier regression of killing legitimate same-
+    diameter dowels.
+
+    Narrow by design (only acts when there's an itemized schedule AND that
+    diameter has other, non-dowel marks present -- i.e. only removes
+    dowels the document actively contradicts, never dowels it's merely
+    silent about, matching this project's "never delete on absence of
+    evidence" rule elsewhere).
+    """
+    dowel_dias = {m.diameter for m in mark_rows if "17A" in m.shape.upper()}
+    all_dias = {m.diameter for m in mark_rows}
+    n_dropped = 0
+    kept = []
+    for b in panel.bars:
+        if b.kind == "face-dowel" and b.diameter in all_dias \
+           and b.diameter not in dowel_dias:
+            n_dropped += 1
+            continue
+        kept.append(b)
+    panel.bars = kept
+    return n_dropped
 
 
 def _dedupe_near(bars: list[Bar3D]) -> list[Bar3D]:
@@ -1448,7 +1765,30 @@ def reconstruct_panel(name: str, views: list[View]) -> Panel:
     # bars drawn as circles in the elevation are perpendicular to the panel
     # face: the N-series projecting bars. Their protrusion profile (how far
     # out of which face) comes from the matching section.
-    profiles = [p for s in sections for p in s.prot]
+    #
+    # MAJOR BUG FOUND AND FIXED (2026-07, PW-01): matching used
+    # `min(abs(pos - (cy-y0)), abs(pos - (cx-x0)))` -- trying the profile's
+    # 1D `pos` against BOTH the circle's x and y and taking whichever was
+    # closer, regardless of which axis that profile's `pos` actually means.
+    # `to_section()` above defines `pos` unambiguously from the section's
+    # own `role`: a "vertical" section (cuts horizontal elevation bars, its
+    # long axis spans panel_h) has pos == an elevation Y-coordinate; a
+    # "horizontal" section has pos == an elevation X-coordinate. Comparing
+    # against the wrong axis let one stray/misregistered profile match
+    # every circle sharing a similar coordinate on the *other* axis --
+    # confirmed directly: ~48 of PW-01's real T10 E/E1 dowels (spread
+    # across x=175..2575, i.e. totally different real positions) all
+    # spuriously matched the same bad profile purely because they share a
+    # common y (~105-145mm, a real dowel row) and the old code was willing
+    # to compare that y against an unrelated horizontal-section profile's
+    # pos. All 48 silently got the same wrong z (-500.1mm off a 113mm-thick
+    # panel), rendering as a "broom" of bars fanning out to one point --
+    # spotted visually by the user in the viewer, not caught by sanity.py
+    # (face-dowel/link are deliberately z-bounds-exempt since real dowels
+    # legitimately protrude far, so a wrong-but-not-implausible-looking z
+    # slipped through). Fix: only compare pos against the axis its own
+    # section's role actually measures.
+    profiles = [(s.role, p) for s in sections for p in s.prot]
     for e in elev.ents:
         if e.layer != "S-RBAR" or e.kind != "CIRCLE" or not (2.0 <= e.radius <= 17.0):
             continue
@@ -1459,10 +1799,11 @@ def reconstruct_panel(name: str, views: list[View]) -> Panel:
         if dia is None:
             continue
         best, best_d = None, 60.0
-        for pos, pz0, pz1, pdia in profiles:
+        for role, (pos, pz0, pz1, pdia) in profiles:
             if abs(pdia - 2 * e.radius) > 3:
                 continue
-            d = min(abs(pos - (cy - y0)), abs(pos - (cx - x0)))
+            axis_coord = (cy - y0) if role == "vertical" else (cx - x0)
+            d = abs(pos - axis_coord)
             if d < best_d:
                 best_d, best = d, (pz0, pz1)
         if best is not None:
@@ -1519,8 +1860,9 @@ def reconstruct_panel(name: str, views: list[View]) -> Panel:
     bars = _synthesize_labelled_singles(bars, elev.ents, x0, y0, thickness,
                                         [e for v in views for e in v.ents])
     bars = _synthesize_hooks(bars, views, thickness, x0, y0)
+    bars = _synthesize_edge_caps(bars, views, thickness, ph, x0, y0)
     bars = _synthesize_column_ties(bars, pw, ph, thickness)
-    bars = _merge_dowel_legs(bars)
+    bars = _merge_dowel_legs(bars, elev.ents, x0, y0)
     bars = _dedupe_near(bars)
 
     # ---- cast-in features: sleeves, corbels, embeds, anchors, wire loops

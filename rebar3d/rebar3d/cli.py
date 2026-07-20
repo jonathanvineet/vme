@@ -15,7 +15,9 @@ from .crosscheck import cross_check, format_report, parse_count_callouts, text_c
 from .export import write_json, write_projections, write_viewer
 from .extract import extract_bars
 from .loader import dwg_to_dxf, load_entities
-from .reconstruct import calibrate_sleeve_wraps, reconstruct_panel
+from .reconstruct import (
+    calibrate_edge_caps, calibrate_sleeve_wraps, drop_unscheduled_dowels, reconstruct_panel,
+)
 from .schedule import (
     compare_to_bars, extract_schedule, extract_schedule_dwg,
     find_schedule_pdf, parse_itemized_bbs,
@@ -148,6 +150,28 @@ def main(argv=None) -> int:
                 if n_cal:
                     print(f"  calibrated {n_cal} sleeve-wrap bar(s) from {pdf.name} "
                           f"(anchored at real detected sleeve positions)")
+
+            # "Hook"/edge-cap family length correction: position/count
+            # already come from real icon geometry (see
+            # `_synthesize_edge_caps`); when that count matches one
+            # schedule mark's quantity exactly, trust that mark's own
+            # stated length over the unreliable arc-measurement fallback.
+            edge_cap_marks = [(m.diameter, m.qty, m.length_mm) for m in mark_rows]
+            n_len_fixed = calibrate_edge_caps(panel, edge_cap_marks)
+            if n_len_fixed:
+                print(f"  corrected length of {n_len_fixed} edge-cap bar(s) from "
+                      f"{pdf.name} (count already matched a schedule mark exactly)")
+
+            # A diameter with real schedule marks but none of them a
+            # dowel-bend shape ("M_17A") has no business owning any
+            # face-dowel/link bar -- drops circles that got wrongly
+            # promoted into dowels by a geometry bug (see the long
+            # unresolved-bug comment in reconstruct_panel's circle-
+            # promotion loop).
+            n_dowel_dropped = drop_unscheduled_dowels(panel, mark_rows)
+            if n_dowel_dropped:
+                print(f"  dropped {n_dowel_dropped} dowel-kind bar(s) at diameters with "
+                      f"no dowel-shaped mark in {pdf.name}")
             break
 
         panels.append(panel)
