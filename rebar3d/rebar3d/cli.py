@@ -11,9 +11,12 @@ import argparse
 import sys
 from pathlib import Path
 
-from .crosscheck import cross_check, format_report, parse_count_callouts, text_callout_diameters
+from .crosscheck import (
+    cross_check, format_report, mark_report, parse_count_callouts,
+    parse_letter_marks, text_callout_diameters,
+)
 from .export import write_json, write_projections, write_viewer
-from .extract import extract_bars
+from .extract import extract_bars, wall_outline
 from .loader import dwg_to_dxf, load_entities
 from .reconstruct import (
     calibrate_edge_caps, calibrate_sleeve_wraps, drop_unscheduled_dowels, reconstruct_panel,
@@ -233,6 +236,21 @@ def main(argv=None) -> int:
             n_short = sum(1 for r in results if r.found < r.callout.count)
             print(f"  crosscheck: {len(callouts)} labelled details, {n_short} short "
                   f"(see {name}_crosscheck.txt)")
+
+        # Schedule-mark-letter reconciliation: pairs every letter label
+        # ("B", "D", "G", ...) with its real, deduped total count (see
+        # `parse_letter_marks`) and checks it against reconstructed
+        # geometry -- a sharper, mark-scoped view of the same gaps the
+        # per-callout crosscheck above already flags, useful for tracing a
+        # specific official schedule row back to its real DWG evidence.
+        mark_groups = parse_letter_marks(ents, views)
+        if mark_groups:
+            (mx0, my0, _mx1, _my1), _ = wall_outline(views[0].ents)
+            report = mark_report(mark_groups, panel.bars, mx0, my0)
+            (args.out / f"{name}_marks.txt").write_text(report + "\n")
+            n_mark_short = sum(1 for line in report.splitlines() if "SHORT" in line)
+            print(f"  marks: {len(mark_groups)} schedule-letter mark(s) identified, "
+                  f"{n_mark_short} short (see {name}_marks.txt)")
 
         if rows is not None:
             report = compare_to_bars(rows, panel.bars)

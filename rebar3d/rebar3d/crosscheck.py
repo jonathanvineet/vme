@@ -22,7 +22,7 @@ from dataclasses import dataclass
 from .extract import Bar2D, snap_diameter
 from .loader import Ent
 
-_COUNT_RE = re.compile(r"\(?(\d+)\)?\s*-\s*T(\d+)\b")
+_COUNT_RE = re.compile(r"\(?(\d+)\)?\s*-\s*\(?T(\d+)\)?\b")
 _ANY_DIA_RE = re.compile(r"\bT(\d+)\b")
 
 
@@ -54,6 +54,133 @@ def parse_count_callouts(ents: list[Ent]) -> list[Callout]:
         cy = (e.bbox[1] + e.bbox[3]) / 2
         out.append(Callout(int(m.group(1)), int(m.group(2)), cx, cy, e.text.strip()))
     return out
+
+
+_MARK_LABEL_RE = re.compile(r"^[A-Z]\d{0,2}$")
+
+
+@dataclass
+class MarkGroup:
+    mark: str
+    diameter: int
+    total_count: int
+    instances: list[Callout]  # every raw callout instance found paired to this mark
+
+
+def parse_letter_marks(ents: list[Ent], views=None, pair_dist: float = 250.0,
+                       same_view_dist: float = 500.0) -> list[MarkGroup]:
+    """Pair every schedule-mark letter label ("B", "D", "D1", "G", ...) with
+    the nearest count callout, then aggregate each mark's TRUE total count
+    across every place the label appears on the sheet.
+
+    Worked out by hand on PW-01 this session before being generalized here:
+    a shop drawing repeats the same label in multiple views for the
+    reader's convenience (an elevation-side detail also labelled in a
+    section cut) — those repeats must NOT be summed, or a real family gets
+    inflated by however many views happen to show it. But a single view
+    can ALSO legitimately show the same letter twice for two genuinely
+    different physical instances of the same mark (PW-01's mark "D": two
+    separate corner instances, "-(3)-T8" at each end of one section view,
+    that really do need summing to reach the true total of 6). The
+    distinguishing signal is view membership + spatial separation, not the
+    letter alone: two same-letter callouts in the SAME view cluster more
+    than `same_view_dist` apart are treated as distinct real instances
+    (summed); the same letter appearing again in a DIFFERENT view is
+    treated as a repeated re-label of what's already counted (deduped via
+    max, not summed). Verified exactly on PW-01: "D" labels both the
+    "-(14)-T8" callout (repeated identically in 3 different views -> 14,
+    not 42) and two separate "-(3)-T8" instances within one view (3+3=6,
+    not 3) -- combined total 20, exactly matching the official D+D1
+    combined count (this DWG's own drafting doesn't distinguish D from D1
+    at all; that split only exists in the separate office schedule).
+
+    `views`: pre-clustered `View` list (see `views.cluster_views`) giving
+    real view membership; if not supplied, clusters `ents` itself.
+    """
+    if views is None:
+        from .views import cluster_views
+        views = cluster_views(ents)
+
+    # `cluster_views`' own margin-based clustering can merge a view's real
+    # geometry with far-flung annotation entities that happen to chain-
+    # connect to it (confirmed on PW-01: view 0's raw entity bbox came out
+    # 5563-10205 -- 3600mm wider than the elevation's own real 6522-9272
+    # panel outline -- swallowing a *different* callout instance 4500mm+
+    # away and wrongly summing it as if it were a distinct in-view
+    # instance). Use each view's real wall/section-band outline (from
+    # `wall_outline`, the same tight boundary the rest of the pipeline
+    # trusts) instead of the raw entity bbox wherever one exists.
+    from .extract import wall_outline
+    view_bounds = []
+    for v in views:
+        try:
+            bbox, _ = wall_outline(v.ents)
+            view_bounds.append(bbox)
+        except (ValueError, IndexError):
+            view_bounds.append(None)
+
+    def view_of(x: float, y: float, margin: float = 600.0) -> int:
+        for i, bbox in enumerate(view_bounds):
+            if bbox is None:
+                continue
+            bx0, by0, bx1, by1 = bbox
+            if bx0 - margin <= x <= bx1 + margin and by0 - margin <= y <= by1 + margin:
+                return i
+        return -1  # no confident view membership -- treated as its own group
+
+    callouts = parse_count_callouts(ents)
+    used = [False] * len(callouts)
+    labels = [e for e in ents if e.kind in ("TEXT", "MTEXT")
+             and _MARK_LABEL_RE.match((e.text or "").strip())]
+
+    raw: dict[str, list[tuple[int, Callout]]] = {}  # mark -> [(view_idx, callout)]
+    for e in labels:
+        text = (e.text or "").strip()
+        lx, ly = (e.bbox[0] + e.bbox[2]) / 2, (e.bbox[1] + e.bbox[3]) / 2
+        best_i, best_d = None, pair_dist
+        for i, c in enumerate(callouts):
+            if used[i]:
+                continue
+            d = math.dist((lx, ly), (c.x, c.y))
+            if d < best_d:
+                best_d, best_i = d, i
+        if best_i is None:
+            continue
+        used[best_i] = True
+        c = callouts[best_i]
+        raw.setdefault(text, []).append((view_of(c.x, c.y), c))
+
+    groups = []
+    next_singleton = -2  # -1 itself is reserved below for "no confident view"
+    for mark, items in raw.items():
+        by_view: dict[int, list[Callout]] = {}
+        for vi, c in items:
+            # -1 ("no confident view membership") must NOT pool unrelated
+            # instances together under one shared bucket -- each gets its
+            # own singleton group instead, so distant same-letter repeats
+            # with no resolvable view (confirmed on PW-01's mark "C": all
+            # 3 instances fall outside every section's own wall-outline
+            # bbox) are correctly deduped via max(), not summed.
+            if vi == -1:
+                by_view[next_singleton] = [c]
+                next_singleton -= 1
+            else:
+                by_view.setdefault(vi, []).append(c)
+        per_view_totals = []
+        for vi, cs in by_view.items():
+            # within one view: distinct positions (>same_view_dist apart)
+            # are genuinely different instances and get summed; near-
+            # duplicates (same detail, jittered label placement) don't.
+            kept: list[Callout] = []
+            for c in cs:
+                if any(math.dist((c.x, c.y), (k.x, k.y)) < same_view_dist for k in kept):
+                    continue
+                kept.append(c)
+            per_view_totals.append(sum(k.count for k in kept))
+        total = max(per_view_totals) if per_view_totals else 0
+        dia = items[0][1].diameter
+        groups.append(MarkGroup(mark, dia, total, [c for _, c in items]))
+    return groups
 
 
 def text_callout_diameters(ents: list[Ent]) -> set[int]:
@@ -119,6 +246,40 @@ def cross_check(callouts: list[Callout], bars2d: list[Bar2D], radius: float = 18
                     best = d
         results.append(CrossCheckResult(c, near, best))
     return results
+
+
+def mark_report(groups: list[MarkGroup], bars3d, x0: float = 0.0, y0: float = 0.0,
+                radius: float = 1800.0) -> str:
+    """Per schedule-mark-letter reconciliation: `parse_letter_marks`'s true
+    deduped total vs how many reconstructed bars of that diameter sit near
+    any of the mark's real callout positions -- the same drawing-wide,
+    per-instance radius check `cross_check` does for raw callouts, but
+    against the letter-aggregated true count instead of a possibly-
+    repeated single instance's own number.
+
+    `bars3d` (`panel.bars`) is already offset into the panel's own local
+    coordinate frame; callout positions are raw DWG coordinates, so `x0,y0`
+    (the same offset `reconstruct_panel` applied) must be subtracted before
+    comparing the two -- confirmed the hard way: skipping this made every
+    single mark read "found=0" despite the bars genuinely being there.
+    """
+    lines = [f"{'mark':<8}{'dia':<6}{'expected':>9}{'found':>7}  status  instances"]
+    for g in sorted(groups, key=lambda g: g.mark):
+        near = set()
+        for c in g.instances:
+            cx, cy = c.x - x0, c.y - y0
+            for i, b in enumerate(bars3d):
+                if b.diameter != g.diameter:
+                    continue
+                d = min(math.dist((p[0], p[1]), (cx, cy)) for p in b.points)
+                if d <= radius:
+                    near.add(i)
+        found = len(near)
+        gap = found - g.total_count
+        status = "OK" if gap == 0 else ("SHORT" if gap < 0 else "OVER")
+        lines.append(f"{g.mark:<8}T{g.diameter:<5}{g.total_count:>9}{found:>7}  "
+                     f"{status:<6}  {len(g.instances)}")
+    return "\n".join(lines)
 
 
 def format_report(results: list[CrossCheckResult]) -> str:
