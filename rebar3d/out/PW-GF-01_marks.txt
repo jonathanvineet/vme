@@ -10,7 +10,7 @@ E1      T12          14     25  OVER    3
 F       T12          14     42  OVER    6
 G       T16           2      5  OVER    4
 H       T16           2      6  OVER    6
-I       T20           2      7  OVER    7
+I       T20           2      9  OVER    7
 J       T20           2      0  SHORT   2
 K       T20           3      0  SHORT   2
-L       T20           2      7  OVER    4
+L       T20           2      9  OVER    4

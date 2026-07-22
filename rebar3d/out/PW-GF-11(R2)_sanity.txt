@@ -1,0 +1,1 @@
+[WARN] reinforcement ratio 401 kg/m3 is outside the usual 20-400 kg/m3 range (28.9kg steel / 0.07m3 concrete) -- reconstruction is likely badly incomplete or has fabricated bars, not just imprecise

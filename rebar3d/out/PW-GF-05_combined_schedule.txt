@@ -1,0 +1,10 @@
+Combined: PW-GF-05(R1), PW-GF-05(R2)
+Official: PW-GF-05(S).dwg paper space
+
+  bar reconstructed   official      gap      %
+T8           62.29k    117.43k  -55.14k    53%
+T10          50.34k     77.88k  -27.54k    65%
+T16          96.38k    165.34k  -68.96k    58%
+T20          27.99k     11.67k  +16.32k   240%
+T25          46.52k     33.76k  +12.76k   138%
+TOTAL       283.53k    406.08k -122.55k    70%

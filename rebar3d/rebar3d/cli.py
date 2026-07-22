@@ -8,6 +8,7 @@ combined viewer, with per-panel JSON + projection PNGs alongside.
 from __future__ import annotations
 
 import argparse
+import re
 import sys
 from pathlib import Path
 
@@ -19,10 +20,11 @@ from .export import write_json, write_projections, write_viewer
 from .extract import extract_bars, wall_outline
 from .loader import dwg_to_dxf, load_entities
 from .reconstruct import (
-    calibrate_edge_caps, calibrate_sleeve_wraps, drop_unscheduled_dowels, reconstruct_panel,
+    calibrate_edge_caps, calibrate_sleeve_wraps, calibrate_uniform_shape_lengths,
+    drop_unscheduled_dowels, reconstruct_panel,
 )
 from .schedule import (
-    compare_to_bars, extract_schedule, extract_schedule_dwg,
+    compare_to_bars, extract_schedule, extract_schedule_dwg, extract_itemized_bbs_dwg,
     find_schedule_pdf, parse_itemized_bbs,
 )
 from .reconstruct import Panel
@@ -83,6 +85,12 @@ def main(argv=None) -> int:
     args.out.mkdir(parents=True, exist_ok=True)
 
     panels = []
+    # groups sibling reinforcement sheets of one physical panel (e.g.
+    # "PW-GF-05(R1)" + "PW-GF-05(R2)") by their shared base name, so their
+    # weights can be summed before comparing to the ONE official schedule
+    # they both share -- see the R1/R2 combination pass after this loop.
+    combo_groups: dict[str, list[tuple[str, Panel]]] = {}
+    combo_official: dict[str, tuple[list[ScheduleRow], str]] = {}
     for src in args.drawings:
         name = src.stem.replace("(R)", "").strip()
         dxf = dwg_to_dxf(src, args.out / "dxf") if src.suffix.lower() == ".dwg" else src
@@ -93,13 +101,39 @@ def main(argv=None) -> int:
             continue
         panel = reconstruct_panel(name, views)
 
+        s_dwg = src.parent / f"{re.sub(r'\([^)]*\)\s*$', '', src.stem).strip()}(S).dwg"
+        # Only trust a same-core-name "(S).dwg" when it's actually the same
+        # revision/batch as `src` -- confirmed on PW-GF-09: an OLD single-
+        # sheet "(R).dwg" (~2 months earlier) shares its base name with the
+        # CURRENT batch's "(S).dwg", but they're different documents (its
+        # own real geometry compared against the new schedule gave a
+        # nonsense 553% on T12). Same-batch siblings are stamped within
+        # minutes of each other; different revisions are months apart.
+        s_dwg_ok = s_dwg.exists() and abs(s_dwg.stat().st_mtime - src.stat().st_mtime) < 7 * 86400
+        s_dxf = dwg_to_dxf(s_dwg, args.out / "dxf") if s_dwg_ok else None
+
         # The sheet's own Summary Schedule is ground truth for which
         # diameters actually appear in this panel at all — independent of
         # how well the geometry reconstruction manages to match it.
-        # Primary source: the DWG's own paper-space layout (every panel
-        # carries its schedule there, even ones with no PDF); fallback: a
-        # sibling (R) PDF.
-        rows, src_name = extract_schedule_dwg(dxf), f"{name} DWG paper space"
+        # Priority: (1) a sibling "(S).dwg"'s own paper space -- the
+        # dedicated schedule sheet by this drawing set's own naming
+        # convention, most reliable when it exists; (2) this DWG's own
+        # paper-space layout (every panel carries its schedule there when
+        # it isn't split into a separate sheet); (3) sibling PDFs. Trying
+        # this DWG's own paper space BEFORE the dedicated (S) sheet used
+        # to risk exactly the bug `find_schedule_pdf` had (confirmed on
+        # PW-GF-09: an unrelated, older same-named PDF's schedule doesn't
+        # match this reconstruction's own panel at all) -- the (S) sheet
+        # is unambiguous, so it goes first now.
+        rows, src_name = None, None
+        if s_dxf is not None:
+            rows = extract_schedule_dwg(s_dxf)
+            if rows is not None:
+                src_name = f"{s_dwg.name} paper space"
+        if rows is None:
+            rows = extract_schedule_dwg(dxf)
+            if rows is not None:
+                src_name = f"{name} DWG paper space"
         if rows is None:
             for pdf in find_schedule_pdf(src):
                 rows = extract_schedule(pdf)
@@ -126,17 +160,28 @@ def main(argv=None) -> int:
                     print(f"  dropped {n_dropped} phantom bar(s) at diameters absent "
                           f"from the sheet's own text callouts (no official schedule found)")
 
-        # Itemized per-mark BBS ("Rebar schedule for X", cell-per-line
-        # layout, e.g. a sibling "(S).pdf") lets us complete sleeve-wrap
-        # brackets that geometry-only pairing only ever captures half of --
-        # anchored at the panel's own already-detected real sleeve
-        # positions, not guessed. Symmetric-U rows only (segments
-        # [0, leg, gap, leg, 0]): the standard "wrap a duct" bracket shape
-        # confirmed against the R-sheet's own "U-BAR DETAIL" callout.
+        # Itemized per-mark BBS ("Rebar schedule for X"). Prefer a sibling
+        # "(S).dwg"'s own paper space (`extract_itemized_bbs_dwg`) over PDF
+        # text extraction when one exists -- structured MTEXT cells read
+        # more reliably than pypdf's cell-per-line text dump, and it's the
+        # only source at all for panels with no PDF. Falls back to the PDF
+        # candidates otherwise. Lets us complete sleeve-wrap brackets that
+        # geometry-only pairing only ever captures half of -- anchored at
+        # the panel's own already-detected real sleeve positions, not
+        # guessed. Symmetric-U rows only (segments [0, leg, gap, leg, 0]):
+        # the standard "wrap a duct" bracket shape confirmed against the
+        # R-sheet's own "U-BAR DETAIL" callout.
+        itemized_candidates: list[tuple[str, list]] = []
+        if s_dxf is not None:
+            s_rows = extract_itemized_bbs_dwg(s_dxf)
+            if s_rows is not None:
+                itemized_candidates.append((s_dwg.name, s_rows))
         for pdf in find_schedule_pdf(src):
-            mark_rows = parse_itemized_bbs(pdf)
-            if mark_rows is None:
-                continue
+            pdf_rows = parse_itemized_bbs(pdf)
+            if pdf_rows is not None:
+                itemized_candidates.append((pdf.name, pdf_rows))
+
+        for src_label, mark_rows in itemized_candidates:
             # Only marks with direct visual confirmation (the R-sheet's own
             # "U-BAR DETAIL" callout explicitly names D4/D5 wrapping the
             # sleeve) -- the shape alone ("symmetric U", segments
@@ -151,7 +196,7 @@ def main(argv=None) -> int:
             if sleeve_marks:
                 n_cal = calibrate_sleeve_wraps(panel, sleeve_marks)
                 if n_cal:
-                    print(f"  calibrated {n_cal} sleeve-wrap bar(s) from {pdf.name} "
+                    print(f"  calibrated {n_cal} sleeve-wrap bar(s) from {src_label} "
                           f"(anchored at real detected sleeve positions)")
 
             # "Hook"/edge-cap family length correction: position/count
@@ -163,7 +208,18 @@ def main(argv=None) -> int:
             n_len_fixed = calibrate_edge_caps(panel, edge_cap_marks)
             if n_len_fixed:
                 print(f"  corrected length of {n_len_fixed} edge-cap bar(s) from "
-                      f"{pdf.name} (count already matched a schedule mark exactly)")
+                      f"{src_label} (count already matched a schedule mark exactly)")
+
+            # Same idea, generalized beyond the "hook" kind: a v-mesh/h-
+            # mesh/shape family whose count exactly matches one mark AND
+            # whose members are all suspiciously uniform in length is the
+            # same "one segment of a repeated bent shape measured as the
+            # whole bar" bug, just landing on an ordinary mesh kind this
+            # time (confirmed on PW-GF-09's mark H).
+            n_uniform_fixed = calibrate_uniform_shape_lengths(panel, mark_rows)
+            if n_uniform_fixed:
+                print(f"  corrected length of {n_uniform_fixed} uniform-length bar(s) from "
+                      f"{src_label} (count and uniformity matched a schedule mark exactly)")
 
             # A diameter with real schedule marks but none of them a
             # dowel-bend shape ("M_17A") has no business owning any
@@ -174,7 +230,7 @@ def main(argv=None) -> int:
             n_dowel_dropped = drop_unscheduled_dowels(panel, mark_rows)
             if n_dowel_dropped:
                 print(f"  dropped {n_dowel_dropped} dowel-kind bar(s) at diameters with "
-                      f"no dowel-shaped mark in {pdf.name}")
+                      f"no dowel-shaped mark in {src_label}")
             break
 
         panels.append(panel)
@@ -258,6 +314,47 @@ def main(argv=None) -> int:
             official_tot = sum(r.weight_kg for r in rows)
             print(f"  official schedule ({src_name}): {official_tot:.1f}kg "
                   f"(see {name}_schedule.txt for reconstructed vs official per diameter)")
+
+        # Only sheets literally split into numbered reinforcement parts
+        # ("(R1)", "(R2)", ...) get grouped -- NOT plain "(R)" (a single,
+        # complete sheet needs no combining) and not "(M...)"/"(S)" (a
+        # different sheet type entirely, never sharing the same steel
+        # takeoff as the reinforcement sheets).
+        rm = re.search(r"\(R(\d+)\)$", src.stem)
+        if rm:
+            base = src.stem[:rm.start()]
+            combo_groups.setdefault(base, []).append((name, panel))
+            if rows is not None and base not in combo_official:
+                combo_official[base] = (rows, src_name)
+
+    # R1+R2(+...) combination: sum every sibling sheet's reconstructed
+    # weight per diameter and compare against their ONE shared official
+    # schedule -- confirmed necessary on the PW-GF-05..30 batch, where
+    # each split sheet covers a physically different wing/leg of one
+    # panel (different width/thickness even) and was never going to
+    # individually reach 100% of the combined total; reporting each
+    # sheet's own ratio against the FULL schedule was actively
+    # misleading (R2 sheets routinely read 2-20%, looking like a near-
+    # total loss, when the real combined total is often 70-90%).
+    for base, members in combo_groups.items():
+        if len(members) < 2 or base not in combo_official:
+            continue
+        rows, src_name = combo_official[base]
+        all_bars = [b for _n, p in members for b in p.bars]
+        report = compare_to_bars(rows, all_bars)
+        member_names = ", ".join(n for n, _p in members)
+        header = f"Combined: {member_names}\nOfficial: {src_name}\n\n"
+        (args.out / f"{base}_combined_schedule.txt").write_text(header + report + "\n")
+        official_tot = sum(r.weight_kg for r in rows)
+        recon_tot = sum(b.diameter ** 2 / 162.0 *
+                        sum(((b.points[i + 1][0] - b.points[i][0]) ** 2 +
+                             (b.points[i + 1][1] - b.points[i][1]) ** 2 +
+                             (b.points[i + 1][2] - b.points[i][2]) ** 2) ** 0.5
+                            for i in range(len(b.points) - 1)) / 1000.0
+                        for b in all_bars)
+        print(f"{base}: combined {member_names} = {recon_tot:.1f}kg of official "
+              f"{official_tot:.1f}kg ({100 * recon_tot / official_tot:.0f}%), "
+              f"see {base}_combined_schedule.txt")
 
     write_viewer(panels, args.out / "viewer.html", title="Rebar 3D Reconstruction")
     print(f"viewer: {args.out / 'viewer.html'}")

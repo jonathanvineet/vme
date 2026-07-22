@@ -1,0 +1,10 @@
+Combined: PW-GF-30(R1), PW-GF-30(R2)
+Official: PW-GF-30(R2).pdf
+
+  bar reconstructed   official      gap      %
+T8          160.48k    158.09k   +2.39k   102%
+T10         180.49k    210.88k  -30.39k    86%
+T12           8.30k      6.00k   +2.30k   138%
+T16          19.18k     77.12k  -57.94k    25%
+T20          83.86k     56.42k  +27.44k   149%
+TOTAL       452.31k    508.51k  -56.20k    89%

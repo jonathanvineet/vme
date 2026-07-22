@@ -111,11 +111,20 @@ class MarkRow:
     mark: str
     diameter: int
     shape: str
-    segments: list[float]  # A,B,C,D,E in mm, zeros kept (positional)
+    segments: list[float]  # A,B,C,... in mm, zeros kept (positional) -- 5 or
+                           # more columns depending on the sheet (confirmed
+                           # PW-GF-05 uses A/B/C/D/E/G, 6 columns, not PW-01's
+                           # fixed 5 -- don't assume a fixed count)
     length_mm: float       # one bar
     total_length_mm: float
     qty: int
     weight_kg: float
+    location: str = ""     # e.g. "WALL - 30mm" / "CORBEL - 25mm" cover note,
+                           # when the sheet prints one (DWG paper-space table
+                           # only; not available in the PDF text extraction)
+    part: str = ""         # which sub-schedule this came from, e.g. "A" for
+                           # "Rebar schedule for PW-GF-05(A)" -- a multi-wing
+                           # panel can have several (A)/(B)/(C) sub-tables
 
 
 _MARK_ROW_RE = re.compile(
@@ -152,6 +161,141 @@ def parse_itemized_bbs(pdf_path: Path) -> list[MarkRow] | None:
     return rows or None
 
 
+def extract_itemized_bbs_dwg(dxf_path: Path) -> list[MarkRow] | None:
+    """Read the itemized "Rebar schedule for X" table(s) directly out of the
+    DWG's own paper space, the same way `extract_schedule_dwg` already does
+    for the coarser Summary Schedule -- more reliable than PDF text
+    extraction (no cell-layout guessing) and works even when a panel has no
+    PDF at all.
+
+    Generalizes `parse_itemized_bbs` in two ways the fixed-5-column PDF
+    regex can't: (1) the segment-column count varies by sheet (PW-01 uses
+    A-E, 5 columns; PW-GF-05 uses A/B/C/D/E/G, 6 -- read from the header
+    row itself instead of hardcoding); (2) a panel can carry SEVERAL
+    itemized sub-schedules on one sheet (confirmed on PW-GF-05: three
+    separate "Rebar schedule for PW-GF-05(A)/(B)/(C)" tables, one per
+    physical wing of a multi-part panel) -- every "Rebar schedule for"
+    title on the sheet is parsed, tagged with its own `part` suffix.
+
+    Also captures each row's location/cover annotation ("WALL - 30mm",
+    "CORBEL - 25mm") when the sheet prints one, off to the right of the
+    table at the same row height -- real, useful context (which bars are
+    corbel steel vs wall steel) that the PDF text extraction path has no
+    equivalent for at all.
+    """
+    import ezdxf
+
+    try:
+        doc = ezdxf.readfile(str(dxf_path))
+    except IOError:
+        return None
+
+    all_rows: list[MarkRow] = []
+    for lname in doc.layout_names():
+        if lname.lower() == "model":
+            continue
+        items = []
+        for e in doc.layout(lname):
+            if e.dxftype() not in ("MTEXT", "TEXT"):
+                continue
+            s = (e.plain_text() if e.dxftype() == "MTEXT" else e.dxf.text).strip()
+            if s:
+                items.append((s, e.dxf.insert.x, e.dxf.insert.y))
+        titles = [(s, x, y) for s, x, y in items if s.startswith("Rebar schedule for")]
+        if not titles:
+            continue
+
+        for title, tx, ty in titles:
+            m = re.search(r"\(([A-Za-z0-9]+)\)\s*$", title)
+            part = m.group(1) if m else ""
+            # header row: nearest "Schedule Mark" cell below the title
+            hdr_y = hdr_x = None
+            for s, x, y in items:
+                if s == "Schedule Mark" and y <= ty + 5:
+                    if hdr_y is None or y > hdr_y:
+                        hdr_y, hdr_x = y, x
+            if hdr_y is None:
+                continue
+            header = sorted(((s, x) for s, x, y in items if abs(y - hdr_y) < 2.0),
+                            key=lambda c: c[1])
+            labels = [s for s, _x in header]
+            if "Shape" not in labels or "Bar Length" not in labels or "Weight" not in labels:
+                continue
+            # title-block/annotation cells elsewhere on the sheet can share
+            # a near-identical Y by coincidence (confirmed: a "<panel>-BBS"
+            # title cell landed 0.5 units from one header row) -- truncate
+            # at the table's own last real column instead of trusting
+            # whatever else this Y-tolerance swept in.
+            header = header[:labels.index("Weight") + 1]
+            labels = labels[:labels.index("Weight") + 1]
+            seg_labels = labels[labels.index("Shape") + 1:labels.index("Bar Length")]
+            n_seg = len(seg_labels)
+            n_cols = len(labels)
+            weight_x = header[labels.index("Weight")][1]
+            col_width = (weight_x - hdr_x) / max(n_cols - 1, 1)
+            # location annotations (if the sheet prints them, e.g. "WALL -
+            # 30mm" / "CORBEL - 25mm") sit further right of the table than
+            # first assumed -- confirmed directly on PW-GF-05's own "A1"
+            # row: "CORBEL" at weight_x+109, "- 25mm" at weight_x+155, well
+            # past a first, too-tight col_width*3 bound that caught nothing
+            # real at all. Bounded well short of the title block's own
+            # static text (a fixed one-off label elsewhere on the sheet,
+            # not printed per-row, so it only risks colliding with a data
+            # row that coincidentally shares its exact Y -- confirmed this
+            # doesn't happen on the rows actually checked).
+            loc_x_lo, loc_x_hi = weight_x + col_width * 0.3, weight_x + col_width * 9.0
+
+            # data rows anchored on the mark column specifically (its own
+            # X, +-1/3 column width) -- using ANY nearby-Y text as a row
+            # anchor double-counted rows whose location annotation sat at
+            # a slightly different Y than the row's own numeric cells.
+            mark_x = hdr_x
+            mark_ys = sorted({y for s, x, y in items
+                              if abs(x - mark_x) < col_width * 0.4 and y < hdr_y - 1},
+                             reverse=True)
+            for y in mark_ys:
+                cells = sorted(((s, x) for s, x, yy in items if abs(yy - y) < 2.0),
+                               key=lambda c: c[1])
+                table_cells = [(s, x) for s, x in cells if x < weight_x + col_width * 0.3]
+                extra = [(s, x) for s, x in cells if loc_x_lo <= x <= loc_x_hi]
+                if len(table_cells) < n_cols:
+                    continue
+                vals = [s for s, _x in table_cells[:n_cols]]
+                mark = vals[0]
+                if not re.match(r"^[A-Za-z]\w*\d*$", mark):
+                    continue
+                if not vals[1].endswith(" mm"):
+                    continue
+                try:
+                    dia = int(float(vals[1][:-3]))
+                    segs = [float(v[:-3]) for v in vals[3:3 + n_seg]]
+                    length_mm = float(vals[3 + n_seg][:-3])
+                    total_mm = float(vals[4 + n_seg][:-3])
+                    qty = int(vals[5 + n_seg])
+                    wt = float(vals[6 + n_seg][:-3]) if vals[6 + n_seg].endswith("kg") \
+                        else float(vals[6 + n_seg])
+                except (ValueError, IndexError):
+                    continue
+                # Only accept the specific known location-keyword vocabulary
+                # this drawing set actually uses ("WALL", "CORBEL", ...)
+                # plus its own "- Nmm" cover continuation -- a bare X-range
+                # window alone also swept in unrelated same-row-Y
+                # coincidences (title block job numbers, shape-image
+                # labels like "M_17A", revision-table text) that have
+                # nothing to do with the bar's real location.
+                loc_word_re = re.compile(r"^(WALL|CORBEL|MOULD|FACE|SLAB|BEAM|COLUMN)$", re.IGNORECASE)
+                loc_cover_re = re.compile(r"^-?\s*\d+\s*mm$", re.IGNORECASE)
+                loc_parts = [s for s, _x in extra
+                            if loc_word_re.match(s.strip()) or loc_cover_re.match(s.strip())]
+                location = " ".join(loc_parts)
+                all_rows.append(MarkRow(
+                    mark=mark, diameter=dia, shape=vals[2],
+                    segments=segs, length_mm=length_mm, total_length_mm=total_mm,
+                    qty=qty, weight_kg=wt, location=location, part=part,
+                ))
+    return all_rows or None
+
+
 def find_schedule_pdf(dwg_path: Path) -> list[Path]:
     """Candidate schedule PDFs beside a given DWG, tolerating a stray space
     before the extension seen in this drawing set (e.g. "PW-GF-02(R) .pdf")
@@ -164,18 +308,53 @@ def find_schedule_pdf(dwg_path: Path) -> list[Path]:
     elevation PDF vs. a separate (S) schedule-only PDF).
     """
     exact = list(dwg_path.parent.glob(f"{dwg_path.stem}*.pdf"))
-    if exact:
-        return exact
     dwg_core = re.sub(r"\([^)]*\)\s*$", "", dwg_path.stem).strip()
-    if not dwg_core:
-        return []
     candidates = []
-    for p in dwg_path.parent.glob("*.pdf"):
-        pdf_core = re.sub(r"\([^)]*\)\s*$", "", p.stem).strip()
-        if pdf_core and dwg_core.startswith(pdf_core):
-            candidates.append(p)
-    candidates.sort(key=lambda p: -len(re.sub(r"\([^)]*\)\s*$", "", p.stem).strip()))
-    return candidates
+    if dwg_core:
+        for p in dwg_path.parent.glob("*.pdf"):
+            pdf_core = re.sub(r"\([^)]*\)\s*$", "", p.stem).strip()
+            if pdf_core and dwg_core.startswith(pdf_core):
+                candidates.append(p)
+        # Same-core-length ties (e.g. "(R) .pdf" vs "(S).pdf", both just
+        # "PW-GF-09" once parens are stripped) used to fall through to
+        # arbitrary filesystem glob order -- confirmed picking the WRONG
+        # one on PW-GF-09: its "(R) .pdf" is a genuinely different, OLDER
+        # document (373.57kg, dated ~2 months earlier) than the current
+        # batch's own "(S).pdf" (328.89kg) -- two real, different
+        # revisions of the same panel coexist in this drawing set, not
+        # duplicates. A same-batch sibling's file mtime lands within
+        # seconds of the source DWG's own (confirmed: the whole PW-GF-05
+        # ..31 batch is stamped to the same minute); an older/newer
+        # revision's is months off. Rank by mtime proximity to the DWG
+        # first -- the right revision, not just "any schedule-shaped
+        # file" -- then break remaining ties (rare) toward "(S)" as this
+        # set's own naming convention for "the schedule sheet".
+        try:
+            dwg_mtime = dwg_path.stat().st_mtime
+        except OSError:
+            dwg_mtime = 0.0
+
+        def is_schedule_named(p: Path) -> int:
+            return 0 if re.search(r"\(S\)\s*$", p.stem, re.IGNORECASE) else 1
+        candidates.sort(key=lambda p: (
+            -len(re.sub(r"\([^)]*\)\s*$", "", p.stem).strip()),
+            abs(p.stat().st_mtime - dwg_mtime) if dwg_mtime else 0,
+            is_schedule_named(p),
+        ))
+    # Exact-stem matches first (most likely to be the right sheet), but
+    # NEVER return only those and stop -- confirmed on the PW-GF-05..31
+    # batch: a same-stem sibling PDF regularly exists (e.g. "(R1).pdf")
+    # but is the reinforcement drawing itself, carrying no Summary
+    # Schedule table at all; the real schedule lives in a separate
+    # "(S).pdf" that only the broader core-prefix search below finds. An
+    # early return on `exact` alone silently starved the whole batch of
+    # their real official schedule. Callers already try every candidate
+    # in order and use the first that actually parses a table, so
+    # returning the full combined list (exact matches ranked first) is
+    # strictly safer than returning either alone.
+    seen = set(exact)
+    ordered = list(exact) + [p for p in candidates if p not in seen]
+    return ordered
 
 
 def compare_to_bars(rows: list[ScheduleRow], bars) -> str:

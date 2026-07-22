@@ -1346,6 +1346,61 @@ def calibrate_edge_caps(panel: "Panel", marks: list[tuple[int, int, float]]) -> 
     return n_fixed
 
 
+def calibrate_uniform_shape_lengths(panel: "Panel", marks: list) -> int:
+    """Correct a bar family's LENGTH using a schedule mark's own stated
+    length, generalizing `calibrate_edge_caps` beyond the "hook" kind.
+
+    Confirmed on PW-GF-09: mark H (11x T12, official 1150mm, bent shape
+    "M_T1") -- reconstruction finds exactly 11 v-mesh bars of that
+    diameter, matching the count precisely, but all at a suspiciously
+    UNIFORM 238mm (21% of the real length) -- the signature of "one
+    small segment of a repeated bent shape got measured as if it were
+    the whole bar" (same root cause class as the hook-family length bug,
+    just landing on a different `kind` this time since the fragment
+    happened to pair as ordinary mesh rather than get tagged "hook").
+
+    Deliberately much narrower than `calibrate_edge_caps` because "kind"
+    here is unrestricted (v-mesh/h-mesh are the most common, generic bar
+    kinds in this whole codebase, unlike "hook" which only ever comes
+    from one specific synthesis path) -- an exact count match ALONE is
+    not enough evidence to safely rescale a v-mesh/h-mesh group; a real,
+    ordinary mesh family can easily share a diameter+count with an
+    unrelated schedule mark by coincidence. Additionally requires every
+    bar in the candidate group to already be near-identical in length
+    (the fragment-of-a-repeated-shape signature) -- genuine mesh rows
+    vary in length (openings, notches, edge trims), so a tight, uniform
+    cluster is real evidence this is one shape measured wrong, not a
+    coincidence. `mark.mark` is also required to NOT be a straight shape
+    (M_00) -- a real straight bar's short uniform length is probably
+    just short, correcting it would be a guess, not a fix.
+    """
+    n_fixed = 0
+    for m in marks:
+        sdia = snap_diameter(m.diameter)
+        if sdia is None or m.qty <= 0 or m.shape.strip().upper() == "M_00":
+            continue
+        for kind in ("v-mesh", "h-mesh", "shape"):
+            group = [b for b in panel.bars if b.kind == kind and b.diameter == sdia]
+            if len(group) != m.qty:
+                continue
+            lens = [math.dist(b.points[0], b.points[-1]) for b in group]
+            if not lens or max(lens) < 1.0:
+                continue
+            spread = (max(lens) - min(lens)) / max(lens)
+            if spread > 0.05:  # not a uniform cluster -- real mesh variation
+                continue
+            if abs(m.length_mm - lens[0]) < 0.05 * m.length_mm:
+                continue  # already close enough, not the bug this targets
+            for b, cur_len in zip(group, lens):
+                if cur_len < 1.0:
+                    continue
+                p0, p1 = b.points[0], b.points[-1]
+                scale = m.length_mm / cur_len
+                b.points = [p0, tuple(p0[k] + (p1[k] - p0[k]) * scale for k in range(3))]
+                n_fixed += 1
+    return n_fixed
+
+
 def drop_unscheduled_dowels(panel: "Panel", mark_rows: list) -> int:
     """Drop face-dowel bars at a diameter with no real dowel-shaped mark in
     the itemized BBS -- a real, general, schedule-grounded fix for the

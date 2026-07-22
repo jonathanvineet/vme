@@ -1,0 +1,11 @@
+callout                      expected  found   nearest  status
+-(15)-T8 U Bar@350 mm              15      8     887mm  SHORT
+-(15)-T8 U Bar@350 mm              15     10     315mm  SHORT
+-(1) -(T20 DOWEL BAR)               1      1    1321mm  OK
+-(2)-T10                            2      3     437mm  OVER
+-(1)-T16                            1      4     894mm  OVER
+-(1)-T16                            1      4     575mm  OVER
+-(1)-T16                            1      4     860mm  OVER
+-(6)-T8@200 mm                      6     10     390mm  OVER
+-(3)-T16                            3      9     635mm  OVER
+-(2)-T16                            2      9     618mm  OVER

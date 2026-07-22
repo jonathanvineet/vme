@@ -1,0 +1,32 @@
+callout                      expected  found   nearest  status
+-(53)-T8@175 mm                    53     13     906mm  SHORT
+-(53)-T8@175 mm                    53     13     921mm  SHORT
+-(52)-T8 U Bar@175 mm              52     16     902mm  SHORT
+-(46)-T8@200 mm                    46     16     915mm  SHORT
+-(52)-T8 U Bar@175 mm              52     26     241mm  SHORT
+-(23)-T10@100 mm                   23      0         -  SHORT
+-(23)-T10@100 mm                   23      0         -  SHORT
+-(46)-T8@200 mm                    46     26     238mm  SHORT
+-(12) -(T10)                       12      3     484mm  SHORT
+-(4) -(T16)                         4      0         -  SHORT
+-(3) -(T20 DOWEL BAR)               3      0         -  SHORT
+-(3) -(T16)                         3      0         -  SHORT
+-(3) -(T16)                         3      0         -  SHORT
+-(1) -(T20 DOWEL BAR)               1      0         -  SHORT
+-(9)-T8@100 mm                      9      8     331mm  SHORT
+-(9)-T8@100 mm                      9      8     351mm  SHORT
+-(2) -(T16 Perimeter Bar)           2      2     353mm  OK
+-(2) -(T16 Perimeter Bar)           2      2     316mm  OK
+-(2) -(T16 Perimeter Bar)           2      2    1030mm  OK
+-(2) -(T12)                         2      2     920mm  OK
+-(21) -(T8 U Bar)                  21     21     179mm  OK
+-(11)-T12@100 mm                   11     11     304mm  OK
+-(2) -(T20)                         2      2     396mm  OK
+-(1) -(T20 DOWEL)                   1      2     684mm  OVER
+-(1) -(T20 DOWEL)                   1      2     940mm  OVER
+-(2) -(T25)                         2      3     481mm  OVER
+-(3) -(T16)                         3      6     491mm  OVER
+-(21) -(T8 U Bar)                  21     25     607mm  OVER
+-(2) -(T16)                         2      6     533mm  OVER
+-(2) -(T16 Perimeter Bar)           2      6     474mm  OVER
+-(12) -(T8)                        12     25     329mm  OVER
