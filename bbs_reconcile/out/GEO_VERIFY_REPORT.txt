@@ -1,0 +1,182 @@
+==============================================================================
+PANEL PW-GF-01 -- schedule vs MEASURED GEOMETRY (from R)
+==============================================================================
+S sheet: /Users/jonathan/elco/vme/DRAWINGS/PW-GF-01(S).dwg
+R sheet(s): PW-GF-01(R).dwg
+
+    dia |  S qty  S len(m)  S wt(kg) |  G count  G len(m)  G wt(kg)  z-meas |  count Δ%    wt Δ%  flag
+  T   8 |    344    352.43    139.24 |      282    159.32     62.94     280 |      -18%     -55%  <-- geometry weight off by >55%
+  T  10 |      3      4.28      2.64 |        3      0.72      0.44       0 |       +0%     -83%  <-- geometry weight off by >83%
+  T  12 |     56    296.80    263.84 |       60    265.00    235.55      58 |       +7%     -11%  
+  T  16 |      8     46.70     73.80 |        8     37.89     59.88       6 |       +0%     -19%  
+  T  20 |     10     35.10     86.67 |        7      6.82     16.83       6 |      -30%     -81%  <-- geometry weight off by >81%
+
+  GRAND TOTAL: S=566.19kg  measured-geometry=375.65kg  delta=-33.7%
+  3 diameter(s) flagged as significantly mismatched
+
+==============================================================================
+PANEL PW-GF-02 -- schedule vs MEASURED GEOMETRY (from R)
+==============================================================================
+S sheet: /Users/jonathan/elco/vme/DRAWINGS/PW-GF-02(S).dwg
+R sheet(s): PW-GF-02(R).dwg
+
+    dia |  S qty  S len(m)  S wt(kg) |  G count  G len(m)  G wt(kg)  z-meas |  count Δ%    wt Δ%  flag
+  T   8 |    328    271.95    107.45 |      364    212.99     84.15     364 |      +11%     -22%  
+  T  10 |      3      5.55      3.43 |        2      3.82      2.36       2 |      -33%     -31%  <-- geometry weight off by >31%
+  T  12 |     34    161.05    143.17 |       23     57.43     51.05      20 |      -32%     -64%  <-- geometry weight off by >64%
+  T  16 |      8     43.60     68.90 |       24     24.08     38.06       7 |     +200%     -45%  <-- geometry weight off by >45%
+  T  20 |      2     18.80     46.42 |        2      1.63      4.02       0 |       +0%     -91%  <-- geometry weight off by >91%
+
+  GRAND TOTAL: S=369.37kg  measured-geometry=179.63kg  delta=-51.4%
+  4 diameter(s) flagged as significantly mismatched
+
+==============================================================================
+PANEL PW-GF-05 -- schedule vs MEASURED GEOMETRY (from R)
+==============================================================================
+S sheet: /Users/jonathan/elco/vme/DRAWINGS/PW-GF-05(S).dwg
+R sheet(s): PW-GF-05(R1).dwg, PW-GF-05(R2).dwg
+
+    dia |  S qty  S len(m)  S wt(kg) |  G count  G len(m)  G wt(kg)  z-meas |  count Δ%    wt Δ%  flag
+  T   8 |    284    297.23    117.44 |      303    114.07     45.06     211 |       +7%     -62%  <-- geometry weight off by >62%
+  T  10 |     28    126.15     77.88 |       26     83.70     51.67       0 |       -7%     -34%  <-- geometry weight off by >34%
+  T  16 |     30    104.62    165.34 |       40     53.62     84.73       0 |      +33%     -49%  <-- geometry weight off by >49%
+  T  20 |      2      4.72     11.67 |        2      1.52      3.76       0 |       +0%     -68%  <-- geometry weight off by >68%
+  T  25 |      4      8.75     33.76 |        5      6.76     26.10       0 |      +25%     -23%  
+
+  GRAND TOTAL: S=406.09kg  measured-geometry=211.32kg  delta=-48.0%
+  4 diameter(s) flagged as significantly mismatched
+
+==============================================================================
+PANEL PW-GF-06 -- schedule vs MEASURED GEOMETRY (from R)
+==============================================================================
+S sheet: /Users/jonathan/elco/vme/DRAWINGS/PW-GF-06(S).dwg
+R sheet(s): PW-GF-06(R).dwg
+
+    dia |  S qty  S len(m)  S wt(kg) |  G count  G len(m)  G wt(kg)  z-meas |  count Δ%    wt Δ%  flag
+  T   8 |    287    361.05    142.65 |      477    286.68    113.26     431 |      +66%     -21%  
+  T  10 |      7     11.38      7.02 |        8      8.40      5.19       2 |      +14%     -26%  <-- geometry weight off by >26%
+  T  12 |      2      1.65      1.47 |        2      1.61      1.43       0 |       +0%      -3%  
+  T  16 |     19     64.40    101.78 |       21     21.08     33.31       4 |      +11%     -67%  <-- geometry weight off by >67%
+  T  20 |      3     13.55     33.46 |        5     10.98     27.12       0 |      +67%     -19%  
+  T  25 |      4      7.40     28.55 |        3      3.87     14.93       0 |      -25%     -48%  <-- geometry weight off by >48%
+
+  GRAND TOTAL: S=314.93kg  measured-geometry=195.24kg  delta=-38.0%
+  3 diameter(s) flagged as significantly mismatched
+
+==============================================================================
+PANEL PW-GF-07 -- schedule vs MEASURED GEOMETRY (from R)
+==============================================================================
+S sheet: /Users/jonathan/elco/vme/DRAWINGS/PW-GF-07(S).dwg
+R sheet(s): PW-GF-07(R).dwg
+
+    dia |  S qty  S len(m)  S wt(kg) |  G count  G len(m)  G wt(kg)  z-meas |  count Δ%    wt Δ%  flag
+  T   8 |    226    379.25    149.84 |      257    276.04    109.05     257 |      +14%     -27%  <-- geometry weight off by >27%
+  T  10 |     10     22.50     13.89 |       11      3.38      2.08       0 |      +10%     -85%  <-- geometry weight off by >85%
+  T  12 |      5      9.57      8.51 |        5      7.88      7.00       4 |       +0%     -18%  
+  T  16 |      8     34.20     54.05 |        8     15.35     24.25       4 |       +0%     -55%  <-- geometry weight off by >55%
+  T  20 |      5     18.27     45.13 |        7     14.82     36.60       4 |      +40%     -19%  
+
+  GRAND TOTAL: S=271.42kg  measured-geometry=178.99kg  delta=-34.1%
+  3 diameter(s) flagged as significantly mismatched
+
+==============================================================================
+PANEL PW-GF-08 -- schedule vs MEASURED GEOMETRY (from R)
+==============================================================================
+S sheet: /Users/jonathan/elco/vme/DRAWINGS/PW-GF-08(S).dwg
+R sheet(s): PW-GF-08(R1).dwg, PW-GF-08(R2).dwg
+
+    dia |  S qty  S len(m)  S wt(kg) |  G count  G len(m)  G wt(kg)  z-meas |  count Δ%    wt Δ%  flag
+  T   8 |    275    408.98    161.59 |      227    234.63     92.69     170 |      -17%     -43%  <-- geometry weight off by >43%
+  T  10 |     11     24.75     15.28 |       14      8.08      4.99       0 |      +27%     -67%  <-- geometry weight off by >67%
+  T  12 |     15     20.93     18.61 |       10      9.57      8.50       4 |      -33%     -54%  <-- geometry weight off by >54%
+  T  16 |     23     65.50    103.52 |       20     21.87     34.56       1 |      -13%     -67%  <-- geometry weight off by >67%
+  T  20 |      9     25.68     63.40 |        9     10.00     24.70       0 |       +0%     -61%  <-- geometry weight off by >61%
+  T  25 |      2      5.20     20.06 |        5      0.97      3.74       0 |     +150%     -81%  <-- geometry weight off by >81%
+
+  GRAND TOTAL: S=382.46kg  measured-geometry=169.19kg  delta=-55.8%
+  6 diameter(s) flagged as significantly mismatched
+
+==============================================================================
+PANEL PW-GF-09 -- schedule vs MEASURED GEOMETRY (from R)
+==============================================================================
+S sheet: /Users/jonathan/elco/vme/DRAWINGS/PW-GF-09(S).dwg
+R sheet(s): PW-GF-09(R).dwg, PW-GF-09(R1).dwg, PW-GF-09(R2).dwg
+
+    dia |  S qty  S len(m)  S wt(kg) |  G count  G len(m)  G wt(kg)  z-meas |  count Δ%    wt Δ%  flag
+  T   8 |    250    314.70    124.34 |      862    406.82    160.72     648 |     +245%     +29%  <-- geometry weight off by >29%
+  T  10 |      7     15.75      9.72 |       31     15.55      9.60      25 |     +343%      -1%  
+  T  12 |     15     17.10     15.21 |       35     43.43     38.60      25 |     +133%    +154%  <-- geometry weight off by >154%
+  T  16 |     21     73.60    116.34 |       74     60.24     95.20      22 |     +252%     -18%  
+  T  20 |      7     17.60     43.46 |        6      7.82     19.31       0 |      -14%     -56%  <-- geometry weight off by >56%
+  T  25 |      2      5.15     19.87 |        7      3.19     12.30       0 |     +250%     -38%  <-- geometry weight off by >38%
+
+  GRAND TOTAL: S=328.94kg  measured-geometry=335.73kg  delta=+2.1%
+  4 diameter(s) flagged as significantly mismatched
+
+==============================================================================
+PANEL PW-GF-11 -- schedule vs MEASURED GEOMETRY (from R)
+==============================================================================
+S sheet: /Users/jonathan/elco/vme/DRAWINGS/PW-GF-11(S).dwg
+R sheet(s): PW-GF-11(R1).dwg, PW-GF-11(R2).dwg
+
+    dia |  S qty  S len(m)  S wt(kg) |  G count  G len(m)  G wt(kg)  z-meas |  count Δ%    wt Δ%  flag
+  T   8 |    404    496.27    196.07 |      535    371.54    146.78     461 |      +32%     -25%  <-- geometry weight off by >25%
+  T  10 |     58    441.25    272.40 |       55    365.71    225.75       0 |       -5%     -17%  
+  T  12 |     15     21.55     19.16 |        9      9.80      8.71       4 |      -40%     -55%  <-- geometry weight off by >55%
+  T  16 |     23     81.80    129.28 |       18     31.44     49.68       4 |      -22%     -62%  <-- geometry weight off by >62%
+  T  20 |      9     31.93     78.84 |       15     32.23     79.57       0 |      +67%      +1%  
+  T  25 |      2      5.15     19.87 |       10      3.31     12.78       0 |     +400%     -36%  <-- geometry weight off by >36%
+
+  GRAND TOTAL: S=715.62kg  measured-geometry=523.28kg  delta=-26.9%
+  4 diameter(s) flagged as significantly mismatched
+
+==============================================================================
+PANEL PW-GF-18 -- schedule vs MEASURED GEOMETRY (from R)
+==============================================================================
+S sheet: /Users/jonathan/elco/vme/DRAWINGS/PW-GF-18(S).dwg
+R sheet(s): PW-GF-18(R).dwg
+
+    dia |  S qty  S len(m)  S wt(kg) |  G count  G len(m)  G wt(kg)  z-meas |  count Δ%    wt Δ%  flag
+  T   8 |    250    310.90    122.84 |      296    182.24     72.00     294 |      +18%     -41%  <-- geometry weight off by >41%
+  T  10 |      7     15.75      9.72 |        7      3.94      2.43       0 |       +0%     -75%  <-- geometry weight off by >75%
+  T  12 |      4      4.50      4.00 |        3      3.31      2.94       3 |      -25%     -26%  <-- geometry weight off by >26%
+  T  16 |     17     66.00    104.30 |       32     29.93     47.29      19 |      +88%     -55%  <-- geometry weight off by >55%
+  T  20 |      3     10.15     25.06 |        5      8.21     20.27       3 |      +67%     -19%  
+
+  GRAND TOTAL: S=265.92kg  measured-geometry=144.93kg  delta=-45.5%
+  4 diameter(s) flagged as significantly mismatched
+
+==============================================================================
+PANEL PW-GF-25 -- schedule vs MEASURED GEOMETRY (from R)
+==============================================================================
+S sheet: /Users/jonathan/elco/vme/DRAWINGS/PW-GF-25(S).dwg
+R sheet(s): PW-GF-25(R).dwg
+
+    dia |  S qty  S len(m)  S wt(kg) |  G count  G len(m)  G wt(kg)  z-meas |  count Δ%    wt Δ%  flag
+  T   8 |    227    294.25    116.26 |      262    173.09     68.38     257 |      +15%     -41%  <-- geometry weight off by >41%
+  T  10 |      2      2.10      1.30 |        0      0.00      0.00       0 |     -100%    -100%  <-- NO geometry found at all for this diameter
+  T  16 |     17     60.00     94.82 |       30     35.97     56.84      17 |      +76%     -40%  <-- geometry weight off by >40%
+  T  20 |      3     14.22     35.13 |        3      5.78     14.26       1 |       +0%     -59%  <-- geometry weight off by >59%
+
+  GRAND TOTAL: S=247.51kg  measured-geometry=139.48kg  delta=-43.6%
+  4 diameter(s) flagged as significantly mismatched
+
+==============================================================================
+PANEL PW-GF-26 -- schedule vs MEASURED GEOMETRY (from R)
+==============================================================================
+S sheet: /Users/jonathan/elco/vme/DRAWINGS/PW-GF-26(S).dwg
+R sheet(s): PW-GF-26(R).dwg
+
+    dia |  S qty  S len(m)  S wt(kg) |  G count  G len(m)  G wt(kg)  z-meas |  count Δ%    wt Δ%  flag
+  T   8 |    219    320.68    126.70 |      245    255.63    100.99     240 |      +12%     -20%  
+  T  16 |      8     32.30     51.05 |       14     23.32     36.85       6 |      +75%     -28%  <-- geometry weight off by >28%
+  T  20 |      4     16.25     40.13 |        6     10.53     25.99       4 |      +50%     -35%  <-- geometry weight off by >35%
+
+  GRAND TOTAL: S=217.88kg  measured-geometry=163.83kg  delta=-24.8%
+  2 diameter(s) flagged as significantly mismatched
+
+==============================================================================
+PANEL PW-GF-27 -- schedule vs MEASURED GEOMETRY (from R)
+==============================================================================
+ERROR: PW-GF-27(S).dwg has no itemized schedule rows
+

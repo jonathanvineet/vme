@@ -1,0 +1,94 @@
+======================================================================
+PANEL PW-GF-01 — internal arithmetic check
+======================================================================
+Rows checked: 15, tallying cleanly: 15
+  All rows: qty x bar_length = total_length, and total_length x (d^2/162) = weight. CLEAN.
+  Per-diameter row sums match the Summary Schedule lines exactly. CLEAN.
+  Summary Schedule per-diameter lines sum to its own grand total. CLEAN.
+
+======================================================================
+PANEL PW-GF-02 — internal arithmetic check
+======================================================================
+Rows checked: 14, tallying cleanly: 14
+  All rows: qty x bar_length = total_length, and total_length x (d^2/162) = weight. CLEAN.
+  Per-diameter row sums match the Summary Schedule lines exactly. CLEAN.
+  Summary Schedule per-diameter lines sum to its own grand total. CLEAN.
+
+======================================================================
+PANEL PW-GF-05 — internal arithmetic check
+======================================================================
+Rows checked: 35, tallying cleanly: 35
+  All rows: qty x bar_length = total_length, and total_length x (d^2/162) = weight. CLEAN.
+  Per-diameter row sums match the Summary Schedule lines exactly. CLEAN.
+  Summary Schedule per-diameter lines sum to its own grand total. CLEAN.
+
+======================================================================
+PANEL PW-GF-06 — internal arithmetic check
+======================================================================
+Rows checked: 28, tallying cleanly: 28
+  All rows: qty x bar_length = total_length, and total_length x (d^2/162) = weight. CLEAN.
+  Per-diameter row sums match the Summary Schedule lines exactly. CLEAN.
+  Summary Schedule per-diameter lines sum to its own grand total. CLEAN.
+
+======================================================================
+PANEL PW-GF-07 — internal arithmetic check
+======================================================================
+Rows checked: 17, tallying cleanly: 17
+  All rows: qty x bar_length = total_length, and total_length x (d^2/162) = weight. CLEAN.
+  Per-diameter row sums match the Summary Schedule lines exactly. CLEAN.
+  Summary Schedule per-diameter lines sum to its own grand total. CLEAN.
+
+======================================================================
+PANEL PW-GF-08 — internal arithmetic check
+======================================================================
+Rows checked: 26, tallying cleanly: 26
+  All rows: qty x bar_length = total_length, and total_length x (d^2/162) = weight. CLEAN.
+  Per-diameter row sums match the Summary Schedule lines exactly. CLEAN.
+  Summary Schedule per-diameter lines sum to its own grand total. CLEAN.
+
+======================================================================
+PANEL PW-GF-09 — internal arithmetic check
+======================================================================
+Rows checked: 31, tallying cleanly: 31
+  All rows: qty x bar_length = total_length, and total_length x (d^2/162) = weight. CLEAN.
+  Per-diameter row sums match the Summary Schedule lines exactly. CLEAN.
+  Summary Schedule per-diameter lines sum to its own grand total. CLEAN.
+
+======================================================================
+PANEL PW-GF-11 — internal arithmetic check
+======================================================================
+Rows checked: 24, tallying cleanly: 24
+  All rows: qty x bar_length = total_length, and total_length x (d^2/162) = weight. CLEAN.
+  Per-diameter row sums match the Summary Schedule lines exactly. CLEAN.
+  Summary Schedule per-diameter lines sum to its own grand total. CLEAN.
+
+======================================================================
+PANEL PW-GF-18 — internal arithmetic check
+======================================================================
+Rows checked: 28, tallying cleanly: 28
+  All rows: qty x bar_length = total_length, and total_length x (d^2/162) = weight. CLEAN.
+  Per-diameter row sums match the Summary Schedule lines exactly. CLEAN.
+  Summary Schedule per-diameter lines sum to its own grand total. CLEAN.
+
+======================================================================
+PANEL PW-GF-25 — internal arithmetic check
+======================================================================
+Rows checked: 25, tallying cleanly: 25
+  All rows: qty x bar_length = total_length, and total_length x (d^2/162) = weight. CLEAN.
+  Per-diameter row sums match the Summary Schedule lines exactly. CLEAN.
+  Summary Schedule per-diameter lines sum to its own grand total. CLEAN.
+
+======================================================================
+PANEL PW-GF-26 — internal arithmetic check
+======================================================================
+Rows checked: 13, tallying cleanly: 13
+  All rows: qty x bar_length = total_length, and total_length x (d^2/162) = weight. CLEAN.
+  Per-diameter row sums match the Summary Schedule lines exactly. CLEAN.
+  Summary Schedule per-diameter lines sum to its own grand total. CLEAN.
+
+======================================================================
+PANEL PW-GF-27 — internal arithmetic check
+======================================================================
+SKIPPED: no schedule table in (S) file
+
+RESULT: ALL PANELS CLEAN

@@ -1,0 +1,43 @@
+======================================================================
+PANEL PW-GF-07
+======================================================================
+S sheet: /Users/jonathan/elco/vme/DRAWINGS/PW-GF-07(S).dwg
+R sheet(s): PW-GF-07(R).dwg
+
+-- Itemized schedule (from S, exact) --
+  [PW-GF-07(A)]
+        A  T8   qty=30   len=   2075mm  total=    62250mm  wt=  24.59kg
+       A1  T8   qty=30   len=   2100mm  total=    63000mm  wt=  24.89kg
+       A2  T8   qty=12   len=   5000mm  total=    60000mm  wt=  23.71kg
+       A3  T8   qty=11   len=   5050mm  total=    55550mm  wt=  21.95kg
+        B  T8   qty=26   len=    875mm  total=    22750mm  wt=   8.99kg
+       B1  T8   qty=22   len=    900mm  total=    19800mm  wt=   7.82kg
+       B2  T8   qty=59   len=    900mm  total=    53100mm  wt=  20.98kg
+        C  T8   qty=10   len=   1225mm  total=    12250mm  wt=   4.84kg
+        D  T12  qty=3    len=   1875mm  total=     5625mm  wt=   5.00kg
+       D1  T12  qty=2    len=   1975mm  total=     3950mm  wt=   3.51kg
+        E  T16  qty=4    len=   5000mm  total=    20000mm  wt=  31.61kg
+        F  T16  qty=2    len=   3525mm  total=     7050mm  wt=  11.14kg
+       F1  T16  qty=2    len=   3575mm  total=     7150mm  wt=  11.30kg
+        G  T20  qty=3    len=   2025mm  total=     6075mm  wt=  15.00kg
+  [PW-GF-07(B)]
+        H  T8   qty=26   len=   1175mm  total=    30550mm  wt=  12.07kg
+        I  T10  qty=10   len=   2250mm  total=    22500mm  wt=  13.89kg
+  [PW-GF-07(C)]
+        J  T20  qty=2    len=   6100mm  total=    12200mm  wt=  30.13kg
+
+-- Per-diameter: S schedule vs R callout evidence --
+    dia   S qty   S wt(kg) | R Ncallout-sum R instances R pitch-callouts  notes
+  T   8     226     149.84 |            567          29                7  @200 mm; Horizontal Bar@175 mm; U Bar; U Bar@175 mm; U Bar@200 mm; Vertical Bar@200 mm
+  T  10      10      13.89 |             30           3                1  @200 mm
+  T  12       5       8.51 |              6           4                0  
+  T  16       8      54.05 |             20          10                0  PERIMETER BAR
+  T  20       5      45.13 |             13           7                0  DOWEL BAR
+
+-- Summary Schedule (from S, panel's own authoritative total) --
+            T8  total_len=   379250mm  weight=  149.84kg
+           T10  total_len=    22500mm  weight=   13.89kg
+           T12  total_len=     9575mm  weight=    8.51kg
+           T16  total_len=    34200mm  weight=   54.05kg
+           T20  total_len=    18275mm  weight=   45.13kg
+   GRAND TOTAL  total_len=   463800mm  weight=  271.41kg

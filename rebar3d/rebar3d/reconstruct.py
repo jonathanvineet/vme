@@ -1401,6 +1401,59 @@ def calibrate_uniform_shape_lengths(panel: "Panel", marks: list) -> int:
     return n_fixed
 
 
+def drop_undersized_mesh_fragments(panel: "Panel", mark_rows: list) -> tuple[int, float]:
+    """Drop v-mesh/h-mesh bars far shorter than the shortest real official
+    mark at that diameter -- schedule-grounded proof they can't be any
+    real scheduled bar, whatever produced them.
+
+    Root-caused on PW-GF-09 (2026-07 study): 146 T8 h-mesh "bars" at
+    102-242mm, concentrated in the D/E mesh region (D is mark M_T1, a
+    genuinely BENT shape with segments 70/330/220/330/220/70mm -- not a
+    straight bar). `pair_lines`/`chain_bars` chain straight-run
+    continuations but don't recognize a multi-angle bent-shape sequence,
+    so each leg of D's real bent bar surfaces as its own short, disjoint
+    "mesh" fragment instead of one complete bar. The fragment lengths
+    even echo D's own segment values (172/184/206/214/220mm cluster near
+    D's 220/330mm legs). The *correct* fix is chaining those legs back
+    into one bent bar per `calibrate_uniform_shape_lengths`'s existing
+    precedent -- deliberately NOT attempted here: that calibration only
+    fires on an exact count+uniform-length match, and this project's
+    history is full of chaining/pairing-logic edits that looked safe and
+    caused large regressions elsewhere (see the long unresolved z=-500
+    dowel bug comment above, three reverted attempts). This function
+    takes the safe, bounded, already-established alternative instead
+    (same shape as `drop_unscheduled_dowels`): the shortest REAL official
+    mark at T8 on this panel is 375mm (mark E) -- nothing scheduled is
+    shorter, so a mesh bar well under that can only be noise (an
+    unchained shape fragment, a mis-paired hatch/icon segment, or
+    similar), never a real distinct bar, regardless of which specific
+    geometry bug produced it. Floor set at 50% of the diameter's shortest
+    official length, not the official length itself, to leave real short
+    bars near that floor untouched.
+    """
+    floor_by_dia: dict[int, float] = {}
+    for m in mark_rows:
+        sdia = snap_diameter(m.diameter)
+        if sdia is None or m.length_mm <= 0:
+            continue
+        floor_by_dia[sdia] = min(floor_by_dia.get(sdia, m.length_mm), m.length_mm)
+
+    n_dropped = 0
+    dropped_kg = 0.0
+    kept = []
+    for b in panel.bars:
+        floor = floor_by_dia.get(b.diameter)
+        if floor is not None and b.kind in ("v-mesh", "h-mesh"):
+            length = math.dist(b.points[0], b.points[-1])
+            if length < 0.5 * floor:
+                n_dropped += 1
+                dropped_kg += b.diameter ** 2 / 162.0 * (length / 1000.0)
+                continue
+        kept.append(b)
+    panel.bars = kept
+    return n_dropped, dropped_kg
+
+
 def drop_unscheduled_dowels(panel: "Panel", mark_rows: list) -> int:
     """Drop face-dowel bars at a diameter with no real dowel-shaped mark in
     the itemized BBS -- a real, general, schedule-grounded fix for the
@@ -1448,6 +1501,121 @@ def drop_unscheduled_dowels(panel: "Panel", mark_rows: list) -> int:
         kept.append(b)
     panel.bars = kept
     return n_dropped
+
+
+def synthesize_from_detail_evidence(
+    panel: "Panel", views: list, mark_rows: list, mark_groups: list,
+    x0: float, y0: float,
+) -> tuple[int, float]:
+    """Originate bars for a schedule mark whose family is real in the
+    drawing but architecturally invisible to reconstruction: drawn only in
+    a local corbel/dowel/bracket DETAIL view, never in the elevation and
+    never spanning a full section cut.
+
+    Root-caused across the whole batch (2026-07 study): of every schedule
+    mark with literally zero reconstructed bars nearby, ~31% do have real
+    `S-RBAR` double-line geometry sitting right next to the mark's own
+    label -- but 100% of that geometry sits in a view other than the
+    elevation (`views[0]`). `reconstruct_panel` only ever calls
+    `extract_bars` on the elevation; `classify_sections` picks up section
+    cuts whose wall band spans a full panel dimension, but a small local
+    detail view (its own drawing scale, unrelated to the panel's global
+    frame) matches neither and is silently never scanned at all. The
+    other 69% have no real bar geometry anywhere nearby (only the label's
+    own leader/tick on `S-RBAR-IDEN`) -- genuinely absent from this DWG
+    (Revit's per-view rebar visibility), and this function correctly does
+    nothing for those: it requires real matching-diameter `S-RBAR`
+    geometry within `evidence_radius` of the mark's own label as a hard
+    gate before adding anything.
+
+    Position is a nominal stand-in (same precedent as `section-layer-
+    origin` bars above): a detail view's local coordinates don't map onto
+    the panel's global frame, so getting the *length and count exactly
+    right* (both taken from the official BBS itemized row, not measured
+    off the detail view) is the priority for correct weight, not visual
+    placement.
+    """
+    groups_by_mark = {g.mark: g for g in mark_groups}
+    n_added = 0
+    added_kg = 0.0
+    for m in mark_rows:
+        if not m.mark or m.qty <= 0 or m.length_mm <= 0:
+            continue
+        sdia = snap_diameter(m.diameter)
+        if sdia is None:
+            continue
+        g = groups_by_mark.get(m.mark)
+        if g is None or not g.instances:
+            continue
+
+        # already has real reconstructed evidence nearby -- only fill
+        # genuine gaps, never touch a mark reconstruction already found.
+        found = False
+        for inst in g.instances:
+            px, py = inst.x - x0, inst.y - y0
+            for b in panel.bars:
+                if b.diameter != sdia:
+                    continue
+                if any(math.dist((p[0], p[1]), (px, py)) <= 1800.0 for p in b.points):
+                    found = True
+                    break
+            if found:
+                break
+        if found:
+            continue
+
+        # Hard gate: real matching-diameter, matching-LENGTH S-RBAR
+        # geometry must exist near this mark's own label, and specifically
+        # within the ONE non-elevation view that geometrically contains
+        # that label instance -- not pooled across every view in the
+        # file. T8 mesh in particular is dense enough that diameter-only
+        # evidence passes almost any label regardless of whether that
+        # specific detail is real: an 800mm any-view/diameter-only version
+        # synthesized 245 T8 bars on PW-GF-09(R2) alone (132% of the whole
+        # panel's official total); tightening to the label's own view at
+        # 500mm still let every A1-A4/B/B1/B2/C mark through, because
+        # those views are themselves genuinely dense with T8 mesh -- proof
+        # the view is real, not proof that specific bar is. Requiring the
+        # candidate's own measured length to land within 30% of the
+        # mark's official length_mm (same discriminator already trusted
+        # elsewhere, e.g. `calibrate_uniform_shape_lengths`) rejects
+        # "some other T8 in a busy view" while still accepting the real
+        # bar even though it's chained/measured slightly differently in a
+        # detail view than a full elevation pairing would give.
+        evidence_radius = 500.0
+        evidence = False
+        for inst in g.instances:
+            vidx = None
+            for i, v in enumerate(views):
+                if i == 0:
+                    continue
+                try:
+                    vx0, vy0, vx1, vy1 = wall_outline(v.ents)[0]
+                except ValueError:
+                    continue
+                if vx0 - 600 <= inst.x <= vx1 + 600 and vy0 - 600 <= inst.y <= vy1 + 600:
+                    vidx = i
+                    break
+            if vidx is None:
+                continue
+            cand = [b for b in extract_bars(views[vidx].ents, min_len=100.0) if snap_diameter(b.diameter) == sdia]
+            for b in cand:
+                if not any(math.dist(p, (inst.x, inst.y)) <= evidence_radius for p in b.points):
+                    continue
+                if abs(b.length - m.length_mm) <= 0.3 * m.length_mm:
+                    evidence = True
+                    break
+            if evidence:
+                break
+        if not evidence:
+            continue
+
+        for k in range(m.qty):
+            pts = [(0.0, k * 50.0, panel.thickness / 2), (m.length_mm, k * 50.0, panel.thickness / 2)]
+            panel.bars.append(Bar3D(pts, sdia, "shape", "detail-view-origin"))
+        n_added += m.qty
+        added_kg += sdia ** 2 / 162.0 * (m.length_mm / 1000.0) * m.qty
+    return n_added, added_kg
 
 
 def _dedupe_near(bars: list[Bar3D]) -> list[Bar3D]:

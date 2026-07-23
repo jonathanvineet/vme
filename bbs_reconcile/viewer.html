@@ -1,0 +1,332 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>VME Rebar 3D Viewer</title>
+<style>
+  html, body { margin:0; height:100%; background:#111319; color:#e8ebf0; font-family:-apple-system,Segoe UI,Roboto,sans-serif; overflow:hidden; }
+  #topbar { position:absolute; top:0; left:0; right:0; z-index:2; display:flex; align-items:center; gap:16px;
+            padding:10px 16px; background:rgba(17,19,25,0.85); backdrop-filter: blur(6px); border-bottom:1px solid #2a2f3a; }
+  #topbar h1 { font-size:14px; font-weight:600; margin:0; opacity:.85; letter-spacing:.02em; }
+  select { background:#1c202b; color:#e8ebf0; border:1px solid #333a48; border-radius:6px; padding:6px 10px; font-size:13px; }
+  #status { font-size:12px; opacity:.6; margin-left:auto; }
+  #legend { position:absolute; bottom:16px; left:16px; z-index:2; background:rgba(17,19,25,0.85); backdrop-filter: blur(6px);
+            border:1px solid #2a2f3a; border-radius:8px; padding:10px 14px; font-size:12px; min-width:150px; }
+  #legend .row { display:flex; align-items:center; gap:8px; padding:3px 0; }
+  #legend .swatch { width:14px; height:14px; border-radius:3px; flex:0 0 auto; }
+  #legend .count { margin-left:auto; opacity:.7; font-variant-numeric: tabular-nums; }
+  #legend .total { margin-top:6px; padding-top:6px; border-top:1px solid #2a2f3a; font-weight:600; opacity:.9; }
+  #note { position:absolute; top:56px; left:16px; z-index:2; max-width:340px; font-size:11.5px; line-height:1.5;
+          background:rgba(255,180,60,0.08); border:1px solid rgba(255,180,60,0.35); color:#ffcf8a;
+          border-radius:8px; padding:8px 12px; }
+  canvas { display:block; }
+
+  #barlist { position:absolute; top:48px; right:0; bottom:0; width:300px; z-index:2;
+             background:rgba(17,19,25,0.92); backdrop-filter: blur(6px); border-left:1px solid #2a2f3a;
+             display:flex; flex-direction:column; font-size:11.5px; transition: transform .15s ease; }
+  #barlist.collapsed { transform: translateX(300px); }
+  #barlistToggle { position:absolute; top:52px; right:300px; z-index:3; background:#1c202b; color:#e8ebf0;
+             border:1px solid #333a48; border-right:none; border-radius:6px 0 0 6px; padding:6px 8px;
+             font-size:12px; cursor:pointer; transition: right .15s ease; }
+  #barlistToggle.collapsed-btn { right:0; }
+  #barlistHead { padding:10px 12px 8px; border-bottom:1px solid #2a2f3a; }
+  #barlistHead .totals { opacity:.7; margin-top:4px; }
+  #barlistSort { background:#1c202b; color:#e8ebf0; border:1px solid #333a48; border-radius:5px;
+             padding:3px 6px; font-size:11px; margin-top:6px; }
+  #barlistTableWrap { flex:1; overflow-y:auto; }
+  table.barlist { width:100%; border-collapse:collapse; }
+  table.barlist th { position:sticky; top:0; background:#171a22; text-align:right; padding:5px 8px;
+             font-weight:600; opacity:.6; border-bottom:1px solid #2a2f3a; }
+  table.barlist th:first-child, table.barlist td:first-child { text-align:left; }
+  table.barlist td { padding:4px 8px; text-align:right; border-bottom:1px solid #1c202b; font-variant-numeric: tabular-nums; }
+  table.barlist td.dia { display:flex; align-items:center; gap:6px; }
+  table.barlist .dot { width:9px; height:9px; border-radius:50%; flex:0 0 auto; }
+  table.barlist tr.unmeasured td { opacity:.55; }
+</style>
+</head>
+<body>
+<div id="topbar">
+  <h1>VME REBAR 3D VIEWER</h1>
+  <select id="panelSelect"></select>
+  <div id="status">loading…</div>
+</div>
+<div id="note">
+  Every bar's count/length/weight is reconciled against the (S) schedule per mark, not just
+  per diameter: <b>solid bars are real geometry measured from the (R) elevation</b>, matched to a
+  schedule row by length. Dense-mesh crossing fragmentation means detection alone misses ~40-60%
+  of the true schedule weight on most panels (measured directly, see geo_reconcile.py) — the
+  disclosed shortfall for each mark is filled with a synthesized bar of the schedule's exact
+  length, placed near a real sibling of the same mark where one was found, or evenly across the
+  panel otherwise. <b>Translucent/dimmer bars marked "~" in the bar list are these synthesized
+  ones</b> (including all bent/U-bar and other multi-segment shapes, which drawing geometry can't
+  reliably locate at all — indistinguishable from crossing-bar noise) — shape, count and weight
+  are exact, position is estimated. Front/back depth (Z) measured from the drawing's own
+  section-cut circles where available (no evidence nearby = left at mid-thickness). Depth
+  exaggerated ×6 — real wall thickness is only ~150mm. <b>Green pipes = sleeves/corrugated
+  conduit</b>, real measured position and diameter from the drawing's own arc geometry.
+  Corbel/anchor cast-in hardware checked directly in the mould (M) drawings — found drawn only in
+  a schematic detail area disconnected from true position, so not shown (no reliable location
+  data exists).
+</div>
+<div id="legend"></div>
+
+<button id="barlistToggle">☰ bar list</button>
+<div id="barlist">
+  <div id="barlistHead">
+    <strong>Bars — length &amp; weight</strong>
+    <select id="barlistSort">
+      <option value="dia">sort: diameter</option>
+      <option value="len">sort: length</option>
+      <option value="wt">sort: weight</option>
+    </select>
+    <div class="totals" id="barlistTotals"></div>
+  </div>
+  <div id="barlistTableWrap">
+    <table class="barlist">
+      <thead><tr><th>dia</th><th>len (mm)</th><th>wt (kg)</th></tr></thead>
+      <tbody id="barlistBody"></tbody>
+    </table>
+  </div>
+</div>
+
+<script type="importmap">
+{ "imports": {
+    "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+} }
+</script>
+<script type="module">
+import * as THREE from "three";
+import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x111319);
+
+const camera = new THREE.PerspectiveCamera(45, innerWidth/innerHeight, 1, 200000);
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setSize(innerWidth, innerHeight);
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+document.body.appendChild(renderer.domElement);
+
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+
+scene.add(new THREE.AmbientLight(0xffffff, 0.55));
+const dir1 = new THREE.DirectionalLight(0xffffff, 0.9); dir1.position.set(1,1,1); scene.add(dir1);
+const dir2 = new THREE.DirectionalLight(0xffffff, 0.4); dir2.position.set(-1,-0.5,-1); scene.add(dir2);
+
+let barGroup = new THREE.Group();
+scene.add(barGroup);
+
+function clearBars() {
+  while (barGroup.children.length) {
+    const m = barGroup.children.pop();
+    m.geometry.dispose();
+    m.material.dispose();
+  }
+}
+
+// Real wall thickness (~150mm) is tiny next to a multi-metre-wide panel,
+// so front/back separation would be an invisible sliver at true scale -
+// exaggerate the depth axis only, purely for legibility.
+const Z_EXAGGERATE = 6;
+
+function addSegment(a, b, dia, color, matOverrides) {
+  const len = a.distanceTo(b);
+  if (len < 1) return;
+  const radius = Math.max(dia/2, 3);
+  const geo = new THREE.CylinderGeometry(radius, radius, len, 8, 1);
+  const mat = new THREE.MeshStandardMaterial(Object.assign({ color, roughness:0.5, metalness:0.3 }, matOverrides || {}));
+  const mesh = new THREE.Mesh(geo, mat);
+  const mid = a.clone().add(b).multiplyScalar(0.5);
+  mesh.position.copy(mid);
+  mesh.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0), b.clone().sub(a).normalize());
+  barGroup.add(mesh);
+}
+
+function addBar(p0, p1, dia, color, measured) {
+  // data point = [x: width, y: height(up), z: depth(front/back)]
+  const a = new THREE.Vector3(p0[0], p0[1], p0[2] * Z_EXAGGERATE);
+  const b = new THREE.Vector3(p1[0], p1[1], p1[2] * Z_EXAGGERATE);
+  addSegment(a, b, dia, color, {
+    emissive: measured ? 0x000000 : 0x331a00, emissiveIntensity: measured ? 0 : 0.6,
+  });
+}
+
+// Bent (U-bar/hairpin/L-bend) shapes. Two provenances, styled differently:
+// `measured` ones are chained from real drawn line+arc geometry
+// (geometry.py's chain_bars) - shape AND position are both real, rendered
+// solid like a straight bar. The rest are schedule-driven synthesis
+// (bent_bars.py) - shape/count/weight exact, position estimated/evenly
+// spread - rendered translucent so they read visually distinct.
+function addBentBar(pts, dia, color, measured) {
+  for (let i = 0; i < pts.length - 1; i++) {
+    const a = new THREE.Vector3(pts[i][0], pts[i][1], pts[i][2] * Z_EXAGGERATE);
+    const b = new THREE.Vector3(pts[i+1][0], pts[i+1][1], pts[i+1][2] * Z_EXAGGERATE);
+    const overrides = measured
+      ? { roughness: 0.5, metalness: 0.1 }
+      : { transparent: true, opacity: 0.45, roughness: 1, metalness: 0 };
+    addSegment(a, b, dia, color, overrides);
+  }
+}
+
+// Sleeves (corrugated pipes): real measured (x,y,radius) from A-WALL arc
+// evidence in the (R) drawing (accumulated angular coverage >=100deg -
+// see castin.py). Run through the full exaggerated depth so they read as
+// pipes piercing the wall thickness, not points.
+const SLEEVE_COLOR = 0x2ecc71;
+function addSleeve(x, y, r) {
+  const depth = 200 * Z_EXAGGERATE;
+  const geo = new THREE.CylinderGeometry(r, r, depth, 16, 1, true);
+  const mat = new THREE.MeshStandardMaterial({
+    color: SLEEVE_COLOR, roughness: 0.6, metalness: 0.1,
+    transparent: true, opacity: 0.55, side: THREE.DoubleSide,
+  });
+  const mesh = new THREE.Mesh(geo, mat);
+  mesh.position.set(x, y, 0);
+  mesh.rotation.x = Math.PI / 2;
+  barGroup.add(mesh);
+}
+
+function buildLegend(counts, colors, panel) {
+  const el = document.getElementById("legend");
+  el.innerHTML = "";
+  const dias = Object.keys(counts).sort((x,y)=>x-y);
+  let total = 0;
+  for (const d of dias) {
+    total += counts[d];
+    const row = document.createElement("div");
+    row.className = "row";
+    row.innerHTML = `<div class="swatch" style="background:${colors[d]}"></div>T${d}<div class="count">${counts[d]}</div>`;
+    el.appendChild(row);
+  }
+  const tot = document.createElement("div");
+  tot.className = "row total";
+  tot.textContent = `${panel} — ${total} bars`;
+  el.appendChild(tot);
+}
+
+async function loadPanel(name) {
+  document.getElementById("status").textContent = "loading " + name + "…";
+  clearBars();
+  const data = await (await fetch(`out/viewer_data/${name}.json`)).json();
+
+  for (const b of data.bars) {
+    const color = data.colors[Math.round(b.d)] || "#ccc";
+    addBar(b.p[0], b.p[1], b.d, new THREE.Color(color), b.z_measured);
+  }
+  for (const bb of (data.bent_bars || [])) {
+    const color = data.colors[Math.round(bb.d)] || "#ccc";
+    addBentBar(bb.pts, bb.d, new THREE.Color(color), !!bb.measured);
+  }
+  for (const s of (data.sleeves || [])) {
+    addSleeve(s.x, s.y, s.r);
+  }
+
+  // fit camera to the actual bar geometry, not the full (possibly much
+  // larger) panel footprint, so narrow/tall panels aren't tiny slivers
+  const box = new THREE.Box3().setFromObject(barGroup);
+  const size = new THREE.Vector3(); box.getSize(size);
+  const center = new THREE.Vector3(); box.getCenter(center);
+  const w = data.width, h = data.height;
+
+  // panel face: lies in the X(width)-Y(height) plane, facing the Z(depth) axis
+  const planeGeo = new THREE.PlaneGeometry(w, h);
+  const planeMat = new THREE.MeshBasicMaterial({ color: 0x1b2028, side: THREE.DoubleSide, transparent:true, opacity:0.35 });
+  const plane = new THREE.Mesh(planeGeo, planeMat);
+  plane.position.set(w/2, h/2, 0);
+  barGroup.add(plane);
+
+  const gridSize = Math.max(size.x, size.y, size.z, 500) * 1.3;
+  const grid = new THREE.GridHelper(gridSize, 20, 0x333a48, 0x22262f);
+  grid.position.set(center.x, box.min.y - 50, center.z);
+  barGroup.add(grid);
+
+  const radius = Math.max(box.getBoundingSphere(new THREE.Sphere()).radius, 300);
+  const dist = radius / Math.sin(THREE.MathUtils.degToRad(camera.fov/2)) * 1.4;
+  camera.position.set(center.x + dist*0.15, center.y + dist*0.25, center.z + dist*0.9);
+  controls.target.copy(center);
+  controls.update();
+
+  buildLegend(data.counts, data.colors, data.panel);
+  const nBent = (data.bent_bars || []).length;
+  const totalN = data.bars.length + nBent;
+  const pctMeasured = data.bars.length ? Math.round(100 * data.n_depth_measured / data.bars.length) : 0;
+  const nBentMeasured = (data.bent_bars || []).filter(b => b.measured).length;
+  document.getElementById("status").textContent =
+    `${totalN} bars (${nBent} bent, ${nBentMeasured} from real drawn geometry) — ${w.toFixed(0)}×${h.toFixed(0)}mm — ` +
+    `${pctMeasured}% of straight bars depth-measured from sections (depth ×${Z_EXAGGERATE} for visibility)`;
+
+  currentBars = [
+    ...data.bars.map(b => ({ ...b, estimated: !!b.synthesized })),
+    ...(data.bent_bars || []).map(b => ({ ...b, estimated: !b.measured })),
+  ];
+  currentColors = data.colors;
+  renderBarList();
+}
+
+let currentBars = [];
+let currentColors = {};
+
+function renderBarList() {
+  const sortBy = document.getElementById("barlistSort").value;
+  const rows = [...currentBars].sort((a, b) => {
+    if (sortBy === "len") return b.len - a.len;
+    if (sortBy === "wt") return b.wt - a.wt;
+    return a.d - b.d || b.len - a.len;
+  });
+  const body = document.getElementById("barlistBody");
+  body.innerHTML = rows.map(b => {
+    const color = currentColors[Math.round(b.d)] || "#ccc";
+    const dimmed = b.estimated || !b.z_measured;
+    const tag = b.estimated ? " ~" : "";
+    return `<tr class="${dimmed ? "unmeasured" : ""}" title="${b.estimated ? "position estimated, shape/count exact from schedule" : ""}">
+      <td class="dia"><span class="dot" style="background:${color}"></span>T${b.d}${tag}</td>
+      <td>${b.len.toFixed(0)}</td>
+      <td>${b.wt.toFixed(3)}</td>
+    </tr>`;
+  }).join("");
+  const totalWt = currentBars.reduce((s, b) => s + b.wt, 0);
+  const totalLen = currentBars.reduce((s, b) => s + b.len, 0);
+  const nEst = currentBars.filter(b => b.estimated).length;
+  document.getElementById("barlistTotals").textContent =
+    `${currentBars.length} bars (${nEst} marked ~ = position estimated) — ${(totalLen/1000).toFixed(1)}m — ` +
+    `${totalWt.toFixed(1)}kg (reconstructed, not the official schedule total)`;
+}
+
+document.getElementById("barlistSort").addEventListener("change", renderBarList);
+document.getElementById("barlistToggle").addEventListener("click", () => {
+  document.getElementById("barlist").classList.toggle("collapsed");
+  document.getElementById("barlistToggle").classList.toggle("collapsed-btn");
+});
+
+async function init() {
+  const index = await (await fetch("out/viewer_data/index.json")).json();
+  const sel = document.getElementById("panelSelect");
+  for (const name of index) {
+    const opt = document.createElement("option");
+    opt.value = name; opt.textContent = name;
+    sel.appendChild(opt);
+  }
+  sel.addEventListener("change", () => loadPanel(sel.value));
+  const qp = new URLSearchParams(location.search).get("panel");
+  const initial = (qp && index.includes(qp)) ? qp : index[0];
+  if (initial) { sel.value = initial; await loadPanel(initial); }
+}
+init();
+
+function animate() {
+  requestAnimationFrame(animate);
+  controls.update();
+  renderer.render(scene, camera);
+}
+animate();
+
+addEventListener("resize", () => {
+  camera.aspect = innerWidth/innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(innerWidth, innerHeight);
+});
+</script>
+</body>
+</html>

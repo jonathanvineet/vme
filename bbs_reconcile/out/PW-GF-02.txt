@@ -1,0 +1,40 @@
+======================================================================
+PANEL PW-GF-02
+======================================================================
+S sheet: /Users/jonathan/elco/vme/DRAWINGS/PW-GF-02(S).dwg
+R sheet(s): PW-GF-02(R).dwg
+
+-- Itemized schedule (from S, exact) --
+  [PW-GF-02(A)]
+        A  T8   qty=60   len=    600mm  total=    36000mm  wt=  14.22kg
+       A1  T8   qty=60   len=    625mm  total=    37500mm  wt=  14.82kg
+        B  T8   qty=118  len=    900mm  total=   106200mm  wt=  41.96kg
+       B1  T8   qty=45   len=    950mm  total=    42750mm  wt=  16.89kg
+        C  T12  qty=2    len=    425mm  total=      850mm  wt=   0.76kg
+       C1  T12  qty=2    len=    600mm  total=     1200mm  wt=   1.07kg
+       C2  T12  qty=16   len=   8800mm  total=   140800mm  wt= 125.16kg
+        D  T12  qty=14   len=   1300mm  total=    18200mm  wt=  16.18kg
+        E  T16  qty=4    len=   8800mm  total=    35200mm  wt=  55.63kg
+        F  T16  qty=4    len=   2100mm  total=     8400mm  wt=  13.27kg
+  [PW-GF-02(B)]
+        G  T8   qty=45   len=   1100mm  total=    49500mm  wt=  19.56kg
+        H  T10  qty=3    len=   1850mm  total=     5550mm  wt=   3.43kg
+  [PW-GF-02(C)]
+        I  T20  qty=1    len=   9000mm  total=     9000mm  wt=  22.22kg
+       I1  T20  qty=1    len=   9800mm  total=     9800mm  wt=  24.20kg
+
+-- Per-diameter: S schedule vs R callout evidence --
+    dia   S qty   S wt(kg) | R Ncallout-sum R instances R pitch-callouts  notes
+  T   8     328     107.45 |             16           6               29  UBAR
+  T  10       3       3.43 |              8           4                0  
+  T  12      34     143.17 |             32          11                0  
+  T  16       8      68.90 |             18           9                0  CRACK BAR
+  T  20       2      46.42 |              6           3                0  
+
+-- Summary Schedule (from S, panel's own authoritative total) --
+            T8  total_len=   271950mm  weight=  107.44kg
+           T10  total_len=     5550mm  weight=    3.43kg
+           T12  total_len=   161050mm  weight=  143.16kg
+           T16  total_len=    43600mm  weight=   68.90kg
+           T20  total_len=    18800mm  weight=   46.42kg
+   GRAND TOTAL  total_len=   500950mm  weight=  369.36kg

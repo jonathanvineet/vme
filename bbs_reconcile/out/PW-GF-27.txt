@@ -1,0 +1,4 @@
+======================================================================
+PANEL PW-GF-27
+======================================================================
+ERROR: PW-GF-27(S).dwg has no itemized schedule table — only a rebar-shape legend/key is present in this file (confirmed against the printed PW-GF-27(S).pdf too, 1 page, no schedule text). This looks like a gap in the source drawing set, not a parsing failure.

@@ -1,0 +1,65 @@
+======================================================================
+PANEL PW-GF-09
+======================================================================
+S sheet: /Users/jonathan/elco/vme/DRAWINGS/PW-GF-09(S).dwg
+R sheet(s): PW-GF-09(R).dwg, PW-GF-09(R1).dwg, PW-GF-09(R2).dwg
+
+-- Itemized schedule (from S, exact) --
+  [PW-GF-09(A)]
+        A  T8   qty=5    len=   1125mm  total=     5625mm  wt=   2.22kg
+       A1  T8   qty=26   len=   1350mm  total=    35100mm  wt=  13.87kg
+       A2  T8   qty=30   len=   1450mm  total=    43500mm  wt=  17.19kg
+       A3  T8   qty=9    len=   5000mm  total=    45000mm  wt=  17.78kg
+       A4  T8   qty=7    len=   5050mm  total=    35350mm  wt=  13.97kg
+        B  T8   qty=14   len=    900mm  total=    12600mm  wt=   4.98kg
+       B1  T8   qty=30   len=    900mm  total=    27000mm  wt=  10.67kg
+       B2  T8   qty=49   len=    950mm  total=    46550mm  wt=  18.39kg
+        C  T8   qty=6    len=    950mm  total=     5700mm  wt=   2.25kg
+        D  T8   qty=37   len=   1200mm  total=    44400mm  wt=  17.54kg
+        E  T8   qty=37   len=    375mm  total=    13875mm  wt=   5.48kg
+        F  T12  qty=1    len=   1075mm  total=     1075mm  wt=   0.96kg
+       F1  T12  qty=3    len=   1125mm  total=     3375mm  wt=   3.00kg
+        H  T12  qty=11   len=   1150mm  total=    12650mm  wt=  11.25kg
+        I  T16  qty=2    len=   5000mm  total=    10000mm  wt=  15.80kg
+        J  T16  qty=3    len=   1850mm  total=     5550mm  wt=   8.77kg
+       J1  T16  qty=2    len=   1850mm  total=     3700mm  wt=   5.85kg
+       J2  T16  qty=2    len=   2625mm  total=     5250mm  wt=   8.30kg
+       J3  T16  qty=2    len=   2900mm  total=     5800mm  wt=   9.17kg
+        K  T16  qty=4    len=   2050mm  total=     8200mm  wt=  12.96kg
+        L  T20  qty=2    len=   2025mm  total=     4050mm  wt=  10.00kg
+        M  T20  qty=2    len=   1450mm  total=     2900mm  wt=   7.16kg
+       M1  T20  qty=2    len=   2275mm  total=     4550mm  wt=  11.24kg
+        N  T25  qty=2    len=   2575mm  total=     5150mm  wt=  19.87kg
+  [PW-GF-09(B)]
+        O  T20  qty=1    len=   6100mm  total=     6100mm  wt=  15.06kg
+  [PW-GF-09(C)]
+        P  T10  qty=7    len=   2250mm  total=    15750mm  wt=   9.72kg
+        Q  T16  qty=1    len=   5850mm  total=     5850mm  wt=   9.25kg
+       Q1  T16  qty=1    len=   5850mm  total=     5850mm  wt=   9.25kg
+       Q2  T16  qty=1    len=   5850mm  total=     5850mm  wt=   9.25kg
+       Q3  T16  qty=1    len=   5850mm  total=     5850mm  wt=   9.25kg
+       Q4  T16  qty=2    len=   5850mm  total=    11700mm  wt=  18.49kg
+
+-- Per-diameter: S schedule vs R callout evidence --
+    dia   S qty   S wt(kg) | R Ncallout-sum R instances R pitch-callouts  notes
+  T   8     250     124.34 |            511          36               24  @100 mm; @200 mm; Hook; Horizontal Bar; Horizontal Bar@175 mm; Ties; U Bar; U Bar@175 mm; U Bar@200 mm; UBAR; Vertical Bar; Vertical Bar@200 mm
+  T  10       7       9.72 |             21           3                3  @200 mm
+  T  12      15      15.21 |             95          28                0  -Crack Bar; @100 mm
+  T  16      21     116.34 |             70          39                0  Perimeter Bar
+  T  20       7      43.46 |             13          11                0  DOWEL; DOWEL BAR
+  T  25       2      19.87 |              4           2                0  
+
+-- Summary Schedule (from S, panel's own authoritative total) --
+            T8  total_len=   314700mm  weight=  124.33kg
+           T10  total_len=    15750mm  weight=    9.72kg
+           T12  total_len=    17100mm  weight=   15.20kg
+           T16  total_len=    73600mm  weight=  116.31kg
+           T20  total_len=    17600mm  weight=   43.46kg
+           T25  total_len=     5150mm  weight=   19.87kg
+   GRAND TOTAL  total_len=   443900mm  weight=  328.90kg
+
+-- Unparsed R identifier-layer text (13 instances) --
+    'T8 Horizontal @150 mm'
+    'T8 Horizontal Bar @175 mm'
+    'T8 Vertical @150 mm'
+    'T8 Vertical Bar @200 mm'

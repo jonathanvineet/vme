@@ -1,0 +1,34 @@
+======================================================================
+PANEL PW-GF-26
+======================================================================
+S sheet: /Users/jonathan/elco/vme/DRAWINGS/PW-GF-26(S).dwg
+R sheet(s): PW-GF-26(R).dwg
+
+-- Itemized schedule (from S, exact) --
+  [PW-GF-26(A)]
+        A  T8   qty=30   len=   1575mm  total=    47250mm  wt=  18.67kg
+       A1  T8   qty=30   len=   1650mm  total=    49500mm  wt=  19.56kg
+       A2  T8   qty=10   len=   5000mm  total=    50000mm  wt=  19.75kg
+       A3  T8   qty=9    len=   5050mm  total=    45450mm  wt=  17.96kg
+        B  T8   qty=18   len=    900mm  total=    16200mm  wt=   6.40kg
+       B1  T8   qty=59   len=    900mm  total=    53100mm  wt=  20.98kg
+       B2  T8   qty=52   len=    950mm  total=    49400mm  wt=  19.52kg
+        C  T8   qty=9    len=    875mm  total=     7875mm  wt=   3.11kg
+       C1  T8   qty=2    len=    950mm  total=     1900mm  wt=   0.75kg
+        D  T16  qty=4    len=   5000mm  total=    20000mm  wt=  31.61kg
+        E  T16  qty=4    len=   3075mm  total=    12300mm  wt=  19.44kg
+        F  T20  qty=2    len=   2025mm  total=     4050mm  wt=  10.00kg
+  [PW-GF-26(B)]
+        G  T20  qty=2    len=   6100mm  total=    12200mm  wt=  30.13kg
+
+-- Per-diameter: S schedule vs R callout evidence --
+    dia   S qty   S wt(kg) | R Ncallout-sum R instances R pitch-callouts  notes
+  T   8     219     126.70 |            535          30                5  @200 mm; Horizontal Bar@175 mm; U Bar; U Bar@175 mm; U Bar@200 mm; Vertical Bar@200 mm
+  T  16       8      51.05 |             16           8                0  PERIMETER BAR
+  T  20       4      40.13 |             10           7                0  DOWEL BAR
+
+-- Summary Schedule (from S, panel's own authoritative total) --
+            T8  total_len=   320675mm  weight=  126.69kg
+           T16  total_len=    32300mm  weight=   51.05kg
+           T20  total_len=    16250mm  weight=   40.13kg
+   GRAND TOTAL  total_len=   369225mm  weight=  217.87kg

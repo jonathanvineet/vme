@@ -1,0 +1,41 @@
+======================================================================
+PANEL PW-GF-01
+======================================================================
+S sheet: /Users/jonathan/elco/vme/DRAWINGS/PW-GF-01(S).dwg
+R sheet(s): PW-GF-01(R).dwg
+
+-- Itemized schedule (from S, exact) --
+  [PW-GF-01(A)]
+        A  T8   qty=62   len=   1175mm  total=    72850mm  wt=  28.78kg
+       A1  T8   qty=61   len=   1250mm  total=    76250mm  wt=  30.13kg
+        B  T8   qty=122  len=    900mm  total=   109800mm  wt=  43.38kg
+       B1  T8   qty=92   len=    950mm  total=    87400mm  wt=  34.53kg
+        C  T8   qty=7    len=    875mm  total=     6125mm  wt=   2.42kg
+        D  T10  qty=3    len=   1425mm  total=     4275mm  wt=   2.64kg
+        E  T12  qty=15   len=   9000mm  total=   135000mm  wt= 120.01kg
+       E1  T12  qty=14   len=   9050mm  total=   126700mm  wt= 112.63kg
+        F  T12  qty=27   len=   1300mm  total=    35100mm  wt=  31.20kg
+        G  T16  qty=4    len=   9000mm  total=    36000mm  wt=  56.89kg
+        H  T16  qty=4    len=   2675mm  total=    10700mm  wt=  16.91kg
+        I  T20  qty=3    len=   1700mm  total=     5100mm  wt=  12.59kg
+  [PW-GF-01(B)]
+        J  T20  qty=2    len=   1575mm  total=     3150mm  wt=   7.78kg
+        K  T20  qty=3    len=   2450mm  total=     7350mm  wt=  18.15kg
+  [PW-GF-01(C)]
+        L  T20  qty=2    len=   9750mm  total=    19500mm  wt=  48.15kg
+
+-- Per-diameter: S schedule vs R callout evidence --
+    dia   S qty   S wt(kg) | R Ncallout-sum R instances R pitch-callouts  notes
+  T   8     344     139.24 |            864          18                4  @150 mm; @200 mm; U Bar; U Bar@150 mm
+  T  10       3       2.64 |              6           2                0  
+  T  12      56     263.84 |            168          12                3  @90 mm
+  T  16       8      73.80 |             20          10                0  Perimeter Bar
+  T  20      10      86.67 |             21          15                0  DOWEL
+
+-- Summary Schedule (from S, panel's own authoritative total) --
+            T8  total_len=   352425mm  weight=  139.24kg
+           T10  total_len=     4275mm  weight=    2.64kg
+           T12  total_len=   296800mm  weight=  263.84kg
+           T16  total_len=    46700mm  weight=   73.80kg
+           T20  total_len=    35100mm  weight=   86.67kg
+   GRAND TOTAL  total_len=   735300mm  weight=  566.19kg

@@ -1,0 +1,54 @@
+======================================================================
+PANEL PW-GF-18
+======================================================================
+S sheet: /Users/jonathan/elco/vme/DRAWINGS/PW-GF-18(S).dwg
+R sheet(s): PW-GF-18(R).dwg
+
+-- Itemized schedule (from S, exact) --
+  [PW-GF-18(A)]
+        A  T8   qty=5    len=   1100mm  total=     5500mm  wt=   2.17kg
+       A1  T8   qty=26   len=   1350mm  total=    35100mm  wt=  13.87kg
+       A2  T8   qty=30   len=   1450mm  total=    43500mm  wt=  17.19kg
+       A3  T8   qty=9    len=   5000mm  total=    45000mm  wt=  17.78kg
+       A4  T8   qty=7    len=   5050mm  total=    35350mm  wt=  13.97kg
+        B  T8   qty=49   len=    875mm  total=    42875mm  wt=  16.94kg
+       B1  T8   qty=14   len=    900mm  total=    12600mm  wt=   4.98kg
+       B2  T8   qty=30   len=    900mm  total=    27000mm  wt=  10.67kg
+        C  T8   qty=6    len=    950mm  total=     5700mm  wt=   2.25kg
+        D  T8   qty=37   len=   1200mm  total=    44400mm  wt=  17.54kg
+        E  T8   qty=37   len=    375mm  total=    13875mm  wt=   5.48kg
+        F  T12  qty=1    len=   1125mm  total=     1125mm  wt=   1.00kg
+       F1  T12  qty=3    len=   1125mm  total=     3375mm  wt=   3.00kg
+        G  T16  qty=2    len=   5000mm  total=    10000mm  wt=  15.80kg
+        H  T16  qty=3    len=   1750mm  total=     5250mm  wt=   8.30kg
+       H1  T16  qty=2    len=   1850mm  total=     3700mm  wt=   5.85kg
+       H2  T16  qty=2    len=   2625mm  total=     5250mm  wt=   8.30kg
+       H3  T16  qty=2    len=   2900mm  total=     5800mm  wt=   9.17kg
+        I  T20  qty=1    len=   2025mm  total=     2025mm  wt=   5.00kg
+       I1  T20  qty=1    len=   2025mm  total=     2025mm  wt=   5.00kg
+  [PW-GF-18(B)]
+        J  T10  qty=7    len=   2250mm  total=    15750mm  wt=   9.72kg
+        K  T16  qty=1    len=   6000mm  total=     6000mm  wt=   9.48kg
+       K1  T16  qty=1    len=   6000mm  total=     6000mm  wt=   9.48kg
+       K2  T16  qty=1    len=   6000mm  total=     6000mm  wt=   9.48kg
+       K3  T16  qty=1    len=   6000mm  total=     6000mm  wt=   9.48kg
+       K4  T16  qty=1    len=   6000mm  total=     6000mm  wt=   9.48kg
+       K5  T16  qty=1    len=   6000mm  total=     6000mm  wt=   9.48kg
+  [PW-GF-18(C)]
+        L  T20  qty=1    len=   6100mm  total=     6100mm  wt=  15.06kg
+
+-- Per-diameter: S schedule vs R callout evidence --
+    dia   S qty   S wt(kg) | R Ncallout-sum R instances R pitch-callouts  notes
+  T   8     250     122.84 |            539          34                3  @150 mm; @200 mm; Horizontal Bar@175 mm; U Bar; U Bar@175 mm; U Bar@200 mm; Vertical Bar@200 mm
+  T  10       7       9.72 |             21           3                0  @200 mm
+  T  12       4       4.00 |              6           4                0  
+  T  16      17     104.30 |             46          29                0  Perimeter Bar
+  T  20       3      25.06 |              5           5                0  DOWEL BAR
+
+-- Summary Schedule (from S, panel's own authoritative total) --
+            T8  total_len=   310900mm  weight=  122.83kg
+           T10  total_len=    15750mm  weight=    9.72kg
+           T12  total_len=     4500mm  weight=    4.00kg
+           T16  total_len=    66000mm  weight=  104.30kg
+           T20  total_len=    10150mm  weight=   25.06kg
+   GRAND TOTAL  total_len=   407300mm  weight=  265.92kg

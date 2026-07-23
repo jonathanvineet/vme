@@ -1,1 +1,2 @@
+[WARN] reinforcement ratio 450 kg/m3 is outside the usual 20-400 kg/m3 range (77.5kg steel / 0.17m3 concrete) -- reconstruction is likely badly incomplete or has fabricated bars, not just imprecise
 [WARN] 2 bar(s) exceed 1.5x the panel's own diagonal (2201mm) in length: u-bar T8 @4415mm, h-mesh T20 @6100mm -- likely a mis-chained bar bridging unrelated fragments

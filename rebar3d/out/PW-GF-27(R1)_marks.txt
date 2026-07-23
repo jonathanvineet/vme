@@ -13,9 +13,9 @@ C1      T8            9      0  SHORT   1
 C2      T8           15     47  OVER    4
 D       T8           15     51  OVER    4
 F       T16           2     14  OVER    2
-G       T16           3     46  OVER    2
-G1      T16           2     47  OVER    2
-G2      T16           4     27  OVER    5
+G       T16           3     23  OVER    2
+G1      T16           2     24  OVER    2
+G2      T16           4     16  OVER    5
 H       T20           1      1  OK      1
 I       T16           1     20  OVER    2
 J       T16           1      0  SHORT   1

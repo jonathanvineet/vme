@@ -1,0 +1,29 @@
+MASTER BAR TALLY — VME Precast, all panels with an (S) schedule
+
+12 panels found: PW-GF-01, PW-GF-02, PW-GF-05, PW-GF-06, PW-GF-07, PW-GF-08, PW-GF-09, PW-GF-11, PW-GF-18, PW-GF-25, PW-GF-26, PW-GF-27
+
+Per-panel totals (from each S sheet's own Summary Schedule):
+  panel           weight(kg)   length(m)
+  PW-GF-01            566.19      735.30
+  PW-GF-02            369.36      500.95
+  PW-GF-05            406.08      541.48
+  PW-GF-06            314.92      459.43
+  PW-GF-07            271.41      463.80
+  PW-GF-08            382.44      551.02
+  PW-GF-09            328.90      443.90
+  PW-GF-11            715.60     1077.95
+  PW-GF-18            265.92      407.30
+  PW-GF-25            247.50      370.57
+  PW-GF-26            217.87      369.23
+  PW-GF-27                --          --  PW-GF-27(S).dwg has no itemized schedule table — only a rebar-shape legend/key is present in this file (confirmed against the printed PW-GF-27(S).pdf too, 1 page, no schedule text). This looks like a gap in the source drawing set, not a parsing failure.
+  TOTAL              4086.19     5920.93
+
+Grand per-diameter rollup (sum across all panels, from S schedules):
+    dia     qty   length(m)  weight(kg)
+  T   8    3094     3807.68     1504.42
+  T  10     136      669.45      413.28
+  T  12     146      533.15      473.97
+  T  16     182      672.73     1063.18
+  T  20      57      206.28      509.37
+  T  25      14       31.65      122.11
+    ALL             5920.93     4086.19

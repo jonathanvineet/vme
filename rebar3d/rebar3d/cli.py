@@ -11,6 +11,7 @@ import argparse
 import re
 import sys
 from pathlib import Path
+from types import SimpleNamespace
 
 from .crosscheck import (
     cross_check, format_report, mark_report, parse_count_callouts,
@@ -21,7 +22,8 @@ from .extract import extract_bars, wall_outline
 from .loader import dwg_to_dxf, load_entities
 from .reconstruct import (
     calibrate_edge_caps, calibrate_sleeve_wraps, calibrate_uniform_shape_lengths,
-    drop_unscheduled_dowels, reconstruct_panel,
+    drop_undersized_mesh_fragments, drop_unscheduled_dowels, reconstruct_panel,
+    synthesize_from_detail_evidence,
 )
 from .schedule import (
     compare_to_bars, extract_schedule, extract_schedule_dwg, extract_itemized_bbs_dwg,
@@ -91,6 +93,7 @@ def main(argv=None) -> int:
     # they both share -- see the R1/R2 combination pass after this loop.
     combo_groups: dict[str, list[tuple[str, Panel]]] = {}
     combo_official: dict[str, tuple[list[ScheduleRow], str]] = {}
+    combo_marks: dict[str, tuple[list, str]] = {}
     for src in args.drawings:
         name = src.stem.replace("(R)", "").strip()
         dxf = dwg_to_dxf(src, args.out / "dxf") if src.suffix.lower() == ".dwg" else src
@@ -171,6 +174,9 @@ def main(argv=None) -> int:
         # guessed. Symmetric-U rows only (segments [0, leg, gap, leg, 0]):
         # the standard "wrap a duct" bracket shape confirmed against the
         # R-sheet's own "U-BAR DETAIL" callout.
+        mark_groups = parse_letter_marks(ents, views)
+        (mx0, my0, _mx1, _my1), _ = wall_outline(views[0].ents)
+
         itemized_candidates: list[tuple[str, list]] = []
         if s_dxf is not None:
             s_rows = extract_itemized_bbs_dwg(s_dxf)
@@ -231,6 +237,22 @@ def main(argv=None) -> int:
             if n_dowel_dropped:
                 print(f"  dropped {n_dowel_dropped} dowel-kind bar(s) at diameters with "
                       f"no dowel-shaped mark in {src_label}")
+
+            n_frag_dropped, frag_kg = drop_undersized_mesh_fragments(panel, mark_rows)
+            if n_frag_dropped:
+                print(f"  dropped {n_frag_dropped} undersized mesh fragment(s) ({frag_kg:.1f}kg) "
+                      f"shorter than any real mark at that diameter in {src_label}")
+
+            # Fill true architecture-gap marks: real S-RBAR geometry sits
+            # next to the label but only in a local detail view the
+            # elevation/section pipeline never scans (see
+            # `synthesize_from_detail_evidence`).
+            n_detail_added, detail_kg = synthesize_from_detail_evidence(
+                panel, views, mark_rows, mark_groups, mx0, my0)
+            if n_detail_added:
+                print(f"  synthesized {n_detail_added} bar(s) ({detail_kg:.1f}kg) from "
+                      f"{src_label} marks whose only real geometry sits in a local "
+                      f"detail view (not the elevation or a full section cut)")
             break
 
         panels.append(panel)
@@ -299,9 +321,7 @@ def main(argv=None) -> int:
         # geometry -- a sharper, mark-scoped view of the same gaps the
         # per-callout crosscheck above already flags, useful for tracing a
         # specific official schedule row back to its real DWG evidence.
-        mark_groups = parse_letter_marks(ents, views)
         if mark_groups:
-            (mx0, my0, _mx1, _my1), _ = wall_outline(views[0].ents)
             report = mark_report(mark_groups, panel.bars, mx0, my0)
             (args.out / f"{name}_marks.txt").write_text(report + "\n")
             n_mark_short = sum(1 for line in report.splitlines() if "SHORT" in line)
@@ -326,6 +346,8 @@ def main(argv=None) -> int:
             combo_groups.setdefault(base, []).append((name, panel))
             if rows is not None and base not in combo_official:
                 combo_official[base] = (rows, src_name)
+            if itemized_candidates and base not in combo_marks:
+                combo_marks[base] = itemized_candidates[0]
 
     # R1+R2(+...) combination: sum every sibling sheet's reconstructed
     # weight per diameter and compare against their ONE shared official
@@ -341,8 +363,35 @@ def main(argv=None) -> int:
             continue
         rows, src_name = combo_official[base]
         all_bars = [b for _n, p in members for b in p.bars]
-        report = compare_to_bars(rows, all_bars)
         member_names = ", ".join(n for n, _p in members)
+
+        # A family split across sibling sheets (e.g. 2 bars of one mark
+        # drawn on R1, 2 more of the SAME mark on R2) never reaches its
+        # real full count within either sheet alone, so the per-sheet
+        # calibration pass above never fires for it -- confirmed on
+        # PW-GF-09's mark K (4x T16): exactly 2 near-identical-length bars
+        # sit on each of R1 and R2, invisible to a single-sheet count
+        # check but an exact match once combined. Re-running the same,
+        # already-proven-safe calibrations here on the COMBINED bar list
+        # mutates the real `Bar3D` objects in place (shared by reference
+        # with each member panel's own `.bars`), so the fix lands in both
+        # this combined report AND each panel's own JSON/viewer -- safe to
+        # re-run even for marks already fixed per-sheet, since both
+        # functions skip a group that's already close to the target
+        # length.
+        if base in combo_marks:
+            _label, combo_mark_rows = combo_marks[base]
+            fake_panel = SimpleNamespace(bars=all_bars)
+            n1 = calibrate_edge_caps(
+                fake_panel, [(m.diameter, m.qty, m.length_mm) for m in combo_mark_rows])
+            n2 = calibrate_uniform_shape_lengths(fake_panel, combo_mark_rows)
+            if n1 or n2:
+                print(f"{base}: corrected length of {n1 + n2} bar(s) split across "
+                      f"{member_names} (count only matched once combined)")
+                for _n, p in members:
+                    write_json(p, args.out / f"{p.name}.json")
+
+        report = compare_to_bars(rows, all_bars)
         header = f"Combined: {member_names}\nOfficial: {src_name}\n\n"
         (args.out / f"{base}_combined_schedule.txt").write_text(header + report + "\n")
         official_tot = sum(r.weight_kg for r in rows)
