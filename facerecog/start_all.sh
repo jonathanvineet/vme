@@ -7,6 +7,9 @@ cd "$(dirname "$0")"
 
 mkdir -p logs
 
+export GOOGLE_SHEET_ID="1CzBMtY1gtp0nB1j_0tZvGuLuEkH_Po4mgl8mfF9rVGo"
+export GOOGLE_SERVICE_ACCOUNT_FILE="$(pwd)/secrets/google-service-account.json"
+
 PORT_IN=5050
 PORT_OUT=5051
 PORT_ADMIN=5052

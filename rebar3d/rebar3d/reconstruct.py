@@ -1424,6 +1424,55 @@ def calibrate_uniform_shape_lengths(panel: "Panel", marks: list) -> int:
     return n_fixed
 
 
+def _fragment_ceiling(mark_rows: list, strict: bool = False) -> dict[int, float]:
+    """Per-diameter length below which a v-mesh/h-mesh bar can't be any
+    real whole bar -- the shared "what counts as a fragment" boundary.
+
+    Root-caused on PW-GF-05: the original bound (half the diameter's
+    shortest whole-bar length) missed real leg fragments of D2 (`M_T1`,
+    segments 70/330/420/330/420/70mm) sitting at ~205mm and ~405mm --
+    both comfortably OVER half of E's 375mm shortest whole bar at the
+    same diameter, so they were never even considered fragments, just
+    silently invisible. A bent shape's own longest individual LEG is the
+    real, principled bound (a leg can never be longer than the segment
+    that produced it) -- falls back to the old half-of-shortest-whole-bar
+    rule when a diameter has no real segment data (all-straight "M_00"
+    marks only), preserving existing behavior there.
+
+    `strict=True` always uses the conservative half-of-shortest-whole-bar
+    rule regardless of segment data -- required by
+    `synthesize_bent_shape_from_fragments`, whose evidence gate is just
+    "N short bars exist somewhere nearby" (no endpoint-joining proof, per
+    `chain_bent_shape_fragments`): confirmed on PW-GF-08's mark B (T8,
+    qty 52, 875mm) -- with the relaxed ceiling, its wide 400/90/400mm-leg
+    window pulled in bars that had nothing to do with B (only 1 real bar
+    naturally existed near 875mm), synthesizing 47 fabricated bars and
+    pushing the whole panel to 106% official weight. `chain_bent_shape_
+    fragments` keeps the relaxed ceiling since its own gate (2+ fragments
+    that ACTUALLY connect end-to-end, verified stitched-path length) is
+    strong enough to stay safe with the wider pool.
+    """
+    all_by_dia: dict[int, list] = {}
+    max_seg_by_dia: dict[int, float] = {}
+    for m in mark_rows:
+        sdia = snap_diameter(m.diameter)
+        if sdia is None or m.qty <= 0 or m.length_mm <= 0:
+            continue
+        all_by_dia.setdefault(sdia, []).append(m.length_mm)
+        if not strict and m.shape.strip().upper() != "M_00":
+            segs = [s for s in m.segments if s > 0]
+            if segs:
+                max_seg_by_dia[sdia] = max(max_seg_by_dia.get(sdia, 0.0), max(segs))
+
+    ceilings: dict[int, float] = {}
+    for sdia, lens in all_by_dia.items():
+        if sdia in max_seg_by_dia:
+            ceilings[sdia] = max_seg_by_dia[sdia] * 1.15
+        else:
+            ceilings[sdia] = 0.5 * min(lens)
+    return ceilings
+
+
 def chain_bent_shape_fragments(panel: "Panel", mark_rows: list, gap_tol: float = 20.0) -> tuple[int, int]:
     """Stitch disjoint mesh-fragment legs back into one complete bent bar.
 
@@ -1453,23 +1502,22 @@ def chain_bent_shape_fragments(panel: "Panel", mark_rows: list, gap_tol: float =
     evidence this is a real reassembly, not a coincidence.
     """
     bent_by_dia: dict[int, list] = {}
-    all_by_dia: dict[int, list] = {}
     for m in mark_rows:
         sdia = snap_diameter(m.diameter)
         if sdia is None or m.qty <= 0 or m.length_mm <= 0:
             continue
-        all_by_dia.setdefault(sdia, []).append(m.length_mm)
         if m.shape.strip().upper() != "M_00":
             bent_by_dia.setdefault(sdia, []).append(m)
+    ceilings = _fragment_ceiling(mark_rows)
 
     n_stitched = 0
     n_frags_consumed = 0
     for sdia, marks in bent_by_dia.items():
-        floor = min(all_by_dia.get(sdia, [0]))
-        if floor <= 0:
+        ceiling = ceilings.get(sdia, 0.0)
+        if ceiling <= 0:
             continue
         frags = [b for b in panel.bars if b.diameter == sdia and b.kind in ("v-mesh", "h-mesh")
-                 and math.dist(b.points[0], b.points[-1]) < 0.5 * floor]
+                 and math.dist(b.points[0], b.points[-1]) < ceiling]
         frag_ids = {id(b) for b in frags}
         dia_bars = [b for b in panel.bars if b.diameter == sdia and id(b) not in frag_ids]
         n = len(frags)
@@ -1554,6 +1602,164 @@ def chain_bent_shape_fragments(panel: "Panel", mark_rows: list, gap_tol: float =
     return n_stitched, n_frags_consumed
 
 
+def _find_leg_sequence_chain(
+    frags: list, used: list, target_segs: list, gap_tol: float,
+) -> tuple[list, list] | None:
+    """Find one disjoint sequence of fragments whose lengths match
+    `target_segs` in order (each within its own tolerance) AND whose
+    endpoints actually touch consecutively within `gap_tol`. Greedy
+    first-match, not exhaustive backtracking -- acceptable here because a
+    false miss just leaves that leg-sequence unrecovered (same fallback
+    as everything else in this module), never a wrong answer, and a full
+    backtracking search over a few hundred fragments risks real slowness
+    for marginal extra recall.
+    """
+    def seg_tol(length: float) -> float:
+        return max(15.0, 0.12 * length)
+
+    n = len(frags)
+    for i in range(n):
+        if used[i]:
+            continue
+        if abs(frags[i][1] - target_segs[0]) > seg_tol(target_segs[0]):
+            continue
+        for start_pts in (list(frags[i][0]), list(frags[i][0][::-1])):
+            chain_idxs = [i]
+            local_used = set([i])
+            pts = list(start_pts)
+            ok = True
+            for target_len in target_segs[1:]:
+                nxt = None
+                for j in range(n):
+                    if used[j] or j in local_used:
+                        continue
+                    if abs(frags[j][1] - target_len) > seg_tol(target_len):
+                        continue
+                    c0, c1 = frags[j][0][0], frags[j][0][-1]
+                    if math.dist(pts[-1], c0) <= gap_tol:
+                        nxt = (j, list(frags[j][0][1:]))
+                        break
+                    if math.dist(pts[-1], c1) <= gap_tol:
+                        nxt = (j, list(frags[j][0][-2::-1]))
+                        break
+                if nxt is None:
+                    ok = False
+                    break
+                j, extra = nxt
+                local_used.add(j)
+                chain_idxs.append(j)
+                pts += extra
+            if ok:
+                return chain_idxs, pts
+    return None
+
+
+def chain_multi_leg_bent_shapes(panel: "Panel", mark_rows: list, gap_tol: float = 20.0) -> tuple[int, int]:
+    """N-way version of `chain_bent_shape_fragments`: reassembles a bent
+    bar from 3+ real fragment legs, not just 2, by matching each leg's
+    OWN length against the mark's own declared segment sequence (A, B,
+    C, ... from the itemized BBS) in order -- not just checking the
+    finished total. This is strictly stronger evidence than the 2-leg
+    version's "any connected group whose total happens to land within
+    15%" (confirmed a real failure mode: on PW-GF-05, that check
+    converged on mark E's short 2-leg completions instead of D2's genuine
+    6-leg 1600mm shape, since E is trivially reachable in 2 hops and nothing
+    stopped the greedy pass from claiming it first).
+
+    Root-caused by direct DXF forensics, not assumed: checked D2's own
+    label position for nearby ARC entities (a possible bend-connector the
+    line-only endpoint chase might miss) -- found none within 2200mm, and
+    zero real fragments near D2's label at all. D2's callout also pairs
+    to a "total_count=15" via `parse_letter_marks`, disagreeing with the
+    official qty of 33 -- the same "label sits in a legend column, not
+    next to its own geometry" issue already confirmed for PW-GF-09's mark
+    D. This function is built and tested honestly regardless: it doesn't
+    special-case D2, it runs the same segment-sequence search for every
+    non-straight mark with 3+ real segments, so it can recover whatever
+    a mark's real geometry genuinely supports finding.
+
+    Tries both the segment order as printed and reversed (a symmetric or
+    front-to-back-ambiguous shape can be walked from either end). Drops
+    the two smallest segments as an optional shorter fallback sequence
+    when the full sequence isn't found -- a short end-tab (e.g. a 70mm
+    hook return) may already be silently fused into its neighboring leg
+    by `merge_collinear`'s own gap-bridging, never surfacing as an
+    independent fragment at all.
+    """
+    ceilings = _fragment_ceiling(mark_rows)
+    bent_by_dia: dict[int, list] = {}
+    for m in mark_rows:
+        sdia = snap_diameter(m.diameter)
+        if sdia is None or m.qty <= 0 or m.length_mm <= 0:
+            continue
+        if m.shape.strip().upper() == "M_00":
+            continue
+        segs = [s for s in m.segments if s > 0]
+        if len(segs) >= 3:
+            bent_by_dia.setdefault(sdia, []).append((m, segs))
+
+    n_stitched = 0
+    n_frags_consumed = 0
+    for sdia, marks in bent_by_dia.items():
+        ceiling = ceilings.get(sdia, 0.0)
+        if ceiling <= 0:
+            continue
+        pool = [b for b in panel.bars if b.diameter == sdia and b.kind in ("v-mesh", "h-mesh")
+                and math.dist(b.points[0], b.points[-1]) < ceiling]
+        if len(pool) < 3:
+            continue
+        frags = [(b.points, math.dist(b.points[0], b.points[-1])) for b in pool]
+        used = [False] * len(frags)
+
+        for m, segs in sorted(marks, key=lambda x: -x[0].length_mm):
+            exist_tol = max(30.0, 0.08 * m.length_mm)
+            existing = sum(
+                1 for b in panel.bars if b.diameter == sdia
+                and abs(math.dist(b.points[0], b.points[-1]) - m.length_mm) <= exist_tol
+            )
+            need = m.qty - existing
+            if need <= 0:
+                continue
+
+            candidates = [segs, segs[::-1]]
+            if len(segs) > 3:
+                # Drop every segment much shorter than this shape's own
+                # main legs (a short end-tab/hook return), not just the
+                # single smallest value -- a shape with tabs at BOTH ends
+                # (e.g. D2: 70/330/420/330/420/70) has two equal smallest
+                # values; dropping only one still requires a 70mm fragment
+                # match that may not exist at all (confirmed on D2: zero
+                # ~70mm fragments anywhere in the pool, so the untrimmed
+                # sequence can never even start). Order-preserving, not
+                # sorted, since the endpoint-chaining walk depends on it.
+                tab_cutoff = 0.4 * max(segs)
+                trimmed = [s for s in segs if s > tab_cutoff]
+                if 3 <= len(trimmed) < len(segs):
+                    candidates += [trimmed, trimmed[::-1]]
+
+            while need > 0:
+                match = None
+                for target_segs in candidates:
+                    match = _find_leg_sequence_chain(frags, used, target_segs, gap_tol)
+                    if match:
+                        break
+                if match is None:
+                    break
+                idxs, pts = match
+                for i in idxs:
+                    used[i] = True
+                panel.bars.append(Bar3D(pts, sdia, "shape", "multi-leg-chained"))
+                n_stitched += 1
+                n_frags_consumed += len(idxs)
+                need -= 1
+
+        remove_ids = {id(pool[i]) for i, u in enumerate(used) if u}
+        if remove_ids:
+            panel.bars = [b for b in panel.bars if id(b) not in remove_ids]
+
+    return n_stitched, n_frags_consumed
+
+
 def synthesize_bent_shape_from_fragments(
     panel: "Panel", mark_rows: list, mark_groups: list, x0: float, y0: float,
 ) -> tuple[int, float]:
@@ -1586,19 +1792,13 @@ def synthesize_bent_shape_from_fragments(
     mark" check as `chain_bent_shape_fragments`, for the same reason).
     """
     groups_by_mark = {g.mark: g for g in mark_groups}
-    all_by_dia: dict[int, list] = {}
-    for m in mark_rows:
-        sdia = snap_diameter(m.diameter)
-        if sdia is None or m.length_mm <= 0:
-            continue
-        all_by_dia.setdefault(sdia, []).append(m.length_mm)
+    ceilings = _fragment_ceiling(mark_rows, strict=True)
 
     frags_by_dia: dict[int, list] = {}
-    for sdia, lens in all_by_dia.items():
-        floor = min(lens)
+    for sdia, ceiling in ceilings.items():
         frags_by_dia[sdia] = [
             b for b in panel.bars if b.diameter == sdia and b.kind in ("v-mesh", "h-mesh")
-            and math.dist(b.points[0], b.points[-1]) < 0.5 * floor
+            and math.dist(b.points[0], b.points[-1]) < ceiling
         ]
 
     # 2200mm, not the more common 1800mm radius used elsewhere in this

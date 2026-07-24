@@ -1,3 +1,11 @@
 balenaEtcher-2.1.6-x64.dmg
 __pycache__/
 *.pyc
+
+# secrets — never commit service-account keys or local env files
+facerecog/secrets/
+*.env.local
+attendance-dashboard/.env*
+!attendance-dashboard/.env.local.example
+**/service-account*.json
+**/*service-account*.json

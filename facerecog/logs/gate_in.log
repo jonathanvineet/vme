@@ -8,3 +8,4 @@
  * Running on https://127.0.0.1:5050
  * Running on https://172.20.10.4:5050
 [33mPress CTRL+C to quit[0m
+127.0.0.1 - - [25/Jul/2026 00:20:03] "POST /recognize HTTP/1.1" 200 -

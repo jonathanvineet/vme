@@ -19,6 +19,7 @@ import numpy as np
 from flask import Flask, jsonify, render_template, request
 
 import attendance
+import sheets_sync
 from face_engine import ENGINE
 
 MATCH_TOLERANCE = 0.50
@@ -80,6 +81,7 @@ def recognize():
             if now - last > COOLDOWN_SECONDS:
                 _last_logged[employee_id] = now
                 attendance.log_event(employee_id, name, GATE_MODE)
+                sheets_sync.sync_event(employee_id, name, GATE_MODE)
 
         results.append({
             "name": name,

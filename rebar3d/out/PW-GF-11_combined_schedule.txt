@@ -3,10 +3,10 @@ Official: PW-GF-11(S).dwg paper space
 
   bar reconstructed   official      gap      %
 T6            1.02k      0.00k   +1.02k  extra
-T8          318.52k    196.07k +122.45k   162%
+T8          318.16k    196.07k +122.09k   162%
 T10         221.55k    272.39k  -50.84k    81%
 T12          19.45k     19.16k   +0.29k   101%
 T16          78.49k    129.27k  -50.78k    61%
 T20          60.14k     78.83k  -18.69k    76%
 T25           8.47k     19.87k  -11.40k    43%
-TOTAL       707.65k    715.59k   -7.94k    99%
+TOTAL       707.29k    715.59k   -8.30k    99%
