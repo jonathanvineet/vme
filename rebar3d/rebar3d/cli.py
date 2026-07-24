@@ -22,8 +22,8 @@ from .extract import extract_bars, wall_outline
 from .loader import dwg_to_dxf, load_entities
 from .reconstruct import (
     calibrate_edge_caps, calibrate_sleeve_wraps, calibrate_uniform_shape_lengths,
-    drop_undersized_mesh_fragments, drop_unscheduled_dowels, reconstruct_panel,
-    synthesize_from_detail_evidence,
+    chain_bent_shape_fragments, drop_undersized_mesh_fragments, drop_unscheduled_dowels,
+    reconstruct_panel, synthesize_bent_shape_from_fragments, synthesize_from_detail_evidence,
 )
 from .schedule import (
     compare_to_bars, extract_schedule, extract_schedule_dwg, extract_itemized_bbs_dwg,
@@ -237,6 +237,19 @@ def main(argv=None) -> int:
             if n_dowel_dropped:
                 print(f"  dropped {n_dowel_dropped} dowel-kind bar(s) at diameters with "
                       f"no dowel-shaped mark in {src_label}")
+
+            n_stitched, n_frags_used = chain_bent_shape_fragments(panel, mark_rows)
+            if n_stitched:
+                print(f"  chained {n_frags_used} disjoint mesh fragment(s) into {n_stitched} "
+                      f"complete bent bar(s) from {src_label} (stitched path length matched "
+                      f"a real bent-shape mark within 15%)")
+
+            n_bent_added, bent_kg = synthesize_bent_shape_from_fragments(
+                panel, mark_rows, mark_groups, mx0, my0)
+            if n_bent_added:
+                print(f"  synthesized {n_bent_added} bent-shape bar(s) ({bent_kg:.1f}kg) from "
+                      f"{src_label} marks with real fragment evidence near their own label "
+                      f"(count trusted from the schedule, not re-measured off broken geometry)")
 
             n_frag_dropped, frag_kg = drop_undersized_mesh_fragments(panel, mark_rows)
             if n_frag_dropped:

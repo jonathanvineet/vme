@@ -1,0 +1,96 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Face Recognition</title>
+<style>
+  body { margin:0; background:#000; overflow:hidden; }
+  #wrap { position:relative; width:100vw; height:100vh; }
+  video, canvas { position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover; }
+  #status { position:absolute; bottom:10px; left:10px; color:#0f0; font-family:monospace; z-index:10; }
+</style>
+</head>
+<body>
+<div id="wrap">
+  <video id="video" autoplay playsinline muted></video>
+  <canvas id="overlay"></canvas>
+</div>
+<div id="status">starting camera...</div>
+
+<script>
+const video = document.getElementById('video');
+const canvas = document.getElementById('overlay');
+const ctx = canvas.getContext('2d');
+const statusEl = document.getElementById('status');
+
+const sendCanvas = document.createElement('canvas');
+const sendCtx = sendCanvas.getContext('2d');
+
+let busy = false;
+
+async function start() {
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({
+      video: { facingMode: 'user' },
+      audio: false
+    });
+    video.srcObject = stream;
+  } catch (err) {
+    statusEl.textContent = 'camera error: ' + err.message;
+    return;
+  }
+
+  video.addEventListener('loadedmetadata', () => {
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    sendCanvas.width = video.videoWidth;
+    sendCanvas.height = video.videoHeight;
+    statusEl.textContent = 'running';
+    loop();
+  });
+}
+
+async function loop() {
+  if (!busy) {
+    busy = true;
+    sendFrame().finally(() => { busy = false; });
+  }
+  setTimeout(loop, 400);
+}
+
+async function sendFrame() {
+  sendCtx.drawImage(video, 0, 0, sendCanvas.width, sendCanvas.height);
+  const dataUrl = sendCanvas.toDataURL('image/jpeg', 0.6);
+
+  const res = await fetch('/recognize', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ image: dataUrl })
+  });
+  const data = await res.json();
+  draw(data.faces || []);
+}
+
+function draw(faces) {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.lineWidth = 3;
+  ctx.font = '20px sans-serif';
+
+  for (const f of faces) {
+    ctx.strokeStyle = '#00ff00';
+    ctx.strokeRect(f.left, f.top, f.right - f.left, f.bottom - f.top);
+
+    const textWidth = ctx.measureText(f.name).width;
+    ctx.fillStyle = '#00ff00';
+    ctx.fillRect(f.left, f.bottom, textWidth + 12, 26);
+
+    ctx.fillStyle = '#000';
+    ctx.fillText(f.name, f.left + 6, f.bottom + 19);
+  }
+}
+
+start();
+</script>
+</body>
+</html>

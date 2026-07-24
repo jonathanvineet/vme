@@ -12,9 +12,9 @@ E       T8            9     90  OVER    3
 G       T12          11      0  SHORT   1
 H       T16           3      0  SHORT   1
 H1      T16           2      2  OK      1
-I       T16           3      4  OVER    2
-I1      T16           2      4  OVER    2
-I2      T16           2      1  SHORT   2
+I       T16           3      7  OVER    2
+I1      T16           2      7  OVER    2
+I2      T16           2      4  OVER    2
 J       T16           4      0  SHORT   1
 K       T20           3      1  SHORT   1
 L       T20           1      2  OVER    3

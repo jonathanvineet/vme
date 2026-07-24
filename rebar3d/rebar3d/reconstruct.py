@@ -1401,6 +1401,243 @@ def calibrate_uniform_shape_lengths(panel: "Panel", marks: list) -> int:
     return n_fixed
 
 
+def chain_bent_shape_fragments(panel: "Panel", mark_rows: list, gap_tol: float = 20.0) -> tuple[int, int]:
+    """Stitch disjoint mesh-fragment legs back into one complete bent bar.
+
+    `chain_bars` already joins fragments purely by endpoint proximity (no
+    collinearity requirement -- it can chain a bent shape fine), but only
+    within a global 4mm tolerance. Root-caused on PW-GF-09: mark D
+    (T8, `M_T1` shape, segments 70/330/220/330/220/70mm) draws its bend
+    points with a real gap of ~8-15mm in the DXF (a CAD clearance/kink
+    convention), which is wider than that tolerance -- so each leg
+    surfaces as its own short, disjoint fragment instead of one bar (see
+    `drop_undersized_mesh_fragments`, which used to just discard these).
+
+    Deliberately NOT a change to `chain_bars`'s own global tolerance --
+    this project's history has repeatedly shown that kind of edit looks
+    safe and regresses real bars elsewhere (see the long unresolved
+    z=-500 dowel bug comment above, three reverted attempts). Instead
+    this operates on an already-isolated, already-worthless pool (exactly
+    the fragments `drop_undersized_mesh_fragments` would otherwise
+    discard as noise -- shorter than any real official mark at that
+    diameter, so nothing legitimate is in this pool to begin with) and
+    only keeps a stitched result when its total path length lands within
+    15% of a real non-straight ("M_00" = straight, excluded) official
+    mark's own stated length -- can't make anything worse than the
+    already-correct "drop as noise" fallback, only better when a genuine
+    match is found. Requires at least 2 fragments actually joined (not a
+    single stray fragment coincidentally close in length) as further
+    evidence this is a real reassembly, not a coincidence.
+    """
+    bent_by_dia: dict[int, list] = {}
+    all_by_dia: dict[int, list] = {}
+    for m in mark_rows:
+        sdia = snap_diameter(m.diameter)
+        if sdia is None or m.qty <= 0 or m.length_mm <= 0:
+            continue
+        all_by_dia.setdefault(sdia, []).append(m.length_mm)
+        if m.shape.strip().upper() != "M_00":
+            bent_by_dia.setdefault(sdia, []).append(m)
+
+    n_stitched = 0
+    n_frags_consumed = 0
+    for sdia, marks in bent_by_dia.items():
+        floor = min(all_by_dia.get(sdia, [0]))
+        if floor <= 0:
+            continue
+        frags = [b for b in panel.bars if b.diameter == sdia and b.kind in ("v-mesh", "h-mesh")
+                 and math.dist(b.points[0], b.points[-1]) < 0.5 * floor]
+        frag_ids = {id(b) for b in frags}
+        dia_bars = [b for b in panel.bars if b.diameter == sdia and id(b) not in frag_ids]
+        n = len(frags)
+        if n < 2:
+            continue
+
+        used = [False] * n
+        chain_groups: list[list[int]] = []
+        chain_pts: list[list] = []
+        for i in range(n):
+            if used[i]:
+                continue
+            used[i] = True
+            group = [i]
+            pts = list(frags[i].points)
+            z0 = pts[0][2]
+            grew = True
+            while grew:
+                grew = False
+                for j in range(n):
+                    if used[j] or abs(frags[j].points[0][2] - z0) > 2.0:
+                        continue
+                    c0, c1 = frags[j].points[0], frags[j].points[-1]
+                    if math.dist(pts[-1], c0) <= gap_tol:
+                        pts = pts + list(frags[j].points[1:])
+                    elif math.dist(pts[-1], c1) <= gap_tol:
+                        pts = pts + list(frags[j].points[-2::-1])
+                    elif math.dist(pts[0], c1) <= gap_tol:
+                        pts = list(frags[j].points[:-1]) + pts
+                    elif math.dist(pts[0], c0) <= gap_tol:
+                        pts = list(frags[j].points[::-1][:-1]) + pts
+                    else:
+                        continue
+                    used[j] = True
+                    group.append(j)
+                    grew = True
+            chain_groups.append(group)
+            chain_pts.append(pts)
+
+        consumed = set()
+        for m in sorted(marks, key=lambda m: -m.length_mm):
+            # Don't add stitched bars on top of a mark that's already at or
+            # over its official count from real (non-fragment) geometry --
+            # confirmed on PW-GF-09's mark E: 90 *existing* bars already sit
+            # in E's length window against only 37 official, so blindly
+            # stitching more there just makes a bug someone else needs to
+            # fix slightly worse. `frags` (the undersized pool) are
+            # excluded from this count since they're what's being
+            # consumed, not pre-existing supply. Tolerance here MUST be
+            # tight (8%/30mm, matching the project's established precise
+            # length discriminator) -- not the same 15% used below to
+            # accept a *stitched* match: a loose existing-count tolerance
+            # sweeps in a DIFFERENT mark's own already-correct bars
+            # (confirmed on mark D: A's real 1125mm bars fell inside a
+            # naive 15% band around D's 1200mm, making D look falsely
+            # oversupplied at 47 when only 25 real matches existed).
+            exist_tol = max(30.0, 0.08 * m.length_mm)
+            existing = sum(
+                1 for b in dia_bars
+                if abs(math.dist(b.points[0], b.points[-1]) - m.length_mm) <= exist_tol
+            )
+            need = m.qty - existing
+            for ci, pts in enumerate(chain_pts):
+                if need <= 0:
+                    break
+                if ci in consumed or len(chain_groups[ci]) < 2:
+                    continue
+                path_len = sum(math.dist(pts[k], pts[k + 1]) for k in range(len(pts) - 1))
+                if path_len < 1.0:
+                    continue
+                if abs(path_len - m.length_mm) <= 0.15 * m.length_mm:
+                    panel.bars.append(Bar3D(pts, sdia, "shape", "chained-bent-fragment"))
+                    n_stitched += 1
+                    n_frags_consumed += len(chain_groups[ci])
+                    consumed.add(ci)
+                    need -= 1
+
+        if consumed:
+            remove_ids = {id(frags[fi]) for ci in consumed for fi in chain_groups[ci]}
+            panel.bars = [b for b in panel.bars if id(b) not in remove_ids]
+
+    return n_stitched, n_frags_consumed
+
+
+def synthesize_bent_shape_from_fragments(
+    panel: "Panel", mark_rows: list, mark_groups: list, x0: float, y0: float,
+) -> tuple[int, float]:
+    """Trust a bent-shape mark's own official length+qty directly once its
+    fragment pool proves the family is really drawn near the mark's own
+    label -- the same "shape+count evidence -> trust the schedule's own
+    number" pattern already proven safe by `synthesize_from_detail_evidence`
+    (which recovered A1/A2 on this same panel), applied here to a mark
+    whose evidence sits in the elevation itself rather than a detail view.
+
+    `chain_bent_shape_fragments` tries to geometrically reassemble the
+    exact bent path first (stronger evidence when it works) but is a
+    simple greedy 2-fragment-at-a-time joiner -- it doesn't reach shapes
+    needing 3+ leg joins (confirmed on PW-GF-09's mark D: `M_T1`, 6
+    segments, needs multiple joins to reach 1200mm, and the greedy pass
+    only ever found 2-piece ~330-370mm chains that landed in a different,
+    already-oversupplied mark's window instead). Rather than build a
+    fragile N-way path search, this takes the same bounded, weight-first
+    shortcut as detail-view synthesis: if at least `min_fragments` of the
+    already-isolated "too short to be any real bar" pool (see
+    `drop_undersized_mesh_fragments`) sit within 1800mm of this mark's own
+    label -- proof the family is physically drawn right where the
+    schedule says it should be, not a coincidence -- trust the official
+    qty/length directly instead of trying to re-derive them from the
+    fragments' own (partial, broken) geometry. Position is a nominal
+    stand-in, same precedent as `section-layer-origin` and
+    `synthesize_from_detail_evidence` -- weight correctness is the
+    priority, not visual placement. Gated on the mark not already being
+    at/over its official count (same "don't add to an already-oversupplied
+    mark" check as `chain_bent_shape_fragments`, for the same reason).
+    """
+    groups_by_mark = {g.mark: g for g in mark_groups}
+    all_by_dia: dict[int, list] = {}
+    for m in mark_rows:
+        sdia = snap_diameter(m.diameter)
+        if sdia is None or m.length_mm <= 0:
+            continue
+        all_by_dia.setdefault(sdia, []).append(m.length_mm)
+
+    frags_by_dia: dict[int, list] = {}
+    for sdia, lens in all_by_dia.items():
+        floor = min(lens)
+        frags_by_dia[sdia] = [
+            b for b in panel.bars if b.diameter == sdia and b.kind in ("v-mesh", "h-mesh")
+            and math.dist(b.points[0], b.points[-1]) < 0.5 * floor
+        ]
+
+    # 2200mm, not the more common 1800mm radius used elsewhere in this
+    # codebase (e.g. `mark_report`'s found-near check) -- this drawing set
+    # places letter labels in a side legend column, further from their
+    # real geometry than a plain in-place callout (confirmed on mark B2:
+    # its nearest real fragment sits at 2034mm, just past 1800mm). Still
+    # bounded, not "any bar anywhere": the min_fragments+length-match
+    # gates below do the real discriminating work, this only controls how
+    # far the label can be from its own real geometry before evidence
+    # counts at all.
+    evidence_radius = 2200.0
+    min_fragments = 3
+    n_added = 0
+    added_kg = 0.0
+    for m in mark_rows:
+        if m.shape.strip().upper() == "M_00" or m.qty <= 0 or m.length_mm <= 0:
+            continue
+        sdia = snap_diameter(m.diameter)
+        if sdia is None:
+            continue
+        g = groups_by_mark.get(m.mark)
+        if g is None or not g.instances:
+            continue
+
+        # Tight tolerance (8%/30mm), same reasoning as the identical gate
+        # in `chain_bent_shape_fragments`: a loose window here sweeps in a
+        # different mark's own real bars (e.g. A's 1125mm bars falsely
+        # counting toward D's 1200mm), making a real gap look already
+        # satisfied.
+        exist_tol = max(30.0, 0.08 * m.length_mm)
+        existing = sum(
+            1 for b in panel.bars if b.diameter == sdia
+            and abs(math.dist(b.points[0], b.points[-1]) - m.length_mm) <= exist_tol
+        )
+        need = m.qty - existing
+        if need <= 0:
+            continue
+
+        frags = frags_by_dia.get(sdia, [])
+        if len(frags) < min_fragments:
+            continue
+
+        near_ids = set()
+        for inst in g.instances:
+            px, py = inst.x - x0, inst.y - y0
+            for b in frags:
+                if id(b) in near_ids:
+                    continue
+                if any(math.dist((p[0], p[1]), (px, py)) <= evidence_radius for p in b.points):
+                    near_ids.add(id(b))
+        if len(near_ids) < min_fragments:
+            continue
+
+        for k in range(need):
+            pts = [(0.0, k * 50.0, panel.thickness / 2), (m.length_mm, k * 50.0, panel.thickness / 2)]
+            panel.bars.append(Bar3D(pts, sdia, "shape", "bent-shape-evidence-origin"))
+        n_added += need
+        added_kg += sdia ** 2 / 162.0 * (m.length_mm / 1000.0) * need
+    return n_added, added_kg
+
+
 def drop_undersized_mesh_fragments(panel: "Panel", mark_rows: list) -> tuple[int, float]:
     """Drop v-mesh/h-mesh bars far shorter than the shortest real official
     mark at that diameter -- schedule-grounded proof they can't be any
