@@ -1,0 +1,212 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Enroll Employee · Attendance Admin</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='admin.css') }}">
+<style>
+  .layout { display: grid; grid-template-columns: 1fr; gap: 20px; }
+  @media (min-width: 760px) {
+    .layout { grid-template-columns: 320px 1fr; align-items: start; }
+  }
+  .video-box {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    background: #000;
+    border-radius: var(--radius);
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+  .video-box video { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .video-hint {
+    position: absolute; bottom: 10px; left: 0; right: 0;
+    text-align: center; font-size: 12px; color: rgba(255,255,255,0.7);
+  }
+  .shots-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(84px, 1fr));
+    gap: 10px;
+    margin-top: 14px;
+  }
+  .shot {
+    position: relative;
+    aspect-ratio: 1;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 2px solid var(--border);
+  }
+  .shot img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .shot .num {
+    position: absolute; top: 4px; left: 4px;
+    background: rgba(0,0,0,0.6); color: #fff;
+    font-size: 11px; font-weight: 600;
+    padding: 1px 6px; border-radius: 4px;
+  }
+  .shot-slot {
+    aspect-ratio: 1;
+    border-radius: 8px;
+    border: 2px dashed var(--border);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--text-dim); font-size: 12px;
+  }
+  .progress-text { font-size: 13px; color: var(--text-dim); margin-top: 8px; }
+  .progress-text.ready { color: var(--success); }
+  .actions { display: flex; gap: 10px; margin-top: 18px; }
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="brand"><span class="dot"></span> Attendance Admin</div>
+  <nav>
+    <a href="{{ url_for('dashboard') }}">&larr; Employees</a>
+    <a href="{{ url_for('logout') }}">Log out</a>
+  </nav>
+</div>
+
+<div class="page" style="max-width: 860px;">
+  <div class="page-header">
+    <div>
+      <h1>Enroll Employee</h1>
+      <p>Capture at least {{ min_photos }} clear photos in good, even lighting.</p>
+    </div>
+  </div>
+
+  <div class="card" style="padding: 24px;">
+    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:14px; max-width:480px; margin-bottom:22px;">
+      <div class="field" style="margin-bottom:0;">
+        <label for="employeeId">Employee ID</label>
+        <input type="text" id="employeeId" placeholder="e.g. E1042" value="{{ employee_id }}">
+      </div>
+      <div class="field" style="margin-bottom:0;">
+        <label for="name">Full name</label>
+        <input type="text" id="name" placeholder="e.g. Priya Sharma" value="{{ name }}">
+      </div>
+    </div>
+
+    <div class="layout">
+      <div>
+        <div class="video-box">
+          <video id="video" autoplay playsinline muted></video>
+          <div class="video-hint">Face the camera, well lit</div>
+        </div>
+        <div class="actions">
+          <button id="capture" class="btn btn-primary" style="flex:1; justify-content:center;">Capture photo</button>
+        </div>
+      </div>
+
+      <div>
+        <label style="margin-bottom:10px;">Captured photos</label>
+        <div id="shots" class="shots-grid"></div>
+        <div id="progress" class="progress-text">0 of {{ min_photos }} minimum captured</div>
+        <div id="msg" class="alert" style="display:none; margin-top:14px;"></div>
+        <div class="actions">
+          <button id="save" class="btn btn-primary" disabled>Save employee</button>
+          <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">Cancel</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const MIN_PHOTOS = {{ min_photos }};
+const video = document.getElementById('video');
+const shotsEl = document.getElementById('shots');
+const progressEl = document.getElementById('progress');
+const captureBtn = document.getElementById('capture');
+const saveBtn = document.getElementById('save');
+const msgEl = document.getElementById('msg');
+
+const shotCanvas = document.createElement('canvas');
+const shotCtx = shotCanvas.getContext('2d');
+const shots = [];
+
+async function start() {
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({
+      video: { facingMode: 'user' },
+      audio: false
+    });
+    video.srcObject = stream;
+  } catch (err) {
+    showMsg('Camera error: ' + err.message, 'error');
+  }
+}
+
+function showMsg(text, type) {
+  msgEl.textContent = text;
+  msgEl.style.display = text ? 'block' : 'none';
+  msgEl.className = 'alert ' + (type === 'error' ? 'alert-error' : 'alert-success');
+}
+
+function updateProgress() {
+  const remaining = MIN_PHOTOS - shots.length;
+  if (remaining > 0) {
+    progressEl.textContent = `${shots.length} of ${MIN_PHOTOS} minimum captured`;
+    progressEl.className = 'progress-text';
+  } else {
+    progressEl.textContent = `${shots.length} photos captured — ready to save`;
+    progressEl.className = 'progress-text ready';
+  }
+  saveBtn.disabled = shots.length < MIN_PHOTOS;
+}
+
+captureBtn.addEventListener('click', () => {
+  shotCanvas.width = video.videoWidth;
+  shotCanvas.height = video.videoHeight;
+  shotCtx.drawImage(video, 0, 0);
+  const dataUrl = shotCanvas.toDataURL('image/jpeg', 0.9);
+  shots.push(dataUrl);
+
+  const shot = document.createElement('div');
+  shot.className = 'shot';
+  shot.innerHTML = `<span class="num">${shots.length}</span><img src="${dataUrl}">`;
+  shotsEl.appendChild(shot);
+
+  updateProgress();
+  showMsg('');
+});
+
+saveBtn.addEventListener('click', async () => {
+  const employeeId = document.getElementById('employeeId').value.trim();
+  const name = document.getElementById('name').value.trim();
+
+  if (!employeeId || !name) {
+    showMsg('Employee ID and name are required.', 'error');
+    return;
+  }
+
+  saveBtn.disabled = true;
+  captureBtn.disabled = true;
+  showMsg('Saving...', 'success');
+
+  try {
+    const res = await fetch('/enroll/save', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ employee_id: employeeId, name: name, images: shots })
+    });
+    const data = await res.json();
+
+    if (data.ok) {
+      showMsg('Saved. Redirecting...', 'success');
+      window.location.href = '/';
+    } else {
+      showMsg(data.error || 'Save failed.', 'error');
+      saveBtn.disabled = shots.length < MIN_PHOTOS;
+      captureBtn.disabled = false;
+    }
+  } catch (err) {
+    showMsg('Save failed: ' + err.message, 'error');
+    saveBtn.disabled = shots.length < MIN_PHOTOS;
+    captureBtn.disabled = false;
+  }
+});
+
+updateProgress();
+start();
+</script>
+</body>
+</html>

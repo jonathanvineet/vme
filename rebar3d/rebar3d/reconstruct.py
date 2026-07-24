@@ -150,6 +150,7 @@ def classify_sections(
     # only compute the consensus from views close enough to plausibly be
     # real -- if all candidates already agree there's nothing to filter).
     candidates = []
+    raw_candidates = []  # every view's own reading, uncapped
     for v in views[1:]:
         wall = [e for e in v.ents if e.layer.startswith("A-WALL")]
         if not wall:
@@ -160,9 +161,31 @@ def classify_sections(
         ys = [b for e in wall for b in (e.bbox[1], e.bbox[3])]
         w, h = max(xs) - min(xs), max(ys) - min(ys)
         t = min(w, h)
+        raw_candidates.append(t)
         if t <= 0.5 * min(panel_w, panel_h):
             candidates.append(t)
     consensus_t = statistics.median(candidates) if candidates else None
+
+    # Fallback for a panel that's itself narrow (root-caused on PW-GF-09's
+    # "(R2)" sheet: an edge-beam/corbel wing only 400mm wide -- its own
+    # real detail-section wall bands are ALSO ~400mm thick, so the
+    # standard 0.5x-panel-size cap above rejects every single one of them,
+    # even though 3 independent views agree on that exact thickness).
+    # The cap's real job is telling a single erroneous wide reading (the
+    # PW-01 case this whole guard exists for: one view's bbox swallowing
+    # unrelated geometry, nothing else to cross-check it against) apart
+    # from a genuine wide section -- so when the *standard* pass finds
+    # NOTHING at all, fall back to trusting a tight multi-view consensus
+    # among the raw (uncapped) readings instead of the panel-relative cap:
+    # requires at least 2 independent views agreeing within 20% of their
+    # own median, which a single-view artifact can't produce on its own.
+    relaxed = False
+    if consensus_t is None and len(raw_candidates) >= 2:
+        med = statistics.median(raw_candidates)
+        agreeing = [t for t in raw_candidates if med > 0 and abs(t - med) <= 0.2 * med]
+        if len(agreeing) >= 2:
+            consensus_t = statistics.median(agreeing)
+            relaxed = True
 
     infos: list[SectionInfo] = []
     for v in views[1:]:
@@ -182,7 +205,7 @@ def classify_sections(
         # the view is laid out on the sheet; the short axis is the thickness.
         long_len, thickness = max(w, h), min(w, h)
         drawn_x = w >= h  # long axis drawn along sheet X
-        if thickness > 0.5 * min(panel_w, panel_h):
+        if not relaxed and thickness > 0.5 * min(panel_w, panel_h):
             continue
         if consensus_t is not None and abs(thickness - consensus_t) > 0.3 * consensus_t:
             continue

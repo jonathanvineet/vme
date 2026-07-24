@@ -1,1 +1,2 @@
-[WARN] reinforcement ratio 2443 kg/m3 is outside the usual 20-400 kg/m3 range (176.4kg steel / 0.07m3 concrete) -- reconstruction is likely badly incomplete or has fabricated bars, not just imprecise
+[WARN] reinforcement ratio 1226 kg/m3 is outside the usual 20-400 kg/m3 range (221.3kg steel / 0.18m3 concrete) -- reconstruction is likely badly incomplete or has fabricated bars, not just imprecise
+[WARN] 4 bar(s) exceed 1.5x the panel's own diagonal (2300mm) in length: shape T16 @3600mm, shape T16 @3600mm, shape T16 @3600mm, shape T16 @3600mm -- likely a mis-chained bar bridging unrelated fragments

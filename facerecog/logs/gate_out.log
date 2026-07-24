@@ -1,0 +1,10 @@
+/opt/homebrew/lib/python3.14/site-packages/face_recognition_models/__init__.py:7: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  from pkg_resources import resource_filename
+[face_engine] loaded 6 face encodings for 3 employees
+ * Serving Flask app 'gate_server'
+ * Debug mode: off
+[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on https://127.0.0.1:5051
+ * Running on https://172.20.10.4:5051
+[33mPress CTRL+C to quit[0m
