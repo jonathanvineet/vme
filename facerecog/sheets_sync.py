@@ -24,6 +24,11 @@ CREDENTIALS_FILE = os.environ.get("GOOGLE_SERVICE_ACCOUNT_FILE")
 SHEET_TAB = "Attendance"
 HEADERS = ["Employee ID", "Name", "Date", "In Time", "Out Time"]
 
+if SHEET_ID and CREDENTIALS_FILE:
+    print(f"[sheets_sync] configured: sheet={SHEET_ID} creds={CREDENTIALS_FILE}")
+else:
+    print("[sheets_sync] not configured (GOOGLE_SHEET_ID / GOOGLE_SERVICE_ACCOUNT_FILE missing) — local-only")
+
 _SCOPES = ["https://www.googleapis.com/auth/spreadsheets"]
 
 _service = None
@@ -134,5 +139,6 @@ def _sync_event_sync(employee_id, name, mode, when):
                 valueInputOption="RAW",
                 body={"values": [[time_str]]},
             ).execute()
+        print(f"[sheets_sync] synced {employee_id} ({mode}) at {time_str}")
     except Exception as exc:
         print(f"[sheets_sync] event sync failed (local record is unaffected): {exc}")

@@ -1,6 +1,6 @@
 import { AttendanceRow } from "@/lib/types";
-import { durationMs, formatDuration, formatTime } from "@/lib/attendanceCalc";
-import { Badge } from "./Badge";
+import { durationMs, formatDuration, formatTime, getRowStatus } from "@/lib/attendanceCalc";
+import { StatusBadge } from "./StatusBadge";
 
 export function PersonalReport({
   rows,
@@ -45,7 +45,7 @@ export function PersonalReport({
           <tbody>
             {sorted.map((r) => {
               const ms = durationMs(r, now);
-              const isOngoing = r.inTime && !r.outTime;
+              const status = getRowStatus(r, now);
               return (
                 <tr key={r.date} className="border-t border-border text-sm hover:bg-surface-2">
                   <td className="px-5 py-3">{r.date}</td>
@@ -53,13 +53,7 @@ export function PersonalReport({
                   <td className="px-5 py-3">{formatTime(r.outTime)}</td>
                   <td className="px-5 py-3">{ms !== null ? formatDuration(ms) : "—"}</td>
                   <td className="px-5 py-3">
-                    {isOngoing ? (
-                      <Badge tone="success">Currently in</Badge>
-                    ) : ms !== null ? (
-                      <Badge>Present</Badge>
-                    ) : (
-                      <Badge tone="warning">Incomplete</Badge>
-                    )}
+                    <StatusBadge status={status} />
                   </td>
                 </tr>
               );

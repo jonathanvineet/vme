@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 import { AttendanceRow } from "@/lib/types";
-import { durationMs, formatDuration, formatTime } from "@/lib/attendanceCalc";
-import { Badge } from "./Badge";
+import { durationMs, formatDuration, formatTime, getRowStatus } from "@/lib/attendanceCalc";
+import { StatusBadge } from "./StatusBadge";
 
 type SortKey = "date" | "name" | "duration";
 
@@ -65,7 +65,7 @@ export function AttendanceList({ rows, now }: { rows: AttendanceRow[]; now: Date
           <tbody>
             {sorted.map((r, i) => {
               const ms = durationMs(r, now);
-              const isOngoing = r.inTime && !r.outTime;
+              const status = getRowStatus(r, now);
               return (
                 <tr key={`${r.employeeId}-${r.date}-${i}`} className="border-t border-border text-sm hover:bg-surface-2">
                   <td className="whitespace-nowrap px-5 py-3">{r.date}</td>
@@ -75,13 +75,7 @@ export function AttendanceList({ rows, now }: { rows: AttendanceRow[]; now: Date
                   <td className="whitespace-nowrap px-5 py-3">{formatTime(r.inTime)}</td>
                   <td className="whitespace-nowrap px-5 py-3">{formatTime(r.outTime)}</td>
                   <td className="whitespace-nowrap px-5 py-3">
-                    {isOngoing ? (
-                      <Badge tone="success">Currently in</Badge>
-                    ) : ms !== null ? (
-                      <Badge>Present</Badge>
-                    ) : (
-                      <Badge tone="warning">Incomplete</Badge>
-                    )}
+                    <StatusBadge status={status} />
                   </td>
                 </tr>
               );

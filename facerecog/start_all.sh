@@ -31,13 +31,13 @@ cleanup() {
 }
 trap cleanup INT TERM
 
-python3 gate_server.py --mode in --port $PORT_IN > logs/gate_in.log 2>&1 &
+python3 -u gate_server.py --mode in --port $PORT_IN > logs/gate_in.log 2>&1 &
 PID_IN=$!
 
-python3 gate_server.py --mode out --port $PORT_OUT > logs/gate_out.log 2>&1 &
+python3 -u gate_server.py --mode out --port $PORT_OUT > logs/gate_out.log 2>&1 &
 PID_OUT=$!
 
-python3 admin_server.py --port $PORT_ADMIN > logs/admin.log 2>&1 &
+python3 -u admin_server.py --port $PORT_ADMIN > logs/admin.log 2>&1 &
 PID_ADMIN=$!
 
 IP=$(ipconfig getifaddr en0 2>/dev/null || ipconfig getifaddr en1 2>/dev/null || echo "<mac-ip>")

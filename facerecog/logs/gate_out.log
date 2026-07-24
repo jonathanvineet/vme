@@ -1,5 +1,6 @@
 /opt/homebrew/lib/python3.14/site-packages/face_recognition_models/__init__.py:7: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
   from pkg_resources import resource_filename
+[sheets_sync] configured: sheet=1CzBMtY1gtp0nB1j_0tZvGuLuEkH_Po4mgl8mfF9rVGo creds=/Users/jonathan/elco/vme/facerecog/secrets/google-service-account.json
 [face_engine] loaded 6 face encodings for 3 employees
  * Serving Flask app 'gate_server'
  * Debug mode: off
@@ -8,3 +9,39 @@
  * Running on https://127.0.0.1:5051
  * Running on https://172.20.10.4:5051
 [33mPress CTRL+C to quit[0m
+172.20.10.4 - - [25/Jul/2026 00:36:13] "GET / HTTP/1.1" 200 -
+172.20.10.4 - - [25/Jul/2026 00:36:14] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+172.20.10.4 - - [25/Jul/2026 00:36:20] "POST /recognize HTTP/1.1" 200 -
+172.20.10.4 - - [25/Jul/2026 00:36:20] "POST /recognize HTTP/1.1" 200 -
+172.20.10.4 - - [25/Jul/2026 00:36:20] "POST /recognize HTTP/1.1" 200 -
+172.20.10.4 - - [25/Jul/2026 00:36:21] "POST /recognize HTTP/1.1" 200 -
+172.20.10.4 - - [25/Jul/2026 00:36:21] "POST /recognize HTTP/1.1" 200 -
+172.20.10.4 - - [25/Jul/2026 00:36:24] "POST /recognize HTTP/1.1" 200 -
+172.20.10.4 - - [25/Jul/2026 00:36:24] "POST /recognize HTTP/1.1" 200 -
+172.20.10.4 - - [25/Jul/2026 00:36:24] "POST /recognize HTTP/1.1" 200 -
+[sheets_sync] synced 14432 (out) at 00:36:24
+172.20.10.4 - - [25/Jul/2026 00:36:25] "POST /recognize HTTP/1.1" 200 -
+172.20.10.4 - - [25/Jul/2026 00:36:25] "POST /recognize HTTP/1.1" 200 -
+172.20.10.4 - - [25/Jul/2026 00:36:26] "POST /recognize HTTP/1.1" 200 -
+172.20.10.4 - - [25/Jul/2026 00:36:26] "POST /recognize HTTP/1.1" 200 -
+172.20.10.4 - - [25/Jul/2026 00:36:26] "POST /recognize HTTP/1.1" 200 -
+172.20.10.4 - - [25/Jul/2026 00:36:27] "POST /recognize HTTP/1.1" 200 -
+172.20.10.4 - - [25/Jul/2026 00:36:27] "POST /recognize HTTP/1.1" 200 -
+172.20.10.4 - - [25/Jul/2026 00:36:28] "POST /recognize HTTP/1.1" 200 -
+172.20.10.4 - - [25/Jul/2026 00:36:28] "POST /recognize HTTP/1.1" 200 -
+172.20.10.4 - - [25/Jul/2026 00:36:29] "POST /recognize HTTP/1.1" 200 -
+172.20.10.4 - - [25/Jul/2026 00:36:30] "POST /recognize HTTP/1.1" 200 -
+172.20.10.4 - - [25/Jul/2026 00:36:31] "POST /recognize HTTP/1.1" 200 -
+172.20.10.4 - - [25/Jul/2026 00:36:32] "POST /recognize HTTP/1.1" 200 -
+172.20.10.4 - - [25/Jul/2026 00:36:33] "POST /recognize HTTP/1.1" 200 -
+172.20.10.4 - - [25/Jul/2026 00:36:34] "POST /recognize HTTP/1.1" 200 -
+172.20.10.4 - - [25/Jul/2026 00:36:35] "POST /recognize HTTP/1.1" 200 -
+172.20.10.4 - - [25/Jul/2026 00:36:36] "POST /recognize HTTP/1.1" 200 -
+172.20.10.4 - - [25/Jul/2026 00:36:37] "POST /recognize HTTP/1.1" 200 -
+172.20.10.4 - - [25/Jul/2026 00:36:38] "POST /recognize HTTP/1.1" 200 -
+172.20.10.4 - - [25/Jul/2026 00:36:39] "POST /recognize HTTP/1.1" 200 -
+172.20.10.4 - - [25/Jul/2026 00:36:40] "POST /recognize HTTP/1.1" 200 -
+172.20.10.4 - - [25/Jul/2026 00:36:40] "POST /recognize HTTP/1.1" 200 -
+172.20.10.4 - - [25/Jul/2026 00:36:41] "POST /recognize HTTP/1.1" 200 -
+172.20.10.4 - - [25/Jul/2026 00:36:42] "POST /recognize HTTP/1.1" 200 -
+172.20.10.4 - - [25/Jul/2026 00:36:43] "POST /recognize HTTP/1.1" 200 -

@@ -27,8 +27,11 @@ export function SummaryReport({
                 <div className="flex items-baseline gap-2">
                   <span className="text-sm font-medium">{t.name}</span>
                   <span className="text-xs text-text-dim">{t.employeeId}</span>
-                  {t.incompleteDays > 0 && (
-                    <Badge tone="warning">{t.incompleteDays} incomplete</Badge>
+                  {t.missingCheckout > 0 && (
+                    <Badge tone="warning">{t.missingCheckout} missing checkout</Badge>
+                  )}
+                  {t.missingCheckin > 0 && (
+                    <Badge tone="warning">{t.missingCheckin} missing checkin</Badge>
                   )}
                 </div>
                 <div className="flex items-baseline gap-3">

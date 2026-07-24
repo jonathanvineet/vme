@@ -8,8 +8,3 @@
  * Running on https://127.0.0.1:5052
  * Running on https://172.20.10.4:5052
 [33mPress CTRL+C to quit[0m
-172.20.10.4 - - [24/Jul/2026 23:37:09] "GET /login HTTP/1.1" 200 -
-172.20.10.4 - - [24/Jul/2026 23:37:09] "GET /static/admin.css HTTP/1.1" 200 -
-172.20.10.4 - - [24/Jul/2026 23:37:13] "[32mPOST /login HTTP/1.1[0m" 302 -
-172.20.10.4 - - [24/Jul/2026 23:37:13] "GET / HTTP/1.1" 200 -
-172.20.10.4 - - [24/Jul/2026 23:37:13] "GET /static/admin.css HTTP/1.1" 200 -
