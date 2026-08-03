@@ -1,0 +1,1 @@
+[WARN] 9 bar(s) exceed 1.5x the panel's own diagonal (5378mm) in length: u-bar T8 @10219mm, u-bar T8 @10219mm, u-bar T8 @10219mm, u-bar T8 @10219mm, u-bar T8 @10219mm (+4 more) -- likely a mis-chained bar bridging unrelated fragments

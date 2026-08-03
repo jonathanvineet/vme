@@ -133,6 +133,57 @@ _MARK_ROW_RE = re.compile(
     re.MULTILINE,
 )
 
+# Some sheets' PDFs flow the whole itemized table as one line of
+# space-separated text per row (e.g. "A 8 mm M_T1 70 mm 250 mm ... 6 2.13
+# kg") instead of pypdf's usual one-cell-per-line dump `_MARK_ROW_RE`
+# expects -- confirmed on PC-GF-01(R).pdf. The segment-column count also
+# varies per sub-table on the SAME page there (6 columns A-E,G on the
+# "(A)" table, 5 columns A-E on the "(B)" table), and a shape name can be
+# multi-word ("Rebar Shape 30"), so segments aren't counted from a fixed
+# column spec -- captured generically as every "<N> mm" / "<varies>" token
+# between the shape name and the trailing qty+weight, with the last two
+# tokens being bar length and total length and everything before them a
+# real segment ("<varies>" -- an end segment PC-GF-01's own E3 row uses to
+# mean "differs per instance" -- stored as 0.0, since no single number
+# applies).
+_FLOWED_ROW_RE = re.compile(
+    r"^(?P<mark>[A-Za-z]\w*)\s+(?P<dia>\d+)\s*mm\s+(?P<shape>.+?)\s+"
+    r"(?P<rest>(?:(?:\d+\s*mm|<varies>)\s+)+)"
+    r"(?P<qty>\d+)\s+(?P<wt>[\d.]+)\s*kg\s*$",
+    re.MULTILINE,
+)
+
+
+def _parse_flowed_itemized_bbs(text: str) -> list["MarkRow"]:
+    rows: list[MarkRow] = []
+    idx = text.find("Rebar schedule for")
+    if idx < 0:
+        return rows
+    for m in _FLOWED_ROW_RE.finditer(text[idx:]):
+        vals: list[float | None] = []
+        i = 0
+        raw = m.group("rest").split()
+        while i < len(raw):
+            if raw[i] == "<varies>":
+                vals.append(None)
+                i += 1
+            else:
+                vals.append(float(raw[i]))
+                i += 2  # skip the "mm" token
+        if len(vals) < 2:
+            continue
+        length_val, total_val = vals[-2], vals[-1]
+        if length_val is None or total_val is None:
+            continue
+        segments = [v if v is not None else 0.0 for v in vals[:-2]]
+        rows.append(MarkRow(
+            mark=m.group("mark"), diameter=int(m.group("dia")),
+            shape=m.group("shape").strip(), segments=segments,
+            length_mm=length_val, total_length_mm=total_val,
+            qty=int(m.group("qty")), weight_kg=float(m.group("wt")),
+        ))
+    return rows
+
 
 def parse_itemized_bbs(pdf_path: Path) -> list[MarkRow] | None:
     """Parse a "Rebar schedule for X" itemized table (Schedule Mark / Bar
@@ -158,6 +209,8 @@ def parse_itemized_bbs(pdf_path: Path) -> list[MarkRow] | None:
             length_mm=float(length), total_length_mm=float(totlen),
             qty=int(qty), weight_kg=float(wt),
         ))
+    if not rows:
+        rows = _parse_flowed_itemized_bbs(text)
     return rows or None
 
 
@@ -199,6 +252,11 @@ def extract_itemized_bbs_dwg(dxf_path: Path) -> list[MarkRow] | None:
             if e.dxftype() not in ("MTEXT", "TEXT"):
                 continue
             s = (e.plain_text() if e.dxftype() == "MTEXT" else e.dxf.text).strip()
+            # a wrapped MTEXT header cell ("Total Bar\nLength") renders its
+            # paragraph break as a literal "\n" -- collapse all internal
+            # whitespace to single spaces so it still compares equal to the
+            # plain "Total Bar Length" label used everywhere below.
+            s = " ".join(s.split())
             if s:
                 items.append((s, e.dxf.insert.x, e.dxf.insert.y))
         titles = [(s, x, y) for s, x, y in items if s.startswith("Rebar schedule for")]
@@ -216,7 +274,18 @@ def extract_itemized_bbs_dwg(dxf_path: Path) -> list[MarkRow] | None:
                         hdr_y, hdr_x = y, x
             if hdr_y is None:
                 continue
-            header = sorted(((s, x) for s, x, y in items if abs(y - hdr_y) < 2.0),
+            # A wrapped two-line header cell ("Total Bar\nLength") sits
+            # noticeably off the single-line headers' shared Y -- confirmed
+            # on PW-GF-01(A)/(B): its insert point lands 2.02 units above
+            # the rest of the header row, just outside the 2.0 tolerance
+            # used for data rows below, so "Total Bar Length" silently
+            # vanished from `labels` while every data row still printed all
+            # 13 real cells (12 columns' worth once corrected). The row-
+            # parsing code below then read the wrong cell as `qty`/`weight`
+            # (off by one column) and threw on every single row in both
+            # sub-tables. Widened just for the header line -- data rows
+            # themselves are single-line and still use the tighter 2.0.
+            header = sorted(((s, x) for s, x, y in items if abs(y - hdr_y) < 3.0),
                             key=lambda c: c[1])
             labels = [s for s, _x in header]
             if "Shape" not in labels or "Bar Length" not in labels or "Weight" not in labels:
@@ -231,6 +300,11 @@ def extract_itemized_bbs_dwg(dxf_path: Path) -> list[MarkRow] | None:
             seg_labels = labels[labels.index("Shape") + 1:labels.index("Bar Length")]
             n_seg = len(seg_labels)
             n_cols = len(labels)
+            len_idx = labels.index("Bar Length")
+            has_total = "Total Bar Length" in labels
+            total_idx = labels.index("Total Bar Length") if has_total else None
+            qty_idx = labels.index("Quantity")
+            wt_idx = labels.index("Weight")
             weight_x = header[labels.index("Weight")][1]
             col_width = (weight_x - hdr_x) / max(n_cols - 1, 1)
             # location annotations (if the sheet prints them, e.g. "WALL -
@@ -268,12 +342,45 @@ def extract_itemized_bbs_dwg(dxf_path: Path) -> list[MarkRow] | None:
                     continue
                 try:
                     dia = int(float(vals[1][:-3]))
-                    segs = [float(v[:-3]) for v in vals[3:3 + n_seg]]
-                    length_mm = float(vals[3 + n_seg][:-3])
-                    total_mm = float(vals[4 + n_seg][:-3])
-                    qty = int(vals[5 + n_seg])
-                    wt = float(vals[6 + n_seg][:-3]) if vals[6 + n_seg].endswith("kg") \
-                        else float(vals[6 + n_seg])
+                    # A segment cell can read "<varies>" instead of a real
+                    # "N mm" value (confirmed on PC-GF-01's mark E3: its
+                    # last leg genuinely varies per instance, per the
+                    # sheet's own note) -- treating the whole row as
+                    # unparseable over ONE non-numeric segment silently
+                    # dropped E3 entirely (4 real instances, 37kg), even
+                    # though every other cell (diameter/length/qty/weight)
+                    # parsed fine and is exactly what every downstream
+                    # chain/synthesis pass actually needs. 0.0 here matches
+                    # how `_MARK_ROW_RE`'s own PDF-text path already
+                    # represents the identical "<varies>" cell for the same
+                    # mark on the same panel (confirmed: its E3 row also
+                    # ends in a 0.0 segment) -- both itemized sources agree
+                    # on the same fallback, not a new convention.
+                    segs = []
+                    for v in vals[3:3 + n_seg]:
+                        try:
+                            segs.append(float(v[:-3]) if v.endswith(" mm") else 0.0)
+                        except ValueError:
+                            segs.append(0.0)
+                    length_mm = float(vals[len_idx][:-3])
+                    # not every sub-table on a sheet prints a separate
+                    # "Total Bar Length" column (confirmed on PW-GF-01: its
+                    # (A)/(B) sub-tables have only Bar Length/Quantity/
+                    # Weight after the segment columns, while (C) has both
+                    # -- the fixed vals[4+n_seg] offset this used to assume
+                    # for `total_mm` silently ran into Quantity's own cell
+                    # instead on those tables, an int like "12" with no
+                    # "mm" suffix, so the float(...[:-3]) parse always threw
+                    # and the whole row -- and thus every mark in that
+                    # sub-table -- was dropped). When the column is genuinely
+                    # absent, `length_mm` doubles as the total (no separate
+                    # per-segment/whole-bar distinction to make); nothing
+                    # downstream reads `total_length_mm` today, so this
+                    # can't change any other panel's numbers.
+                    total_mm = float(vals[total_idx][:-3]) if has_total else length_mm
+                    qty = int(vals[qty_idx])
+                    wt = float(vals[wt_idx][:-3]) if vals[wt_idx].endswith("kg") \
+                        else float(vals[wt_idx])
                 except (ValueError, IndexError):
                     continue
                 # Only accept the specific known location-keyword vocabulary

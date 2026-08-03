@@ -1,0 +1,64 @@
+callout                      expected  found   nearest  status
+-(30)-T8 Horizontal Bar@150 mm       30      0         -  SHORT
+-(30)-T8 Horizontal Bar@150 mm       30      2    1223mm  SHORT
+-(30)-T8 Horizontal Bar@150 mm       30      9     797mm  SHORT
+-(30)-T8 Horizontal Bar@150 mm       30     10     589mm  SHORT
+-(10)-T10 Vertical Bar@125 mm       10      0         -  SHORT
+-(20)-T8@150 mm                    20     10     680mm  SHORT
+-(20)-T8@150 mm                    20     10     713mm  SHORT
+-(10)-T10 Vertical Bar@125 mm       10      2    1239mm  SHORT
+-(23)-T8@200 mm                    23     17     294mm  SHORT
+-(6)-T10 Vertical Bar@125 mm        6      0         -  SHORT
+-(6)-T10 Vertical Bar@125 mm        6      0         -  SHORT
+-(6)-T8 U Bar@125 mm                6      1     580mm  SHORT
+-(5)-T8 Horizontal Bar@150 mm        5      0         -  SHORT
+-(15)-T8@200 mm                    15     11     343mm  SHORT
+-(15)-T8@200 mm                    15     11     413mm  SHORT
+-(15)-T8@200 mm                    15     11     429mm  SHORT
+-(4)-T10 Vertical Bar@125 mm        4      0         -  SHORT
+-(6)-T8 U Bar@125 mm                6      2     821mm  SHORT
+-(3)-T10 Vertical Bar@125 mm        3      0         -  SHORT
+-(5)-T8 Horizontal Bar@150 mm        5      2     577mm  SHORT
+-(3)-T10 Vertical Bar@125 mm        3      1    1778mm  SHORT
+-(2) -(T16)                         2      0         -  SHORT
+-(2) -(T16)                         2      0         -  SHORT
+-(2) -(T16 Perimeter Bar)           2      0         -  SHORT
+-(2) -(T16 Perimeter Bar)           2      0         -  SHORT
+-(3)-T10 Vertical Bar@125 mm        3      2    1146mm  SHORT
+-(3)-T10 Vertical Bar@125 mm        3      2    1116mm  SHORT
+-(1) -(T16)                         1      0         -  SHORT
+-(1) -(T16)                         1      0         -  SHORT
+-(1) -(T16)                         1      0         -  SHORT
+-(1) -(T16)                         1      0         -  SHORT
+-(1) -(T16)                         1      0         -  SHORT
+-(1) -(T16)                         1      0         -  SHORT
+-(1) -(T16)                         1      0         -  SHORT
+-(1) -(T16)                         1      0         -  SHORT
+-(1) -(T16)                         1      0         -  SHORT
+-(1) -(T16)                         1      0         -  SHORT
+-(1) -(T16)                         1      0         -  SHORT
+-(1) -(T20 DOWEL BAR)               1      0         -  SHORT
+-(1) -(T20 DOWEL BAR)               1      0         -  SHORT
+-(1) -(T25)                         1      0         -  SHORT
+-(1) -(T25)                         1      0         -  SHORT
+-(1) -(T25)                         1      0         -  SHORT
+-(1) -(T25)                         1      0         -  SHORT
+-(1) -(T25)                         1      1     894mm  OK
+-(1) -(T20 DOWEL BAR)               1      1     937mm  OK
+-(2) -(T16 Perimeter Bar)           2      2     494mm  OK
+-(1) -(T16)                         1      2    1511mm  OVER
+-(1) -(T25)                         1      2    1019mm  OVER
+-(1) -(T25)                         1      2     906mm  OVER
+-(3) -(T16)                         3      7     915mm  OVER
+-(1) -(T16)                         1      6    1115mm  OVER
+-(1) -(T16)                         1      6     918mm  OVER
+-(2) -(T16)                         2      7     924mm  OVER
+-(1) -(T16)                         1      7     671mm  OVER
+-(3) -(T16)                         3      9     360mm  OVER
+-(3) -(T16)                         3      9     475mm  OVER
+-(6)-T8 U Bar@125 mm                6     12     343mm  OVER
+-(2) -(T16 Perimeter Bar)           2      9     423mm  OVER
+-(2) -(T16)                         2      9     347mm  OVER
+-(2) -(T16)                         2      9     544mm  OVER
+-(4) -(T8)                          4     12     343mm  OVER
+-(6)-T8 U Bar@125 mm                6     16     548mm  OVER

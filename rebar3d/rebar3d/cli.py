@@ -22,9 +22,12 @@ from .extract import extract_bars, wall_outline
 from .loader import dwg_to_dxf, load_entities
 from .reconstruct import (
     calibrate_edge_caps, calibrate_sleeve_wraps, calibrate_uniform_shape_lengths,
-    chain_bent_shape_fragments, chain_multi_leg_bent_shapes, drop_undersized_mesh_fragments,
-    drop_unscheduled_dowels, reconstruct_panel, synthesize_bent_shape_from_fragments,
-    synthesize_from_detail_evidence,
+    cap_column_ties_to_schedule_need,
+    cap_unproven_mesh_to_schedule_need,
+    chain_bent_shape_fragments, chain_multi_leg_bent_shapes,
+    chain_two_leg_bent_shapes, dowel_only_diameters, drop_unclaimed_tie_candidates,
+    drop_undersized_mesh_fragments, drop_unscheduled_dowels, reconstruct_panel,
+    synthesize_bent_shape_from_fragments, synthesize_from_detail_evidence,
 )
 from .schedule import (
     compare_to_bars, extract_schedule, extract_schedule_dwg, extract_itemized_bbs_dwg,
@@ -37,7 +40,7 @@ from .schedule import ScheduleRow
 from .views import cluster_views
 
 
-def drop_unscheduled_phantoms(panel: Panel, rows: list[ScheduleRow]) -> int:
+def drop_unscheduled_phantoms(panel: Panel, rows: list[ScheduleRow], include_shape: bool = False) -> int:
     """Drop generic-mesh bars at a diameter the panel's own official
     schedule never lists at all.
 
@@ -65,11 +68,29 @@ def drop_unscheduled_phantoms(panel: Panel, rows: list[ScheduleRow]) -> int:
     running off the text-callout fallback (no official schedule existed
     for that panel at the time) -- restored once the actual schedule
     surfaced and proved it was real.
+
+    `include_shape`: also drop "shape" bars at an absent diameter, but
+    ONLY meant to be passed True when `rows` is a genuine Summary
+    Schedule (a real material takeoff, not the `text_callout_diameters`
+    fallback used when no schedule exists at all) -- that's precisely
+    the gap the PW-01 regression above fell into, and it's scoped out
+    here by leaving the caller's default False for the fallback path.
+    With a real schedule, a diameter with zero official weight is
+    definitive: PW-GF-08 root cause, a chained "shape" bar (0.09kg) at
+    T6, a diameter completely absent from PW-GF-08(S).dwg's own Summary
+    Schedule -- `chain_bars` occasionally joins two fragments of
+    adjacent real diameters into a phantom bar whose paired-rail spacing
+    snaps to a diameter that doesn't exist on the sheet at all, same
+    class of artifact this function already removes for straight mesh,
+    just surviving as a multi-point "shape" this time because it happened
+    to chain across a bend.
     """
     official_dia = {r.diameter for r in rows}
+    drop_kinds = ("v-mesh", "h-mesh", "diagonal", "shape") if include_shape \
+        else ("v-mesh", "h-mesh", "diagonal")
     kept, dropped = [], 0
     for b in panel.bars:
-        if b.kind in ("v-mesh", "h-mesh", "diagonal") and b.z_source != "synthesized" \
+        if b.kind in drop_kinds and b.z_source != "synthesized" \
                 and b.diameter not in official_dia:
             dropped += 1
             continue
@@ -95,6 +116,21 @@ def main(argv=None) -> int:
     combo_groups: dict[str, list[tuple[str, Panel]]] = {}
     combo_official: dict[str, tuple[list[ScheduleRow], str]] = {}
     combo_marks: dict[str, tuple[list, str]] = {}
+
+    # Sharing one sibling sheet's itemized BBS with another (e.g. handing
+    # R2's rich table to R1 too, since split reinforcement sheets share one
+    # physical panel's steel takeoff) was tried and reverted: it does help
+    # this panel's own T8, but it also hands marks whose real geometry only
+    # exists on R2 to R1's synthesis/calibration passes, which then add real
+    # weight for those marks ON TOP of R1's own already-excessive T16
+    # geometry (a separate, still-open bug -- see `_z_lookup`'s docstring
+    # discussion of PW-GF-27(R1)'s duplicated boundary-column depths) instead
+    # of correcting it, making T16 worse, not better. Each sheet keeps its
+    # own itemized resolution only; `combo_marks` below still lets the
+    # COMBINE-time calibration re-run (`calibrate_edge_caps` /
+    # `calibrate_uniform_shape_lengths`, which only ever tighten an existing
+    # bar's length to a proven mark, never add new weight) use whichever
+    # sibling's table is richest.
     for src in args.drawings:
         name = src.stem.replace("(R)", "").strip()
         dxf = dwg_to_dxf(src, args.out / "dxf") if src.suffix.lower() == ".dwg" else src
@@ -103,8 +139,6 @@ def main(argv=None) -> int:
         if not views:
             print(f"{name}: no elevation view found (schedule-only or non-rebar sheet), skipping")
             continue
-        panel = reconstruct_panel(name, views)
-
         s_dwg = src.parent / f"{re.sub(r'\([^)]*\)\s*$', '', src.stem).strip()}(S).dwg"
         # Only trust a same-core-name "(S).dwg" when it's actually the same
         # revision/batch as `src` -- confirmed on PW-GF-09: an OLD single-
@@ -115,6 +149,94 @@ def main(argv=None) -> int:
         # minutes of each other; different revisions are months apart.
         s_dwg_ok = s_dwg.exists() and abs(s_dwg.stat().st_mtime - src.stat().st_mtime) < 7 * 86400
         s_dxf = dwg_to_dxf(s_dwg, args.out / "dxf") if s_dwg_ok else None
+
+        # Itemized per-mark BBS, sourced early (before reconstruction) so
+        # `reconstruct_panel` can exempt dowel-only diameters (see
+        # `dowel_only_diameters`) from the purely-geometric column-tie
+        # synthesizer -- moved up from its original post-reconstruction
+        # spot below; the itemized-BBS sourcing logic itself is unchanged.
+        itemized_candidates: list[tuple[str, list]] = []
+        if s_dxf is not None:
+            s_rows = extract_itemized_bbs_dwg(s_dxf)
+            if s_rows is not None:
+                itemized_candidates.append((s_dwg.name, s_rows))
+        if not itemized_candidates:
+            # This sheet's OWN paper space, tried before falling back to PDF
+            # text extraction -- confirmed on PW-GF-27(R2): its own dxf
+            # paper space carries the full 26-mark itemized table (A, A1,
+            # A2, ..., J4), structured MTEXT read cleanly by
+            # `extract_itemized_bbs_dwg`, but the code previously jumped
+            # straight to `parse_itemized_bbs` on the sibling PDF, which
+            # only ever recovered 1 of those 26 marks (just "I"). Losing
+            # marks A-D (all the panel's T8) and G/J-family (T16) starved
+            # every T8/T16 calibration and synthesis step below of real
+            # schedule data, which is exactly what produced PW-GF-27's
+            # T8-under / T10+T16+T20-over combined-sheet mismatch. The
+            # summary-schedule `rows` block below already prefers this same
+            # own-paper-space source over PDF for the identical reliability
+            # reason; the itemized block just hadn't caught up.
+            own_rows = extract_itemized_bbs_dwg(dxf)
+            if own_rows is not None:
+                itemized_candidates.append((name, own_rows))
+        if not itemized_candidates:
+            for pdf in find_schedule_pdf(src):
+                if abs(pdf.stat().st_mtime - src.stat().st_mtime) >= 7 * 86400:
+                    continue
+                pdf_rows = parse_itemized_bbs(pdf)
+                if pdf_rows is not None:
+                    itemized_candidates.append((pdf.name, pdf_rows))
+                    break
+        tie_exempt_dias = (
+            dowel_only_diameters(itemized_candidates[0][1]) if itemized_candidates else set()
+        )
+
+        # Diameter-gap fill for the SUBTRACTIVE-only schedule checks below
+        # (currently just `drop_undersized_mesh_fragments`): when this
+        # sheet's own itemized table (above) never resolved a real mark
+        # for some diameter at all -- not "resolved but sparse", literally
+        # zero marks -- a sibling reinforcement sheet's own itemized table
+        # (same "(R1)"/"(R2)"/... family, sharing one physical panel's
+        # steel takeoff) is tried as a fallback source for THAT diameter
+        # only. Root-caused on PW-GF-27(R1): its own itemized resolution
+        # falls all the way through to a degraded 1-row PDF extraction
+        # (only mark "I", T16) while its sibling (R2)'s own paper space
+        # carries the real 25-row table -- so every diameter but T16 (T8,
+        # T10, T20) has NO real schedule-length evidence on R1 at all,
+        # letting `drop_undersized_mesh_fragments` skip real noise
+        # (mis-paired short "mesh" fragments, confirmed on T20: 9 spurious
+        # v-mesh/h-mesh fragments of 100-450mm alongside the 1 real
+        # ~2.7m bar, none ever dropped for lack of a floor) clean through
+        # to the final weight total.
+        #
+        # Deliberately NOT merged into `itemized_candidates`/`mark_rows`
+        # itself: that was tried before (see the long comment on this
+        # loop, below) and reverted -- handing a sibling's marks to the
+        # ADDITIVE synthesis/calibration passes (chain_*, synthesize_*,
+        # calibrate_*) let them add real weight for marks whose only
+        # geometry lives on the sibling sheet, on top of this sheet's own
+        # already-complete geometry for that diameter, inflating T16
+        # further rather than fixing it. `drop_undersized_mesh_fragments`
+        # is the one schedule-consuming pass that can only ever REMOVE a
+        # bar (never invent one), so lending it extra floor evidence for a
+        # diameter this sheet's own table is silent on carries none of
+        # that risk -- and only ever fires for a diameter already totally
+        # unrepresented in this sheet's own table, so a diameter with its
+        # own (even sparse) real mark data is never touched by this.
+        rm_self = re.search(r"\(R(\d+)\)$", src.stem)
+        sibling_gap_rows: list = []
+        if rm_self:
+            base_stem = src.stem[:rm_self.start()]
+            for sib in sorted(src.parent.glob(f"{base_stem}(R*).dwg")):
+                if sib == src or not re.search(r"\(R\d+\)$", sib.stem):
+                    continue
+                if abs(sib.stat().st_mtime - src.stat().st_mtime) >= 7 * 86400:
+                    continue
+                sib_dxf = dwg_to_dxf(sib, args.out / "dxf")
+                sib_rows = extract_itemized_bbs_dwg(sib_dxf)
+                if sib_rows and len(sib_rows) > len(sibling_gap_rows):
+                    sibling_gap_rows = sib_rows
+
+        panel = reconstruct_panel(name, views, tie_exempt_dias=tie_exempt_dias)
 
         # The sheet's own Summary Schedule is ground truth for which
         # diameters actually appear in this panel at all — independent of
@@ -130,10 +252,12 @@ def main(argv=None) -> int:
         # match this reconstruction's own panel at all) -- the (S) sheet
         # is unambiguous, so it goes first now.
         rows, src_name = None, None
+        rows_is_dedicated_summary = False
         if s_dxf is not None:
             rows = extract_schedule_dwg(s_dxf)
             if rows is not None:
                 src_name = f"{s_dwg.name} paper space"
+                rows_is_dedicated_summary = True
         if rows is None:
             rows = extract_schedule_dwg(dxf)
             if rows is not None:
@@ -145,7 +269,23 @@ def main(argv=None) -> int:
                     src_name = pdf.name
                     break
         if rows is not None:
-            n_dropped = drop_unscheduled_phantoms(panel, rows)
+            # `include_shape` is only safe with the dedicated "(S).dwg"
+            # summary sheet as the source -- confirmed a genuine regression
+            # on PW-GF-30(R2): its OWN paper-space/PDF schedule sources are
+            # partial (425.4kg / 508.5kg, vs the panel's true combined
+            # 508.5kg total), silently missing T16 entirely on that one
+            # sheet even though real T16 steel legitimately sits there (its
+            # sibling R1 carries the rest) -- treating that sheet-local gap
+            # as "T16 doesn't exist on this panel" deleted 5.06kg of real
+            # T16 "shape" bars. The "(S).dwg" summary sheet is the one
+            # source this codebase already trusts as the authoritative full
+            # takeoff (see the sourcing-priority comment above), so scoping
+            # the new "shape" removal to it keeps the T6-phantom fix (a
+            # genuinely absent diameter on PW-GF-08's own authoritative
+            # summary) without risking a same-panel sheet-split gap
+            # elsewhere.
+            n_dropped = drop_unscheduled_phantoms(
+                panel, rows, include_shape=rows_is_dedicated_summary)
             if n_dropped:
                 print(f"  dropped {n_dropped} phantom bar(s) at diameters absent "
                       f"from the official schedule ({src_name})")
@@ -178,16 +318,13 @@ def main(argv=None) -> int:
         mark_groups = parse_letter_marks(ents, views)
         (mx0, my0, _mx1, _my1), _ = wall_outline(views[0].ents)
 
-        itemized_candidates: list[tuple[str, list]] = []
-        if s_dxf is not None:
-            s_rows = extract_itemized_bbs_dwg(s_dxf)
-            if s_rows is not None:
-                itemized_candidates.append((s_dwg.name, s_rows))
-        for pdf in find_schedule_pdf(src):
-            pdf_rows = parse_itemized_bbs(pdf)
-            if pdf_rows is not None:
-                itemized_candidates.append((pdf.name, pdf_rows))
-
+        # `itemized_candidates` (PDF text extraction is a fallback for
+        # panels with no reliable DWG-sourced itemized table, not a second
+        # independent source to run alongside it; also guarded by the same
+        # `s_dwg_ok`-style staleness check -- see comment where it's
+        # sourced, above, near `reconstruct_panel`) was already computed
+        # earlier in this loop, before `reconstruct_panel` ran, so
+        # `tie_exempt_dias` could be derived from it.
         for src_label, mark_rows in itemized_candidates:
             # Only marks with direct visual confirmation (the R-sheet's own
             # "U-BAR DETAIL" callout explicitly names D4/D5 wrapping the
@@ -251,6 +388,13 @@ def main(argv=None) -> int:
                       f"complete bent bar(s) from {src_label} (each leg's own length matched "
                       f"the mark's own segment sequence, not just the finished total)")
 
+            n_two_leg, two_leg_kg = chain_two_leg_bent_shapes(panel, mark_rows)
+            if n_two_leg:
+                print(f"  synthesized {n_two_leg} bent-shape bar(s) ({two_leg_kg:.1f}kg) from "
+                      f"{src_label} (two real fragments each individually matched one of the "
+                      f"mark's own two declared leg lengths, even though their endpoints don't "
+                      f"touch)")
+
             n_bent_added, bent_kg = synthesize_bent_shape_from_fragments(
                 panel, mark_rows, mark_groups, mx0, my0)
             if n_bent_added:
@@ -258,10 +402,25 @@ def main(argv=None) -> int:
                       f"{src_label} marks with real fragment evidence near their own label "
                       f"(count trusted from the schedule, not re-measured off broken geometry)")
 
-            n_frag_dropped, frag_kg = drop_undersized_mesh_fragments(panel, mark_rows)
+            own_dias = {m.diameter for m in mark_rows}
+            gap_fill = [m for m in sibling_gap_rows if m.diameter not in own_dias]
+            n_frag_dropped, frag_kg = drop_undersized_mesh_fragments(
+                panel, mark_rows + gap_fill)
             if n_frag_dropped:
+                gap_note = (
+                    f" (plus diameter(s) {sorted({m.diameter for m in gap_fill})} floored "
+                    f"from a sibling sheet, absent from {src_label} itself)" if gap_fill else ""
+                )
                 print(f"  dropped {n_frag_dropped} undersized mesh fragment(s) ({frag_kg:.1f}kg) "
-                      f"shorter than any real mark at that diameter in {src_label}")
+                      f"shorter than any real mark at that diameter in {src_label}{gap_note}")
+
+            n_tie_noise, tie_noise_kg = drop_unclaimed_tie_candidates(
+                panel, mark_rows, panel.width, panel.height, panel.thickness)
+            if n_tie_noise:
+                print(f"  dropped {n_tie_noise} unclaimed full-span mesh line(s) "
+                      f"({tie_noise_kg:.1f}kg) at a dowel-only diameter in {src_label} "
+                      f"(tie-candidate-shaped but matches no real mark, and no longer "
+                      f"absorbed into a fabricated tie now that this diameter is exempt)")
 
             # Fill true architecture-gap marks: real S-RBAR geometry sits
             # next to the label but only in a local detail view the
@@ -273,6 +432,17 @@ def main(argv=None) -> int:
                 print(f"  synthesized {n_detail_added} bar(s) ({detail_kg:.1f}kg) from "
                       f"{src_label} marks whose only real geometry sits in a local "
                       f"detail view (not the elevation or a full section cut)")
+
+
+            n_tie_dropped, tie_kg = cap_column_ties_to_schedule_need(panel, mark_rows)
+            if n_tie_dropped:
+                print(f"  trimmed {n_tie_dropped} synthesized column-tie bar(s) ({tie_kg:.1f}kg) "
+                      f"exceeding {src_label}'s own remaining weight budget at that diameter")
+
+            n_mesh_dropped, mesh_kg = cap_unproven_mesh_to_schedule_need(panel, mark_rows)
+            if n_mesh_dropped:
+                print(f"  trimmed {n_mesh_dropped} non-section-backed mesh bar(s) ({mesh_kg:.1f}kg) "
+                      f"exceeding {src_label}'s own remaining weight budget at that diameter")
             break
 
         panels.append(panel)
@@ -366,8 +536,19 @@ def main(argv=None) -> int:
             combo_groups.setdefault(base, []).append((name, panel))
             if rows is not None and base not in combo_official:
                 combo_official[base] = (rows, src_name)
-            if itemized_candidates and base not in combo_marks:
-                combo_marks[base] = itemized_candidates[0]
+            if itemized_candidates:
+                # Prefer whichever sibling sheet's itemized table has the
+                # most rows, not just whichever sheet happened to be
+                # processed first -- confirmed on PW-GF-27: R1 (processed
+                # first) only ever resolves a 1-row PDF-fallback table while
+                # R2's own paper space carries the real 26-row table, and
+                # first-come-first-served locked the combine-time
+                # calibration re-run (`calibrate_edge_caps` /
+                # `calibrate_uniform_shape_lengths` below) onto the near-
+                # empty one.
+                cand = itemized_candidates[0]
+                if base not in combo_marks or len(cand[1]) > len(combo_marks[base][1]):
+                    combo_marks[base] = cand
 
     # R1+R2(+...) combination: sum every sibling sheet's reconstructed
     # weight per diameter and compare against their ONE shared official
@@ -408,7 +589,39 @@ def main(argv=None) -> int:
             if n1 or n2:
                 print(f"{base}: corrected length of {n1 + n2} bar(s) split across "
                       f"{member_names} (count only matched once combined)")
+
+            # Each sibling sheet's own per-sheet budget cap
+            # (`cap_column_ties_to_schedule_need` / `cap_unproven_mesh_
+            # to_schedule_need`) only ever sees ITS OWN bars against the
+            # full shared official total -- when a sheet has no itemized
+            # table of its own (falls back to the one shared official
+            # schedule, e.g. PW-GF-30(R1) borrowing PW-GF-30(R2).pdf) it
+            # has no way to know a sibling sheet will independently spend
+            # more of that same budget, so it under-trims. Root-caused on
+            # PW-GF-30: R1's cap correctly capped itself to <= the full
+            # T8 budget (158.1kg) in isolation, but R2 then added its own
+            # ~22.9kg of trusted, uncapped T8 bars on top, landing the
+            # true combined total at 115% (181.3kg). Re-running both caps
+            # here on the COMBINED bar list against the same combined
+            # mark rows already used for the calibration re-run above
+            # closes that gap the same safe way: each cap only trims
+            # v-mesh/h-mesh (or synthesized tie) bars whose own diameter
+            # total, across BOTH sheets together, exceeds what the real
+            # schedule calls for -- a panel that genuinely needs every
+            # one of those bars to reach its official weight is
+            # untouched, exactly as when run per-sheet.
+            n3, tie_kg = cap_column_ties_to_schedule_need(fake_panel, combo_mark_rows)
+            n4, mesh_kg = cap_unproven_mesh_to_schedule_need(fake_panel, combo_mark_rows)
+            if n3 or n4:
+                print(f"{base}: trimmed {n3 + n4} bar(s) ({tie_kg + mesh_kg:.1f}kg) "
+                      f"exceeding the combined schedule's own remaining weight budget "
+                      f"(only visible once {member_names} are summed together)")
+
+            if n1 or n2 or n3 or n4:
+                all_bars = fake_panel.bars
+                kept_ids = {id(b) for b in all_bars}
                 for _n, p in members:
+                    p.bars = [b for b in p.bars if id(b) in kept_ids]
                     write_json(p, args.out / f"{p.name}.json")
 
         report = compare_to_bars(rows, all_bars)

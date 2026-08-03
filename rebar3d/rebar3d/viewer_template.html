@@ -402,6 +402,16 @@ function buildScene() {
       const lens = cur.bars
         .filter(b => b.kind === f.kind && b.d === f.d && Math.abs(b.pts[0][2] - f.z) <= 8)
         .map(barLen);
+      // Guard: `families` is computed by mesh_families() at one point in
+      // the pipeline, but later passes (dedup/phantom-drop/synthesis) can
+      // still add or remove bars at that same (kind,d,z) -- if literally
+      // none remain, `lens` is empty and Math.min/max(...[]) silently
+      // yield +/-Infinity, rendered as the literal text "-Infinity m" in
+      // the sidebar (found during 2026-08 visual QA sweep). Not a geometry
+      // bug -- nothing wrong is drawn in 3D -- purely a stale-label
+      // display bug; drop the now-empty family from the list instead of
+      // printing a nonsense length for bars that no longer exist.
+      if (lens.length === 0) return "";
       const lo = Math.min(...lens) / 1000, hi = Math.max(...lens) / 1000;
       const lenTxt = hi - lo > 0.05 ? `${lo.toFixed(2)}–${hi.toFixed(2)} m` : `${hi.toFixed(2)} m`;
       return `<div class="dim">${f.kind === "v-mesh" ? "vert" : "horz"} T${f.d} @ <b style="color:#dde1e6">${f.spacing} mm</b> · ${f.count} bars · ${lenTxt} · z=${f.z}</div>`;

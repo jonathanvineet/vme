@@ -1,0 +1,46 @@
+callout                      expected  found   nearest  status
+-(30)-T8 Horizontal Bar@175 mm       30      7     250mm  SHORT
+-(26)-T8 Horizontal Bar@175 mm       26      7     398mm  SHORT
+-(30)-T8 U Bar@175 mm              30     17     263mm  SHORT
+-(26)-T8@200 mm                    26     17     251mm  SHORT
+-(4) -(T16)                         4      0         -  SHORT
+-(4) -(T16)                         4      1    1079mm  SHORT
+-(11)-T12@100 mm                   11      9    1024mm  SHORT
+-(9)-T8 Vertical Bar@200 mm         9      7     351mm  SHORT
+-(7)-T10@200 mm                     7      5     990mm  SHORT
+-(2) -(T25)                         2      1    1035mm  SHORT
+-(1) -(T20 DOWEL BAR)               1      0         -  SHORT
+-(1) -(T20 DOWEL BAR)               1      0         -  SHORT
+-(1) -(T20 DOWEL BAR)               1      0         -  SHORT
+-(3) -(T16)                         3      2     447mm  SHORT
+-(2) -(T20)                         2      2    1171mm  OK
+-(7)-T8 Vertical Bar@200 mm         7      7     277mm  OK
+-(2) -(T25)                         2      2     374mm  OK
+-(11)-T12@100 mm                   11     11     351mm  OK
+-(2) -(T16 Perimeter Bar)           2      2     554mm  OK
+-(2) -(T16 Perimeter Bar)           2      2     399mm  OK
+-(2) -(T16 Perimeter Bar)           2      2     293mm  OK
+-(2) -(T16)                         2      2     533mm  OK
+-(1) -(T20 DOWEL)                   1      2    1180mm  OVER
+-(1) -(T16)                         1      2     938mm  OVER
+-(1) -(T16)                         1      2     925mm  OVER
+-(1) -(T16)                         1      2     941mm  OVER
+-(1) -(T16)                         1      2    1009mm  OVER
+-(1) -(T16)                         1      2    1066mm  OVER
+-(1) -(T16)                         1      2    1024mm  OVER
+-(2) -(T20)                         2      4     441mm  OVER
+-(1) -(T20 DOWEL)                   1      4     483mm  OVER
+-(1) -(T20 DOWEL)                   1      4     776mm  OVER
+-(1) -(T16)                         1      7    1016mm  OVER
+-(1) -(T16)                         1      7     880mm  OVER
+-(1) -(T16)                         1      7     766mm  OVER
+-(1) -(T16)                         1      7     913mm  OVER
+-(1) -(T16)                         1      7     823mm  OVER
+-(1) -(T16)                         1      7     884mm  OVER
+-(8)-T8@100 mm                      8     15     603mm  OVER
+-(8)-T8@100 mm                      8     15     625mm  OVER
+-(7)-T8 U Bar@200 mm                7     14     338mm  OVER
+-(3) -(T16)                         3     11     843mm  OVER
+-(2) -(T16)                         2     11     812mm  OVER
+-(7)-T8 U Bar@200 mm                7     17     594mm  OVER
+-(6)-T8@200 mm                      6     17     366mm  OVER

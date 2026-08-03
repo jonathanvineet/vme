@@ -362,8 +362,11 @@ def classify_sections(
     return infos
 
 
-def _z_lookup(sections: list[SectionInfo], role: str, coord: float, radius: float, tol: float = 40.0) -> list[float]:
-    """All depths at which section circles match `coord` with this radius.
+def _z_lookup(
+    sections: list[SectionInfo], role: str, coord: float, radius: float, tol: float = 40.0,
+) -> list[tuple[float, bool]]:
+    """All depths at which section circles match `coord` with this radius,
+    each tagged with whether that depth is corroborated (see below).
 
     The same bar position usually shows a circle near each face (mesh on
     both sides), and occasionally a genuine third/fourth layer (confirmed:
@@ -383,15 +386,64 @@ def _z_lookup(sections: list[SectionInfo], role: str, coord: float, radius: floa
     capping how many depths a single diameter can legitimately have.
     Section circles are drawn at essentially exact radii in this DXF
     (floating-point noise only), so a tight tolerance costs nothing.
+
+    Root-caused on PW-GF-25(R): T16 came in at 157% of official, traced to
+    a single elevation bar position picking up 11 different z's out of a
+    panel-wide `tol=40mm` net. This panel has multiple separate *partial*
+    sections of the same role (local cuts near different openings/corbels,
+    not one full-width cut) — each contributes its OWN local mesh's real
+    circles at ITS OWN nearby x, typically 15-35mm away from the query
+    coord, well inside the loose 40mm tolerance meant to absorb
+    elevation-vs-section registration noise. Checked directly: of those 11
+    z's, all but the 2-3 actually AT the query coord (diff ~0mm) were each
+    supported by exactly one section's circle 25-39mm away.
+
+    A first attempt dropped every uncorroborated z outright, exactly like
+    the "brand new bar" originator a few lines down does with its own
+    `len({si for _, _, si in cl}) < 2` corroboration gate. That fixed
+    PW-GF-25 (157%->100%) but regressed PW-GF-18 T16 (113%->75%, moving
+    further from its own 104.3kg official truth) plus collateral T8/T10/
+    T12/T25 drift on half the batch — PW-GF-18's sections have the exact
+    same overlapping-partial-cut layout as PW-GF-25's, yet its own
+    single-section-supported z's turned out to be genuinely real steel,
+    just less exhaustively cross-confirmed by the drawing. Geometry alone
+    can't tell those two cases apart. So: still return every z (nothing
+    invented here is thrown away blind), but tag the weakly-supported ones
+    -- a contributing circle sitting tight against the query coord (<=15mm,
+    comfortably covers real registration noise between a section and the
+    elevation) or >=2 independent sections agreeing on the same z is
+    "corroborated"; a single section's circle 15-40mm off axis, agreeing
+    with nothing else, is not. The caller marks corroborated depths
+    `z_source="section"` (unchanged, fully trusted) and uncorroborated ones
+    a distinct `"section-weak"` -- real, kept, but no longer exempt from
+    `cap_unproven_mesh_to_schedule_need`'s aggregate weight-budget check,
+    the same mechanism that already reconciles every other kind of
+    imperfectly-evidenced mesh bar down to a panel's own declared need
+    instead of an outright geometric guess.
     """
-    zs = []
-    for s in sections:
+    raw: list[tuple[float, float, int]] = []  # (z, |coord diff|, section idx)
+    for si, s in enumerate(sections):
         if s.role != role:
             continue
         for c, z, r in s.circles:
             if abs(r - radius) <= 0.5 and abs(c - coord) <= tol:
-                zs.append(z)
-    return _cluster_planes(zs, tol=8.0) if zs else []
+                raw.append((z, abs(c - coord), si))
+    if not raw:
+        return []
+    raw.sort(key=lambda t: t[0])
+    clusters: list[list[tuple[float, float, int]]] = [[raw[0]]]
+    for entry in raw[1:]:
+        if entry[0] - clusters[-1][-1][0] <= 8.0:
+            clusters[-1].append(entry)
+        else:
+            clusters.append([entry])
+    out = []
+    for cl in clusters:
+        n_sections = len({si for _, _, si in cl})
+        min_diff = min(d for _, d, _ in cl)
+        corroborated = n_sections >= 2 or min_diff <= 15.0
+        out.append((sum(z for z, _, _ in cl) / len(cl), corroborated))
+    return out
 
 
 # ---------------------------------------------------------------- features
@@ -1369,6 +1421,81 @@ def calibrate_edge_caps(panel: "Panel", marks: list[tuple[int, int, float]]) -> 
     return n_fixed
 
 
+def _has_real_continuation(panel: "Panel", b: "Bar3D", sdia: int, tol: float = 30.0) -> bool:
+    """True if some OTHER bar of the same diameter has an endpoint sitting
+    right where `b`'s own real (un-extrapolated) geometry ends or starts --
+    i.e. real evidence that a second physical leg already occupies the
+    space a straight-line length-rescale of `b` would extrapolate into.
+    See `calibrate_uniform_shape_lengths` for the double-counting this
+    guards against.
+    """
+    far = b.points[-1][:2]
+    for other in panel.bars:
+        if other is b or other.diameter != sdia:
+            continue
+        for p in (other.points[0][:2], other.points[-1][:2]):
+            if math.dist(p, far) <= tol:
+                return True
+    return False
+
+
+def _reflect_path_in_bounds(
+    p0: tuple[float, float, float], p1: tuple[float, float, float],
+    pw: float, ph: float,
+) -> list[tuple[float, float, float]]:
+    """Path of exactly `dist(p0, p1)` starting at `p0` toward `p1`,
+    bouncing off the panel's own x/y bounds (0..pw, 0..ph) instead of
+    running straight past them.
+
+    Root-caused on PW-GF-06: `calibrate_uniform_shape_lengths` rescales a
+    bar's far endpoint straight out to a schedule mark's own declared
+    length -- correct for weight, but with no check that the extrapolated
+    point stays inside the panel's own real footprint. When the mark's
+    length is much longer than the fragment's own short original span
+    (the exact case this function targets), the straight rescale can land
+    the far endpoint 500-1000mm+ outside the panel, rendering as a bar
+    visibly shooting off the model. Reflecting off whichever edge the
+    straight path would cross -- like light bouncing off a wall -- keeps
+    every point inside the panel while preserving the exact total path
+    length (each leg's length is consumed directly from the remaining
+    budget, so summing consecutive-point distances reproduces
+    `dist(p0, p1)` exactly, same length-preservation guarantee as
+    `_folded_placeholder_path`). Only touches x/y; only used when the
+    bar's z is constant along its length (the observed case) -- callers
+    should fall back to the plain straight line otherwise.
+    """
+    total_len = math.dist(p0, p1)
+    if total_len < 1e-9:
+        return [p0, p1]
+    x0, y0, z0 = p0
+    x1, y1, _z1 = p1
+    ux, uy = (x1 - x0) / total_len, (y1 - y0) / total_len
+    x, y = x0, y0
+    remaining = total_len
+    pts = [(x, y, z0)]
+    while remaining > 1e-6:
+        step = remaining
+        for u, pos, hi in ((ux, x, pw), (uy, y, ph)):
+            if abs(u) < 1e-12:
+                continue
+            target = hi if u > 0 else 0.0
+            d = (target - pos) / u
+            if d > 1e-9:
+                step = min(step, d)
+        x, y = x + ux * step, y + uy * step
+        x = min(max(x, 0.0), pw)
+        y = min(max(y, 0.0), ph)
+        pts.append((x, y, z0))
+        remaining -= step
+        if remaining <= 1e-6:
+            break
+        if x <= 1e-6 or x >= pw - 1e-6:
+            ux = -ux
+        if y <= 1e-6 or y >= ph - 1e-6:
+            uy = -uy
+    return pts
+
+
 def calibrate_uniform_shape_lengths(panel: "Panel", marks: list) -> int:
     """Correct a bar family's LENGTH using a schedule mark's own stated
     length, generalizing `calibrate_edge_caps` beyond the "hook" kind.
@@ -1414,12 +1541,77 @@ def calibrate_uniform_shape_lengths(panel: "Panel", marks: list) -> int:
                 continue
             if abs(m.length_mm - lens[0]) < 0.05 * m.length_mm:
                 continue  # already close enough, not the bug this targets
+            # The group's own uniform length already lands within 10% of
+            # a DIFFERENT real mark at this same diameter -- e.g. those
+            # bars are H's own genuine short bars, not an unmeasured
+            # fragment of a completely different mark J that just
+            # happens to share H's count by coincidence. Root-caused on
+            # PW-GF-30 (combined R1+R2): once an unrelated fix elsewhere
+            # trimmed a duplicate-detection v-mesh bar, T20's v-mesh
+            # group coincidentally dropped to exactly 2 -- H's own real
+            # qty -- with both bars sitting right at H's real 1675mm
+            # length, yet this function (matching on J, qty=2, a
+            # DIFFERENT non-M_00 T20 mark) rescaled them out to J's
+            # 9750mm, fabricating ~16kg from bars that were already
+            # correct. A real fragment-of-m has no other mark it already
+            # matches -- only a wrong pairing does.
+            if any(
+                other is not m and snap_diameter(other.diameter) == sdia
+                and other.qty > 0 and other.length_mm > 0
+                and abs(other.length_mm - lens[0]) < 0.10 * other.length_mm
+                for other in marks
+            ):
+                continue
             for b, cur_len in zip(group, lens):
                 if cur_len < 1.0:
                     continue
+                # A bar with more than 2 points already carries real bend
+                # evidence (a genuine chained/multi-segment path, not "one
+                # short straight stub measured as if it were the whole
+                # bar" -- the pattern this function is meant to fix).
+                # Straight-line-extrapolating such a fragment out to the
+                # mark's full length is only safe when nothing else in the
+                # bar pool already picks up where the fragment's own real
+                # (un-extrapolated) end leaves off -- otherwise the
+                # extrapolation blows straight past a real second leg,
+                # double-counting the same physical steel once as that
+                # real bar and again as the bogus extrapolated "whole
+                # shape". Root-caused on PW-GF-26's T20 mark: a real
+                # ~1.4m diagonal leg fragment (19 real chained points,
+                # endpoints (197,58)->(150,1466)) got extrapolated along
+                # its own chord out to the mark's full 6.1m length, landing
+                # at (-7,6155) -- but a real v-mesh bar was already sitting
+                # almost exactly at the fragment's true endpoint,
+                # (150,1475)-(150,6115), untouched in the pool. Same
+                # pattern independently confirmed on PW-GF-09(R1)'s own T20
+                # mark. Only skip the extrapolation when this real-
+                # continuation evidence is actually present -- a
+                # multi-point fragment with no such neighbour (e.g.
+                # PW-GF-06's T16 mark) has no double-count risk and keeps
+                # the original rescue.
+                if len(b.points) > 2 and _has_real_continuation(panel, b, sdia):
+                    continue
                 p0, p1 = b.points[0], b.points[-1]
                 scale = m.length_mm / cur_len
-                b.points = [p0, tuple(p0[k] + (p1[k] - p0[k]) * scale for k in range(3))]
+                new_p1 = tuple(p0[k] + (p1[k] - p0[k]) * scale for k in range(3))
+                # `panel` is sometimes a bare `SimpleNamespace(bars=...)`
+                # (the cli.py R1+R2 combine-time re-run) with no
+                # width/height at all -- skip the bounds fold there and
+                # fall back to the plain straight-line rescale (matches
+                # this function's original behavior before the fold was
+                # added; the combine-time re-run's own member panels
+                # already got the fold applied per-sheet where a real
+                # width/height exists).
+                pw = getattr(panel, "width", None)
+                ph = getattr(panel, "height", None)
+                out_of_bounds = pw is not None and ph is not None and (
+                    new_p1[0] < -50.0 or new_p1[0] > pw + 50.0
+                    or new_p1[1] < -50.0 or new_p1[1] > ph + 50.0
+                )
+                if out_of_bounds and abs(new_p1[2] - p0[2]) < 1e-6:
+                    b.points = _reflect_path_in_bounds(p0, new_p1, pw, ph)
+                else:
+                    b.points = [p0, new_p1]
                 n_fixed += 1
     return n_fixed
 
@@ -1613,6 +1805,27 @@ def _find_leg_sequence_chain(
     as everything else in this module), never a wrong answer, and a full
     backtracking search over a few hundred fragments risks real slowness
     for marginal extra recall.
+
+    One INTERIOR leg (never the first or last -- those must stay grounded
+    on real material) may be bridged virtually with a synthetic straight
+    connector when no real fragment matches it, provided the fragment for
+    the leg AFTER it is found at a straight-line distance from the current
+    chain end that itself matches the missing leg's own declared length.
+    Root-caused on PC-GF-01's T16 mark E (`Rebar Shape 30`, segments
+    935/720/2405/255/1520mm): legs 1, 2, 4 and 5 all have real matching
+    fragments (928.8/716.0/233.2/1520-ish), chaining correctly leg-to-leg,
+    but leg 3 (2405mm) has NO line entity anywhere in the drawing at
+    all -- yet leg 2's real endpoint and leg 4's real endpoint sit almost
+    exactly in line, separated by ~2460mm, within this leg's own
+    12%/2405mm tolerance. That's real geometric evidence the run exists
+    (two independently-drawn, independently-measured real legs agreeing on
+    where its ends must be) even though no entity was extracted for it --
+    plausibly a long straight run the source drawing didn't bother
+    separately dimensioning/drawing since its ends are already implied by
+    the bend markers on either side. Requires the flanking leg (the one
+    AFTER the gap) to be real, matched by its own length tolerance same as
+    everywhere else in this module -- never invented from distance alone
+    without that corroborating real fragment.
     """
     def seg_tol(length: float) -> float:
         return max(15.0, 0.12 * length)
@@ -1628,7 +1841,9 @@ def _find_leg_sequence_chain(
             local_used = set([i])
             pts = list(start_pts)
             ok = True
-            for target_len in target_segs[1:]:
+            k = 1
+            while k < len(target_segs):
+                target_len = target_segs[k]
                 nxt = None
                 for j in range(n):
                     if used[j] or j in local_used:
@@ -1642,19 +1857,71 @@ def _find_leg_sequence_chain(
                     if math.dist(pts[-1], c1) <= gap_tol:
                         nxt = (j, list(frags[j][0][-2::-1]))
                         break
-                if nxt is None:
-                    ok = False
-                    break
-                j, extra = nxt
-                local_used.add(j)
-                chain_idxs.append(j)
-                pts += extra
+                if nxt is not None:
+                    j, extra = nxt
+                    local_used.add(j)
+                    chain_idxs.append(j)
+                    pts += extra
+                    k += 1
+                    continue
+
+                # Bridging requires at least 4 declared segments (so at
+                # least 3 legs stay independently real-matched even after
+                # one is bridged) -- confirmed a real false positive at
+                # only 3 segments: PC-GF-01 mark D (800/300/800) bridged
+                # its middle 300mm leg between a real 792mm bar and a
+                # real 716mm fragment that only coincidentally sits within
+                # the generous 12% tolerance of D's 800mm target (716 is
+                # actually part of a completely different mark, E's, own
+                # real leg) -- with only 2 independently-real legs backing
+                # the match, that generous per-leg tolerance is nowhere
+                # near strong enough evidence on its own. 4+ real/matched
+                # segments (as E's genuine 5-segment shape has) is a much
+                # harder coincidence to hit by chance.
+                if 0 < k < len(target_segs) - 1 and len(target_segs) >= 4:
+                    next_len = target_segs[k + 1]
+                    # Pick the candidate whose bridge distance is CLOSEST
+                    # to the missing leg's own target length, not just the
+                    # first one found within tolerance -- multiple parallel
+                    # instances of the same shape (e.g. E/E1/E2 side by
+                    # side) can each independently offer a same-length
+                    # next-leg fragment within the same generous 12%
+                    # tolerance; picking the nearest keeps the chain on its
+                    # own physical family instead of jumping sideways to a
+                    # different instance's fragment.
+                    bridge = None
+                    best_err = None
+                    for j in range(n):
+                        if used[j] or j in local_used:
+                            continue
+                        if abs(frags[j][1] - next_len) > seg_tol(next_len):
+                            continue
+                        c0, c1 = frags[j][0][0], frags[j][0][-1]
+                        err0 = abs(math.dist(pts[-1], c0) - target_len)
+                        err1 = abs(math.dist(pts[-1], c1) - target_len)
+                        if err0 <= seg_tol(target_len) and (best_err is None or err0 < best_err):
+                            bridge = (j, c0, list(frags[j][0][1:]))
+                            best_err = err0
+                        if err1 <= seg_tol(target_len) and (best_err is None or err1 < best_err):
+                            bridge = (j, c1, list(frags[j][0][-2::-1]))
+                            best_err = err1
+                    if bridge is not None:
+                        j, bridge_pt, extra = bridge
+                        local_used.add(j)
+                        chain_idxs.append(j)
+                        pts.append(bridge_pt)
+                        pts += extra
+                        k += 2
+                        continue
+
+                ok = False
+                break
             if ok:
                 return chain_idxs, pts
     return None
 
 
-def chain_multi_leg_bent_shapes(panel: "Panel", mark_rows: list, gap_tol: float = 20.0) -> tuple[int, int]:
+def chain_multi_leg_bent_shapes(panel: "Panel", mark_rows: list, gap_tol: float = 22.0) -> tuple[int, int]:
     """N-way version of `chain_bent_shape_fragments`: reassembles a bent
     bar from 3+ real fragment legs, not just 2, by matching each leg's
     OWN length against the mark's own declared segment sequence (A, B,
@@ -1704,19 +1971,44 @@ def chain_multi_leg_bent_shapes(panel: "Panel", mark_rows: list, gap_tol: float 
         ceiling = ceilings.get(sdia, 0.0)
         if ceiling <= 0:
             continue
-        pool = [b for b in panel.bars if b.diameter == sdia and b.kind in ("v-mesh", "h-mesh")
+        pool = [b for b in panel.bars if b.diameter == sdia and b.kind in ("v-mesh", "h-mesh", "diagonal")
                 and math.dist(b.points[0], b.points[-1]) < ceiling]
         if len(pool) < 3:
             continue
         frags = [(b.points, math.dist(b.points[0], b.points[-1])) for b in pool]
         used = [False] * len(frags)
-
+        dia_bars = [b for b in panel.bars if b.diameter == sdia]
+        # Track which already-existing bars have been counted toward a
+        # mark's own "already satisfied" check, but ONLY share that claim
+        # among marks declaring the EXACT same length -- root-caused on
+        # PC-GF-01's T16 family: E/E1/E2/E3 all declare the same 5850mm
+        # length, and exactly 3 real full-length bars already sit in that
+        # window -- the old per-mark scan independently saw "existing=3"
+        # for EVERY one of the 4 marks, so E, E1 and E2 (each qty 2) all
+        # looked already fully satisfied off the SAME 3 bars, leaving 7
+        # real missing instances never even attempted. Claiming each real
+        # bar at most once, in the same descending-length order already
+        # used to process marks, allocates the shared pool fairly across
+        # ties instead of letting every tied mark double-count it.
+        # Scoping the claim strictly to exact-length ties (not any mark
+        # within the diameter's own tolerance window) matters: confirmed a
+        # real regression sharing it diameter-wide -- D1's own wider
+        # tolerance window (1950mm +-156) overlaps D's real 1850mm bars
+        # (only 100mm away), so a diameter-wide claim let D1 "use up" D's
+        # own already-correct existing bars first (D1 is tried first,
+        # being longer), leaving D looking falsely short and triggering a
+        # bogus chain attempt of its own.
+        claimed_by_length: dict[float, set] = {}
         for m, segs in sorted(marks, key=lambda x: -x[0].length_mm):
+            claimed_existing = claimed_by_length.setdefault(m.length_mm, set())
             exist_tol = max(30.0, 0.08 * m.length_mm)
-            existing = sum(
-                1 for b in panel.bars if b.diameter == sdia
+            unclaimed = [
+                b for b in dia_bars if id(b) not in claimed_existing
                 and abs(math.dist(b.points[0], b.points[-1]) - m.length_mm) <= exist_tol
-            )
+            ]
+            existing = min(len(unclaimed), m.qty)
+            for b in unclaimed[:existing]:
+                claimed_existing.add(id(b))
             need = m.qty - existing
             if need <= 0:
                 continue
@@ -1758,6 +2050,172 @@ def chain_multi_leg_bent_shapes(panel: "Panel", mark_rows: list, gap_tol: float 
             panel.bars = [b for b in panel.bars if id(b) not in remove_ids]
 
     return n_stitched, n_frags_consumed
+
+
+def chain_two_leg_bent_shapes(panel: "Panel", mark_rows: list, tol_frac: float = 0.05) -> tuple[int, float]:
+    """Synthesize a 2-leg bent bar (exactly 2 non-zero declared segments,
+    e.g. a face-dowel bend) from two real fragments whose OWN individual
+    lengths each closely match one of the mark's two segments, even when
+    the fragments' endpoints don't actually touch.
+
+    `chain_bent_shape_fragments` (the 2-fragment joiner) and
+    `chain_multi_leg_bent_shapes` (3+-leg version) both require real
+    endpoint-to-endpoint proximity (`gap_tol`) to join fragments -- solid
+    evidence when it's there, but root-caused directly on PC-GF-01's mark
+    C1 (T10, shape "M_17A", segments [930, 835]mm) that it ISN'T always
+    there for a 2-leg bend: real fragments of 928.6mm and 830.6mm exist
+    (one in the elevation, one in its companion/mirrored elevation) --
+    matching C1's own declared 930mm/835mm legs to within 0.5% -- but sit
+    OVERLAPPING in the shared 2D frame rather than meeting end-to-end,
+    because (confirmed by direct DXF inspection) the bend crosses between
+    two different real depths the reconstruction has no z-evidence for
+    yet, not a left-right kink a 2D endpoint chase can follow. Precision
+    of match is the evidence substitute for touching: `tol_frac` is far
+    tighter than the 12-15% tolerance the touching-based chainers use,
+    specifically because this function has no positional corroboration to
+    lean on otherwise.
+
+    Position is a nominal stand-in for the resulting bar (own official
+    length from the schedule, not the raw fragments' own endpoints --
+    concatenating two non-touching fragments' raw points would silently
+    inflate the path length by the gap between them) -- same precedent as
+    `synthesize_bent_shape_from_fragments`. The two consumed fragments are
+    removed so they can't double-count elsewhere.
+    """
+    ceilings = _fragment_ceiling(mark_rows)
+    two_leg_by_dia: dict[int, list] = {}
+    for m in mark_rows:
+        sdia = snap_diameter(m.diameter)
+        if sdia is None or m.qty <= 0 or m.length_mm <= 0:
+            continue
+        # T8/T16 handling is explicitly out of scope for this task (already
+        # verified correct elsewhere in this batch) -- confirmed a real,
+        # if small, side effect on PW-GF-09's T16 mark K (also a genuine
+        # 2-leg M_17A shape, segments [1275, 800]) once this function
+        # existed at all: 49%->50% of official, still under 100% and not a
+        # regression, but this project's explicit scope for this session
+        # is T10 only, so both diameters are hard-excluded here rather
+        # than left to depend on which marks happen to qualify.
+        if sdia in (8, 16):
+            continue
+        if m.shape.strip().upper() == "M_00":
+            continue
+        segs = [s for s in m.segments if s > 0]
+        if len(segs) == 2:
+            two_leg_by_dia.setdefault(sdia, []).append((m, segs))
+
+    def seg_tol(length: float) -> float:
+        return max(10.0, tol_frac * length)
+
+    n_added = 0
+    added_kg = 0.0
+    for sdia, marks in two_leg_by_dia.items():
+        ceiling = ceilings.get(sdia, 0.0)
+        if ceiling <= 0:
+            continue
+        claimed: set = set()
+        for m, segs in sorted(marks, key=lambda x: -x[0].length_mm):
+            exist_tol = max(30.0, 0.08 * m.length_mm)
+            existing = sum(
+                1 for b in panel.bars if b.diameter == sdia
+                and abs(math.dist(b.points[0], b.points[-1]) - m.length_mm) <= exist_tol
+            )
+            need = m.qty - existing
+            if need <= 0:
+                continue
+            pool = [b for b in panel.bars if b.diameter == sdia and b.kind in ("v-mesh", "h-mesh")
+                    and id(b) not in claimed
+                    and math.dist(b.points[0], b.points[-1]) < ceiling]
+            for _ in range(need):
+                match = None
+                for i, b1 in enumerate(pool):
+                    if id(b1) in claimed:
+                        continue
+                    l1 = math.dist(b1.points[0], b1.points[-1])
+                    for b2 in pool[i + 1:]:
+                        if id(b2) in claimed:
+                            continue
+                        l2 = math.dist(b2.points[0], b2.points[-1])
+                        if (abs(l1 - segs[0]) <= seg_tol(segs[0]) and abs(l2 - segs[1]) <= seg_tol(segs[1])) or \
+                           (abs(l1 - segs[1]) <= seg_tol(segs[1]) and abs(l2 - segs[0]) <= seg_tol(segs[0])):
+                            match = (b1, b2)
+                            break
+                    if match:
+                        break
+                if match is None:
+                    break
+                b1, b2 = match
+                claimed.add(id(b1))
+                claimed.add(id(b2))
+                k = n_added
+                pts = [(0.0, k * 50.0, panel.thickness / 2), (m.length_mm, k * 50.0, panel.thickness / 2)]
+                panel.bars.append(Bar3D(pts, sdia, "shape", "two-leg-length-matched"))
+                n_added += 1
+                added_kg += sdia ** 2 / 162.0 * (m.length_mm / 1000.0)
+        if claimed:
+            panel.bars = [b for b in panel.bars if id(b) not in claimed]
+    return n_added, added_kg
+
+
+def _folded_placeholder_path(
+    length_mm: float, avail_x: float, avail_y: float, y_start: float, z: float,
+) -> list[tuple[float, float, float]]:
+    """Nominal-position placeholder path for a weight-correct synthesized
+    bar whose real drawn position is unknown (see `synthesize_bent_shape_
+    from_fragments`'s docstring for why a placeholder is used at all).
+
+    A single straight run from x=0 to x=`length_mm` is fine as long as it
+    fits inside the panel's own known width -- but when `length_mm`
+    (trusted from the schedule) exceeds `avail_x`, drawing it as one
+    straight line sends it shooting past the panel's real outline, which
+    reads as a visible modeling bug (confirmed on PW-GF-06: a T16 bent
+    shape's official 6050mm length drawn straight on a 1180mm-wide panel
+    stuck out ~4870mm past the panel edge). Folding it back and forth
+    within [0, avail_x] keeps every point inside the panel's real bounding
+    box while preserving the exact total path length (hence exact bar
+    weight, computed elsewhere as a sum of consecutive-point distances):
+    each appended point moves along exactly one axis by exactly the
+    remaining-length slice it consumes, so summing consecutive-point
+    distances over the whole path reproduces `length_mm` by construction,
+    not by approximation.
+
+    `y_start` staggers different placeholder instances (the `k`-th
+    synthesized bar for a mark) so they don't all sit exactly on top of
+    each other; the fold itself also walks in y as it turns, bounced back
+    within [0, avail_y] so multi-fold paths don't wander outside the
+    panel's height either.
+    """
+    if length_mm <= avail_x + 1e-6 or avail_x <= 1e-6:
+        # Fits within the panel's own width untouched -- leave the plain
+        # straight-line behavior alone, no need to zigzag a short bar.
+        y = min(max(y_start, 0.0), avail_y) if avail_y > 0 else y_start
+        return [(0.0, y, z), (length_mm, y, z)]
+
+    fold_y = min(50.0, max(avail_y * 0.05, 5.0)) if avail_y > 0 else 0.0
+    x = 0.0
+    y = min(max(y_start, 0.0), avail_y) if avail_y > 0 else y_start
+    x_dir = 1
+    y_dir = 1
+    pts: list[tuple[float, float, float]] = [(x, y, z)]
+    remaining = length_mm
+    while remaining > 1e-6:
+        seg = min(avail_x, remaining)
+        x = x + seg if x_dir == 1 else x - seg
+        pts.append((x, y, z))
+        remaining -= seg
+        x_dir *= -1
+        if remaining <= 1e-6:
+            break
+        if fold_y > 0:
+            seg_v = min(fold_y, remaining)
+            y_candidate = y + y_dir * seg_v
+            if y_candidate > avail_y or y_candidate < 0.0:
+                y_dir *= -1
+                y_candidate = y + y_dir * seg_v
+            y = y_candidate
+            pts.append((x, y, z))
+            remaining -= seg_v
+    return pts
 
 
 def synthesize_bent_shape_from_fragments(
@@ -1814,6 +2272,24 @@ def synthesize_bent_shape_from_fragments(
     min_fragments = 3
     n_added = 0
     added_kg = 0.0
+    # NOTE (investigated 2026-07, PC-GF-01 T16 push): tried sharing a
+    # `claimed_by_length` allocation across marks with the exact same
+    # declared length_mm here too, mirroring `chain_multi_leg_bent_
+    # shapes`'s fix -- it does recover PC-GF-01's E-family correctly (its
+    # 4 real bars get fairly split across E/E1/E2/E3 instead of all 4
+    # double-counted as "existing" by every one of them). But unlike that
+    # sibling function (whose evidence gate is real endpoint-to-endpoint
+    # leg chaining), this function's own gate is much looser (just "N
+    # short fragments sit somewhere within 2200mm of the label"), and full-
+    # batch testing showed the shared allocation lets it over-fire on
+    # other panels that also carry same-length-tied marks: PW-GF-09
+    # combined T16 104%->107%, PW-GF-25 T16 100%->109%, plus smaller T8
+    # over-additions on PW-GF-07/11/30 -- all already at/over 100%, made
+    # worse. Reverted; kept per-mark (unshared) `existing` below. PC-GF-01
+    # itself only gained ~0.3kg from the shared version (E2/E3's own
+    # remaining need is gated out by the evidence-radius check anyway --
+    # their real label instances sit 5560-8800mm from any T16 fragment,
+    # confirmed genuine dead end, not a bug this function can fix).
     for m in mark_rows:
         if m.shape.strip().upper() == "M_00" or m.qty <= 0 or m.length_mm <= 0:
             continue
@@ -1854,7 +2330,8 @@ def synthesize_bent_shape_from_fragments(
             continue
 
         for k in range(need):
-            pts = [(0.0, k * 50.0, panel.thickness / 2), (m.length_mm, k * 50.0, panel.thickness / 2)]
+            pts = _folded_placeholder_path(
+                m.length_mm, panel.width, panel.height, k * 50.0, panel.thickness / 2)
             panel.bars.append(Bar3D(pts, sdia, "shape", "bent-shape-evidence-origin"))
         n_added += need
         added_kg += sdia ** 2 / 162.0 * (m.length_mm / 1000.0) * need
@@ -1890,13 +2367,29 @@ def drop_undersized_mesh_fragments(panel: "Panel", mark_rows: list) -> tuple[int
     geometry bug produced it. Floor set at 50% of the diameter's shortest
     official length, not the official length itself, to leave real short
     bars near that floor untouched.
+
+    A bent-shape mark's own `length_mm` is its *unfolded* total path (all
+    legs plus bends), but a single v-mesh/h-mesh fragment is one straight
+    run only -- one leg, not the whole shape -- and `length` here is
+    measured chord-to-chord (start to end point), which for a real single
+    leg is close to that leg's own segment length, not the mark's total.
+    Using the mark's total length_mm as the floor for a bent mark
+    (confirmed on PW-GF-01: marks B/B1/C are all short bent U-shapes --
+    e.g. B is 400/140/400mm legs summing to a 900mm `length_mm` official
+    total) wrongly floors every one of that shape's real ~400mm leg
+    fragments out as "noise", when 400mm is entirely legitimate for that
+    mark. Per mark, the right floor is its own longest individual leg
+    (`max(segments)`, falling back to `length_mm` for a plain straight bar
+    with no segment breakdown) -- still a real, schedule-grounded number,
+    just the right one for what a single fragment actually represents.
     """
     floor_by_dia: dict[int, float] = {}
     for m in mark_rows:
         sdia = snap_diameter(m.diameter)
         if sdia is None or m.length_mm <= 0:
             continue
-        floor_by_dia[sdia] = min(floor_by_dia.get(sdia, m.length_mm), m.length_mm)
+        own_floor = max([s for s in m.segments if s > 0], default=m.length_mm)
+        floor_by_dia[sdia] = min(floor_by_dia.get(sdia, own_floor), own_floor)
 
     n_dropped = 0
     dropped_kg = 0.0
@@ -1909,6 +2402,83 @@ def drop_undersized_mesh_fragments(panel: "Panel", mark_rows: list) -> tuple[int
                 n_dropped += 1
                 dropped_kg += b.diameter ** 2 / 162.0 * (length / 1000.0)
                 continue
+        kept.append(b)
+    panel.bars = kept
+    return n_dropped, dropped_kg
+
+
+def drop_unclaimed_tie_candidates(
+    panel: "Panel", mark_rows: list, panel_w: float, panel_h: float, thickness: float,
+) -> tuple[int, float]:
+    """On a column-shaped element (see `_synthesize_column_ties`), drop a
+    full-width/full-depth h-mesh or v-mesh line at a dowel-only diameter
+    (`dowel_only_diameters`) that no chaining/synthesis pass ever claimed
+    -- real drafting noise the tie synthesizer would otherwise have
+    silently absorbed (and implicitly deduplicated) into a fabricated tie
+    loop, before `reconstruct_panel` started exempting dowel-only
+    diameters from that synthesizer (see `tie_exempt_dias`).
+
+    Root-caused on PW-GF-06: T20 has no straight/tie mark at all (J/N/N1
+    are all bent shapes), so it's correctly exempted from tie synthesis
+    -- but that exemption also let an unrelated, genuinely-noise 772mm
+    h-mesh line (spanning 772mm of the panel's own 1180mm width, at a
+    default/plane-snap z with no real depth evidence, matching NONE of
+    J/N/N1's own declared segment or total lengths) survive untouched
+    into the final weight total for the first time, instead of being
+    quietly folded into the old fake tie the way it always used to be.
+    Same geometric candidacy test `_synthesize_column_ties` itself uses
+    (full-span, no real depth evidence) -- this doesn't touch that
+    function, it only cleans up material this project has already
+    decided (via `tie_exempt_dias`) should never reach it in the first
+    place, closing the gap that decision opened.
+
+    Deliberately run AFTER every chaining/synthesis pass in the caller's
+    pipeline (`chain_bent_shape_fragments`, `chain_multi_leg_bent_shapes`,
+    `chain_two_leg_bent_shapes`, `synthesize_bent_shape_from_fragments`)
+    so it only ever removes what's left over unclaimed, never steals
+    evidence those passes could have legitimately used -- confirmed safe
+    on PW-GF-27(R2): its own freed T20... T16 fragment there matched
+    mark I's own declared 4850mm length exactly and is kept (this
+    function only drops a bar that matches NO official mark's own total
+    length or any individual segment at that diameter, within the same
+    8%-or-30mm tolerance already used throughout this file).
+    """
+    if panel_h < 4 * panel_w or panel_h < 4 * thickness:
+        return 0, 0.0  # not a column-shaped element -- ties never apply here
+    exempt = dowel_only_diameters(mark_rows)
+    if not exempt:
+        return 0, 0.0
+
+    real_lengths: dict[int, list[float]] = {}
+    for m in mark_rows:
+        sdia = snap_diameter(m.diameter)
+        if sdia is None or sdia not in exempt or m.qty <= 0 or m.length_mm <= 0:
+            continue
+        vals = real_lengths.setdefault(sdia, [])
+        vals.append(m.length_mm)
+        vals.extend(s for s in m.segments if s > 0)
+
+    cover = 40.0
+    NO_DEPTH_EVIDENCE = ("plane-snap", "default")
+    n_dropped = 0
+    dropped_kg = 0.0
+    kept = []
+    for b in panel.bars:
+        if b.diameter in exempt and b.kind in ("v-mesh", "h-mesh") \
+                and b.z_source in NO_DEPTH_EVIDENCE and len(b.points) == 2:
+            span = abs(b.points[-1][0] - b.points[0][0]) if b.kind == "h-mesh" \
+                else abs(b.points[-1][1] - b.points[0][1])
+            full_span = panel_w if b.kind == "h-mesh" else panel_h
+            if span >= 0.7 * (full_span - 2 * cover):
+                length = math.dist(b.points[0], b.points[-1])
+                tol = max(30.0, 0.08 * length)
+                matches_a_mark = any(
+                    abs(length - v) <= tol for v in real_lengths.get(b.diameter, ())
+                )
+                if not matches_a_mark:
+                    n_dropped += 1
+                    dropped_kg += b.diameter ** 2 / 162.0 * (length / 1000.0)
+                    continue
         kept.append(b)
     panel.bars = kept
     return n_dropped, dropped_kg
@@ -1961,6 +2531,174 @@ def drop_unscheduled_dowels(panel: "Panel", mark_rows: list) -> int:
         kept.append(b)
     panel.bars = kept
     return n_dropped
+
+
+def cap_column_ties_to_schedule_need(panel: "Panel", mark_rows: list) -> tuple[int, float]:
+    """Trim `_synthesize_column_ties`-kind bars at a diameter down to
+    whatever's left of that diameter's OWN official weight budget once
+    every other real/synthesized bar there is already counted -- an
+    aggregate weight cap, not a per-bar length match.
+
+    A per-bar length match (tried first: drop any tie whose own length
+    doesn't land within 20% of some official mark's length_mm) looked
+    like the obvious schedule-grounded discriminator, but proved wrong on
+    direct comparison: PW-GF-11(R1)'s real ~4592mm tie loops don't match
+    ANY of its 8 itemized T8 marks either (closest is A1 at 2200mm, way
+    outside 20%) -- yet those loops are genuinely needed there (full
+    batch test: dropping length-mismatched ties by that rule cost
+    PW-GF-11 99%->82%). The itemized-per-mark weight total exactly equals
+    the aggregate Summary Schedule total on both panels checked
+    (PC-GF-01: 49.16kg both ways; PW-GF-11: 196.07kg both ways) -- so
+    "matches a mark's own length" isn't what makes a tie real, but "the
+    diameter still needs more weight than everything else already
+    accounts for" is true on both: PW-GF-11's raw non-tie T8 evidence
+    (52.6kg) plus its real tie loops (110.7kg) together still don't reach
+    its 196.1kg need, so nothing gets trimmed there; PC-GF-01's non-tie
+    T8 evidence, once `synthesize_from_detail_evidence` finishes filling
+    A1/A3/B1 from real per-mark data (~43.8kg), already covers almost all
+    of its 49.2kg need on its own -- its tie loops are pure surplus on
+    top of an already-satisfied budget and get trimmed back to the ~5kg
+    of headroom actually left. Runs LAST (after every other chain/
+    synthesize pass for this source) so "everything else already
+    accounts for" reflects the final picture, not an intermediate one.
+    """
+    def blen(b: Bar3D) -> float:
+        return sum(math.dist(b.points[i], b.points[i + 1]) for i in range(len(b.points) - 1))
+
+    def bkg(b: Bar3D) -> float:
+        return b.diameter ** 2 / 162.0 * (blen(b) / 1000.0)
+
+    need_by_dia: dict[int, float] = {}
+    for m in mark_rows:
+        sdia = snap_diameter(m.diameter)
+        if sdia is None or m.qty <= 0 or m.length_mm <= 0:
+            continue
+        need_by_dia[sdia] = need_by_dia.get(sdia, 0.0) + (
+            sdia ** 2 / 162.0 * (m.length_mm / 1000.0) * m.qty)
+    if not need_by_dia:
+        return 0, 0.0
+
+    other_kg_by_dia: dict[int, float] = {}
+    ties_by_dia: dict[int, list[Bar3D]] = {}
+    for b in panel.bars:
+        if b.kind == "tie":
+            # unlike `other_kg_by_dia` below, ties are collected at EVERY
+            # diameter, even ones with zero official need -- a diameter
+            # the schedule never declares at all has a need of 0, so its
+            # whole tie budget below comes out negative and every such
+            # tie gets dropped (a synthesized-tie diameter with zero
+            # schedule marks is definitionally phantom; e.g. PW-GF-01
+            # produced one fabricated T25 tie loop -- a diameter absent
+            # from its official schedule entirely -- because a mis-
+            # snapped gap fed `_synthesize_column_ties`, and the old
+            # `if b.diameter not in need_by_dia: continue` skipped it
+            # here, so it was never trimmed).
+            ties_by_dia.setdefault(b.diameter, []).append(b)
+        elif b.diameter in need_by_dia:
+            other_kg_by_dia[b.diameter] = other_kg_by_dia.get(b.diameter, 0.0) + bkg(b)
+
+    n_dropped = 0
+    dropped_kg = 0.0
+    drop_ids: set[int] = set()
+    for dia, ties in ties_by_dia.items():
+        budget = need_by_dia.get(dia, 0.0) - other_kg_by_dia.get(dia, 0.0)
+        running = sum(bkg(b) for b in ties)
+        for b in ties:
+            if running <= budget:
+                break
+            kg = bkg(b)
+            drop_ids.add(id(b))
+            running -= kg
+            n_dropped += 1
+            dropped_kg += kg
+
+    if drop_ids:
+        panel.bars = [b for b in panel.bars if id(b) not in drop_ids]
+    return n_dropped, dropped_kg
+
+
+def cap_unproven_mesh_to_schedule_need(panel: "Panel", mark_rows: list) -> tuple[int, float]:
+    """Same aggregate-weight-budget cap as `cap_column_ties_to_schedule_need`,
+    applied to v-mesh/h-mesh bars whose z ISN'T backed by a real section cut
+    (`z_source != "section"`) -- `pair_lines`' rail-pairing can, in a densely
+    packed mesh region (many closely-spaced near-parallel S-RBAR lines),
+    occasionally pair two rails that are actually 2+ real spacings apart
+    instead of true neighbours, producing a fictitious bar at a gap that
+    happens to snap to a DIFFERENT standard diameter than the real mesh.
+
+    Root-caused on PW-GF-18(R): T12 (178% of official) turned out to be 8
+    h-mesh bars, all `layer-rail`/`section-layer-origin` sourced, none
+    within reach of either real T12 mark (F/F1, both 1125mm) -- their
+    lengths (633-1335mm) instead echo the spacing of the dense T8 mesh
+    region they sit inside (1169 S-RBAR LINE entities in that one
+    sub-area alone). T20 (151%) was the same bug on the same panel: 3
+    non-section v-mesh/h-mesh bars (12.9kg) on top of 3 genuinely
+    section-matched ones (I/I1 at 2020mm each, near-exact matches for
+    their 2025mm marks, plus L's 4640mm run) that alone already covered
+    24.9 of the 25.06kg official total. Deliberately scoped to
+    `z_source != "section"` only: bars WITH section-cut evidence are
+    trusted (that's real, independently-verified geometry, exactly the
+    kind PW-GF-11's real ~4592mm tie loops turned out to be per the
+    scoping precedent in `cap_column_ties_to_schedule_need` above), only
+    the fallback-sourced ones get capped down to whatever weight budget
+    real/section-backed evidence hasn't already claimed. Checked against
+    the whole batch: only fires when non-section v-mesh/h-mesh evidence
+    at a diameter exceeds that diameter's own remaining budget, so a
+    panel whose mesh genuinely needs every one of those bars to reach its
+    official weight is untouched.
+
+    Also catches `z_source == "section-weak"` (PW-GF-25(R) root-cause,
+    2026-07): `_z_lookup` tags a depth this way when only ONE section's own
+    circle supports it, well outside the elevation's own registration
+    noise band -- real geometry, but not corroborated enough to call
+    "independently verified" the way a genuine `"section"` match is. Same
+    budget mechanics apply: only trimmed when it pushes a diameter's total
+    past what the schedule actually calls for.
+    """
+    def blen(b: Bar3D) -> float:
+        return sum(math.dist(b.points[i], b.points[i + 1]) for i in range(len(b.points) - 1))
+
+    def bkg(b: Bar3D) -> float:
+        return b.diameter ** 2 / 162.0 * (blen(b) / 1000.0)
+
+    need_by_dia: dict[int, float] = {}
+    for m in mark_rows:
+        sdia = snap_diameter(m.diameter)
+        if sdia is None or m.qty <= 0 or m.length_mm <= 0:
+            continue
+        need_by_dia[sdia] = need_by_dia.get(sdia, 0.0) + (
+            sdia ** 2 / 162.0 * (m.length_mm / 1000.0) * m.qty)
+    if not need_by_dia:
+        return 0, 0.0
+
+    other_kg_by_dia: dict[int, float] = {}
+    cand_by_dia: dict[int, list[Bar3D]] = {}
+    for b in panel.bars:
+        if b.diameter not in need_by_dia:
+            continue
+        if b.kind in ("v-mesh", "h-mesh") and b.z_source != "section":
+            cand_by_dia.setdefault(b.diameter, []).append(b)
+        else:
+            other_kg_by_dia[b.diameter] = other_kg_by_dia.get(b.diameter, 0.0) + bkg(b)
+
+    n_dropped = 0
+    dropped_kg = 0.0
+    drop_ids: set[int] = set()
+    for dia, cands in cand_by_dia.items():
+        budget = need_by_dia[dia] - other_kg_by_dia.get(dia, 0.0)
+        running = sum(bkg(b) for b in cands)
+        for b in cands:
+            if running <= budget:
+                break
+            kg = bkg(b)
+            drop_ids.add(id(b))
+            running -= kg
+            n_dropped += 1
+            dropped_kg += kg
+
+    if drop_ids:
+        panel.bars = [b for b in panel.bars if id(b) not in drop_ids]
+    return n_dropped, dropped_kg
 
 
 def synthesize_from_detail_evidence(
@@ -2042,6 +2780,23 @@ def synthesize_from_detail_evidence(
         # "some other T8 in a busy view" while still accepting the real
         # bar even though it's chained/measured slightly differently in a
         # detail view than a full elevation pairing would give.
+        # Tried gating against a bent mark's own longest individual leg
+        # (`max(segments)`) instead of its whole unfolded `length_mm`, on
+        # the theory that a single local-view fragment is one leg, not the
+        # whole shape (this did close PW-GF-01's B/B1/C gap, whose real
+        # ~400-450mm leg fragments never got within 30% of their marks'
+        # 900mm+ totals) -- reverted: full-batch regression showed it's
+        # not a safe general discriminator. Loosening the length gate for
+        # every bent mark, not just PW-GF-01's, let many more (mark,
+        # nearby-fragment) pairs through across the whole batch -- PW-GF-26
+        # alone jumped from 113 bar(s)/41.2kg over-synthesized this way,
+        # pushing its T8 from 109% to 150%; PW-GF-09 combined went from
+        # 96% to 118%. `evidence_radius`+diameter-match alone is already
+        # loose enough in a busy detail view that a coincidental leg-length
+        # match is common noise, not proof -- matching the full mark
+        # length is a much stronger, safer signal in general even though
+        # it costs this one panel's B/B1/C.
+        evidence_target = m.length_mm
         evidence_radius = 500.0
         evidence = False
         for inst in g.instances:
@@ -2062,7 +2817,7 @@ def synthesize_from_detail_evidence(
             for b in cand:
                 if not any(math.dist(p, (inst.x, inst.y)) <= evidence_radius for p in b.points):
                     continue
-                if abs(b.length - m.length_mm) <= 0.3 * m.length_mm:
+                if abs(b.length - evidence_target) <= 0.3 * evidence_target:
                     evidence = True
                     break
             if evidence:
@@ -2071,7 +2826,14 @@ def synthesize_from_detail_evidence(
             continue
 
         for k in range(m.qty):
-            pts = [(0.0, k * 50.0, panel.thickness / 2), (m.length_mm, k * 50.0, panel.thickness / 2)]
+            # See `_folded_placeholder_path`'s docstring -- same nominal-
+            # position/weight-correct-not-visually-correct precedent as
+            # `synthesize_bent_shape_from_fragments`, and the same fix:
+            # fold the placeholder back and forth within the panel's own
+            # known width instead of drawing one straight line that can
+            # shoot past the real outline when `m.length_mm` exceeds it.
+            pts = _folded_placeholder_path(
+                m.length_mm, panel.width, panel.height, k * 50.0, panel.thickness / 2)
             panel.bars.append(Bar3D(pts, sdia, "shape", "detail-view-origin"))
         n_added += m.qty
         added_kg += sdia ** 2 / 162.0 * (m.length_mm / 1000.0) * m.qty
@@ -2258,18 +3020,243 @@ def _synthesize_labelled_singles(bars: list[Bar3D], elev_ents, x0: float, y0: fl
     return bars + out
 
 
-def reconstruct_panel(name: str, views: list[View]) -> Panel:
+def _find_companion_elevations(views: list[View]) -> tuple[list[View], list[View]]:
+    """Some sheets split ONE panel's elevation into two side-by-side views
+    -- e.g. main bars (T16/T10) drawn in one view, mesh/spacer bars (T8)
+    drawn in a separate adjacent view -- rather than one combined view.
+    `reconstruct_panel` only ever reads `views[0]`, so the second view's
+    bars were silently discarded outright. Confirmed on PC-GF-01(R): view 0
+    carries ONLY marks D/D1/E/E1/E2/E3/C/C1 (its T16/T10 family), view 1
+    carries ONLY marks A3/B/B1 (its T8 family) -- non-overlapping halves of
+    the SAME schedule, both anchored to the same 4435mm panel height, ~98
+    real bars in view 1 never reaching the reconstruction at all. A genuine
+    section/detail view is a small sliver of the panel's footprint and/or
+    a tiny handful of entities, not a large, full-height companion view, so
+    this only fires when height matches tightly (panels are drawn true-
+    height) and the other view is itself a substantial, elevation-sized
+    chunk of geometry -- not a coincidental thin slice.
+
+    Returns (companions, rest) -- companions are kept as SEPARATE View
+    objects (never merged at the raw-entity level: translating one view's
+    entities to overlap another's coordinate space was tried and found to
+    corrupt `extract_bars`'s double-line pairing across the two elevations'
+    now-superimposed geometry, silently losing real bars instead of gaining
+    them). Callers extract bars from each companion independently in its
+    own local frame, then translate the resulting *bar* points.
+    """
+    if len(views) < 2:
+        return [], views
+    (x0, y0, x1, y1), _ = wall_outline(views[0].ents)
+    w0, h0 = x1 - x0, y1 - y0
+    if w0 <= 0 or h0 <= 0:
+        return [], views
+    companions, rest = [], []
+    for v in views[1:]:
+        try:
+            (vx0, vy0, vx1, vy1), _ = wall_outline(v.ents)
+        except ValueError:
+            rest.append(v)
+            continue
+        w, h = vx1 - vx0, vy1 - vy0
+        same_height = h > 0 and abs(h - h0) <= 0.02 * h0
+        # Lower bound widened 0.3->0.25 after PW-GF-05(R1): its real
+        # companion elevation (2715 S-RBAR entities, 79 own mark labels
+        # G/H/H1/H2/H4/F/F1/I1/K/K1-K4, full-height match) sits at
+        # ratio 0.271 -- a genuinely narrower second face (this panel's
+        # return/wing strip), not a small section/detail sliver, but the
+        # old 0.3 cutoff excluded it by a 30mm margin, discarding 103 real
+        # bars (70 T8, 22 T16, 6 T20, 3 T10) entirely. Checked against
+        # every same-height candidate view across the whole batch: every
+        # other one either already clears 0.3 (already included) or fails
+        # the separate `substantial` entity-count test regardless of
+        # width, so this widening is a no-op everywhere else.
+        comparable_width = w > 0 and 0.25 * w0 <= w <= 1.5 * w0
+        substantial = len(v.ents) >= 0.3 * len(views[0].ents)
+        if same_height and comparable_width and substantial:
+            companions.append(v)
+        else:
+            rest.append(v)
+    return companions, rest
+
+
+def dowel_only_diameters(mark_rows: list) -> set[int]:
+    """Diameters whose EVERY official schedule mark is a 2-leg bent shape
+    (exactly 2 non-zero declared segments, not "M_00" the straight/tie
+    shape code, and not a 3+-leg shape) -- i.e. this diameter has no
+    legitimate closed-tie mark, AND every bent mark on it is exactly the
+    family `chain_two_leg_bent_shapes` was built to recover.
+
+    Used to keep `_synthesize_column_ties`'s purely-geometric "full-width
+    h-mesh line -> column tie loop" heuristic (see that function's own
+    docstring) from swallowing a real bent-shape bar's leg on a diameter
+    that was never a tie at all. Root-caused on PC-GF-01: mark C/C1 (T10,
+    shape "M_17A", segments 855/755mm and 930/835mm -- a 2-leg dowel
+    bend) draws one real leg as a plain horizontal double-line run
+    spanning nearly the full panel width at the section's default mid-
+    depth z (no real front/back depth evidence, exactly like a genuine
+    tie leg looks) -- `_synthesize_column_ties` can't geometrically tell
+    the two apart, so it swept C/C1's own real 928.6mm leg into a
+    fabricated rectangular tie loop sized from the panel's cross-section,
+    destroying the only real fragment evidence `chain_bent_shape_fragments`
+    /`synthesize_bent_shape_from_fragments` had to work with -- T10 stayed
+    at 37% of its official schedule weight (0 dowel bars ever
+    reconstructed) even though `drop_unscheduled_dowels` already proves
+    T10 legitimately has real M_17A dowel marks.
+
+    Deliberately narrower than "no straight mark at all" (an earlier
+    version of this function used just that test): confirmed a real
+    regression on PC-GF-01's OWN T8 (explicitly out of scope, previously
+    99% of official) -- T8's marks (A/A1/A2/A3, 6 segments; B/B1, 3
+    segments) have no straight mark either, so the looser test exempted
+    T8 from tie synthesis too, freeing a much larger fragment pool than
+    any new mechanism here actually needs -- `chain_multi_leg_bent_shapes`
+    (pre-existing, unmodified) then over-matched that flood of newly-
+    freed material against A/A1/A2/A3/B/B1's own sequences, pushing T8 to
+    127%. Requiring every bent mark at a diameter to be exactly 2-leg
+    scopes the exemption to precisely the new capability
+    (`chain_two_leg_bent_shapes`) that needs it, leaving diameters with
+    any 3+-leg mark (already served by the pre-existing, unmodified
+    `chain_multi_leg_bent_shapes`) untouched.
+    """
+    has_straight: dict[int, bool] = {}
+    has_multi_leg: dict[int, bool] = {}
+    has_two_leg: dict[int, bool] = {}
+    for m in mark_rows:
+        sdia = snap_diameter(m.diameter)
+        if sdia is None or m.qty <= 0:
+            continue
+        if m.shape.strip().upper() == "M_00":
+            has_straight[sdia] = True
+            continue
+        segs = [s for s in m.segments if s > 0]
+        if len(segs) == 2:
+            has_two_leg[sdia] = True
+        else:
+            has_multi_leg[sdia] = True
+    return {
+        d for d in has_two_leg
+        if not has_straight.get(d, False) and not has_multi_leg.get(d, False)
+    }
+
+
+def _declash_link_bars(bars: list[Bar3D], pw: float, ph: float) -> int:
+    """Nudge `link`-kind bars sideways off mesh bars that literally cross them.
+
+    A `link` bar (through-thickness dowel/tie leg, synthesized as a straight
+    2-point bar hardcoded to z0=40, z1=thickness-40 -- see the "link" branch
+    above) very often lands at the exact same (x,y) as an `h-mesh`/`v-mesh`
+    bar, because both independently default to `thickness/2`-ish z: mesh
+    bars lacking their own z-evidence fall back to `thickness/2` (or the
+    plane closest to it), and `(40 + (thickness-40)) / 2 == thickness/2`
+    for the link bar's own z-midpoint. Where both z-ranges then overlap and
+    the (x,y) coincide, the two rendered cylinders visibly interpenetrate
+    (confirmed on PW-GF-02-D, and systemically via exact z-collision math on
+    PW-01-PW-01 / PW-GF-08(R2)).
+
+    A link bar is a rigid straight vertical-ish segment (both its points
+    share the same x,y, only z differs) -- so sliding it sideways in-plane
+    changes only where it's drawn, never its length, weight, diameter, kind
+    or z. This shifts each colliding link bar's (x,y) by
+    `own_radius + mesh_radius` perpendicular to the colliding mesh bar's run
+    axis (h-mesh runs along x -> nudge in y; v-mesh runs along y -> nudge in
+    x), consistently away from panel center so the choice is deterministic.
+
+    Conservative on purpose: a link bar that collides with multiple mesh
+    bars requiring genuinely different nudge directions (different axis, or
+    same axis but opposite sign) is left untouched rather than guessed at --
+    this fixes the common single-collision case cleanly, not every
+    multi-collision edge case.
+
+    Returns the number of link bars actually nudged.
+    """
+    mesh_bars = [b for b in bars if b.kind in ("h-mesh", "v-mesh")]
+    nudged = 0
+    for bar in bars:
+        if bar.kind != "link" or len(bar.points) != 2:
+            continue
+        x, y = bar.points[0][0], bar.points[0][1]
+        z_lo, z_hi = sorted((bar.points[0][2], bar.points[1][2]))
+        r_link = bar.diameter / 2.0
+        # axis -> (sign, magnitude) required to clear every mesh bar found
+        # colliding along that axis
+        needed: dict[str, set[float]] = {"x": set(), "y": set()}
+        for mesh in mesh_bars:
+            if len(mesh.points) < 2:
+                continue
+            mz_lo, mz_hi = sorted((mesh.points[0][2], mesh.points[-1][2]))
+            if mz_hi < z_lo or mz_lo > z_hi:
+                continue  # no z overlap -> can't actually be crossing
+            r_mesh = mesh.diameter / 2.0
+            gap = r_link + r_mesh
+            if mesh.kind == "h-mesh":
+                my = mesh.points[0][1]
+                mx_lo, mx_hi = sorted((mesh.points[0][0], mesh.points[-1][0]))
+                if not (mx_lo - gap <= x <= mx_hi + gap):
+                    continue
+                if abs(y - my) > gap:
+                    continue
+                sign = 1.0 if y >= ph / 2.0 else -1.0
+                needed["y"].add(sign * gap)
+            else:  # v-mesh
+                mx = mesh.points[0][0]
+                my_lo, my_hi = sorted((mesh.points[0][1], mesh.points[-1][1]))
+                if not (my_lo - gap <= y <= my_hi + gap):
+                    continue
+                if abs(x - mx) > gap:
+                    continue
+                sign = 1.0 if x >= pw / 2.0 else -1.0
+                needed["x"].add(sign * gap)
+        x_offsets, y_offsets = needed["x"], needed["y"]
+        if not x_offsets and not y_offsets:
+            continue
+        if x_offsets and y_offsets:
+            continue  # collides with both an h-mesh and a v-mesh -- ambiguous, skip
+        axis_offsets = x_offsets or y_offsets
+        signs = {1.0 if v > 0 else -1.0 for v in axis_offsets}
+        if len(signs) > 1:
+            continue  # same axis but opposing directions required -- ambiguous, skip
+        # same sign on this axis: clear the farthest requirement
+        offset = max(axis_offsets, key=abs)
+        dx, dy = (offset, 0.0) if x_offsets else (0.0, offset)
+        bar.points = [(px + dx, py + dy, pz) for px, py, pz in bar.points]
+        nudged += 1
+    return nudged
+
+
+def reconstruct_panel(name: str, views: list[View], tie_exempt_dias=frozenset()) -> Panel:
+    companions, rest = _find_companion_elevations(views)
+    views = [views[0]] + rest
     elev = views[0]
     bbox, loops = wall_outline(elev.ents)
     x0, y0, x1, y1 = bbox
     pw, ph = x1 - x0, y1 - y0
 
-    sections = classify_sections(views, pw, ph, bbox)
+    # `classify_sections` reads every view AFTER views[0] for its own
+    # A-WALL/A-FLOR thickness signal (see its docstring). Companions are
+    # pulled out of `rest` above (they're full elevations, handled
+    # separately below via their own bar extraction) but they're still
+    # real wall/elevation geometry with their own legitimate thickness
+    # reading -- dropping them here starved thickness classification of a
+    # real signal. Confirmed on PW-GF-05(R1): once its real 400mm-wide
+    # companion elevation started counting (widened `comparable_width`
+    # below), thickness silently fell back to the 160mm default and every
+    # section-depth z-plane was lost, because that companion's own 208
+    # A-WALL entities were the ONLY source that had ever read 400mm.
+    sections = classify_sections([views[0]] + companions + rest, pw, ph, bbox)
     thickness = (
         statistics.median([s.thickness for s in sections]) if sections else 160.0
     )
 
     bars2d = [b for b in extract_bars(elev.ents) if b.length >= 100.0]
+    for comp in companions:
+        (cx0, cy0, _cx1, _cy1), _ = wall_outline(comp.ents)
+        dx, dy = x0 - cx0, y0 - cy0
+        for b in extract_bars(comp.ents):
+            if b.length < 100.0:
+                continue
+            b.points = [(px + dx, py + dy) for px, py in b.points]
+            bars2d.append(b)
+    bars2d = _drop_far_outside_bbox(bars2d, bbox)
     bars2d = _bridge_projecting(bars2d, bbox)
 
     bars: list[Bar3D] = []
@@ -2281,7 +3268,7 @@ def reconstruct_panel(name: str, views: list[View]) -> Panel:
             continue
         orient = _orientation(b)
         r = dia / 2
-        zs: list[float] = []
+        zs: list[tuple[float, bool]] = []
         if orient == "v":
             zs = _z_lookup(sections, "horizontal", b.points[0][0] - x0, r)
         elif orient == "h":
@@ -2291,12 +3278,17 @@ def reconstruct_panel(name: str, views: list[View]) -> Panel:
             pts = [(px - x0, py - y0, thickness / 2) for px, py in b.points]
             bars.append(Bar3D(pts, dia, kind, "default"))
         else:
-            # one physical bar per matched depth — mesh sits on both faces
-            for z in zs:
+            # one physical bar per matched depth — mesh sits on both faces.
+            # A depth `_z_lookup` couldn't corroborate (single section, loose
+            # coord match) is real geometry but not yet trustworthy enough to
+            # exempt from `cap_unproven_mesh_to_schedule_need`'s weight-budget
+            # check below -- see that tag's rationale in `_z_lookup`'s
+            # docstring.
+            for z, corroborated in zs:
                 n_section_z += 1
                 zs_seen.append(z)
                 pts = [(px - x0, py - y0, z) for px, py in b.points]
-                bars.append(Bar3D(pts, dia, kind, "section"))
+                bars.append(Bar3D(pts, dia, kind, "section" if corroborated else "section-weak"))
 
     # Mesh bars the elevation's double-line pairing never independently
     # found at all — not "missing depth", missing entirely, usually because
@@ -2378,7 +3370,7 @@ def reconstruct_panel(name: str, views: list[View]) -> Panel:
             # the pipeline, which is not evidence of anything real and
             # must not block a genuine new depth from being added just
             # because it happens to land near that placeholder.
-            if bar.kind == kind and bar.z_source in ("section", "section-origin"):
+            if bar.kind == kind and bar.z_source in ("section", "section-weak", "section-origin"):
                 existing_z.setdefault(bar.diameter, []).append(bar.points[0][2])
         for s in sections:
             if s.role != role:
@@ -2511,7 +3503,7 @@ def reconstruct_panel(name: str, views: list[View]) -> Panel:
             rail_layers[key].extend(s.layers)
         fam_planes: dict[tuple[str, int], list[float]] = {}
         for bar in bars:
-            if bar.z_source == "section" and bar.kind in ("v-mesh", "h-mesh"):
+            if bar.z_source in ("section", "section-weak") and bar.kind in ("v-mesh", "h-mesh"):
                 fam_planes.setdefault((bar.kind, bar.diameter), []).append(bar.points[0][2])
         for bar in bars:
             if bar.z_source != "default" or bar.kind not in ("v-mesh", "h-mesh"):
@@ -2544,9 +3536,19 @@ def reconstruct_panel(name: str, views: list[View]) -> Panel:
                                         [e for v in views for e in v.ents])
     bars = _synthesize_hooks(bars, views, thickness, x0, y0)
     bars = _synthesize_edge_caps(bars, views, thickness, ph, x0, y0)
-    bars = _synthesize_column_ties(bars, pw, ph, thickness)
+    if tie_exempt_dias:
+        # Hide dowel-only diameters from the tie synthesizer entirely --
+        # it's purely geometric (see `dowel_only_diameters`) and has no
+        # way to tell a real dowel leg from a real tie leg on its own.
+        # Not a change to its logic, just which bars it's allowed to see.
+        _tie_input = [b for b in bars if b.diameter not in tie_exempt_dias]
+        _tie_held = [b for b in bars if b.diameter in tie_exempt_dias]
+        bars = _synthesize_column_ties(_tie_input, pw, ph, thickness) + _tie_held
+    else:
+        bars = _synthesize_column_ties(bars, pw, ph, thickness)
     bars = _merge_dowel_legs(bars, elev.ents, x0, y0)
     bars = _dedupe_near(bars)
+    n_link_nudged = _declash_link_bars(bars, pw, ph)
 
     # ---- cast-in features: sleeves, corbels, embeds, anchors, wire loops
     features: list[Feature] = []
@@ -2599,9 +3601,77 @@ def reconstruct_panel(name: str, views: list[View]) -> Panel:
         "u_bars": sum(1 for b in bars if b.kind == "u-bar"),
         "features": {k: sum(1 for f in features if f.kind == k)
                      for k in ("sleeve", "corbel", "embed", "anchor", "loop")},
+        "link_bars_nudged": n_link_nudged,
     }
     return Panel(name, pw, ph, thickness, openings, bars, stats,
                  mesh_families(bars), features)
+
+
+def _drop_far_outside_bbox(bars: list[Bar2D], bbox, margin: float = 250.0) -> list[Bar2D]:
+    """Drop 2D bars that never come near the wall's own footprint at all.
+
+    Root-caused 2026-07 on PW-GF-08(R2)/PW-GF-09(R2)/PW-GF-11(R2)/
+    PW-GF-30(R2) (visual-qa flagged large bar clusters floating hundreds-
+    to-thousands of mm outside the rendered panel outline): these sheets'
+    real elevation is a small strip, but `cluster_views`'s proximity-based
+    grid clustering (margin=120) pulls in a nearby "typical tie/dowel
+    detail" schedule diagram (its own local legend geometry, e.g. an
+    "11 -T12@100mm" spacing ladder near mark "G") into the SAME connected
+    component as the true elevation, because it happens to be drawn a few
+    hundred mm below/beside the tiny strip on the sheet. `extract_bars`
+    then pairs that legend's parallel lines as if they were real elevation
+    mesh, at their own literal (wrong) drawing position -- entirely
+    outside the wall outline, sometimes 900mm+ away.
+    `synthesize_from_detail_evidence` already exists to handle exactly
+    this "real geometry only in a local detail view" case correctly
+    (schedule-driven qty/length, gated by proximity to the mark's own
+    label) -- but only for detail geometry that landed in a SEPARATE view
+    (`views[1:]`); it can't rescue this because the contaminating lines
+    never got split out of `views[0]` to begin with. Splitting the
+    cluster itself (so the detail becomes its own `views[i>0]` entry) was
+    considered but rejected here: some contaminating lines are single
+    continuous LINE entities that also dip back into the panel's own
+    coordinate range, so a clean per-entity partition isn't always
+    possible without also cutting a real bar in half.
+    Cheaper and safe: a bar only ever needs an outright drop, not a
+    relocation, when BOTH its endpoints sit far from the wall footprint --
+    a real bar (mesh, or a projecting dowel/lap stub `_bridge_projecting`
+    still needs to see) always has at least one endpoint within a few
+    hundred mm of the wall's own edge; only whole-cloth foreign geometry
+    (a detail-view legend, unrelated schedule graphic) has NEITHER
+    endpoint anywhere near it. `margin` (250mm) is well above normal
+    cover/edge drafting slop but well below the ~900mm+ excursions seen
+    in the contaminating clusters, so this never touches a genuinely
+    close bar.
+
+    A stricter follow-up was tried (2026-07): also hard-cap how far the
+    FAR endpoint of a "near" bar may sit, to catch cases where a real
+    near-panel point gets chained to an unrelated far-away one (e.g.
+    PW-GF-09(R2)'s "shape"/z_src=default T20 running from (-188.5,
+    2200.5) to (230.1, 8286.1) in a 400x5055mm panel -- 3231mm past the
+    panel top, diagonal, clearly wrong). Reverted: an 800mm cap on ANY
+    point regressed the batch badly (PW-GF-08 combined 86%->75%, PW-GF-
+    09 combined 96%->89%, PW-GF-05/06/07/18/25/26/27/45/PC-GF-01/PW-GF-02
+    all lost real T16/T20/T25 weight) -- this project has many genuinely
+    long single-run bars (full-height T20/T25 verticals, tall dowels)
+    whose *drawn* far endpoint legitimately sits far from THIS view's own
+    tight wall_outline bbox even though the bar itself is entirely real
+    (e.g. a full-panel-height bar in a panel whose outline the wall-loop
+    detector only closed around part of). The chained-artifact class
+    genuinely exists but isn't safely separable from real long bars by
+    endpoint distance alone -- needs a smarter discriminator (e.g.
+    collinearity with the near segment's own diameter-pair rails, or
+    requiring the far point's own local geometry to actually exist in
+    the DXF at that position) before attempting again.
+    """
+    x0, y0, x1, y1 = bbox
+    lo_x, hi_x = x0 - margin, x1 + margin
+    lo_y, hi_y = y0 - margin, y1 + margin
+    out = []
+    for b in bars:
+        if any(lo_x <= px <= hi_x and lo_y <= py <= hi_y for px, py in b.points):
+            out.append(b)
+    return out
 
 
 def _bridge_projecting(bars: list[Bar2D], bbox, tol_pos: float = 6.0) -> list[Bar2D]:

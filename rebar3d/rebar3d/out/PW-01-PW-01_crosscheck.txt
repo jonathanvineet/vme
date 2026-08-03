@@ -1,0 +1,14 @@
+callout                      expected  found   nearest  status
+-(22) -T8                          22      1    1191mm  SHORT
+-(22) -T8                          22      5    1358mm  SHORT
+-(14) -T8                          14      1     229mm  SHORT
+-(17) -T8                          17      5     424mm  SHORT
+-(14) -T8                          14      5    1034mm  SHORT
+-(22) -T8                          22     16     898mm  SHORT
+-(3) -T8                            3      1     391mm  SHORT
+-(3) -T8                            3      1     342mm  SHORT
+-(2) -T10                           2      2     603mm  OK
+-(2) -T10                           2      2     550mm  OK
+-(2) -T10.                          2      4     245mm  OVER
+-(2) -T10                           2      4     242mm  OVER
+-(14) -T8                          14     23     839mm  OVER

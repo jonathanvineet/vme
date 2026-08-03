@@ -1,0 +1,31 @@
+callout                      expected  found   nearest  status
+6 -T12                              6      0         -  SHORT
+6 -T12                              6      0         -  SHORT
+6 -T12                              6      0         -  SHORT
+6 -T12                              6      0         -  SHORT
+6 -T12                              6      2     222mm  SHORT
+6 -T12                              6      2     636mm  SHORT
+2 -T12                              2      0         -  SHORT
+2 -T12                              2      1     736mm  SHORT
+1 -T12                              1      0         -  SHORT
+1 -T12                              1      0         -  SHORT
+2 -T16                              2      1     426mm  SHORT
+2 -T16                              2      1     715mm  SHORT
+1 -T12                              1      0         -  SHORT
+1 -T12                              1      0         -  SHORT
+2 -T16                              2      1     515mm  SHORT
+2 -T16                              2      1     594mm  SHORT
+6 -T12                              6      8    1531mm  OVER
+6 -T12                              6      8    1598mm  OVER
+2 -T16                              2      9     314mm  OVER
+2 -T12 -Crack Bar                   2      9     406mm  OVER
+2 -T12 -Crack Bar                   2     11     257mm  OVER
+2 -T16                              2     12     847mm  OVER
+1 -T12                              1     11     247mm  OVER
+1 -T12                              1     12     687mm  OVER
+2 -T16                              2     14     609mm  OVER
+1 -T12                              1     13     291mm  OVER
+2 -T16                              2     14     758mm  OVER
+1 -T12                              1     14     753mm  OVER
+1 -T12                              1     14     670mm  OVER
+2 -T12 -Crack Bar                   2     15    1188mm  OVER
