@@ -26,19 +26,19 @@ if (-not (Get-Command winget -ErrorAction SilentlyContinue)) {
 # python.org, checking "Add python.exe to PATH"), then run this script.
 # It still validates what's on PATH before trusting it, since some machines
 # have a "python" that isn't a real, complete CPython install (e.g. a
-# stripped interpreter bundled with unrelated hardware/software) - missing
-# the venvlauncher.exe / venvwlauncher.exe files "python -m venv" needs to
-# copy on Windows, even though the venv/ensurepip *modules* import fine.
+# stripped interpreter bundled with unrelated hardware/software). The only
+# reliable test is to actually try building a venv with it.
 if (-not (Get-Command python -ErrorAction SilentlyContinue)) {
     Fail "python is not on PATH. Install Python 3.11+ from python.org (check 'Add python.exe to PATH' during install), open a NEW PowerShell window, and re-run .\setup.ps1"
 }
 $pythonExe = (Get-Command python).Source
-$pyDir = Split-Path $pythonExe
-if (-not (Test-Path (Join-Path $pyDir "venvlauncher.exe")) -or -not (Test-Path (Join-Path $pyDir "venvwlauncher.exe"))) {
-    Fail "The 'python' on PATH ($pythonExe) is missing venvlauncher.exe/venvwlauncher.exe - it's not a complete Python install (possibly bundled by other software). Install Python 3.11+ from python.org, make sure it comes first on PATH, open a NEW PowerShell window, and re-run .\setup.ps1"
+$probeDir = Join-Path $env:TEMP "vme_venv_probe_$([guid]::NewGuid().ToString('N'))"
+& $pythonExe -m venv $probeDir *> $null
+$venvWorks = ($LASTEXITCODE -eq 0) -and (Test-Path (Join-Path $probeDir "Scripts\python.exe"))
+Remove-Item -Recurse -Force $probeDir -ErrorAction SilentlyContinue
+if (-not $venvWorks) {
+    Fail "The 'python' on PATH ($pythonExe) can't create a working venv - it's not a complete Python install (possibly bundled by other software). Install Python 3.11+ from python.org, make sure it comes first on PATH, open a NEW PowerShell window, and re-run .\setup.ps1"
 }
-& $pythonExe -c "import venv, ensurepip" *> $null
-if ($LASTEXITCODE -ne 0) { Fail "'$pythonExe -c `"import venv, ensurepip`"' failed - this Python install is incomplete." }
 Log "Using Python: $pythonExe ($(& $pythonExe --version))"
 
 # 2. CMake (required to build dlib from source)
