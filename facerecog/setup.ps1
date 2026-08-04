@@ -22,10 +22,16 @@ if (-not (Get-Command winget -ErrorAction SilentlyContinue)) {
 # 1. Python
 # Some machines already have a "python" on PATH that isn't a real, complete
 # CPython install (e.g. a stripped interpreter bundled with unrelated
-# hardware/software, missing the venv/ensurepip modules). Get-Command alone
-# can't tell the difference, so actually probe it before trusting it.
+# hardware/software). Get-Command alone can't tell the difference, so
+# actually probe it before trusting it - including the venvlauncher.exe /
+# venvwlauncher.exe files that "python -m venv" needs to copy on Windows,
+# which stripped/embeddable distributions often omit even though the venv
+# and ensurepip *modules* import fine.
 function Test-PythonOk($exe) {
     if (-not $exe -or -not (Test-Path $exe)) { return $false }
+    $dir = Split-Path $exe
+    if (-not (Test-Path (Join-Path $dir "venvlauncher.exe"))) { return $false }
+    if (-not (Test-Path (Join-Path $dir "venvwlauncher.exe"))) { return $false }
     & $exe -c "import venv, ensurepip" *> $null
     return ($LASTEXITCODE -eq 0)
 }
@@ -81,6 +87,14 @@ if (-not $hasBuildTools) {
 }
 
 # 4. Virtual environment
+$venvPython = Join-Path $PSScriptRoot ".venv\Scripts\python.exe"
+$venvPip    = Join-Path $PSScriptRoot ".venv\Scripts\pip.exe"
+
+if ((Test-Path ".venv") -and -not (Test-Path $venvPython)) {
+    Log "Found an incomplete .venv from a previous failed run - removing it"
+    Remove-Item -Recurse -Force ".venv"
+}
+
 if (-not (Test-Path ".venv")) {
     Log "Creating virtual environment (.venv)"
     & $pythonExe -m venv .venv
@@ -89,11 +103,8 @@ if (-not (Test-Path ".venv")) {
     Log "Virtual environment already exists"
 }
 
-$venvPython = Join-Path $PSScriptRoot ".venv\Scripts\python.exe"
-$venvPip    = Join-Path $PSScriptRoot ".venv\Scripts\pip.exe"
-
 if (-not (Test-Path $venvPython)) {
-    Fail ".venv exists but is incomplete (missing $venvPython). Delete the .venv folder and re-run .\setup.ps1"
+    Fail "venv creation reported success but $venvPython is still missing - something is wrong with the Python install at $pythonExe"
 }
 
 Log "Upgrading pip/setuptools/wheel"
