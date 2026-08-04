@@ -26,6 +26,7 @@ from .reconstruct import (
     cap_unproven_mesh_to_schedule_need,
     chain_bent_shape_fragments, chain_multi_leg_bent_shapes,
     chain_two_leg_bent_shapes, dowel_only_diameters, drop_unclaimed_tie_candidates,
+    straight_mark_lengths,
     drop_undersized_mesh_fragments, drop_unscheduled_dowels, reconstruct_panel,
     synthesize_bent_shape_from_fragments, synthesize_from_detail_evidence,
 )
@@ -189,6 +190,9 @@ def main(argv=None) -> int:
         tie_exempt_dias = (
             dowel_only_diameters(itemized_candidates[0][1]) if itemized_candidates else set()
         )
+        straight_lengths = (
+            straight_mark_lengths(itemized_candidates[0][1]) if itemized_candidates else {}
+        )
 
         # Diameter-gap fill for the SUBTRACTIVE-only schedule checks below
         # (currently just `drop_undersized_mesh_fragments`): when this
@@ -236,7 +240,8 @@ def main(argv=None) -> int:
                 if sib_rows and len(sib_rows) > len(sibling_gap_rows):
                     sibling_gap_rows = sib_rows
 
-        panel = reconstruct_panel(name, views, tie_exempt_dias=tie_exempt_dias)
+        panel = reconstruct_panel(
+            name, views, tie_exempt_dias=tie_exempt_dias, straight_lengths=straight_lengths)
 
         # The sheet's own Summary Schedule is ground truth for which
         # diameters actually appear in this panel at all — independent of

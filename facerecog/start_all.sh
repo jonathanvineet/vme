@@ -7,6 +7,11 @@ cd "$(dirname "$0")"
 
 mkdir -p logs
 
+if [ -f .venv/bin/activate ]; then
+    # shellcheck disable=SC1091
+    source .venv/bin/activate
+fi
+
 export GOOGLE_SHEET_ID="1CzBMtY1gtp0nB1j_0tZvGuLuEkH_Po4mgl8mfF9rVGo"
 export GOOGLE_SERVICE_ACCOUNT_FILE="$(pwd)/secrets/google-service-account.json"
 

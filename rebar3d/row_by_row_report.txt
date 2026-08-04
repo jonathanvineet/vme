@@ -1,0 +1,390 @@
+
+=== PC-GF-01 ===
+mark    dia  qty   len_mm  found   status
+A      T8      6      900      0    SHORT
+A1     T8     33     1125     33       OK
+A2     T8      6     1325      0    SHORT
+A3     T8     33     1575     33       OK
+B      T8      6      500      0    SHORT
+B1     T8     33      575     33       OK
+C      T10     1     1600      0    SHORT
+C1     T10     1     1750      1       OK
+D      T16     3     1850      3       OK
+D1     T16     2     1950      2       OK
+E      T16     2     5850      2       OK
+E1     T16     2     5850      2       OK
+E2     T16     2     5850      0    SHORT
+E3     T16     4     5850      0    SHORT
+  -> 8 OK, 6 SHORT, 0 OVER (of 14 official rows)
+
+=== PW-01-PW-01 ===
+mark    dia  qty   len_mm  found   status
+A      T8      6      782      0    SHORT
+B      T8     17     1008     17       OK
+C      T8     22     3017     16    SHORT
+D      T8      6     3095      0    SHORT
+D1     T8     14     3120      0    SHORT
+D2     T10     4      334      4       OK
+D3     T10     4      634      0    SHORT
+D4     T10    20      716     20       OK
+D5     T10    12      734     12       OK
+E      T10    25     1004     25       OK
+E1     T10    25     1039     25       OK
+F      T10     2     1077      0    SHORT
+F1     T10     2     1077      0    SHORT
+F2     T10     1     1233      0    SHORT
+F2     T10     1     1283      0    SHORT
+F3     T10     6     1327      0    SHORT
+G      T10     4     2480      3    SHORT
+H      T12     4      723      1    SHORT
+H1     T12     8      823      8       OK
+  -> 7 OK, 12 SHORT, 0 OVER (of 19 official rows)
+
+=== PW-GF-01 ===
+mark    dia  qty   len_mm  found   status
+A      T8     62     1175     62       OK
+A1     T8     61     1250     39    SHORT
+B      T8    122      900      3    SHORT
+B1     T8     92      950      0    SHORT
+C      T8      7      875      0    SHORT
+D      T10     3     1425      0    SHORT
+E      T12    15     9000     15       OK
+E1     T12    14     9050      9    SHORT
+F      T12    27     1300     27       OK
+G      T16     4     9000      3    SHORT
+H      T16     4     2675      0    SHORT
+I      T20     3     1700      3       OK
+J      T20     2     1575      2       OK
+K      T20     3     2450      0    SHORT
+L      T20     2     9750      2       OK
+  -> 6 OK, 9 SHORT, 0 OVER (of 15 official rows)
+
+=== PW-GF-02 ===
+  (no itemized BBS table found -- summary-only)
+
+=== PW-GF-06 ===
+mark    dia  qty   len_mm  found   status
+A      T8      5      775      2    SHORT
+A1     T8      5      800      0    SHORT
+A2     T8     31     1075      9    SHORT
+A3     T8     31     1125     31       OK
+A4     T8      8     4375      6    SHORT
+A5     T8      9     5000      9       OK
+A6     T8      8     5050      8       OK
+B      T8     16      900     16       OK
+B1     T8     68      900      3    SHORT
+B2     T8     25      950      0    SHORT
+C      T8      5     1075      0    SHORT
+D      T8     38     1200      9    SHORT
+E      T8     38      375     38       OK
+F      T10     2     1125      0    SHORT
+G      T12     2      825      2       OK
+H      T16     4     5000      4       OK
+I      T16     3     1750      3       OK
+I1     T16     2     1850      0    SHORT
+I2     T16     4     2300      0    SHORT
+J      T20     1     1425      1       OK
+K      T25     4     1850      4       OK
+L      T10     5     1825      0    SHORT
+M      T16     2     4375      2       OK
+M1     T16     2     4375      0    SHORT
+M2     T16     1     4375      0    SHORT
+M3     T16     1     4375      0    SHORT
+N      T20     1     6050      1       OK
+N1     T20     1     6075      0    SHORT
+  -> 12 OK, 16 SHORT, 0 OVER (of 28 official rows)
+
+=== PW-GF-07 ===
+mark    dia  qty   len_mm  found   status
+A      T8     30     2075      4    SHORT
+A1     T8     30     2100      0    SHORT
+A2     T8     12     5000     12       OK
+A3     T8     11     5050      8    SHORT
+B      T8     26      875     26       OK
+B1     T8     22      900     22       OK
+B2     T8     59      900     16    SHORT
+C      T8     10     1225     10       OK
+D      T12     3     1875      1    SHORT
+D1     T12     2     1975      0    SHORT
+E      T16     4     5000      3    SHORT
+F      T16     2     3525      2       OK
+F1     T16     2     3575      0    SHORT
+G      T20     3     2025      1    SHORT
+H      T8     26     1175      8    SHORT
+I      T10    10     2250      0    SHORT
+J      T20     2     6100      0    SHORT
+J      T20     2     6100      0    SHORT
+  -> 5 OK, 13 SHORT, 0 OVER (of 18 official rows)
+
+=== PW-GF-09 ===
+  (no itemized BBS table found -- summary-only)
+
+=== PW-GF-18 ===
+mark    dia  qty   len_mm  found   status
+A      T8      5     1100      5       OK
+A1     T8     26     1350     26       OK
+A2     T8     30     1450     29    SHORT
+A3     T8      9     5000      9       OK
+A4     T8      7     5050      6    SHORT
+B      T8     49      875     14    SHORT
+B1     T8     14      900      0    SHORT
+B2     T8     30      900      0    SHORT
+C      T8      6      950      2    SHORT
+D      T8     37     1200     36    SHORT
+E      T8     37      375     37       OK
+F      T12     1     1125      1       OK
+F1     T12     3     1125      1    SHORT
+G      T16     2     5000      2       OK
+H      T16     3     1750      3       OK
+H1     T16     2     1850      2       OK
+H2     T16     2     2625      0    SHORT
+H3     T16     2     2900      0    SHORT
+I      T20     1     2025      1       OK
+I1     T20     1     2025      1       OK
+J      T10     7     2250      7       OK
+K      T16     1     6000      0    SHORT
+K1     T16     1     6000      0    SHORT
+K2     T16     1     6000      0    SHORT
+K3     T16     1     6000      0    SHORT
+K4     T16     1     6000      0    SHORT
+K5     T16     1     6000      0    SHORT
+L      T20     1     6100      0    SHORT
+  -> 11 OK, 17 SHORT, 0 OVER (of 28 official rows)
+
+=== PW-GF-25 ===
+mark    dia  qty   len_mm  found   status
+A      T8      5     1100      5       OK
+A1     T8     26     1400     26       OK
+A2     T8     30     1450     15    SHORT
+A3     T8      9     5000      9       OK
+A4     T8      7     5050      7       OK
+B      T8     14      900      6    SHORT
+B1     T8     29      900      0    SHORT
+B2     T8     26      950      0    SHORT
+C      T8      7      975      0    SHORT
+D      T8     37     1200     37       OK
+E      T8     37      375     37       OK
+F      T10     2     1050      1    SHORT
+G      T16     2     5000      2       OK
+H      T16     3     1750      3       OK
+H1     T16     2     1850      1    SHORT
+H2     T16     2     2625      2       OK
+H3     T16     2     2900      0    SHORT
+I      T20     1     2025      1       OK
+J      T16     1     5000      1       OK
+J1     T16     1     5000      1       OK
+J2     T16     1     5000      0    SHORT
+J3     T16     1     5000      0    SHORT
+J4     T16     1     5000      0    SHORT
+J5     T16     1     5000      0    SHORT
+K      T20     2     6100      1    SHORT
+  -> 12 OK, 13 SHORT, 0 OVER (of 25 official rows)
+
+=== PW-GF-26 ===
+mark    dia  qty   len_mm  found   status
+A      T8     30     1575      4    SHORT
+A1     T8     30     1650      2    SHORT
+A2     T8     10     5000      9    SHORT
+A3     T8      9     5050      0    SHORT
+B      T8     18      900     18       OK
+B1     T8     59      900     20    SHORT
+B2     T8     52      950      3    SHORT
+C      T8      9      875      0    SHORT
+C1     T8      2      950      0    SHORT
+D      T16     4     5000      4       OK
+E      T16     4     3075      0    SHORT
+F      T20     2     2025      2       OK
+G      T20     2     6100      0    SHORT
+G      T20     2     6100      0    SHORT
+  -> 3 OK, 11 SHORT, 0 OVER (of 14 official rows)
+
+=== PW-GF-45 ===
+  (no itemized BBS table found -- summary-only)
+
+=== SS-GF-01 ===
+  (no itemized BBS table found -- summary-only)
+
+=== PW-GF-05 (combined: PW-GF-05(R1), PW-GF-05(R2)) ===
+mark    dia  qty   len_mm  found   status
+A      T8      5      600      5       OK
+A1     T8      5     1100      5       OK
+A2     T8     30     1375     30       OK
+A3     T8     30     1425     19    SHORT
+B      T8     23      875     23       OK
+B1     T8     12      900     12       OK
+C      T8      4      850      4       OK
+D      T8     33     1175     33       OK
+D1     T8     38     1200      5    SHORT
+D2     T8     33     1600      0    SHORT
+E      T8     38      375     38       OK
+E1     T8     33      575     33       OK
+F      T10    10     4375      5    SHORT
+F1     T10    10     5000     10       OK
+F2     T10     6     5050      0    SHORT
+G      T10     2     1050      2       OK
+H      T16     3     1750      3       OK
+H1     T16     5     1850      5       OK
+H2     T16     2     1950      2       OK
+H3     T16     2     2125      0    SHORT
+H4     T16     2     2925      2       OK
+I      T20     1     2025      1       OK
+I1     T20     1     2700      1       OK
+J      T25     3     1850      1    SHORT
+J1     T25     1     3200      1       OK
+K      T16     1     5000      1       OK
+K1     T16     1     5000      1       OK
+K2     T16     2     5000      2       OK
+K3     T16     2     5000      0    SHORT
+K4     T16     4     5000      0    SHORT
+L      T16     1     4275      1       OK
+L1     T16     1     4350      1       OK
+L2     T16     1     4375      0    SHORT
+L3     T16     1     4375      0    SHORT
+L4     T16     2     4375      0    SHORT
+  -> 23 OK, 12 SHORT, 0 OVER (of 35 official rows)
+
+=== PW-GF-08 (combined: PW-GF-08(R1), PW-GF-08(R2)) ===
+mark    dia  qty   len_mm  found   status
+A      T8     30     2025     30       OK
+A1     T8     30     2100     30       OK
+A2     T8     12     5000      6    SHORT
+A3     T8     11     5050      0    SHORT
+B      T8     52      875     14    SHORT
+B1     T8     22      900      1    SHORT
+B2     T8     59      900      0    SHORT
+C      T8     11     1225     11       OK
+D      T8     24     1200      7    SHORT
+E      T8     24      375     24       OK
+F      T12     1     1975      1       OK
+F1     T12     3     2100      0    SHORT
+G      T12    11     1150     11       OK
+H      T16     6     2375      0    SHORT
+H1     T16     4     5000      1    SHORT
+I      T16     3     1750      3       OK
+I1     T16     2     1850      2       OK
+I2     T16     4     3525      0    SHORT
+J      T16     4     2050      4       OK
+K      T20     3     2025      2    SHORT
+L      T20     2     1425      2       OK
+L1     T20     2     2275      0    SHORT
+M      T25     2     2600      2       OK
+N      T20     1     6100      0    SHORT
+N1     T20     1     6100      0    SHORT
+O      T10    11     2250      0    SHORT
+  -> 11 OK, 15 SHORT, 0 OVER (of 26 official rows)
+
+=== PW-GF-09-combo (combined: PW-GF-09(R1), PW-GF-09(R2)) ===
+mark    dia  qty   len_mm  found   status
+A      T8      5     1125      5       OK
+A1     T8     26     1350     26       OK
+A2     T8     30     1450     30       OK
+A3     T8      9     5000      4    SHORT
+A4     T8      7     5050      0    SHORT
+B      T8     14      900     14       OK
+B1     T8     30      900     30       OK
+B2     T8     49      950     13    SHORT
+C      T8      6      950      0    SHORT
+D      T8     37     1200     32    SHORT
+E      T8     37      375     37       OK
+F      T12     1     1075      1       OK
+F1     T12     3     1125      3       OK
+H      T12    11     1150      8    SHORT
+I      T16     2     5000      0    SHORT
+J      T16     3     1850      3       OK
+J1     T16     2     1850      2       OK
+J2     T16     2     2625      2       OK
+J3     T16     2     2900      2       OK
+K      T16     4     2050      0    SHORT
+L      T20     2     2025      1    SHORT
+M      T20     2     1450      2       OK
+M1     T20     2     2275      0    SHORT
+N      T25     2     2575      0    SHORT
+O      T20     1     6100      1       OK
+P      T10     7     2250      0    SHORT
+Q      T16     1     5850      1       OK
+Q1     T16     1     5850      1       OK
+Q2     T16     1     5850      1       OK
+Q3     T16     1     5850      1       OK
+Q4     T16     2     5850      1    SHORT
+  -> 18 OK, 13 SHORT, 0 OVER (of 31 official rows)
+
+=== PW-GF-11 (combined: PW-GF-11(R1), PW-GF-11(R2)) ===
+mark    dia  qty   len_mm  found   status
+A      T8     53     2175     53       OK
+A1     T8     53     2200     53       OK
+B      T8     92      875     92       OK
+B1     T8     42      900     42       OK
+B2     T8    104      900     13    SHORT
+C      T8     12     1225     12       OK
+D      T8     24     1200      0    SHORT
+E      T8     24      375     24       OK
+F      T10    23     9000     23       OK
+F1     T10    23     9050      8    SHORT
+G      T12     4     2225      2    SHORT
+H      T12    11     1150      1    SHORT
+I      T16     6     2375      0    SHORT
+I1     T16     4     9000      2    SHORT
+J      T16     3     1750      0    SHORT
+J1     T16     2     1850      1    SHORT
+J2     T16     4     3600      4       OK
+K      T16     4     2050      4       OK
+L      T20     3     1675      2    SHORT
+M      T20     2     1425      0    SHORT
+M1     T20     2     2275      0    SHORT
+N      T25     2     2575      0    SHORT
+O      T20     2     9750      1    SHORT
+P      T10    12     2175     12       OK
+  -> 10 OK, 14 SHORT, 0 OVER (of 24 official rows)
+
+=== PW-GF-27 (combined: PW-GF-27(R1), PW-GF-27(R2)) ===
+mark    dia  qty   len_mm  found   status
+A      T8      4     1050      4       OK
+A1     T8      3     1075      3       OK
+A2     T8      6     1125      6       OK
+A3     T8     26     1350     18    SHORT
+A4     T8     26     1450      0    SHORT
+A5     T8      7     4750      7       OK
+A6     T8      7     4900      7       OK
+B      T8     12      900     12       OK
+B1     T8     30      900     30       OK
+B2     T8     48      950     20    SHORT
+C      T8     24     1050     11    SHORT
+C1     T8      9     1125      0    SHORT
+C2     T8     33     1575      0    SHORT
+D      T8     33      575      0    SHORT
+E      T10     2     1050      0    SHORT
+G1     T16     2     1950      0    SHORT
+G2     T16     2     2475      0    SHORT
+G2     T16     2     2625      0    SHORT
+H      T20     1     2700      1       OK
+I      T16     1     4850      1       OK
+J      T16     1     4375      1       OK
+J1     T16     1     4375      1       OK
+J2     T16     3     4375      3       OK
+J3     T16     1     4375      0    SHORT
+J4     T16     3     4375      0    SHORT
+  -> 12 OK, 13 SHORT, 0 OVER (of 25 official rows)
+
+=== PW-GF-30 (combined: PW-GF-30(R1), PW-GF-30(R2)) ===
+mark    dia  qty   len_mm  found   status
+A      T8     53     1650     53       OK
+A1     T8     53     1725     53       OK
+B      T8     34      900     34       OK
+B1     T8    104      900    104       OK
+B2     T8     92      950      2    SHORT
+C      T8      9     1075      9       OK
+D      T10    19     9000     19       OK
+D1     T10    17     9050     11    SHORT
+E      T12     2     1650      2       OK
+E1     T12     2     1725      1    SHORT
+F      T16     4     9050      1    SHORT
+G      T16     4     3150      0    SHORT
+H      T20     2     1675      2       OK
+J      T20     2     9750      2       OK
+I      T10    10     1675     10       OK
+J      T20     2     9750      0    SHORT
+  -> 10 OK, 6 SHORT, 0 OVER (of 16 official rows)
+
+
+===== GRAND TOTAL =====
+148 OK, 170 SHORT, 0 OVER (of 318 official BBS rows across the whole batch)

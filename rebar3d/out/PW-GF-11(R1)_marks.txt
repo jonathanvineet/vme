@@ -5,8 +5,8 @@ B       T8           46      0  SHORT   2
 B1      T8           42     22  SHORT   4
 B2      T8           52      0  SHORT   2
 C       T8           12      0  SHORT   2
-D       T8            9     31  OVER    3
-E       T8            9     91  OVER    3
+D       T8            9     29  OVER    3
+E       T8            9     96  OVER    3
 F       T10          23     20  SHORT   2
 F1      T10          23     16  SHORT   2
 G       T12           2      0  SHORT   3

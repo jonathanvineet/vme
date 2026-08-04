@@ -1247,7 +1247,8 @@ def _merge_dowel_legs(bars: list[Bar3D], elev_ents=None, x0: float = 0.0,
 
 
 def _synthesize_column_ties(bars: list[Bar3D], panel_w: float, panel_h: float,
-                            thickness: float) -> list[Bar3D]:
+                            thickness: float,
+                            straight_lengths: dict[int, list[float]] | None = None) -> list[Bar3D]:
     """Full-cross-section closed tie loops on a column-shaped element.
 
     A column (tall and narrow -- panel_h at least 4x both panel_w and
@@ -1281,19 +1282,27 @@ def _synthesize_column_ties(bars: list[Bar3D], panel_w: float, panel_h: float,
         return bars
 
     NO_DEPTH_EVIDENCE = ("plane-snap", "default")
-    by_dia: dict[int, list[float]] = {}
-    for b in bars:
+    straight_lengths = straight_lengths or {}
+
+    def _is_tie_candidate(b: Bar3D) -> bool:
         if b.kind != "h-mesh" or b.z_source not in NO_DEPTH_EVIDENCE:
-            continue
+            return False
         span = abs(b.points[-1][0] - b.points[0][0])
         if span < 0.7 * (panel_w - 2 * cover):
-            continue
-        by_dia.setdefault(b.diameter, []).append(b.points[0][1])
+            return False
+        own_len = math.dist(b.points[0], b.points[-1])
+        for target in straight_lengths.get(b.diameter, []):
+            if abs(own_len - target) <= max(30.0, 0.08 * target):
+                return False  # matches a real straight mark's own length -- not tie material
+        return True
+
+    by_dia: dict[int, list[float]] = {}
+    for b in bars:
+        if _is_tie_candidate(b):
+            by_dia.setdefault(b.diameter, []).append(b.points[0][1])
 
     kept: list[Bar3D] = [b for b in bars if not (
-        b.kind == "h-mesh" and b.z_source in NO_DEPTH_EVIDENCE
-        and b.diameter in by_dia
-        and abs(b.points[-1][0] - b.points[0][0]) >= 0.7 * (panel_w - 2 * cover))]
+        _is_tie_candidate(b) and b.diameter in by_dia)]
     out: list[Bar3D] = []
     for dia, ys in by_dia.items():
         ys = sorted(ys)
@@ -3139,6 +3148,42 @@ def dowel_only_diameters(mark_rows: list) -> set[int]:
     }
 
 
+def straight_mark_lengths(mark_rows: list) -> dict[int, list[float]]:
+    """Declared length of every plain-straight ("M_00") official mark, by
+    diameter -- used to keep `_synthesize_column_ties`'s purely-geometric
+    "full-width h-mesh line -> column tie loop" heuristic from absorbing a
+    DIFFERENT, real straight bar that just happens to also span the full
+    width with no depth evidence (common for any plainly-drawn straight
+    bar, not just genuine tie material).
+
+    Root-caused on PW-GF-11: mark G (T12, `M_00`, 4x 2225mm) draws as a
+    plain full-span h-mesh line at the panel's default mid-depth z --
+    geometrically indistinguishable from a real tie candidate, so all 3 of
+    G's own real remaining bars were being swept into synthesized tie
+    loops sized from the column's cross-section instead. The panel's
+    actual tie material is a DIFFERENT mark (H, `M_T1`, 11x 1150mm,
+    matching its own "-(11)-T12@100mm" pitch callout exactly) at the SAME
+    diameter -- diameter-level exemption (`dowel_only_diameters`) can't
+    separate the two since T12 legitimately has both a real straight mark
+    and real tie material. Length-level exemption can: a raw tie
+    candidate's own measured length is only ever used for its Y position
+    (`_synthesize_column_ties` synthesizes the loop's actual shape/length
+    entirely from panel geometry, never from the candidate's own length),
+    so a candidate whose length ALREADY closely matches a real straight
+    mark's own declared total is far more likely that mark's own bar than
+    incidental position evidence for a tie.
+    """
+    out: dict[int, list[float]] = {}
+    for m in mark_rows:
+        sdia = snap_diameter(m.diameter)
+        if sdia is None or m.qty <= 0 or m.length_mm <= 0:
+            continue
+        if m.shape.strip().upper() != "M_00":
+            continue
+        out.setdefault(sdia, []).append(m.length_mm)
+    return out
+
+
 def _declash_link_bars(bars: list[Bar3D], pw: float, ph: float) -> int:
     """Nudge `link`-kind bars sideways off mesh bars that literally cross them.
 
@@ -3223,7 +3268,10 @@ def _declash_link_bars(bars: list[Bar3D], pw: float, ph: float) -> int:
     return nudged
 
 
-def reconstruct_panel(name: str, views: list[View], tie_exempt_dias=frozenset()) -> Panel:
+def reconstruct_panel(
+    name: str, views: list[View], tie_exempt_dias=frozenset(),
+    straight_lengths: dict[int, list[float]] | None = None,
+) -> Panel:
     companions, rest = _find_companion_elevations(views)
     views = [views[0]] + rest
     elev = views[0]
@@ -3543,9 +3591,9 @@ def reconstruct_panel(name: str, views: list[View], tie_exempt_dias=frozenset())
         # Not a change to its logic, just which bars it's allowed to see.
         _tie_input = [b for b in bars if b.diameter not in tie_exempt_dias]
         _tie_held = [b for b in bars if b.diameter in tie_exempt_dias]
-        bars = _synthesize_column_ties(_tie_input, pw, ph, thickness) + _tie_held
+        bars = _synthesize_column_ties(_tie_input, pw, ph, thickness, straight_lengths) + _tie_held
     else:
-        bars = _synthesize_column_ties(bars, pw, ph, thickness)
+        bars = _synthesize_column_ties(bars, pw, ph, thickness, straight_lengths)
     bars = _merge_dowel_legs(bars, elev.ents, x0, y0)
     bars = _dedupe_near(bars)
     n_link_nudged = _declash_link_bars(bars, pw, ph)
