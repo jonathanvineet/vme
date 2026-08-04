@@ -22,7 +22,8 @@ if (-not (Get-Command winget -ErrorAction SilentlyContinue)) {
 # 1. Python
 if (-not (Get-Command python -ErrorAction SilentlyContinue)) {
     Log "Installing Python 3.11 via winget"
-    winget install -e --id Python.Python.3.11 --accept-source-agreements --accept-package-agreements
+    winget install -e --id Python.Python.3.11 --source winget --accept-source-agreements --accept-package-agreements
+    if ($LASTEXITCODE -ne 0) { Fail "winget install Python failed (exit $LASTEXITCODE) - see the error above" }
     Fail "Python was just installed. Close this terminal, open a NEW PowerShell window (so PATH updates), and re-run .\setup.ps1"
 } else {
     Log "Python already installed: $(python --version)"
@@ -31,7 +32,10 @@ if (-not (Get-Command python -ErrorAction SilentlyContinue)) {
 # 2. CMake (required to build dlib from source)
 if (-not (Get-Command cmake -ErrorAction SilentlyContinue)) {
     Log "Installing CMake via winget"
-    winget install -e --id Kitware.CMake --accept-source-agreements --accept-package-agreements
+    winget install -e --id Kitware.CMake --source winget --accept-source-agreements --accept-package-agreements
+    if ($LASTEXITCODE -ne 0) { Fail "winget install CMake failed (exit $LASTEXITCODE) - see the error above" }
+    Log "CMake installed. Close this terminal, open a NEW PowerShell window, and re-run .\setup.ps1"
+    exit 0
 } else {
     Log "CMake already installed"
 }
@@ -45,7 +49,8 @@ if (Test-Path $vswhere) {
 }
 if (-not $hasBuildTools) {
     Log "Installing Visual Studio Build Tools (C++ workload) via winget - this is the biggest download, can take a while"
-    winget install -e --id Microsoft.VisualStudio.2022.BuildTools --override "--quiet --wait --add Microsoft.VisualStudio.Workload.VCTools --includeRecommended" --accept-source-agreements --accept-package-agreements
+    winget install -e --id Microsoft.VisualStudio.2022.BuildTools --source winget --override "--quiet --wait --add Microsoft.VisualStudio.Workload.VCTools --includeRecommended" --accept-source-agreements --accept-package-agreements
+    if ($LASTEXITCODE -ne 0) { Fail "winget install Build Tools failed (exit $LASTEXITCODE) - see the error above" }
     Log "Build Tools installed. Close this terminal, open a NEW PowerShell window, and re-run .\setup.ps1"
     exit 0
 } else {
