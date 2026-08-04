@@ -6,7 +6,7 @@
 Set-Location -Path $PSScriptRoot
 New-Item -ItemType Directory -Force -Path logs | Out-Null
 
-$venvPython = ".venv\Scripts\python.exe"
+$venvPython = Join-Path $PSScriptRoot ".venv\Scripts\python.exe"
 if (-not (Test-Path $venvPython)) {
     Write-Host "No .venv found - run .\setup.ps1 first." -ForegroundColor Red
     exit 1

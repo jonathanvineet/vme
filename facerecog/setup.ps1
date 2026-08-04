@@ -89,8 +89,12 @@ if (-not (Test-Path ".venv")) {
     Log "Virtual environment already exists"
 }
 
-$venvPython = ".venv\Scripts\python.exe"
-$venvPip    = ".venv\Scripts\pip.exe"
+$venvPython = Join-Path $PSScriptRoot ".venv\Scripts\python.exe"
+$venvPip    = Join-Path $PSScriptRoot ".venv\Scripts\pip.exe"
+
+if (-not (Test-Path $venvPython)) {
+    Fail ".venv exists but is incomplete (missing $venvPython). Delete the .venv folder and re-run .\setup.ps1"
+}
 
 Log "Upgrading pip/setuptools/wheel"
 & $venvPython -m pip install --upgrade pip setuptools wheel | Out-Null
