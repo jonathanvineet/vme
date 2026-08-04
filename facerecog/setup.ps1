@@ -7,7 +7,7 @@
 # If PowerShell blocks the script with an "execution policy" error, run once:
 #   Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
 #
-# Safe to re-run — every step checks whether it's already done.
+# Safe to re-run - every step checks whether it's already done.
 
 $ErrorActionPreference = "Stop"
 Set-Location -Path $PSScriptRoot
@@ -16,7 +16,7 @@ function Log($msg)  { Write-Host "`n==> $msg" -ForegroundColor Cyan }
 function Fail($msg) { Write-Host "`nERROR: $msg" -ForegroundColor Red; exit 1 }
 
 if (-not (Get-Command winget -ErrorAction SilentlyContinue)) {
-    Fail "winget (Windows Package Manager) is not available. It ships with Windows 10 21H2+/Windows 11. Update Windows, or install 'App Installer' from the Microsoft Store, then re-run this script."
+    Fail "winget (Windows Package Manager) is not available. It ships with Windows 10 21H2+/Windows 11. Update Windows, or install App Installer from the Microsoft Store, then re-run this script."
 }
 
 # 1. Python
@@ -44,10 +44,8 @@ if (Test-Path $vswhere) {
     if ($found) { $hasBuildTools = $true }
 }
 if (-not $hasBuildTools) {
-    Log "Installing Visual Studio Build Tools (C++ workload) via winget — this is the biggest download, can take a while"
-    winget install -e --id Microsoft.VisualStudio.2022.BuildTools --override `
-        "--quiet --wait --add Microsoft.VisualStudio.Workload.VCTools --includeRecommended" `
-        --accept-source-agreements --accept-package-agreements
+    Log "Installing Visual Studio Build Tools (C++ workload) via winget - this is the biggest download, can take a while"
+    winget install -e --id Microsoft.VisualStudio.2022.BuildTools --override "--quiet --wait --add Microsoft.VisualStudio.Workload.VCTools --includeRecommended" --accept-source-agreements --accept-package-agreements
     Log "Build Tools installed. Close this terminal, open a NEW PowerShell window, and re-run .\setup.ps1"
     exit 0
 } else {
@@ -69,10 +67,10 @@ $venvPip    = ".venv\Scripts\pip.exe"
 Log "Upgrading pip/setuptools/wheel"
 & $venvPython -m pip install --upgrade pip setuptools wheel | Out-Null
 
-# 5. Project dependencies (dlib compiles from source here — can take 5-15 min)
+# 5. Project dependencies (dlib compiles from source here - can take 5-15 min)
 Log "Installing Python packages from requirements.txt (dlib compiles from source; this can take a while, please be patient)"
 & $venvPip install -r requirements.txt
-if ($LASTEXITCODE -ne 0) { Fail "pip install -r requirements.txt failed — see the error above" }
+if ($LASTEXITCODE -ne 0) { Fail "pip install -r requirements.txt failed - see the error above" }
 
-Log "Done. Activate the environment in future shells with:  .venv\Scripts\Activate.ps1"
-Log "The servers themselves (start_all.sh) are a bash script and won't run natively on Windows — see WINDOWS.md for how to start them."
+Log "Done. Activate the environment in future shells with: .venv\Scripts\Activate.ps1"
+Log "Then start everything with: .\start_all.ps1"
