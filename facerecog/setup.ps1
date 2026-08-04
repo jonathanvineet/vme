@@ -1,5 +1,7 @@
-# Bootstrap a brand-new Windows machine (no Python, nothing) so it can run
-# the face-recognition attendance system, without needing WSL.
+# Sets up the face-recognition attendance system on Windows, without WSL.
+# Install Python 3.11+ yourself first (python.org, check "Add python.exe to
+# PATH"); this script installs CMake + VS Build Tools (needed to compile
+# dlib) if missing, then creates .venv and installs requirements.txt.
 #
 # Usage (from PowerShell, in the facerecog folder):
 #   .\setup.ps1
@@ -20,42 +22,23 @@ if (-not (Get-Command winget -ErrorAction SilentlyContinue)) {
 }
 
 # 1. Python
-# Some machines already have a "python" on PATH that isn't a real, complete
-# CPython install (e.g. a stripped interpreter bundled with unrelated
-# hardware/software). Get-Command alone can't tell the difference, so
-# actually probe it before trusting it - including the venvlauncher.exe /
-# venvwlauncher.exe files that "python -m venv" needs to copy on Windows,
-# which stripped/embeddable distributions often omit even though the venv
-# and ensurepip *modules* import fine.
-function Test-PythonOk($exe) {
-    if (-not $exe -or -not (Test-Path $exe)) { return $false }
-    $dir = Split-Path $exe
-    if (-not (Test-Path (Join-Path $dir "venvlauncher.exe"))) { return $false }
-    if (-not (Test-Path (Join-Path $dir "venvwlauncher.exe"))) { return $false }
-    & $exe -c "import venv, ensurepip" *> $null
-    return ($LASTEXITCODE -eq 0)
+# This script does NOT install Python - install it yourself first (from
+# python.org, checking "Add python.exe to PATH"), then run this script.
+# It still validates what's on PATH before trusting it, since some machines
+# have a "python" that isn't a real, complete CPython install (e.g. a
+# stripped interpreter bundled with unrelated hardware/software) - missing
+# the venvlauncher.exe / venvwlauncher.exe files "python -m venv" needs to
+# copy on Windows, even though the venv/ensurepip *modules* import fine.
+if (-not (Get-Command python -ErrorAction SilentlyContinue)) {
+    Fail "python is not on PATH. Install Python 3.11+ from python.org (check 'Add python.exe to PATH' during install), open a NEW PowerShell window, and re-run .\setup.ps1"
 }
-
-function Find-Python311 {
-    if (Get-Command py -ErrorAction SilentlyContinue) {
-        $viaLauncher = & py -3.11 -c "import sys; print(sys.executable)" 2>$null
-        if ($LASTEXITCODE -eq 0 -and (Test-PythonOk $viaLauncher)) { return $viaLauncher }
-    }
-    $standard = Join-Path $env:LOCALAPPDATA "Programs\Python\Python311\python.exe"
-    if (Test-PythonOk $standard) { return $standard }
-    $onPath = (Get-Command python -ErrorAction SilentlyContinue).Source
-    if (Test-PythonOk $onPath) { return $onPath }
-    return $null
+$pythonExe = (Get-Command python).Source
+$pyDir = Split-Path $pythonExe
+if (-not (Test-Path (Join-Path $pyDir "venvlauncher.exe")) -or -not (Test-Path (Join-Path $pyDir "venvwlauncher.exe"))) {
+    Fail "The 'python' on PATH ($pythonExe) is missing venvlauncher.exe/venvwlauncher.exe - it's not a complete Python install (possibly bundled by other software). Install Python 3.11+ from python.org, make sure it comes first on PATH, open a NEW PowerShell window, and re-run .\setup.ps1"
 }
-
-$pythonExe = Find-Python311
-if (-not $pythonExe) {
-    Log "No working Python 3.11 install found (existing 'python' on PATH may be incomplete/broken) - installing a fresh copy via winget"
-    winget install -e --id Python.Python.3.11 --source winget --force --accept-source-agreements --accept-package-agreements
-    if ($LASTEXITCODE -ne 0) { Fail "winget install Python failed (exit $LASTEXITCODE) - see the error above" }
-    $pythonExe = Find-Python311
-    if (-not $pythonExe) { Fail "Python was installed but could not be located automatically. Close this terminal, open a NEW PowerShell window, and re-run .\setup.ps1" }
-}
+& $pythonExe -c "import venv, ensurepip" *> $null
+if ($LASTEXITCODE -ne 0) { Fail "'$pythonExe -c `"import venv, ensurepip`"' failed - this Python install is incomplete." }
 Log "Using Python: $pythonExe ($(& $pythonExe --version))"
 
 # 2. CMake (required to build dlib from source)
