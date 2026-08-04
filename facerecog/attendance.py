@@ -7,8 +7,8 @@ file to avoid corrupting the workbook.
 """
 
 import datetime
-import fcntl
 import os
+import sys
 
 import openpyxl
 
@@ -19,15 +19,36 @@ LOCK_PATH = os.path.join(BASE_DIR, "attendance.xlsx.lock")
 HEADERS = ["Employee ID", "Name", "Date", "In Time", "Out Time"]
 
 
-class _FileLock:
-    def __enter__(self):
-        self._fh = open(LOCK_PATH, "w")
-        fcntl.flock(self._fh, fcntl.LOCK_EX)
-        return self
+if sys.platform == "win32":
+    import msvcrt
 
-    def __exit__(self, *exc):
-        fcntl.flock(self._fh, fcntl.LOCK_UN)
-        self._fh.close()
+    class _FileLock:
+        def __enter__(self):
+            self._fh = open(LOCK_PATH, "a+b")
+            if os.path.getsize(LOCK_PATH) == 0:
+                self._fh.write(b"\0")
+                self._fh.flush()
+            self._fh.seek(0)
+            msvcrt.locking(self._fh.fileno(), msvcrt.LK_LOCK, 1)
+            return self
+
+        def __exit__(self, *exc):
+            self._fh.seek(0)
+            msvcrt.locking(self._fh.fileno(), msvcrt.LK_UNLCK, 1)
+            self._fh.close()
+
+else:
+    import fcntl
+
+    class _FileLock:
+        def __enter__(self):
+            self._fh = open(LOCK_PATH, "w")
+            fcntl.flock(self._fh, fcntl.LOCK_EX)
+            return self
+
+        def __exit__(self, *exc):
+            fcntl.flock(self._fh, fcntl.LOCK_UN)
+            self._fh.close()
 
 
 def _open_workbook():

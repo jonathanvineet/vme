@@ -99,7 +99,12 @@ class FaceEngine:
                 try:
                     with open(CACHE_PATH, "rb") as f:
                         cache = pickle.load(f)
-                except (pickle.PickleError, EOFError):
+                except Exception:
+                    # Cache is just an optimization - if it's corrupt or was
+                    # written by an incompatible numpy/pickle version (e.g.
+                    # copied over from a different machine), drop it and
+                    # recompute encodings from the source images instead of
+                    # crashing.
                     cache = {}
 
             new_cache = {}

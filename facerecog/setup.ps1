@@ -91,7 +91,8 @@ if (-not (Test-Path $venvPython)) {
 }
 
 Log "Upgrading pip/setuptools/wheel"
-& $venvPython -m pip install --upgrade pip setuptools wheel | Out-Null
+& $venvPython -m pip install --upgrade pip setuptools wheel
+if ($LASTEXITCODE -ne 0) { Fail "pip install --upgrade pip setuptools wheel failed - see the error above" }
 
 # 5. Project dependencies (dlib compiles from source here - can take 5-15 min)
 Log "Installing Python packages from requirements.txt (dlib compiles from source; this can take a while, please be patient)"
