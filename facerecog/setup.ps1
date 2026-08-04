@@ -51,7 +51,7 @@ function Find-Python311 {
 $pythonExe = Find-Python311
 if (-not $pythonExe) {
     Log "No working Python 3.11 install found (existing 'python' on PATH may be incomplete/broken) - installing a fresh copy via winget"
-    winget install -e --id Python.Python.3.11 --source winget --accept-source-agreements --accept-package-agreements
+    winget install -e --id Python.Python.3.11 --source winget --force --accept-source-agreements --accept-package-agreements
     if ($LASTEXITCODE -ne 0) { Fail "winget install Python failed (exit $LASTEXITCODE) - see the error above" }
     $pythonExe = Find-Python311
     if (-not $pythonExe) { Fail "Python was installed but could not be located automatically. Close this terminal, open a NEW PowerShell window, and re-run .\setup.ps1" }
